@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface SortOrder=NoneProps {
+export interface SortOrderNoneProps {
   /** Size of the icon in pixels */
   size?: number;
   /** Color of the icon - defaults to currentColor */
@@ -9,11 +9,11 @@ export interface SortOrder=NoneProps {
   className?: string;
 }
 
-export function SortOrder=None({ 
+export function SortOrderNone({ 
   size = 24, 
   color = 'currentColor',
   className 
-}: SortOrder=NoneProps) {
+}: SortOrderNoneProps) {
   return (
     <svg
       width={size}

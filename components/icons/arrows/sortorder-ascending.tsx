@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface SortOrder=AscendingProps {
+export interface SortOrderAscendingProps {
   /** Size of the icon in pixels */
   size?: number;
   /** Color of the icon - defaults to currentColor */
@@ -9,11 +9,11 @@ export interface SortOrder=AscendingProps {
   className?: string;
 }
 
-export function SortOrder=Ascending({ 
+export function SortOrderAscending({ 
   size = 24, 
   color = 'currentColor',
   className 
-}: SortOrder=AscendingProps) {
+}: SortOrderAscendingProps) {
   return (
     <svg
       width={size}

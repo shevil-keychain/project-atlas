@@ -31,10 +31,9 @@ export { NotificationMessage } from './alerts/notificationmessage';
 export { NotificationText } from './alerts/notificationtext';
 export { ThumbsDown } from './alerts/thumbsdown';
 export { ThumbsUp } from './alerts/thumbsup';
-// Note: sortorder=* icons have invalid names and are excluded
-// export { SortOrder=Ascending } from './arrows/sortorder=ascending';
-// export { SortOrder=Descending } from './arrows/sortorder=descending';
-// export { SortOrder=None } from './arrows/sortorder=none';
+export { SortOrderAscending } from './arrows/sortorder-ascending';
+export { SortOrderDescending } from './arrows/sortorder-descending';
+export { SortOrderNone } from './arrows/sortorder-none';
 export { ArrowBlockDown } from './arrows/arrowblockdown';
 export { ArrowBlockLeft } from './arrows/arrowblockleft';
 export { ArrowBlockRight } from './arrows/arrowblockright';

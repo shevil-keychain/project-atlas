@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface 1Props {
+export interface Icon1Props {
   /** Size of the icon in pixels */
   size?: number;
   /** Color of the icon - defaults to currentColor */
@@ -9,11 +9,11 @@ export interface 1Props {
   className?: string;
 }
 
-export function 1({ 
+export function Icon1({ 
   size = 24, 
   color = 'currentColor',
   className 
-}: 1Props) {
+}: Icon1Props) {
   return (
     <svg
       width={size}
