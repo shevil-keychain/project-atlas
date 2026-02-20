@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface Divide01Props {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function Divide01({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: Divide01Props) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M10 6C10 4.89543 10.8954 4 12 4C13.1046 4 14 4.89543 14 6C14 7.10457 13.1046 8 12 8C10.8954 8 10 7.10457 10 6ZM3 12C3 11.4477 3.44772 11 4 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12ZM10 18C10 16.8954 10.8954 16 12 16C13.1046 16 14 16.8954 14 18C14 19.1046 13.1046 20 12 20C10.8954 20 10 19.1046 10 18Z" fill="currentColor"/>
+    </svg>
+  );
+}

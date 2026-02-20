@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface SwitchVertical02Props {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function SwitchVertical02({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: SwitchVertical02Props) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M7 3C7.55228 3 8 3.44772 8 4V17.5858L10.2929 15.2929C10.6834 14.9024 11.3166 14.9024 11.7071 15.2929C12.0976 15.6834 12.0976 16.3166 11.7071 16.7071L7.70711 20.7071C7.31658 21.0976 6.68342 21.0976 6.29289 20.7071L2.29289 16.7071C1.90237 16.3166 1.90237 15.6834 2.29289 15.2929C2.68342 14.9024 3.31658 14.9024 3.70711 15.2929L6 17.5858V4C6 3.44772 6.44772 3 7 3ZM16.2929 3.29289C16.6834 2.90237 17.3166 2.90237 17.7071 3.29289L21.7071 7.29289C22.0976 7.68342 22.0976 8.31658 21.7071 8.70711C21.3166 9.09763 20.6834 9.09763 20.2929 8.70711L18 6.41421V20C18 20.5523 17.5523 21 17 21C16.4477 21 16 20.5523 16 20V6.41421L13.7071 8.70711C13.3166 9.09763 12.6834 9.09763 12.2929 8.70711C11.9024 8.31658 11.9024 7.68342 12.2929 7.29289L16.2929 3.29289Z" fill="currentColor"/>
+    </svg>
+  );
+}

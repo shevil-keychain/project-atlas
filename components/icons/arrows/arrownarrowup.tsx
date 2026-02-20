@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface ArrowNarrowUpProps {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function ArrowNarrowUp({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: ArrowNarrowUpProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M11.2929 3.29289C11.6834 2.90237 12.3166 2.90237 12.7071 3.29289L18.7071 9.29289C19.0976 9.68342 19.0976 10.3166 18.7071 10.7071C18.3166 11.0976 17.6834 11.0976 17.2929 10.7071L13 6.41421V20C13 20.5523 12.5523 21 12 21C11.4477 21 11 20.5523 11 20V6.41421L6.70711 10.7071C6.31658 11.0976 5.68342 11.0976 5.29289 10.7071C4.90237 10.3166 4.90237 9.68342 5.29289 9.29289L11.2929 3.29289Z" fill="currentColor"/>
+    </svg>
+  );
+}

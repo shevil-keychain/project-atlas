@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface Toggle02LeftProps {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function Toggle02Left({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: Toggle02LeftProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M7 8C4.79086 8 3 9.79086 3 12C3 14.2091 4.79086 16 7 16C9.20914 16 11 14.2091 11 12C11 9.79086 9.20914 8 7 8ZM1 12C1 8.68629 3.68629 6 7 6C8.22674 6 9.36749 6.36815 10.3178 7H18C20.7614 7 23 9.23858 23 12C23 14.7614 20.7614 17 18 17H10.3178C9.36749 17.6318 8.22674 18 7 18C3.68629 18 1 15.3137 1 12ZM12.1973 15H18C19.6569 15 21 13.6569 21 12C21 10.3431 19.6569 9 18 9H12.1973C12.7078 9.88252 13 10.9071 13 12C13 13.0929 12.7078 14.1175 12.1973 15Z" fill="currentColor"/>
+    </svg>
+  );
+}

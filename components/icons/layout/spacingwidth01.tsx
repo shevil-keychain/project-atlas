@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface SpacingWidth01Props {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function SpacingWidth01({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: SpacingWidth01Props) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M3 2C3.55228 2 4 2.44772 4 3V21C4 21.5523 3.55228 22 3 22C2.44772 22 2 21.5523 2 21V3C2 2.44772 2.44772 2 3 2ZM21 2C21.5523 2 22 2.44772 22 3V21C22 21.5523 21.5523 22 21 22C20.4477 22 20 21.5523 20 21V3C20 2.44772 20.4477 2 21 2ZM8.5547 8.16795C9.01423 8.4743 9.1384 9.09517 8.83205 9.5547L7.86852 11H16.1315L15.168 9.5547C14.8616 9.09517 14.9858 8.4743 15.4453 8.16795C15.9048 7.8616 16.5257 7.98577 16.8321 8.4453L18.8321 11.4453C19.056 11.7812 19.056 12.2188 18.8321 12.5547L16.8321 15.5547C16.5257 16.0142 15.9048 16.1384 15.4453 15.8321C14.9858 15.5257 14.8616 14.9048 15.1679 14.4453L16.1315 13H7.86852L8.83205 14.4453C9.1384 14.9048 9.01423 15.5257 8.5547 15.8321C8.09517 16.1384 7.4743 16.0142 7.16795 15.5547L5.16795 12.5547C4.94402 12.2188 4.94402 11.7812 5.16795 11.4453L7.16795 8.4453C7.4743 7.98577 8.09517 7.8616 8.5547 8.16795Z" fill="currentColor"/>
+    </svg>
+  );
+}

@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface Toggle02RightProps {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function Toggle02Right({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: Toggle02RightProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M14.5821 8.81288C13.6204 9.54342 12.9995 10.6992 12.9995 12C12.9995 13.3008 13.6204 14.4566 14.5821 15.1871C14.5938 15.1955 14.6054 15.2042 14.6167 15.2132C15.2823 15.7075 16.1067 16 16.9995 16C19.2087 16 20.9995 14.2091 20.9995 12C20.9995 9.79086 19.2087 8 16.9995 8C16.1067 8 15.2823 8.29248 14.6167 8.78685C14.6054 8.79577 14.5938 8.80445 14.5821 8.81288ZM11.8022 9C11.2917 9.88252 10.9995 10.9071 10.9995 12C10.9995 13.0929 11.2917 14.1175 11.8022 15H6C4.34315 15 3 13.6569 3 12C3 10.3431 4.34315 9 6 9H11.8022ZM13.6817 7H6C3.23858 7 1 9.23858 1 12C1 14.7614 3.23858 17 6 17H13.6817C14.632 17.6318 15.7728 18 16.9995 18C20.3132 18 22.9995 15.3137 22.9995 12C22.9995 8.68629 20.3132 6 16.9995 6C15.7728 6 14.632 6.36815 13.6817 7Z" fill="currentColor"/>
+    </svg>
+  );
+}

@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface MouseProps {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function Mouse({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: MouseProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M4 9C4 4.58172 7.58172 1 12 1C16.4183 1 20 4.58172 20 9V15C20 19.4183 16.4183 23 12 23C7.58172 23 4 19.4183 4 15V9ZM12 3C8.68629 3 6 5.68629 6 9V15C6 18.3137 8.68629 21 12 21C15.3137 21 18 18.3137 18 15V9C18 5.68629 15.3137 3 12 3ZM12 5C12.5523 5 13 5.44772 13 6V9C13 9.55228 12.5523 10 12 10C11.4477 10 11 9.55228 11 9V6C11 5.44772 11.4477 5 12 5Z" fill="currentColor"/>
+    </svg>
+  );
+}

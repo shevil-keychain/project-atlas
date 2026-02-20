@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface CurrencyEthereumProps {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function CurrencyEthereum({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: CurrencyEthereumProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M12 1C12.2856 0.999999 12.5576 1.12215 12.7474 1.33564L20.7474 10.3356C20.9798 10.5971 21.0587 10.9609 20.9554 11.2951C20.8522 11.6293 20.5819 11.8853 20.2425 11.9701L12.2425 13.9701C12.0833 14.01 11.9167 14.01 11.7575 13.9701L3.75747 11.9703C3.41812 11.8855 3.14777 11.6295 3.04453 11.2953C2.9413 10.9611 3.02019 10.5972 3.25257 10.3358L11.2526 1.33564C11.4423 1.12215 11.7143 1 12 1ZM11 4.63023L6.89823 9.24478L11 8.21931V4.63023ZM12 10.0309L8.12317 11.0001L12 11.9692L15.8768 11L12 10.0309ZM17.1018 9.2447L13 8.21929V4.6302L17.1018 9.2447ZM4.63446 14.4991C4.85448 14.1189 5.29683 13.9268 5.72485 14.0256L12 15.4737L18.2751 14.0256C18.7031 13.9268 19.1455 14.1189 19.3655 14.4991C19.5855 14.8793 19.5317 15.3586 19.2328 15.6804L12.7329 22.6804C12.5437 22.8842 12.2782 23 12.0001 23C11.722 23 11.4565 22.8842 11.2673 22.6805L4.7672 15.6805C4.4683 15.3586 4.41445 14.8793 4.63446 14.4991ZM8.44973 16.707L12.0001 20.5304L15.5503 16.707L12.2248 17.4744C12.0769 17.5085 11.9231 17.5085 11.7751 17.4744L8.44973 16.707Z" fill="currentColor"/>
+    </svg>
+  );
+}

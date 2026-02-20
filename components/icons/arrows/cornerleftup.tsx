@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface CornerLeftUpProps {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function CornerLeftUp({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: CornerLeftUpProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M8 3C8.26522 3 8.51957 3.10536 8.70711 3.29289L13.7071 8.29289C14.0976 8.68342 14.0976 9.31658 13.7071 9.70711C13.3166 10.0976 12.6834 10.0976 12.2929 9.70711L9 6.41421V10.4C9 12.0967 9.00078 13.309 9.07842 14.2594C9.15512 15.198 9.30179 15.7927 9.54497 16.27C10.0243 17.2108 10.7892 17.9757 11.73 18.455C12.2073 18.6982 12.802 18.8449 13.7406 18.9216C14.691 18.9992 15.9033 19 17.6 19H21C21.5523 19 22 19.4477 22 20C22 20.5523 21.5523 21 21 21L17.5556 21C15.9131 21 14.6191 21 13.5778 20.9149C12.5154 20.8281 11.6283 20.6478 10.8221 20.237C9.50493 19.5659 8.43407 18.4951 7.76296 17.1779C7.35217 16.3717 7.17186 15.4846 7.08507 14.4222C6.99999 13.3809 6.99999 12.087 7 10.4444V6.41421L3.70711 9.70711C3.31658 10.0976 2.68342 10.0976 2.29289 9.70711C1.90237 9.31658 1.90237 8.68342 2.29289 8.29289L7.29289 3.29289C7.48043 3.10536 7.73478 3 8 3Z" fill="currentColor"/>
+    </svg>
+  );
+}

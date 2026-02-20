@@ -1,0 +1,30 @@
+import React from 'react';
+
+export interface Cloud03Props {
+  /** Size of the icon in pixels */
+  size?: number;
+  /** Color of the icon - defaults to currentColor */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+}
+
+export function Cloud03({ 
+  size = 24, 
+  color = 'currentColor',
+  className 
+}: Cloud03Props) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      style={{ color }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fillRule="evenodd" clipRule="evenodd" d="M9.5 5C5.91015 5 3 7.91015 3 11.5C3 15.0899 5.91015 18 9.5 18H16.5C18.9853 18 21 15.9853 21 13.5C21 11.0147 18.9853 9 16.5 9C16.4009 9 16.3026 9.00319 16.2053 9.00946C15.8117 9.03482 15.4399 8.82639 15.2561 8.47732C14.1667 6.40763 11.9969 5 9.5 5ZM1 11.5C1 6.80558 4.80558 3 9.5 3C12.5447 3 15.2141 4.6011 16.7144 7.00347C20.205 7.11661 23 9.9819 23 13.5C23 17.0899 20.0898 20 16.5 20H9.5C4.80558 20 1 16.1944 1 11.5Z" fill="currentColor"/>
+    </svg>
+  );
+}
