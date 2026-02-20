@@ -45,7 +45,7 @@ function RadioGroupItem({
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <Circle className="size-2 fill-primary text-primary" />
+        <Circle className="size-2 fill-primary text-primary font-medium" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )

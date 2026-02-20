@@ -53,7 +53,7 @@ function CheckboxWithLabel({
         {subtext && (
           <span
             className={cn(
-              "text-xs font-medium text-stone-700 leading-tight mt-0.5",
+              "text-xs font-medium text-stone-700 leading-tight mt-1.5",
               disabled && "text-stone-600"
             )}
           >

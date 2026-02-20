@@ -1,136 +1,207 @@
-import { ArrowLeft, ArrowRight, Trash2, Plus } from "lucide-react"
+import { ArrowLeft, ArrowRight, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { BackButton } from "@/components/ui/back-button"
 
 const variants = [
-  "default",
-  "destructive",
-  "secondary",
-  "ghost",
-  "linkPrimary",
-  "linkSecondary",
+  { value: "default", label: "Default" },
+  { value: "destructive", label: "Destructive" },
+  { value: "secondary", label: "Secondary" },
+  { value: "ghost", label: "Ghost" },
+  { value: "linkPrimary", label: "Link Primary" },
+  { value: "linkSecondary", label: "Link Secondary" },
 ] as const
 
-const sizes = ["sm", "default", "lg"] as const
-const iconSizes = ["icon-sm", "icon", "icon-lg"] as const
+const sizes = [
+  { value: "sm", label: "Small" },
+  { value: "default", label: "Default" },
+  { value: "lg", label: "Large" },
+] as const
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
+const iconSizes = [
+  { value: "icon-sm", label: "Small" },
+  { value: "icon", label: "Default" },
+  { value: "icon-lg", label: "Large" },
+] as const
+
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string
+  description: string
+  children: React.ReactNode
+}) {
   return (
-    <h2 className="text-lg font-bold tracking-tight text-foreground mb-4 mt-10 first:mt-0">
-      {children}
-    </h2>
+    <section className="rounded-2xl border border-stone-300/80 bg-white/90 p-6 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
+      <div className="mb-5">
+        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+        <p className="mt-1 text-sm text-stone-700">{description}</p>
+      </div>
+      <div className="space-y-3">{children}</div>
+    </section>
   )
 }
 
-function VariantLabel({ children }: { children: React.ReactNode }) {
+function Row({
+  label,
+  children,
+}: {
+  label: string
+  children: React.ReactNode
+}) {
   return (
-    <span className="text-xs font-semibold text-stone-600 uppercase tracking-wider min-w-28 shrink-0">
-      {children}
-    </span>
+    <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-4 sm:flex sm:items-center sm:gap-6">
+      <p className="w-32 shrink-0 text-xs font-semibold uppercase tracking-[0.14em] text-stone-600">
+        {label}
+      </p>
+      <div className="mt-3 flex flex-wrap items-center gap-3 sm:mt-0">
+        {children}
+      </div>
+    </div>
   )
 }
 
 export default function ButtonPage() {
   return (
-    <div className="min-h-screen p-12 max-w-5xl">
-      <h1 className="text-3xl font-bold tracking-tight mb-1">Button</h1>
-      <p className="text-stone-700 mb-10">
-        All variants, sizes, icon slots, and disabled states.
-      </p>
-
-      {/* Variants x Sizes */}
-      <SectionHeading>Variants &times; Sizes</SectionHeading>
-      <div className="space-y-5">
-        {variants.map((variant) => (
-          <div key={variant} className="flex items-center gap-4 flex-wrap">
-            <VariantLabel>{variant}</VariantLabel>
-            {sizes.map((size) => (
-              <Button key={size} variant={variant} size={size}>
-                {size === "sm" ? "Small" : size === "lg" ? "Large" : "Default"}
-              </Button>
-            ))}
+    <div className="min-h-screen bg-[radial-gradient(1100px_420px_at_0%_-10%,#FFF5EB,transparent),radial-gradient(900px_360px_at_100%_0%,#F5FCFF,transparent)] px-4 py-10 sm:px-8">
+      <div className="mx-auto max-w-6xl space-y-8">
+        <header className="rounded-2xl border border-stone-300/80 bg-white/90 p-6 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-600">
+            Component Demo
+          </p>
+          <BackButton />
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground">
+            Button
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-stone-700">
+            Clean reference for variants, sizes, icon placements, and disabled
+            states with consistent labels and spacing.
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-stone-600">
+                Variants
+              </p>
+              <p className="mt-1 text-xl font-bold text-foreground">
+                {variants.length}
+              </p>
+            </div>
+            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-stone-600">
+                Text Sizes
+              </p>
+              <p className="mt-1 text-xl font-bold text-foreground">
+                {sizes.length}
+              </p>
+            </div>
+            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-3">
+              <p className="text-xs uppercase tracking-[0.12em] text-stone-600">
+                Icon Sizes
+              </p>
+              <p className="mt-1 text-xl font-bold text-foreground">
+                {iconSizes.length}
+              </p>
+            </div>
           </div>
-        ))}
-      </div>
+        </header>
 
-      {/* With Icons */}
-      <SectionHeading>With Icons</SectionHeading>
-      <div className="space-y-5">
-        <div className="flex items-center gap-4 flex-wrap">
-          <VariantLabel>icon left</VariantLabel>
-          <Button iconLeft={<ArrowLeft className="size-4" />}>
-            Back
-          </Button>
-          <Button variant="secondary" iconLeft={<ArrowLeft className="size-4" />}>
-            Back
-          </Button>
-          <Button variant="ghost" iconLeft={<ArrowLeft className="size-4" />}>
-            Back
-          </Button>
-        </div>
-        <div className="flex items-center gap-4 flex-wrap">
-          <VariantLabel>icon right</VariantLabel>
-          <Button iconRight={<ArrowRight className="size-4" />}>
-            Continue
-          </Button>
-          <Button variant="secondary" iconRight={<ArrowRight className="size-4" />}>
-            Continue
-          </Button>
-          <Button variant="ghost" iconRight={<ArrowRight className="size-4" />}>
-            Continue
-          </Button>
-        </div>
-        <div className="flex items-center gap-4 flex-wrap">
-          <VariantLabel>both icons</VariantLabel>
-          <Button
-            iconLeft={<ArrowLeft className="size-4" />}
-            iconRight={<ArrowRight className="size-4" />}
-          >
-            Navigate
-          </Button>
-          <Button
-            variant="destructive"
-            iconLeft={<Trash2 className="size-4" />}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
-
-      {/* Icon-only */}
-      <SectionHeading>Icon-Only Buttons</SectionHeading>
-      <div className="space-y-5">
-        {(["default", "destructive", "secondary", "ghost"] as const).map(
-          (variant) => (
-            <div key={variant} className="flex items-center gap-4 flex-wrap">
-              <VariantLabel>{variant}</VariantLabel>
-              {iconSizes.map((size) => (
-                <Button key={size} variant={variant} size={size}>
-                  <Plus className="size-4" />
+        <Section
+          title="Variant and Size Matrix"
+          description="Every variant rendered across small, default, and large sizes."
+        >
+          {variants.map((variant) => (
+            <Row key={variant.value} label={variant.label}>
+              {sizes.map((size) => (
+                <Button key={size.value} variant={variant.value} size={size.value}>
+                  {size.label}
                 </Button>
               ))}
-            </div>
-          )
-        )}
-      </div>
+            </Row>
+          ))}
+        </Section>
 
-      {/* Disabled */}
-      <SectionHeading>Disabled States</SectionHeading>
-      <div className="space-y-5">
-        {variants.map((variant) => (
-          <div key={variant} className="flex items-center gap-4 flex-wrap">
-            <VariantLabel>{variant}</VariantLabel>
-            <Button variant={variant} disabled>
-              Disabled
+        <Section
+          title="Buttons with Icons"
+          description="Consistent examples for left icon, right icon, and dual-icon combinations."
+        >
+          <Row label="Left Icon">
+            <Button iconLeft={<ArrowLeft className="size-4" />}>Back</Button>
+            <Button variant="secondary" iconLeft={<ArrowLeft className="size-4" />}>
+              Back
             </Button>
+            <Button variant="ghost" iconLeft={<ArrowLeft className="size-4" />}>
+              Back
+            </Button>
+          </Row>
+          <Row label="Right Icon">
+            <Button iconRight={<ArrowRight className="size-4" />}>Continue</Button>
             <Button
-              variant={variant}
-              disabled
-              iconLeft={<ArrowLeft className="size-4" />}
+              variant="secondary"
+              iconRight={<ArrowRight className="size-4" />}
             >
-              Disabled
+              Continue
             </Button>
-          </div>
-        ))}
+            <Button variant="ghost" iconRight={<ArrowRight className="size-4" />}>
+              Continue
+            </Button>
+          </Row>
+          <Row label="Both Icons">
+            <Button
+              iconLeft={<ArrowLeft className="size-4" />}
+              iconRight={<ArrowRight className="size-4" />}
+            >
+              Navigate
+            </Button>
+            <Button variant="destructive" iconLeft={<Trash2 className="size-4" />}>
+              Delete
+            </Button>
+          </Row>
+        </Section>
+
+        <Section
+          title="Icon-Only Buttons"
+          description="Icon-only sizes for core button variants."
+        >
+          {variants
+            .filter(({ value }) =>
+              ["default", "destructive", "secondary", "ghost"].includes(value)
+            )
+            .map((variant) => (
+              <Row key={variant.value} label={variant.label}>
+                {iconSizes.map((size) => (
+                  <Button
+                    key={size.value}
+                    variant={variant.value}
+                    size={size.value}
+                    aria-label={`${variant.label} ${size.label} add`}
+                  >
+                    <Plus className="size-4" />
+                  </Button>
+                ))}
+              </Row>
+            ))}
+        </Section>
+
+        <Section
+          title="Disabled States"
+          description="Each variant shown in disabled text-only and disabled-with-icon forms."
+        >
+          {variants.map((variant) => (
+            <Row key={variant.value} label={variant.label}>
+              <Button variant={variant.value} disabled>
+                Disabled
+              </Button>
+              <Button
+                variant={variant.value}
+                disabled
+                iconLeft={<ArrowLeft className="size-4" />}
+              >
+                Disabled
+              </Button>
+            </Row>
+          ))}
+        </Section>
       </div>
     </div>
   )
