@@ -28,6 +28,7 @@ const components = [
   { name: "Inline Alert", href: "/inline-alert" },
   { name: "Tag", href: "/tag" },
   { name: "Page Header", href: "/page-header" },
+  { name: "Page Boilerplate", href: "/boilerplate" },
   { name: "Main Nav", href: "/main-nav" },
   { name: "Top Bar", href: "/top-bar" },
   { name: "Table", href: "/table" },
