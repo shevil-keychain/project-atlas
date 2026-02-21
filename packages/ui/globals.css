@@ -195,6 +195,7 @@
   --spacing-128: 128px;
   --spacing-240: 240px;
   --spacing-256: 256px;
+  --spacing-720: 720px;
 
   /* Typography Size Tokens (pixel-based) */
   --text-*: initial;
