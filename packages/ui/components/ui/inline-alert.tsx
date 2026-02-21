@@ -11,12 +11,11 @@ const inlineAlertVariants = cva(
   {
     variants: {
       variant: {
-        info:
-          "bg-secondary-blue-50 border-secondary-blue-100 text-secondary-blue-700",
-        success: "bg-success-50 border-success-100 text-success-700",
-        warning:
-          "bg-secondary-yellow-50 border-secondary-yellow-300 text-secondary-yellow-800",
-        error: "bg-error-50 border-error-100 text-error-700",
+        // info and warning use palette-specific tokens — no single semantic token covers these states
+        info: "bg-secondary-blue-50 border-secondary-blue-100 text-secondary-blue-700",
+        warning: "bg-secondary-yellow-50 border-secondary-yellow-300 text-secondary-yellow-800",
+        success: "bg-surface-success-subtle border-border-success text-icon-success",
+        error: "bg-surface-error-subtle border-border-error text-icon-error",
       },
     },
     defaultVariants: {
@@ -70,10 +69,10 @@ function InlineAlert({
       )}
       <div className="min-w-0 flex-1 flex flex-col gap-2">
         {title != null && (
-          <span className="text-14 font-semibold">{title}</span>
+          <span className="text-14 font-semibold text-text-primary">{title}</span>
         )}
         {description != null && (
-          <span className="text-12 font-medium">{description}</span>
+          <span className="text-12 font-medium text-text-secondary">{description}</span>
         )}
       </div>
       {action && (

@@ -17,17 +17,17 @@ function Calendar({ className, classNames, ...props }: CalendarProps) {
         months: "flex flex-col sm:flex-row gap-16",
         month: "relative flex flex-col gap-16",
         month_caption: "relative flex h-40 items-center justify-center",
-        caption_label: "text-14 font-semibold text-foreground",
+        caption_label: "text-14 font-semibold text-text-primary",
         nav: "absolute inset-x-0 top-12 flex h-40 items-center justify-between px-16",
         button_previous: cn(
-          "inline-flex items-center justify-center size-32 rounded-md border border-stone-400 bg-white text-stone-700 hover:bg-stone-100 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          "inline-flex items-center justify-center size-32 rounded-md border border-border-default bg-surface-card text-text-secondary hover:bg-interactive-secondary hover:text-text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         ),
         button_next: cn(
-          "inline-flex items-center justify-center size-32 rounded-md border border-stone-400 bg-white text-stone-700 hover:bg-stone-100 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          "inline-flex items-center justify-center size-32 rounded-md border border-border-default bg-surface-card text-text-secondary hover:bg-interactive-secondary hover:text-text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         ),
         month_grid: "border-collapse",
         weekdays: "",
-        weekday: "h-36 w-36 text-center align-middle font-medium text-12 text-stone-600",
+        weekday: "h-36 w-36 text-center align-middle font-medium text-12 text-text-tertiary",
         week: "",
         day: cn(
           "h-36 w-36 p-0 text-center align-middle text-14",
@@ -35,8 +35,8 @@ function Calendar({ className, classNames, ...props }: CalendarProps) {
         ),
         day_button: cn(
           "inline-flex items-center justify-center size-36 rounded-md font-medium transition-colors",
-          "hover:bg-stone-100 hover:text-foreground",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand-200",
+          "hover:bg-interactive-secondary hover:text-text-primary",
+          "focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus-ring)]",
           "disabled:pointer-events-none disabled:opacity-50"
         ),
         selected: cn(

@@ -8,10 +8,11 @@ const badgeVariants = cva(
   {
     variants: {
       color: {
-        gray: "bg-stone-100 text-stone-800",
+        gray: "bg-surface-sunken text-text-primary",
+        error: "bg-surface-error-subtle text-text-error",
+        // These variants use palette-specific tokens — no semantic equivalent exists for these brand expression colors
         primary: "bg-primary-lime-100 text-primary-lime-900",
         warning: "bg-secondary-yellow-100 text-secondary-yellow-800",
-        error: "bg-error-50 text-error-600",
         blue: "bg-primary-sky-50 text-primary-sky-800",
         purple: "bg-secondary-purple-50 text-secondary-purple-800",
       },

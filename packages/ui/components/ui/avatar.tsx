@@ -51,7 +51,7 @@ function Avatar({ name, size = "md", color, className, src }: AvatarProps) {
     <span
       data-slot="avatar"
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-white",
+        "inline-flex shrink-0 items-center justify-center rounded-full font-semibold text-text-inverse",
         sizeClasses[size],
         className,
       )}

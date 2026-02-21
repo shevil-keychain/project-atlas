@@ -315,7 +315,7 @@ function NavItem({
       <span
         className={cn(
           "text-10 leading-tight tracking-[0.2px] font-[family-name:var(--font-manrope,sans-serif)]",
-          isActive ? "text-white font-semibold" : "text-[#E1DEDA] font-medium"
+          isActive ? "text-text-inverse font-semibold" : "text-[#E1DEDA] font-medium"
         )}
       >
         {item.label}
@@ -330,7 +330,7 @@ export function MainNav({ activeItem, onItemClick, className }: MainNavProps) {
   return (
     <nav
       className={cn(
-        "flex h-screen w-[72px] flex-col items-center bg-gradient-to-b from-[#333333] to-[#1B1B1B] py-8 text-white",
+        "flex h-screen w-[72px] flex-col items-center bg-gradient-to-b from-[#333333] to-[#1B1B1B] py-8 text-text-inverse",
         className
       )}
     >

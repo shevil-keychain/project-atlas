@@ -1,0 +1,16 @@
+---
+description: Mandatory first step for every agent request — read the LLM context and rules folder before doing anything else.
+globs:
+alwaysApply: true
+---
+
+# Mandatory First Step
+
+Before doing anything else — regardless of the user's query — read every file in the folder `LLM context and rules` at the repository root:
+
+1. `LLM context and rules/tokens-usage.md`
+2. `LLM context and rules/components-usage.md`
+3. `LLM context and rules/overall-rules.md`
+4. `LLM context and rules/project-setup.md`
+
+Do not skip this step. Do not write or modify any code until you have read all four files. The tokens, components, rules, and project structure defined there are the source of truth for all UI work.

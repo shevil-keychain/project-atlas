@@ -58,14 +58,14 @@ function AlertToast({
         }
       `}</style>
 
-      <span className="shrink-0 text-white font-medium">
+      <span className="shrink-0 text-text-inverse font-medium">
         {icon ?? <CheckCircle size={16} />}
       </span>
 
       <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <span className="text-14 font-semibold text-white">{title}</span>
+        <span className="text-14 font-semibold text-text-inverse">{title}</span>
         {description && (
-          <span className="text-12 font-medium text-stone-600">
+          <span className="text-12 font-medium text-text-tertiary">
             {description}
           </span>
         )}
@@ -75,7 +75,7 @@ function AlertToast({
         <button
           type="button"
           onClick={onAction}
-          className="shrink-0 rounded-md border border-stone-300 bg-white px-12 py-6 text-14 font-semibold text-stone-800 transition-colors hover:bg-stone-100"
+          className="shrink-0 rounded-md border border-border-subtle bg-surface-card px-12 py-6 text-14 font-semibold text-stone-800 transition-colors hover:bg-interactive-secondary"
         >
           {actionLabel}
         </button>

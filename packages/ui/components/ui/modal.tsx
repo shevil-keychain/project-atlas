@@ -54,7 +54,7 @@ const DialogContent = React.forwardRef<
           ref={ref}
           className={cn(
             "fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2",
-            "w-full bg-white rounded-lg border border-stone-300 shadow-lg",
+            "w-full bg-surface-card rounded-lg border border-border-subtle shadow-lg",
             "flex flex-col max-h-[85vh]",
             "animate-in fade-in-0 zoom-in-95",
             "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
@@ -83,21 +83,21 @@ function DialogHeader({ children, description, className }: DialogHeaderProps) {
     <div
       className={cn(
         "flex items-center justify-between px-32 py-24",
-        isScrollable && "border-b border-stone-300",
+        isScrollable && "border-b border-border-subtle",
         className
       )}
     >
       <div>
-        <DialogPrimitive.Title className="text-xl font-bold tracking-tight text-foreground">
+        <DialogPrimitive.Title className="text-xl font-bold tracking-tight text-text-primary">
           {children}
         </DialogPrimitive.Title>
         {description && (
-          <DialogPrimitive.Description className="text-14 text-stone-700 mt-4">
+          <DialogPrimitive.Description className="text-14 text-text-secondary mt-4">
             {description}
           </DialogPrimitive.Description>
         )}
       </div>
-      <DialogPrimitive.Close className="size-40 rounded-lg hover:bg-stone-100 flex items-center justify-center">
+      <DialogPrimitive.Close className="size-40 rounded-lg hover:bg-interactive-secondary flex items-center justify-center">
         <X className="size-20" />
       </DialogPrimitive.Close>
     </div>
@@ -128,7 +128,7 @@ function DialogBody({
   }, [setScrollable])
 
   return (
-    <div ref={bodyRef} className={cn("flex-1 overflow-y-auto px-32 py-8 text-foreground", className)}>
+    <div ref={bodyRef} className={cn("flex-1 overflow-y-auto px-32 py-8 text-text-primary", className)}>
       {children}
     </div>
   )
@@ -146,7 +146,7 @@ function DialogFooter({
     <div
       className={cn(
         "flex items-center justify-end gap-12 px-32 py-32",
-        isScrollable && "border-t border-stone-300",
+        isScrollable && "border-t border-border-subtle",
         className
       )}
     >

@@ -68,7 +68,9 @@ export default function CardPage() {
         <Section title="With Image">
           <Card>
             <div className="p-8">
-              <div className="bg-stone-200 h-40 rounded-md" />
+              <div className="flex h-96 items-center justify-center rounded-md bg-stone-200 text-14 text-stone-700">
+                Image placeholder
+              </div>
             </div>
             <CardHeader>
               <CardTitle>Featured project</CardTitle>

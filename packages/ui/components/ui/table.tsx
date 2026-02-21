@@ -48,8 +48,8 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-stone-300 hover:bg-stone-50 transition-colors",
-      "data-[state=selected]:bg-primary-brand-50",
+      "border-b border-border-subtle hover:bg-surface-subtle transition-colors",
+      "data-[state=selected]:bg-surface-brand-subtle",
       className
     )}
     {...props}
@@ -78,7 +78,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     ref
   ) => {
     const baseClass =
-      "text-left text-12 font-semibold text-stone-700 px-16 py-12"
+      "text-left text-12 font-semibold text-text-secondary px-16 py-12"
     if (sortable) {
       const Icon =
         sortDirection === "asc"
@@ -123,7 +123,7 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("px-16 py-12 text-14 font-medium text-foreground", className)}
+    className={cn("px-16 py-12 text-14 font-medium text-text-primary", className)}
     {...props}
   />
 ))
@@ -135,7 +135,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-8 text-14 text-stone-600 text-left", className)}
+    className={cn("mt-8 text-14 text-text-tertiary text-left", className)}
     {...props}
   />
 ))

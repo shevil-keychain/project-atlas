@@ -7,6 +7,12 @@
 @source "../../apps/**/*.tsx";
 
 @theme {
+  /* ═══════════════════════════════════════════════════════════
+     PRIMITIVES — raw palette values.
+     ⚠️  Never use these directly in component code.
+     Always use the semantic tokens in @theme inline below.
+     ═══════════════════════════════════════════════════════════ */
+
   /* Base Colors */
   --color-white: #FFFFFF;
   --color-off-black: #282624;
@@ -277,6 +283,134 @@
 }
 
 @theme inline {
+  /* ═══════════════════════════════════════════════════════════
+     SEMANTIC COLOR TOKENS — use these in all component code.
+     Each generates Tailwind utilities (bg-*, text-*, border-*)
+     and is also accessible as a CSS var via var(--color-*).
+     ═══════════════════════════════════════════════════════════ */
+
+  /* ─── TEXT COLORS ─── */
+
+  /* Primary body text — headings, labels, body copy */
+  --color-text-primary: var(--color-off-black);
+
+  /* Secondary text — descriptions, helper text, metadata */
+  --color-text-secondary: var(--color-stone-700);
+
+  /* Tertiary text — placeholders, timestamps, low-priority metadata */
+  --color-text-tertiary: var(--color-stone-600);
+
+  /* Disabled text — inactive controls */
+  --color-text-disabled: var(--color-stone-500);
+
+  /* Inverse text — text on dark or brand-colored backgrounds */
+  --color-text-inverse: var(--color-white);
+
+  /* Brand text — links, brand-colored labels, active nav items */
+  --color-text-brand: var(--color-primary-brand-700);
+
+  /* Error text — error messages, invalid field labels */
+  --color-text-error: var(--color-error-600);
+
+  /* Success text — success messages */
+  --color-text-success: var(--color-success-700);
+
+  /* Warning text — warning messages */
+  --color-text-warning: var(--color-warning-700);
+
+
+  /* ─── SURFACE / BACKGROUND COLORS ─── */
+
+  /* Page background — main page canvas */
+  --color-surface-page: var(--color-white);
+
+  /* Card/panel background — elevated containers, modals, sheets, popovers */
+  --color-surface-card: var(--color-white);
+
+  /* Subtle background — secondary panels, table headers, sidebar, hover rows */
+  --color-surface-subtle: var(--color-stone-50);
+
+  /* Sunken background — inset areas, code blocks, input wells, badge backgrounds */
+  --color-surface-sunken: var(--color-stone-100);
+
+  /* Muted background — disabled inputs, skeleton loaders, placeholder areas */
+  --color-surface-muted: var(--color-stone-200);
+
+  /* Brand background — primary CTA buttons, active brand indicators */
+  --color-surface-brand: var(--color-primary-brand-500);
+
+  /* Brand subtle — active breadcrumb, brand-tinted chips, soft highlights */
+  --color-surface-brand-subtle: var(--color-primary-brand-50);
+
+  /* Feedback backgrounds */
+  --color-surface-error: var(--color-error-500);
+  --color-surface-error-subtle: var(--color-error-50);
+  --color-surface-success: var(--color-success-500);
+  --color-surface-success-subtle: var(--color-success-50);
+  --color-surface-warning: var(--color-warning-500);
+  --color-surface-warning-subtle: var(--color-warning-50);
+
+
+  /* ─── BORDER COLORS ─── */
+
+  /* Default border — card borders, dividers */
+  --color-border-default: var(--color-stone-400);
+
+  /* Subtle border — inner dividers, less prominent separators, disabled inputs */
+  --color-border-subtle: var(--color-stone-300);
+
+  /* Strong border — input resting borders, emphasized dividers */
+  --color-border-strong: var(--color-stone-500);
+
+  /* Focus border — focused inputs, active selection */
+  --color-border-focus: var(--color-primary-brand-500);
+
+  /* Error border — invalid inputs, error state borders */
+  --color-border-error: var(--color-error-500);
+
+  /* Success border — valid inputs, success state borders */
+  --color-border-success: var(--color-success-500);
+
+
+  /* ─── INTERACTIVE COLORS ─── */
+
+  /* Primary action — main CTA button */
+  --color-interactive-primary: var(--color-primary-brand-500);
+  --color-interactive-primary-hover: var(--color-primary-brand-600);
+  --color-interactive-primary-active: var(--color-primary-brand-700);
+
+  /* Secondary action — ghost/secondary button hover background */
+  --color-interactive-secondary: var(--color-stone-100);
+  --color-interactive-secondary-hover: var(--color-stone-200);
+
+  /* Destructive action — delete, remove */
+  --color-interactive-destructive: var(--color-error-500);
+  --color-interactive-destructive-hover: var(--color-error-600);
+
+
+  /* ─── FOCUS RING ─── */
+
+  /* Focus ring color — always use var(--shadow-focus-ring) for the full shadow */
+  --color-focus-ring: var(--color-primary-brand-200);
+
+
+  /* ─── ICON COLORS ─── */
+
+  --color-icon-primary: var(--color-off-black);
+  --color-icon-secondary: var(--color-stone-700);
+  --color-icon-tertiary: var(--color-stone-600);
+  --color-icon-brand: var(--color-primary-brand-500);
+  --color-icon-error: var(--color-error-500);
+  --color-icon-success: var(--color-success-500);
+  --color-icon-warning: var(--color-warning-500);
+
+
+  /* ═══════════════════════════════════════════════════════════
+     SHADCN COMPATIBILITY TOKENS
+     These map shadcn component conventions to our primitives.
+     Prefer the semantic tokens above for new component code.
+     ═══════════════════════════════════════════════════════════ */
+
   --color-background: var(--color-white);
   --color-foreground: var(--color-off-black);
   --color-card: var(--color-white);
@@ -321,6 +455,80 @@
 
 :root {
   --radius: 8px;
+
+  /* ═══════════════════════════════════════════════════════════
+     SEMANTIC SPACING TOKENS
+     Use these in CSS files. In TSX, use Tailwind classes (p-16, gap-24, etc.)
+     ═══════════════════════════════════════════════════════════ */
+
+  /* Component padding scale */
+  --space-component-padding-sm: var(--spacing-8);    /* 8px  — small buttons, compact items */
+  --space-component-padding-md: var(--spacing-12);   /* 12px — input horizontal padding */
+  --space-component-padding-lg: var(--spacing-16);   /* 16px — default button padding, card compact */
+  --space-component-padding-xl: var(--spacing-24);   /* 24px — card standard, page content */
+
+  /* Component gap scale */
+  --space-component-gap-sm: var(--spacing-8);        /* 8px  — gap within tight groups */
+  --space-component-gap-md: var(--spacing-16);       /* 16px — gap within sections */
+  --space-component-gap-lg: var(--spacing-24);       /* 24px — gap between sections */
+  --space-component-gap-xl: var(--spacing-32);       /* 32px — gap between major page areas */
+
+
+  /* ═══════════════════════════════════════════════════════════
+     SEMANTIC TYPOGRAPHY TOKENS
+     Use these in CSS files. In TSX, use Tailwind classes (text-14, font-semibold, etc.)
+     ═══════════════════════════════════════════════════════════ */
+
+  --text-heading-page-size: var(--text-24);
+  --text-heading-page-weight: var(--font-weight-semibold);
+
+  --text-heading-section-size: var(--text-18);
+  --text-heading-section-weight: var(--font-weight-semibold);
+
+  --text-body-size: var(--text-14);
+  --text-body-weight: var(--font-weight-medium);
+
+  --text-caption-size: var(--text-12);
+  --text-caption-weight: var(--font-weight-medium);
+
+  --text-label-size: var(--text-14);
+  --text-label-weight: var(--font-weight-semibold);
+
+
+  /* ═══════════════════════════════════════════════════════════
+     SEMANTIC RADIUS TOKENS
+     Component-specific radius aliases. In TSX, use Tailwind (rounded-lg, rounded-xl, etc.)
+     ═══════════════════════════════════════════════════════════ */
+
+  --radius-button: var(--radius-lg);     /* 8px  */
+  --radius-input: var(--radius-lg);      /* 8px  */
+  --radius-card: var(--radius-xl);       /* 12px */
+  --radius-badge: var(--radius-round);   /* 500px — pill */
+  --radius-modal: var(--radius-xl);      /* 12px */
+  --radius-tooltip: var(--radius-md);    /* 6px  */
+
+
+  /* ═══════════════════════════════════════════════════════════
+     SEMANTIC SHADOW TOKENS
+     ═══════════════════════════════════════════════════════════ */
+
+  /* Standard focus ring — use on all focusable interactive elements */
+  --shadow-focus-ring: 0px 0px 0px 4px var(--color-focus-ring);
+
+  /* Error focus ring — use on inputs/controls in error state */
+  --shadow-focus-ring-error: 0px 0px 0px 4px var(--color-error-100);
+
+  /* Overlay backdrop — use for modal/sheet backdrops (no Tailwind utility for rgba) */
+  --color-surface-overlay: rgba(40, 38, 36, 0.5);
+
+
+  /* ═══════════════════════════════════════════════════════════
+     TRANSITION TOKENS
+     ═══════════════════════════════════════════════════════════ */
+
+  --transition-fast: 150ms ease;
+  --transition-normal: 200ms ease;
+  --transition-slow: 300ms ease;
 }
 
 @layer base {

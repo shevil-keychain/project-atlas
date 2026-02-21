@@ -49,7 +49,7 @@ const SheetContent = React.forwardRef<
         <Dialog.Content
           ref={ref}
           className={cn(
-            "fixed right-8 top-8 bottom-8 z-50 bg-white border border-stone-300 shadow-xl rounded-lg",
+            "fixed right-8 top-8 bottom-8 z-50 bg-surface-card border border-border-subtle shadow-xl rounded-lg",
             "flex flex-col",
             "animate-in slide-in-from-right duration-300",
             "data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=closed]:duration-200",
@@ -80,12 +80,12 @@ function SheetHeader({
     <div
       className={cn(
         "flex items-center justify-between px-32 py-24",
-        isScrollable && "border-b border-stone-300",
+        isScrollable && "border-b border-border-subtle",
         className
       )}
     >
       <div>
-        <Dialog.Title className="text-lg font-bold text-foreground">
+        <Dialog.Title className="text-lg font-bold text-text-primary">
           {children}
         </Dialog.Title>
         {description && (

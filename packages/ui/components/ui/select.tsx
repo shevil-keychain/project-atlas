@@ -24,16 +24,16 @@ const SelectTrigger = React.forwardRef<
     ref={ref}
     data-slot="select-trigger"
     className={cn(
-      "flex w-full items-center justify-between gap-8 rounded-lg bg-white border transition-all font-medium outline-none",
-      "text-foreground data-[placeholder]:text-stone-600",
+      "flex w-full items-center justify-between gap-8 rounded-lg bg-surface-card border transition-all font-medium outline-none",
+      "text-text-primary data-[placeholder]:text-text-tertiary",
       "hover:border-stone-600",
-      "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
+      "disabled:bg-surface-muted disabled:border-border-strong disabled:cursor-not-allowed disabled:text-stone-600",
       inputSize === "large"
         ? "h-48 px-16 py-12 text-16 font-medium"
         : "h-40 px-12 py-8 text-14 font-medium",
       error
-        ? "border-error-500 data-[state=open]:border-error-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-error-100)] focus-visible:border-error-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-error-100)]"
-        : "border-stone-500 data-[state=open]:border-primary-brand-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)] focus-visible:border-primary-brand-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]",
+        ? "border-border-error data-[state=open]:border-border-error data-[state=open]:shadow-[var(--shadow-focus-ring-error)] focus-visible:border-border-error focus-visible:shadow-[var(--shadow-focus-ring-error)]"
+        : "border-border-strong data-[state=open]:border-border-focus data-[state=open]:shadow-[var(--shadow-focus-ring)] focus-visible:border-border-focus focus-visible:shadow-[var(--shadow-focus-ring)]",
       className
     )}
     {...props}

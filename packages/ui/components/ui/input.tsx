@@ -15,16 +15,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         data-slot="input"
         className={cn(
-          "w-full rounded-lg bg-white border transition-all font-medium outline-none",
-          "placeholder:text-stone-600",
-          "hover:border-stone-600",
-          "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
+          "w-full rounded-lg bg-surface-card border transition-all font-medium outline-none text-text-primary",
+          "placeholder:text-text-tertiary",
+          "hover:border-border-strong",
+          "disabled:bg-surface-muted disabled:border-border-subtle disabled:cursor-not-allowed disabled:text-text-disabled disabled:placeholder:text-text-disabled",
           inputSize === "large"
             ? "h-48 px-16 py-12 text-16 font-medium"
             : "h-40 px-12 py-8 text-14 font-medium",
           error
-            ? "border-error-500 focus:border-error-500 focus:shadow-[0px_0px_0px_4px_var(--color-error-100)]"
-            : "border-stone-500 focus:border-primary-brand-500 focus:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]",
+            ? "border-border-error focus:border-border-error focus:shadow-[var(--shadow-focus-ring-error)]"
+            : "border-border-strong focus:border-border-focus focus:shadow-[var(--shadow-focus-ring)]",
           className
         )}
         {...props}

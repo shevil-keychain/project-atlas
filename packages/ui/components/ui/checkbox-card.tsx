@@ -33,22 +33,22 @@ function CheckboxCard({
         "group flex flex-col rounded-lg border px-16 py-12 transition-colors cursor-pointer select-none",
         checked
           ? "border-primary-brand-100"
-          : "border-stone-300",
+          : "border-border-subtle",
         disabled && "cursor-not-allowed opacity-70",
         className
       )}
     >
       <div className="flex items-start gap-12">
         {icon && (
-          <div className="flex size-32 shrink-0 items-center justify-center rounded-[8px] bg-stone-200">
+          <div className="flex size-32 shrink-0 items-center justify-center rounded-[8px] bg-surface-muted">
             {icon}
           </div>
         )}
         <div className="flex min-w-0 flex-1 flex-col">
           <span
             className={cn(
-              "text-14 font-semibold text-foreground leading-tight",
-              disabled && "text-stone-600"
+              "text-14 font-semibold text-text-primary leading-tight",
+              disabled && "text-text-tertiary"
             )}
           >
             {label}

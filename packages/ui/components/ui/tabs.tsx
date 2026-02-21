@@ -52,7 +52,7 @@ function TriggerContent({
         {badge}
       </span>
       {subtext && (
-        <span className="block text-12 font-medium text-stone-700">
+        <span className="block text-12 font-medium text-text-secondary">
           {subtext}
         </span>
       )}
@@ -72,7 +72,7 @@ const NeutralTabsList = React.forwardRef<
     ref={ref}
     data-slot="neutral-tabs-list"
     className={cn(
-      "inline-flex gap-4 rounded-lg bg-stone-100 p-4",
+      "inline-flex gap-4 rounded-lg bg-surface-sunken p-4",
       className,
     )}
     {...props}
@@ -88,10 +88,10 @@ const NeutralTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="neutral-tabs-trigger"
     className={cn(
-      "rounded-md px-16 py-8 text-14 font-semibold text-black transition-colors",
-      "hover:bg-stone-200",
-      "data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm",
-      "disabled:cursor-not-allowed disabled:text-stone-600",
+      "rounded-md px-16 py-8 text-14 font-semibold text-text-primary transition-colors",
+      "hover:bg-surface-muted",
+      "data-[state=active]:bg-surface-card data-[state=active]:text-text-primary data-[state=active]:shadow-sm",
+      "disabled:cursor-not-allowed disabled:text-text-disabled",
       className,
     )}
     {...props}
@@ -128,10 +128,10 @@ const BrandTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="brand-tabs-trigger"
     className={cn(
-      "rounded-md px-16 py-8 text-14 font-semibold text-black transition-colors",
-      "hover:bg-primary-brand-25",
-      "data-[state=active]:bg-primary-brand-50 data-[state=active]:text-primary-brand-700",
-      "disabled:cursor-not-allowed disabled:text-stone-600",
+      "rounded-md px-16 py-8 text-14 font-semibold text-text-primary transition-colors",
+      "hover:bg-surface-brand-subtle",
+      "data-[state=active]:bg-surface-brand-subtle data-[state=active]:text-text-brand",
+      "disabled:cursor-not-allowed disabled:text-text-disabled",
       className,
     )}
     {...props}
@@ -154,7 +154,7 @@ const UnderlinedTabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     data-slot="underlined-tabs-list"
-    className={cn("inline-flex border-b border-stone-300", className)}
+    className={cn("inline-flex border-b border-border-subtle", className)}
     {...props}
   />
 ))
@@ -168,10 +168,10 @@ const UnderlinedTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="underlined-tabs-trigger"
     className={cn(
-      "-mb-px border-b-2 border-transparent px-16 py-8 text-14 font-semibold text-black transition-colors",
-      "hover:text-black",
-      "data-[state=active]:border-primary-brand-700 data-[state=active]:text-primary-brand-700",
-      "disabled:cursor-not-allowed disabled:text-stone-600",
+      "-mb-px border-b-2 border-transparent px-16 py-8 text-14 font-semibold text-text-primary transition-colors",
+      "hover:text-text-primary",
+      "data-[state=active]:border-text-brand data-[state=active]:text-text-brand",
+      "disabled:cursor-not-allowed disabled:text-text-disabled",
       className,
     )}
     {...props}
@@ -208,10 +208,10 @@ const VerticalTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="vertical-tabs-trigger"
     className={cn(
-      "w-full rounded-md px-16 py-8 text-left text-14 font-semibold text-black transition-colors",
-      "hover:bg-stone-100",
-      "data-[state=active]:bg-primary-brand-50 data-[state=active]:text-primary-brand-700",
-      "disabled:cursor-not-allowed disabled:text-stone-600",
+      "w-full rounded-md px-16 py-8 text-left text-14 font-semibold text-text-primary transition-colors",
+      "hover:bg-interactive-secondary",
+      "data-[state=active]:bg-surface-brand-subtle data-[state=active]:text-text-brand",
+      "disabled:cursor-not-allowed disabled:text-text-disabled",
       className,
     )}
     {...props}

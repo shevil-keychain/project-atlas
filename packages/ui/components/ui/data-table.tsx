@@ -170,7 +170,7 @@ export function DataTable({
     <div className="space-y-8">
       <div className="flex flex-wrap justify-between items-center gap-12 py-12 px-4">
         <div className="flex flex-wrap items-center gap-8">
-          <span className="text-14 font-medium text-stone-700">
+          <span className="text-14 font-medium text-text-secondary">
             About {totalCount} {itemLabel}
           </span>
           {toolbarActions}
@@ -178,7 +178,7 @@ export function DataTable({
         <div className="flex flex-wrap items-center gap-8">
           {searchable && (
             <div className="relative w-256">
-              <Search className="absolute left-12 top-1/2 -translate-y-1/2 size-16 text-stone-500 pointer-events-none" />
+              <Search className="absolute left-12 top-1/2 -translate-y-1/2 size-16 text-text-disabled pointer-events-none" />
               <Input
                 value={searchQuery}
                 onChange={(e) => {
@@ -242,7 +242,7 @@ export function DataTable({
         </div>
       </div>
 
-      <div className="border border-stone-300 rounded-lg overflow-hidden">
+      <div className="border border-border-subtle rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -277,7 +277,7 @@ export function DataTable({
               <TableRow>
                 <TableCell
                   colSpan={visibleCols.length + (selectable ? 1 : 0)}
-                  className={cn("text-center text-stone-600", pyClass)}
+                  className={cn("text-center text-text-tertiary", pyClass)}
                 >
                   {emptyMessage}
                 </TableCell>

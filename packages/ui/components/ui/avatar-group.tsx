@@ -46,7 +46,7 @@ function AvatarGroup({ names, max = 3, size = "md", className }: AvatarGroupProp
       {overflowCount > 0 && (
         <span
           className={cn(
-            "inline-flex shrink-0 items-center justify-center rounded-full bg-stone-200 font-semibold text-stone-700 ring-2 ring-white",
+            "inline-flex shrink-0 items-center justify-center rounded-full bg-surface-muted font-semibold text-text-secondary ring-2 ring-white",
             sizeClasses[size],
             overlapClasses[size],
           )}

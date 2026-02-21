@@ -218,7 +218,7 @@ export default function ToggleDemoPage() {
                 checked={imageCard}
                 onCheckedChange={setImageCard}
                 image={
-                  <div className="flex h-24 items-center justify-center rounded-md bg-stone-200 text-14 text-stone-700">
+                  <div className="flex h-96 items-center justify-center rounded-md bg-stone-200 text-14 text-stone-700">
                     Image placeholder
                   </div>
                 }

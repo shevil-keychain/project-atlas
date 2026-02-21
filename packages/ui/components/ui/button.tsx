@@ -5,22 +5,22 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-8 whitespace-nowrap text-14 text-primary-foreground font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-8 whitespace-nowrap text-14 font-semibold transition-colors focus-visible:outline-none focus-visible:shadow-[var(--shadow-focus-ring)] disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-primary hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground",
+          "bg-interactive-primary hover:bg-interactive-primary-hover text-text-inverse disabled:bg-surface-muted disabled:text-text-disabled",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:bg-muted disabled:text-muted-foreground",
+          "bg-interactive-destructive hover:bg-interactive-destructive-hover text-text-inverse disabled:bg-surface-muted disabled:text-text-disabled",
         secondary:
-          "bg-white border border-border text-foreground hover:border-stone-600 disabled:text-muted-foreground disabled:border-border",
+          "bg-surface-card border border-border-default text-text-primary hover:bg-interactive-secondary hover:border-border-strong disabled:text-text-disabled disabled:border-border-subtle",
         ghost:
-          "text-foreground hover:bg-accent disabled:text-muted-foreground",
+          "text-text-primary hover:bg-interactive-secondary disabled:text-text-disabled",
         linkPrimary:
-          "text-primary-brand-700 underline-offset-4 hover:underline disabled:text-muted-foreground disabled:no-underline",
+          "text-text-brand underline-offset-4 hover:underline disabled:text-text-disabled disabled:no-underline",
         linkSecondary:
-          "text-foreground underline underline-offset-4 hover:underline disabled:text-muted-foreground",
+          "text-text-primary underline underline-offset-4 hover:underline disabled:text-text-disabled",
       },
       size: {
         sm: "h-32 px-12 rounded-lg",
