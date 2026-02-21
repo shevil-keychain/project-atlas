@@ -36,8 +36,8 @@ function Section({
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-stone-300/80 bg-white/90 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
-      <div className="border-b border-stone-200 px-6 py-3">
-        <h2 className="text-sm font-semibold text-foreground">{title}</h2>
+      <div className="border-b border-stone-200 px-24 py-12">
+        <h2 className="text-14 font-semibold text-foreground">{title}</h2>
       </div>
       {children}
     </section>
@@ -46,17 +46,17 @@ function Section({
 
 export default function PageHeaderDemoPage() {
   return (
-    <div className="min-h-screen bg-[radial-gradient(1100px_420px_at_0%_-10%,#FFF5EB,transparent),radial-gradient(900px_360px_at_100%_0%,#F5FCFF,transparent)] px-4 py-10 sm:px-8">
-      <div className="mx-auto max-w-4xl space-y-8">
+    <div className="min-h-screen bg-[radial-gradient(1100px_420px_at_0%_-10%,#FFF5EB,transparent),radial-gradient(900px_360px_at_100%_0%,#F5FCFF,transparent)] px-16 py-40 sm:px-32">
+      <div className="mx-auto max-w-4xl space-y-32">
         <BackButton />
-        <header className="rounded-2xl border border-stone-300/80 bg-white/90 p-6 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-600">
+        <header className="rounded-2xl border border-stone-300/80 bg-white/90 p-24 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
+          <p className="text-12 font-semibold uppercase tracking-[0.16em] text-stone-600">
             Pattern Demo
           </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="mt-8 text-30 font-bold tracking-tight text-foreground">
             Page Header
           </h1>
-          <p className="mt-2 text-sm text-stone-700">
+          <p className="mt-8 text-14 text-stone-700">
             Composable page header with back button, breadcrumb, title,
             description, metadata, actions, prev/next navigation, and status
             badges. Covers 5 layout variants from the product.
@@ -67,7 +67,7 @@ export default function PageHeaderDemoPage() {
         <Section title="1 — Back + title + badge + actions (Conversation tags)">
           <PageHeader>
             <PageHeaderRow>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-16">
                 <PageHeaderBackButton onClick={() => {}} />
                 <PageHeaderTitle>New conversation tag</PageHeaderTitle>
               </div>
@@ -77,10 +77,10 @@ export default function PageHeaderDemoPage() {
                 </Badge>
                 <button
                   type="button"
-                  className="flex size-10 items-center justify-center rounded-lg transition-colors hover:bg-stone-100"
+                  className="flex size-40 items-center justify-center rounded-lg transition-colors hover:bg-stone-100"
                   aria-label="More options"
                 >
-                  <MoreVertical className="size-5 text-stone-600" />
+                  <MoreVertical className="size-20 text-stone-600" />
                 </button>
                 <Button variant="secondary">Save</Button>
                 <Button disabled>Activate</Button>
@@ -93,9 +93,9 @@ export default function PageHeaderDemoPage() {
         <Section title="2 — Back + breadcrumb + title + action (VOC detail)">
           <PageHeader>
             <PageHeaderRow>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-16">
                 <PageHeaderBackButton onClick={() => {}} />
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-4">
                   <PageHeaderBreadcrumb>
                     <Breadcrumb>
                       <BreadcrumbList>
@@ -116,7 +116,7 @@ export default function PageHeaderDemoPage() {
                 </div>
               </div>
               <PageHeaderActions>
-                <Button variant="secondary" iconLeft={<Sparkles className="size-4" />}>
+                <Button variant="secondary" iconLeft={<Sparkles className="size-16" />}>
                   Ask AI
                 </Button>
               </PageHeaderActions>
@@ -127,8 +127,8 @@ export default function PageHeaderDemoPage() {
         {/* Variant 3: QA calibration — breadcrumb + title + badges + meta + prev/next + action */}
         <Section title="3 — Breadcrumb + title + badges + metadata + prev/next (QA calibration)">
           <PageHeader variant="subtle">
-            <div className="flex items-end justify-between gap-4">
-              <div className="flex flex-col gap-2">
+            <div className="flex items-end justify-between gap-16">
+              <div className="flex flex-col gap-8">
                 <PageHeaderBreadcrumb>
                   <Breadcrumb>
                     <BreadcrumbList>
@@ -139,7 +139,7 @@ export default function PageHeaderDemoPage() {
                     </BreadcrumbList>
                   </Breadcrumb>
                 </PageHeaderBreadcrumb>
-                <div className="flex flex-wrap items-baseline gap-3">
+                <div className="flex flex-wrap items-baseline gap-12">
                   <PageHeaderTitle>
                     John Doe (Original evaluator)
                   </PageHeaderTitle>
@@ -190,7 +190,7 @@ export default function PageHeaderDemoPage() {
         <Section title="4 — Title + description (QA preferences)">
           <PageHeader>
             <PageHeaderRow>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-4">
                 <PageHeaderTitle>QA preferences</PageHeaderTitle>
                 <PageHeaderDescription>
                   Configure default thresholds, sampling, and review rules for
@@ -205,10 +205,10 @@ export default function PageHeaderDemoPage() {
         <Section title="5 — Back + title + prev/next + metadata + avatars + actions (Account 360)">
           <PageHeader>
             <PageHeaderRow>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-16">
                 <PageHeaderBackButton onClick={() => {}} />
-                <div className="flex flex-col gap-1">
-                  <div className="flex items-center gap-6">
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-24">
                     <PageHeaderTitle size="2xl">
                       Understanding Integration issues
                     </PageHeaderTitle>
@@ -240,19 +240,19 @@ export default function PageHeaderDemoPage() {
               <PageHeaderActions>
                 <Button
                   variant="secondary"
-                  iconLeft={<ListPlus className="size-5" />}
+                  iconLeft={<ListPlus className="size-20" />}
                 >
                   Add to
                 </Button>
                 <Button
                   variant="secondary"
-                  iconLeft={<Share2 className="size-5" />}
+                  iconLeft={<Share2 className="size-20" />}
                 >
                   Share
                 </Button>
                 <Button
                   variant="secondary"
-                  iconLeft={<Sparkles className="size-4" />}
+                  iconLeft={<Sparkles className="size-16" />}
                 >
                   Ask AI
                 </Button>

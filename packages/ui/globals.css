@@ -158,6 +158,77 @@
   --font-sans: Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: var(--font-geist-mono);
 
+  /* Spacing Tokens (pixel-based) */
+  --spacing: initial;
+  --spacing-*: initial;
+  --spacing-0: 0px;
+  --spacing-1: 1px;
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-12: 12px;
+  --spacing-14: 14px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-22: 22px;
+  --spacing-24: 24px;
+  --spacing-28: 28px;
+  --spacing-32: 32px;
+  --spacing-36: 36px;
+  --spacing-40: 40px;
+  --spacing-44: 44px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-64: 64px;
+  --spacing-72: 72px;
+  --spacing-80: 80px;
+  --spacing-88: 88px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+  --spacing-240: 240px;
+  --spacing-256: 256px;
+
+  /* Typography Size Tokens (pixel-based) */
+  --text-*: initial;
+  --text-10: 10px;
+  --text-10--line-height: 16px;
+  --text-12: 12px;
+  --text-12--line-height: 16px;
+  --text-14: 14px;
+  --text-14--line-height: 20px;
+  --text-16: 16px;
+  --text-16--line-height: 24px;
+  --text-18: 18px;
+  --text-18--line-height: 28px;
+  --text-lg: 18px;
+  --text-lg--line-height: 28px;
+  --text-20: 20px;
+  --text-20--line-height: 28px;
+  --text-xl: 20px;
+  --text-xl--line-height: 28px;
+  --text-24: 24px;
+  --text-24--line-height: 32px;
+  --text-30: 30px;
+  --text-30--line-height: 36px;
+
+  /* Font Weight Tokens */
+  --font-weight-*: initial;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Shadow Tokens */
+  --shadow-*: initial;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-none: 0 0 #0000;
+
   /* Accordion Animations */
   --animate-accordion-down: accordion-down 200ms ease-out;
   --animate-accordion-up: accordion-up 200ms ease-out;

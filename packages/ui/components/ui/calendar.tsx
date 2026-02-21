@@ -12,29 +12,29 @@ type CalendarProps = DayPickerProps & {
 function Calendar({ className, classNames, ...props }: CalendarProps) {
   return (
     <DayPicker
-      className={cn("p-3", className)}
+      className={cn("p-12", className)}
       classNames={{
-        months: "flex flex-col sm:flex-row gap-4",
-        month: "relative flex flex-col gap-4",
-        month_caption: "relative flex h-10 items-center justify-center",
-        caption_label: "text-sm font-semibold text-foreground",
-        nav: "absolute inset-x-0 top-3 flex h-10 items-center justify-between px-4",
+        months: "flex flex-col sm:flex-row gap-16",
+        month: "relative flex flex-col gap-16",
+        month_caption: "relative flex h-40 items-center justify-center",
+        caption_label: "text-14 font-semibold text-foreground",
+        nav: "absolute inset-x-0 top-12 flex h-40 items-center justify-between px-16",
         button_previous: cn(
-          "inline-flex items-center justify-center size-8 rounded-md border border-stone-400 bg-white text-stone-700 hover:bg-stone-100 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          "inline-flex items-center justify-center size-32 rounded-md border border-stone-400 bg-white text-stone-700 hover:bg-stone-100 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         ),
         button_next: cn(
-          "inline-flex items-center justify-center size-8 rounded-md border border-stone-400 bg-white text-stone-700 hover:bg-stone-100 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          "inline-flex items-center justify-center size-32 rounded-md border border-stone-400 bg-white text-stone-700 hover:bg-stone-100 hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         ),
         month_grid: "border-collapse",
         weekdays: "",
-        weekday: "h-9 w-9 text-center align-middle font-medium text-xs text-stone-600",
+        weekday: "h-36 w-36 text-center align-middle font-medium text-12 text-stone-600",
         week: "",
         day: cn(
-          "h-9 w-9 p-0 text-center align-middle text-sm",
+          "h-36 w-36 p-0 text-center align-middle text-14",
           "focus-within:relative focus-within:z-20"
         ),
         day_button: cn(
-          "inline-flex items-center justify-center size-9 rounded-md font-medium transition-colors",
+          "inline-flex items-center justify-center size-36 rounded-md font-medium transition-colors",
           "hover:bg-stone-100 hover:text-foreground",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand-200",
           "disabled:pointer-events-none disabled:opacity-50"
@@ -56,9 +56,9 @@ function Calendar({ className, classNames, ...props }: CalendarProps) {
       components={{
         Chevron: ({ orientation }) =>
           orientation === "left" ? (
-            <ChevronLeft className="size-4" />
+            <ChevronLeft className="size-16" />
           ) : (
-            <ChevronRight className="size-4" />
+            <ChevronRight className="size-16" />
           ),
       }}
       {...props}

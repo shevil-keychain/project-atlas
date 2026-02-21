@@ -18,7 +18,7 @@ const Slider = React.forwardRef<
   const displayValues = Array.isArray(currentValue) ? currentValue : [currentValue]
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-12">
       <SliderPrimitive.Root
         ref={ref}
         data-slot="slider"
@@ -31,23 +31,23 @@ const Slider = React.forwardRef<
         defaultValue={defaultValue}
         {...props}
       >
-        <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-stone-300">
+        <SliderPrimitive.Track className="relative h-8 w-full grow overflow-hidden rounded-full bg-stone-300">
           <SliderPrimitive.Range className="absolute h-full bg-primary-brand-500 data-[disabled]:bg-stone-500" />
         </SliderPrimitive.Track>
         {displayValues.map((_, i) => (
           <SliderPrimitive.Thumb
             key={i}
             className={cn(
-              "block size-5 rounded-full border-2 border-primary-brand-500 bg-white shadow-sm transition-colors",
+              "block size-20 rounded-full border-2 border-primary-brand-500 bg-white shadow-sm transition-colors",
               "hover:border-primary-brand-600",
-              "focus-visible:outline-none focus-visible:shadow-[0px_0px_0px_4px_#FFCB9B]",
+              "focus-visible:outline-none focus-visible:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]",
               "disabled:border-stone-500 disabled:bg-stone-200"
             )}
           />
         ))}
       </SliderPrimitive.Root>
       {showValue && (
-        <span className="text-sm font-semibold text-foreground tabular-nums min-w-[3ch] text-right">
+        <span className="text-14 font-semibold text-foreground tabular-nums min-w-[3ch] text-right">
           {displayValues.map((v) => formatValue ? formatValue(v) : v).join(" – ")}
         </span>
       )}
@@ -84,7 +84,7 @@ function SliderField({
   const fmt = formatValue ?? ((v: number) => String(v))
 
   return (
-    <div data-slot="slider-field" className={cn("flex flex-col gap-2", className)}>
+    <div data-slot="slider-field" className={cn("flex flex-col gap-8", className)}>
       {(label || showRange) && (
         <div className="flex items-center justify-between">
           {label && (
@@ -99,7 +99,7 @@ function SliderField({
             </Label>
           )}
           {showRange && (
-            <span className="text-xs font-medium text-stone-600 tabular-nums">
+            <span className="text-12 font-medium text-stone-600 tabular-nums">
               {fmt(min)} – {fmt(max)}
             </span>
           )}
@@ -116,9 +116,9 @@ function SliderField({
       />
 
       {errorText ? (
-        <p className="text-xs font-medium text-error-500">{errorText}</p>
+        <p className="text-12 font-medium text-error-500">{errorText}</p>
       ) : hintText ? (
-        <p className="text-xs font-medium text-stone-700">{hintText}</p>
+        <p className="text-12 font-medium text-stone-700">{hintText}</p>
       ) : null}
     </div>
   )

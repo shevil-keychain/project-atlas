@@ -19,7 +19,7 @@ const PageHeader = React.forwardRef<HTMLElement, PageHeaderProps>(
       ref={ref as React.Ref<HTMLElement>}
       data-slot="page-header"
       className={cn(
-        "flex w-full flex-col gap-2 px-6 py-4",
+        "flex w-full flex-col gap-8 px-24 py-16",
         variant === "default" ? "bg-white" : "bg-stone-100",
         withBorder && "border-b border-stone-300",
         className
@@ -43,7 +43,7 @@ const PageHeaderRow = React.forwardRef<
   <div
     ref={ref}
     data-slot="page-header-row"
-    className={cn("flex items-center justify-between gap-4", className)}
+    className={cn("flex items-center justify-between gap-16", className)}
     {...props}
   />
 ))
@@ -65,14 +65,14 @@ const PageHeaderBackButton = React.forwardRef<
     type="button"
     data-slot="page-header-back"
     className={cn(
-      "flex size-10 shrink-0 items-center justify-center rounded-lg border border-stone-500 bg-white transition-colors hover:border-stone-600 hover:bg-stone-100",
+      "flex size-40 shrink-0 items-center justify-center rounded-lg border border-stone-500 bg-white transition-colors hover:border-stone-600 hover:bg-stone-100",
       className
     )}
     onClick={onClick}
     aria-label="Go back"
     {...props}
   >
-    {children ?? <ChevronLeft className="size-5 text-stone-700" />}
+    {children ?? <ChevronLeft className="size-20 text-stone-700" />}
   </button>
 ))
 PageHeaderBackButton.displayName = "PageHeaderBackButton"
@@ -112,7 +112,7 @@ const PageHeaderTitle = React.forwardRef<HTMLHeadingElement, PageHeaderTitleProp
       data-slot="page-header-title"
       className={cn(
         "font-bold text-foreground tracking-tight",
-        size === "2xl" ? "text-2xl tracking-[-0.4px]" : "text-xl tracking-[-0.2px]",
+        size === "2xl" ? "text-24 tracking-[-0.4px]" : "text-xl tracking-[-0.2px]",
         className
       )}
       {...props}
@@ -132,7 +132,7 @@ const PageHeaderDescription = React.forwardRef<
   <p
     ref={ref}
     data-slot="page-header-description"
-    className={cn("text-sm font-medium text-stone-700", className)}
+    className={cn("text-14 font-medium text-stone-700", className)}
     {...props}
   />
 ))
@@ -155,7 +155,7 @@ const PageHeaderMeta = React.forwardRef<HTMLDivElement, PageHeaderMetaProps>(
         ref={ref}
         data-slot="page-header-meta"
         className={cn(
-          "flex flex-wrap items-center gap-2 text-xs font-medium text-foreground",
+          "flex flex-wrap items-center gap-8 text-12 font-medium text-foreground",
           className
         )}
         {...props}
@@ -167,7 +167,7 @@ const PageHeaderMeta = React.forwardRef<HTMLDivElement, PageHeaderMetaProps>(
                 {i < items.length - 1 && (
                   <span
                     data-slot="page-header-meta-separator"
-                    className="h-3 w-px shrink-0 bg-stone-800"
+                    className="h-12 w-px shrink-0 bg-stone-800"
                     aria-hidden
                   />
                 )}
@@ -191,7 +191,7 @@ const PageHeaderActions = React.forwardRef<
   <div
     ref={ref}
     data-slot="page-header-actions"
-    className={cn("flex items-center gap-2", className)}
+    className={cn("flex items-center gap-8", className)}
     {...props}
   />
 ))
@@ -225,7 +225,7 @@ const PageHeaderNav = React.forwardRef<HTMLDivElement, PageHeaderNavProps>(
       ref={ref}
       data-slot="page-header-nav"
       className={cn(
-        "flex items-center gap-3 text-xs font-semibold text-primary-brand-700",
+        "flex items-center gap-12 text-12 font-semibold text-primary-brand-700",
         className
       )}
       {...props}
@@ -235,21 +235,21 @@ const PageHeaderNav = React.forwardRef<HTMLDivElement, PageHeaderNavProps>(
           {onPrev && (
             <button
               type="button"
-              className="flex items-center gap-1 transition-colors hover:text-primary-brand-500"
+              className="flex items-center gap-4 transition-colors hover:text-primary-brand-500"
               onClick={onPrev}
             >
-              <ArrowLeft className="size-4" />
+              <ArrowLeft className="size-16" />
               {prevLabel}
             </button>
           )}
           {onNext && (
             <button
               type="button"
-              className="flex items-center gap-1 transition-colors hover:text-primary-brand-500"
+              className="flex items-center gap-4 transition-colors hover:text-primary-brand-500"
               onClick={onNext}
             >
               {nextLabel}
-              <ArrowRight className="size-4" />
+              <ArrowRight className="size-16" />
             </button>
           )}
         </>
@@ -270,7 +270,7 @@ const PageHeaderStatus = React.forwardRef<
   <div
     ref={ref}
     data-slot="page-header-status"
-    className={cn("flex items-center gap-2", className)}
+    className={cn("flex items-center gap-8", className)}
     {...props}
   >
     {children}

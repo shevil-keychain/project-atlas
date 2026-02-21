@@ -14,8 +14,8 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+    <div className="space-y-16">
+      <h2 className="text-18 font-semibold text-foreground">{title}</h2>
       {children}
     </div>
   )
@@ -23,12 +23,12 @@ function Section({
 
 export default function InputDemoPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-xxl font-bold text-foreground">Input</h1>
-          <p className="mt-1 text-default text-stone-700 font-medium">
+          <h1 className="text-24 font-bold text-foreground">Input</h1>
+          <p className="mt-4 text-14 text-stone-700 font-medium">
             Text input fields with label, hint text, error state, and icon
             support.
           </p>
@@ -52,7 +52,7 @@ export default function InputDemoPage() {
         </Section>
 
         <Section title="With Icons">
-          <div className="space-y-6">
+          <div className="space-y-24">
             <InputField
               label="Search"
               placeholder="Search..."
@@ -76,7 +76,7 @@ export default function InputDemoPage() {
         </Section>
 
         <Section title="States">
-          <div className="space-y-6">
+          <div className="space-y-24">
             <InputField
               label="Placeholder"
               placeholder="Placeholder text"
@@ -102,7 +102,7 @@ export default function InputDemoPage() {
         </Section>
 
         <Section title="Error State">
-          <div className="space-y-6">
+          <div className="space-y-24">
             <InputField
               label="Email address"
               defaultValue="invalid-email"
@@ -119,7 +119,7 @@ export default function InputDemoPage() {
         </Section>
 
         <Section title="Required & Optional">
-          <div className="space-y-6">
+          <div className="space-y-24">
             <InputField
               label="Company name"
               placeholder="Acme Inc."

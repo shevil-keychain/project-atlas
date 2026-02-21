@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm text-primary-foreground font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-8 whitespace-nowrap text-14 text-primary-foreground font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -23,12 +23,12 @@ const buttonVariants = cva(
           "text-foreground underline underline-offset-4 hover:underline disabled:text-muted-foreground",
       },
       size: {
-        sm: "h-8 px-3 rounded-lg",
-        default: "h-10 px-4 rounded-lg",
-        lg: "h-12 px-6 rounded-lg text-base",
-        icon: "size-9 rounded-lg",
-        "icon-sm": "size-8 rounded-lg",
-        "icon-lg": "size-10 rounded-lg",
+        sm: "h-32 px-12 rounded-lg",
+        default: "h-40 px-16 rounded-lg",
+        lg: "h-48 px-24 rounded-lg text-16",
+        icon: "size-36 rounded-lg",
+        "icon-sm": "size-32 rounded-lg",
+        "icon-lg": "size-40 rounded-lg",
       },
     },
     defaultVariants: {
@@ -49,11 +49,11 @@ type ButtonProps = React.ComponentProps<"button"> &
 function Kbd({ shortcut }: { shortcut: string }) {
   const keys = shortcut.split("+").map((k) => k.trim())
   return (
-    <kbd className="ml-auto inline-flex items-center gap-0.5 text-xs font-medium opacity-60">
+    <kbd className="ml-auto inline-flex items-center gap-2 text-12 font-medium opacity-60">
       {keys.map((key, i) => (
         <span
           key={i}
-          className="inline-flex h-5 min-w-5 items-center justify-center rounded bg-white/10 px-1 font-mono text-[11px]"
+          className="inline-flex h-20 min-w-20 items-center justify-center rounded bg-white/10 px-4 font-mono text-[11px]"
         >
           {key}
         </span>

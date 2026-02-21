@@ -78,16 +78,16 @@ export function AIWorkersTopBar({
   sidebarOpen,
 }: AIWorkersTopBarProps) {
   return (
-    <header className="flex h-14 shrink-0 items-center gap-3 bg-gradient-to-r from-[#333333] to-[#1B1B1B] px-3">
+    <header className="flex h-56 shrink-0 items-center gap-12 bg-gradient-to-r from-[#333333] to-[#1B1B1B] px-12">
       {/* Logo */}
-      <div className="flex items-center gap-1.5">
-        <div className="flex items-center rounded-lg px-1.5 py-1">
+      <div className="flex items-center gap-6">
+        <div className="flex items-center rounded-lg px-6 py-4">
           <LogoMark />
         </div>
         <button
           type="button"
           onClick={onToggleSidebar}
-          className="flex h-7 w-7 items-center justify-center rounded-md text-stone-400 transition-colors hover:bg-white/10 hover:text-white"
+          className="flex h-28 w-28 items-center justify-center rounded-md text-stone-400 transition-colors hover:bg-white/10 hover:text-white"
         >
           {sidebarOpen ? (
             <PanelLeftClose size={15} />
@@ -98,13 +98,13 @@ export function AIWorkersTopBar({
       </div>
 
       {/* Session tabs */}
-      <div className="flex min-w-0 flex-1 items-center gap-1 px-2">
+      <div className="flex min-w-0 flex-1 items-center gap-4 px-8">
         {sessionTabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
             className={cn(
-              "flex max-w-[180px] items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+              "flex max-w-[180px] items-center gap-6 rounded-lg px-12 py-6 text-12 font-medium transition-colors",
               "group",
               tab.id === "1"
                 ? "bg-white/15 text-white"
@@ -126,10 +126,10 @@ export function AIWorkersTopBar({
       </div>
 
       {/* Right-side actions */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-6">
         <Button
           size="sm"
-          className="gap-1.5 bg-primary-brand-500 text-white hover:bg-primary-brand-600"
+          className="gap-6 bg-primary-brand-500 text-white hover:bg-primary-brand-600"
         >
           <Plus size={14} />
           <span>New Chat</span>
@@ -139,7 +139,7 @@ export function AIWorkersTopBar({
           type="button"
           onClick={() => onTabChange("automations")}
           className={cn(
-            "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+            "flex items-center gap-6 rounded-lg px-12 py-6 text-12 font-medium transition-colors",
             activeTab === "automations"
               ? "bg-white/15 text-white"
               : "text-stone-400 hover:bg-white/10 hover:text-stone-200"
@@ -153,7 +153,7 @@ export function AIWorkersTopBar({
           type="button"
           onClick={() => onTabChange("ai-workers")}
           className={cn(
-            "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+            "flex items-center gap-6 rounded-lg px-12 py-6 text-12 font-medium transition-colors",
             activeTab === "ai-workers"
               ? "bg-white/15 text-white"
               : "text-stone-400 hover:bg-white/10 hover:text-stone-200"

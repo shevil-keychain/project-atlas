@@ -14,8 +14,8 @@ import { BackButton } from "@/components/ui/back-button"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+    <div className="space-y-16">
+      <h2 className="text-18 font-semibold text-foreground">{title}</h2>
       {children}
     </div>
   )
@@ -31,12 +31,12 @@ export default function SelectDemoPage() {
   const [bare, setBare] = React.useState("")
 
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-xxl font-bold text-foreground">Select</h1>
-          <p className="mt-1 text-default text-stone-700 font-medium">
+          <h1 className="text-24 font-bold text-foreground">Select</h1>
+          <p className="mt-4 text-14 text-stone-700 font-medium">
             Dropdown select fields with search, icons, and form field wrapper.
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function SelectDemoPage() {
         </Section>
 
         <Section title="Required & Optional">
-          <div className="space-y-6">
+          <div className="space-y-24">
             <SelectField
               label="Department"
               required

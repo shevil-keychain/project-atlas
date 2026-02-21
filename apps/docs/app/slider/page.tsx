@@ -6,7 +6,7 @@ import { BackButton } from "@/components/ui/back-button"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -21,12 +21,12 @@ export default function SliderDemoPage() {
   const [price, setPrice] = React.useState([200, 800])
 
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Slider</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Slider</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Range slider with single and dual thumb variants, step markers, value display, and form field wrapper.
           </p>
         </div>

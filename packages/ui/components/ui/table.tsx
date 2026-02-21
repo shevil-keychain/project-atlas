@@ -11,7 +11,7 @@ const Table = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <table
     ref={ref}
-    className={cn("w-full border-collapse caption-bottom text-sm", className)}
+    className={cn("w-full border-collapse caption-bottom text-14", className)}
     {...props}
   />
 ))
@@ -69,6 +69,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     {
       className,
       sortable,
+      sorted,
       sortDirection,
       onSort,
       children,
@@ -77,7 +78,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
     ref
   ) => {
     const baseClass =
-      "text-left text-xs font-semibold text-stone-700 px-4 py-3"
+      "text-left text-12 font-semibold text-stone-700 px-16 py-12"
     if (sortable) {
       const Icon =
         sortDirection === "asc"
@@ -86,14 +87,19 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
             ? ChevronDown
             : ChevronsUpDown
       return (
-        <th ref={ref} className={cn(baseClass, className)} {...props}>
+        <th
+          ref={ref}
+          className={cn(baseClass, className)}
+          data-sorted={sorted ? "true" : undefined}
+          {...props}
+        >
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 hover:opacity-80"
+            className="inline-flex items-center gap-6 hover:opacity-80"
             onClick={onSort}
           >
             {children}
-            <Icon className="size-4 shrink-0" />
+            <Icon className="size-16 shrink-0" />
           </button>
         </th>
       )
@@ -117,7 +123,7 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("px-4 py-3 text-sm font-medium text-foreground", className)}
+    className={cn("px-16 py-12 text-14 font-medium text-foreground", className)}
     {...props}
   />
 ))
@@ -129,7 +135,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-2 text-sm text-stone-600 text-left", className)}
+    className={cn("mt-8 text-14 text-stone-600 text-left", className)}
     {...props}
   />
 ))

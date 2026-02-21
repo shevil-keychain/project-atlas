@@ -17,10 +17,10 @@ type ToastContainerProps = {
 }
 
 const positionClasses: Record<ToastPosition, string> = {
-  "top-center": "fixed top-4 left-1/2 -translate-x-1/2",
-  "top-right": "fixed top-4 right-4",
-  "bottom-center": "fixed bottom-4 left-1/2 -translate-x-1/2",
-  "bottom-right": "fixed bottom-4 right-4",
+  "top-center": "fixed top-16 left-1/2 -translate-x-1/2",
+  "top-right": "fixed top-16 right-16",
+  "bottom-center": "fixed bottom-16 left-1/2 -translate-x-1/2",
+  "bottom-right": "fixed bottom-16 right-16",
 }
 
 function ToastContainer({
@@ -35,7 +35,7 @@ function ToastContainer({
     <div
       data-slot="toast-container"
       className={cn(
-        "z-50 flex flex-col gap-2",
+        "z-50 flex flex-col gap-8",
         positionClasses[position],
         className,
       )}

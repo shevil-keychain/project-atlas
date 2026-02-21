@@ -54,9 +54,9 @@ export interface DataTableProps {
 }
 
 const densityPadding = {
-  compact: "py-2",
-  default: "py-3",
-  comfortable: "py-4",
+  compact: "py-8",
+  default: "py-12",
+  comfortable: "py-16",
 } as const
 
 function getRowId(row: Record<string, unknown>, index: number): string {
@@ -167,18 +167,18 @@ export function DataTable({
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap justify-between items-center gap-3 py-3 px-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium text-stone-700">
+    <div className="space-y-8">
+      <div className="flex flex-wrap justify-between items-center gap-12 py-12 px-4">
+        <div className="flex flex-wrap items-center gap-8">
+          <span className="text-14 font-medium text-stone-700">
             About {totalCount} {itemLabel}
           </span>
           {toolbarActions}
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-8">
           {searchable && (
-            <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-stone-500 pointer-events-none" />
+            <div className="relative w-256">
+              <Search className="absolute left-12 top-1/2 -translate-y-1/2 size-16 text-stone-500 pointer-events-none" />
               <Input
                 value={searchQuery}
                 onChange={(e) => {
@@ -186,7 +186,7 @@ export function DataTable({
                   setCurrentPage(1)
                 }}
                 placeholder={searchPlaceholder}
-                className="pl-9"
+                className="pl-36"
               />
             </div>
           )}
@@ -194,7 +194,7 @@ export function DataTable({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" size="icon-sm">
-                  <Columns3 className="size-4" />
+                  <Columns3 className="size-16" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -219,7 +219,7 @@ export function DataTable({
                     : density === "comfortable"
                       ? "Comfortable"
                       : "Default"}
-                  <ChevronDown className="size-4" />
+                  <ChevronDown className="size-16" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -247,7 +247,7 @@ export function DataTable({
           <TableHeader>
             <TableRow>
               {selectable && (
-                <TableHead className={cn("w-12", pyClass)}>
+                <TableHead className={cn("w-48", pyClass)}>
                   <Checkbox
                     checked={allSelected ? true : someSelected ? "indeterminate" : false}
                     onCheckedChange={toggleSelectAll}

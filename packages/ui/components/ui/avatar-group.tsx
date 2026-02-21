@@ -5,17 +5,17 @@ import { cn } from "@/lib/utils"
 import { Avatar } from "@/components/ui/avatar"
 
 const overlapClasses = {
-  xs: "-ml-1",
-  sm: "-ml-1.5",
-  md: "-ml-2",
-  lg: "-ml-2",
+  xs: "-ml-4",
+  sm: "-ml-6",
+  md: "-ml-8",
+  lg: "-ml-8",
 } as const
 
 const sizeClasses = {
-  xs: "size-6 text-[10.5px]",
-  sm: "size-8 text-sm",
-  md: "size-10 text-[17.5px]",
-  lg: "size-12 text-[21px]",
+  xs: "size-24 text-[10.5px]",
+  sm: "size-32 text-14",
+  md: "size-40 text-[17.5px]",
+  lg: "size-48 text-[21px]",
 } as const
 
 type AvatarGroupProps = {

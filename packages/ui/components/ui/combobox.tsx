@@ -103,21 +103,21 @@ function Combobox({
           type="button"
           data-slot="combobox-trigger"
           className={cn(
-            "flex w-full items-center justify-between gap-2 rounded-lg bg-white border transition-all font-medium outline-none text-left",
+            "flex w-full items-center justify-between gap-8 rounded-lg bg-white border transition-all font-medium outline-none text-left",
             "hover:border-stone-600",
             "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
-            isLarge ? "h-12 px-4 py-3 text-base" : "h-10 px-3 py-2 text-sm",
+            isLarge ? "h-48 px-16 py-12 text-16" : "h-40 px-12 py-8 text-14",
             error
-              ? "border-error-500 data-[state=open]:border-error-500 data-[state=open]:shadow-[0px_0px_0px_4px_#FAD5CC] focus-visible:border-error-500 focus-visible:shadow-[0px_0px_0px_4px_#FAD5CC]"
-              : "border-stone-500 data-[state=open]:border-primary-brand-500 data-[state=open]:shadow-[0px_0px_0px_4px_#FFCB9B] focus-visible:border-primary-brand-500 focus-visible:shadow-[0px_0px_0px_4px_#FFCB9B]",
+              ? "border-error-500 data-[state=open]:border-error-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-error-100)] focus-visible:border-error-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-error-100)]"
+              : "border-stone-500 data-[state=open]:border-primary-brand-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)] focus-visible:border-primary-brand-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]",
             className
           )}
         >
-          <span className={cn("flex items-center gap-2 truncate [&_svg]:size-4", !selected && "text-stone-600")}>
+          <span className={cn("flex items-center gap-8 truncate [&_svg]:size-16", !selected && "text-stone-600")}>
             {selected?.icon}
             {selected ? selected.label : placeholder}
           </span>
-          <ChevronDown className={cn("size-4 shrink-0 text-stone-600 transition-transform duration-200", open && "rotate-180")} />
+          <ChevronDown className={cn("size-16 shrink-0 text-stone-600 transition-transform duration-200", open && "rotate-180")} />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
@@ -135,43 +135,43 @@ function Combobox({
           )}
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="flex items-center gap-2 px-3 py-2 border-b border-stone-400">
-            <Search className="size-4 shrink-0 text-stone-600" />
+          <div className="flex items-center gap-8 px-12 py-8 border-b border-stone-400">
+            <Search className="size-16 shrink-0 text-stone-600" />
             <input
               ref={inputRef}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={searchPlaceholder}
-              className="w-full text-sm outline-none placeholder:text-stone-600 bg-transparent"
+              className="w-full text-14 outline-none placeholder:text-stone-600 bg-transparent"
             />
           </div>
-          <div ref={listRef} className="max-h-60 overflow-y-auto py-1">
+          <div ref={listRef} className="max-h-240 overflow-y-auto py-4">
             {filtered.length === 0 ? (
-              <p className="px-4 py-3 text-sm text-stone-600 text-center">{emptyMessage}</p>
+              <p className="px-16 py-12 text-14 text-stone-600 text-center">{emptyMessage}</p>
             ) : (
               filtered.map((opt) => {
                 const enabledItems = filtered.filter((o) => !o.disabled)
                 const enabledIdx = enabledItems.indexOf(opt)
                 return (
-                  <div key={opt.value} className="px-1.5 py-0.5">
+                  <div key={opt.value} className="px-6 py-2">
                     <button
                       type="button"
                       data-combobox-item=""
                       onClick={() => handleSelect(opt)}
                       className={cn(
-                        "flex w-full items-center justify-between px-4 py-2 rounded-md text-sm font-semibold cursor-pointer outline-none transition-colors text-left",
+                        "flex w-full items-center justify-between px-16 py-8 rounded-md text-14 font-semibold cursor-pointer outline-none transition-colors text-left",
                         "text-foreground",
                         opt.disabled && "text-stone-600 cursor-not-allowed",
                         value === opt.value && "bg-primary-brand-50 text-primary-brand-700",
                         enabledIdx === highlightedIndex && value !== opt.value && "bg-stone-100"
                       )}
                     >
-                      <span className="flex items-center gap-2 [&_svg]:size-4">
+                      <span className="flex items-center gap-8 [&_svg]:size-16">
                         {opt.icon}
                         {opt.label}
                       </span>
-                      {value === opt.value && <Check className="size-4 shrink-0" />}
+                      {value === opt.value && <Check className="size-16 shrink-0" />}
                     </button>
                   </div>
                 )
@@ -208,7 +208,7 @@ function ComboboxField({
   const isLarge = inputSize === "large"
 
   return (
-    <div data-slot="combobox-field" className={cn("flex flex-col gap-1", className)}>
+    <div data-slot="combobox-field" className={cn("flex flex-col gap-4", className)}>
       {label && (
         <Label
           htmlFor={generatedId}
@@ -221,7 +221,7 @@ function ComboboxField({
         </Label>
       )}
 
-      <div className={cn(label && "mt-1")}>
+      <div className={cn(label && "mt-4")}>
         <Combobox
           inputSize={inputSize}
           error={hasError}
@@ -231,11 +231,11 @@ function ComboboxField({
       </div>
 
       {errorText ? (
-        <p className={cn("mt-1 font-medium text-error-500", isLarge ? "text-sm" : "text-xs")}>
+        <p className={cn("mt-4 font-medium text-error-500", isLarge ? "text-14" : "text-12")}>
           {errorText}
         </p>
       ) : hintText ? (
-        <p className={cn("mt-1 font-medium text-stone-700", isLarge ? "text-sm" : "text-xs")}>
+        <p className={cn("mt-4 font-medium text-stone-700", isLarge ? "text-14" : "text-12")}>
           {hintText}
         </p>
       ) : null}

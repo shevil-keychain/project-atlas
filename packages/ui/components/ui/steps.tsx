@@ -38,11 +38,11 @@ export function Steps({ steps, currentStep, onStepClick, className }: StepsProps
       data-slot="steps"
       aria-label="Progress"
       className={cn(
-        "flex w-full items-center justify-center border-b border-stone-300 bg-white px-6 py-3",
+        "flex w-full items-center justify-center border-b border-stone-300 bg-white px-24 py-12",
         className
       )}
     >
-      <ol className="flex items-center gap-6">
+      <ol className="flex items-center gap-24">
         {steps.map((step, index) => {
           const state = getStepState(index, bounded, step.disabled === true)
           const isClickable = Boolean(onStepClick) && state !== "disabled"
@@ -52,7 +52,7 @@ export function Steps({ steps, currentStep, onStepClick, className }: StepsProps
               <span
                 data-slot="steps-badge"
                 className={cn(
-                  "inline-flex shrink-0 items-center justify-center rounded-full px-2 py-0.5 text-xs font-medium leading-[18px]",
+                  "inline-flex shrink-0 items-center justify-center rounded-full px-8 py-2 text-12 font-medium leading-[18px]",
                   state === "active"
                     ? "bg-primary-brand-100 text-primary-brand-700"
                     : state === "disabled"
@@ -65,7 +65,7 @@ export function Steps({ steps, currentStep, onStepClick, className }: StepsProps
               <span
                 data-slot="steps-label"
                 className={cn(
-                  "text-sm font-semibold leading-6 whitespace-nowrap",
+                  "text-14 font-semibold leading-[24px] whitespace-nowrap",
                   state === "active" && "text-primary-brand-700",
                   state === "completed" && "text-foreground",
                   state === "upcoming" && "text-foreground",
@@ -78,7 +78,7 @@ export function Steps({ steps, currentStep, onStepClick, className }: StepsProps
           )
 
           const pillClasses = cn(
-            "inline-flex items-center gap-2 rounded-full px-3 py-[7px] transition-colors",
+            "inline-flex items-center gap-8 rounded-full px-12 py-[7px] transition-colors",
             state === "active" && "bg-primary-brand-50",
             state === "disabled" && "cursor-not-allowed"
           )

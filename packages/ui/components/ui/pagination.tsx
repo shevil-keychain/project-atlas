@@ -65,15 +65,15 @@ export function Pagination({
   return (
     <div
       className={cn(
-        "flex h-14 items-center justify-between border-t border-stone-300 bg-white px-4",
+        "flex h-56 items-center justify-between border-t border-stone-300 bg-white px-16",
         className
       )}
     >
-      <p className="text-xs font-medium text-foreground tabular-nums">
+      <p className="text-12 font-medium text-foreground tabular-nums">
         Showing {start}–{end} of {totalItems}
       </p>
 
-      <nav className="flex items-center gap-1" aria-label="Pagination">
+      <nav className="flex items-center gap-4" aria-label="Pagination">
         {showPageNumbers ? (
           <>
             <NavButton
@@ -81,15 +81,15 @@ export function Pagination({
               disabled={isFirst}
               onClick={() => onPageChange(currentPage - 1)}
             >
-              <ChevronLeft className="size-5" />
+              <ChevronLeft className="size-20" />
             </NavButton>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-4">
               {pages.map((page, i) =>
                 page === "dots" ? (
                   <span
                     key={`dots-${i}`}
-                    className="inline-flex size-8 items-center justify-center text-sm text-stone-600 select-none"
+                    className="inline-flex size-32 items-center justify-center text-14 text-stone-600 select-none"
                   >
                     ...
                   </span>
@@ -109,7 +109,7 @@ export function Pagination({
               disabled={isLast}
               onClick={() => onPageChange(currentPage + 1)}
             >
-              <ChevronRight className="size-5" />
+              <ChevronRight className="size-20" />
             </NavButton>
           </>
         ) : (
@@ -119,43 +119,43 @@ export function Pagination({
               disabled={isFirst}
               onClick={() => onPageChange(1)}
             >
-              <ChevronsLeft className="size-5" />
+              <ChevronsLeft className="size-20" />
             </NavButton>
             <NavButton
               aria-label="Previous page"
               disabled={isFirst}
               onClick={() => onPageChange(currentPage - 1)}
             >
-              <ChevronLeft className="size-5" />
+              <ChevronLeft className="size-20" />
             </NavButton>
             <NavButton
               aria-label="Next page"
               disabled={isLast}
               onClick={() => onPageChange(currentPage + 1)}
             >
-              <ChevronRight className="size-5" />
+              <ChevronRight className="size-20" />
             </NavButton>
             <NavButton
               aria-label="Last page"
               disabled={isLast}
               onClick={() => onPageChange(totalPages)}
             >
-              <ChevronsRight className="size-5" />
+              <ChevronsRight className="size-20" />
             </NavButton>
           </>
         )}
       </nav>
 
       {onPageSizeChange && (
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-foreground">
+        <div className="flex items-center gap-8">
+          <span className="text-12 font-medium text-foreground">
             Results per page
           </span>
           <Select
             value={String(pageSize)}
             onValueChange={(v) => onPageSizeChange(Number(v))}
           >
-            <SelectTrigger className="h-8 w-auto min-w-[56px] gap-1 border-stone-400 px-3 text-sm font-semibold">
+            <SelectTrigger className="h-32 w-auto min-w-[56px] gap-4 border-stone-400 px-12 text-14 font-semibold">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="w-auto min-w-[var(--radix-select-trigger-width)]">
@@ -181,7 +181,7 @@ function NavButton({ className, ...props }: React.ComponentProps<"button">) {
     <button
       type="button"
       className={cn(
-        "inline-flex size-8 items-center justify-center rounded-lg text-foreground transition-colors",
+        "inline-flex size-32 items-center justify-center rounded-lg text-foreground transition-colors",
         "hover:bg-stone-100",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand-500",
         "disabled:pointer-events-none disabled:text-stone-400",
@@ -208,7 +208,7 @@ function PageButton({
       aria-current={active ? "page" : undefined}
       onClick={onClick}
       className={cn(
-        "inline-flex h-8 min-w-8 items-center justify-center rounded-lg px-2 text-sm font-medium tabular-nums transition-colors",
+        "inline-flex h-32 min-w-32 items-center justify-center rounded-lg px-8 text-14 font-medium tabular-nums transition-colors",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-brand-500",
         active
           ? "bg-stone-200 text-foreground"

@@ -14,7 +14,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -98,7 +98,7 @@ export default function DataTableDemoPage() {
         header: "Agent",
         accessorKey: "agentName",
         cell: (row) => (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-8">
             <Avatar name={String(row.agentName)} size="xs" />
             <span className="font-medium">{String(row.agentName)}</span>
           </div>
@@ -135,12 +135,12 @@ export default function DataTableDemoPage() {
   )
 
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-5xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-5xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Data Table</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Data Table</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Full data table with search, filters, bulk actions, column visibility,
             density, and pagination.
           </p>

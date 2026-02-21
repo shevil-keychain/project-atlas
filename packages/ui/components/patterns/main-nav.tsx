@@ -288,13 +288,13 @@ function NavItem({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex w-[72px] h-[72px] flex-col items-center justify-center gap-1 cursor-pointer",
+        "flex w-[72px] h-[72px] flex-col items-center justify-center gap-4 cursor-pointer",
         "group"
       )}
     >
       <div
         className={cn(
-          "flex h-9 w-9 items-center justify-center rounded-lg transition-colors",
+          "flex h-36 w-36 items-center justify-center rounded-lg transition-colors",
           isActive && "bg-white/15",
           !isActive && "group-hover:bg-white/10"
         )}
@@ -314,7 +314,7 @@ function NavItem({
       </div>
       <span
         className={cn(
-          "text-[10px] leading-tight tracking-[0.2px] font-[family-name:var(--font-manrope,sans-serif)]",
+          "text-10 leading-tight tracking-[0.2px] font-[family-name:var(--font-manrope,sans-serif)]",
           isActive ? "text-white font-semibold" : "text-[#E1DEDA] font-medium"
         )}
       >
@@ -330,7 +330,7 @@ export function MainNav({ activeItem, onItemClick, className }: MainNavProps) {
   return (
     <nav
       className={cn(
-        "flex h-screen w-[72px] flex-col items-center bg-gradient-to-b from-[#333333] to-[#1B1B1B] py-2 text-white",
+        "flex h-screen w-[72px] flex-col items-center bg-gradient-to-b from-[#333333] to-[#1B1B1B] py-8 text-white",
         className
       )}
     >

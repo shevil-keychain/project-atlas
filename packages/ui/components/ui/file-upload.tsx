@@ -78,19 +78,19 @@ function FileUpload({
 
   if (variant === "compact") {
     return (
-      <div className={cn("flex flex-col gap-2", className)}>
+      <div className={cn("flex flex-col gap-8", className)}>
         <button
           type="button"
           disabled={disabled}
           onClick={() => inputRef.current?.click()}
           className={cn(
-            "inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition-all",
+            "inline-flex items-center gap-8 rounded-lg border px-16 py-8 text-14 font-semibold transition-all",
             "hover:border-stone-600 hover:bg-stone-50",
             "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
             error ? "border-error-500 text-error-500" : "border-stone-500 text-foreground"
           )}
         >
-          <Upload className="size-4" />
+          <Upload className="size-16" />
           {multiple ? "Choose files" : "Choose file"}
         </button>
         <input
@@ -108,7 +108,7 @@ function FileUpload({
   }
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn("flex flex-col gap-8", className)}>
       <button
         type="button"
         disabled={disabled}
@@ -117,7 +117,7 @@ function FileUpload({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={cn(
-          "flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-8 transition-all cursor-pointer text-center",
+          "flex flex-col items-center justify-center gap-8 rounded-lg border-2 border-dashed p-32 transition-all cursor-pointer text-center",
           "hover:border-stone-600 hover:bg-stone-50",
           "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
           isDragging && "border-primary-brand-500 bg-primary-brand-25",
@@ -129,16 +129,16 @@ function FileUpload({
         )}
       >
         <div className={cn(
-          "flex items-center justify-center size-10 rounded-full",
+          "flex items-center justify-center size-40 rounded-full",
           isDragging ? "bg-primary-brand-100 text-primary-brand-600" : "bg-stone-200 text-stone-700"
         )}>
-          <Upload className="size-5" />
+          <Upload className="size-20" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-foreground">
+          <p className="text-14 font-semibold text-foreground">
             {isDragging ? "Drop files here" : "Click to upload or drag and drop"}
           </p>
-          <p className="text-xs text-stone-600 mt-0.5">
+          <p className="text-12 text-stone-600 mt-2">
             {accept ? accept.split(",").join(", ") : "Any file type"}
             {maxFileSize && ` · Max ${formatFileSize(maxFileSize)}`}
           </p>
@@ -171,25 +171,25 @@ function FileList({
   disabled?: boolean
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-6">
       {files.map((f) => (
         <div
           key={f.id}
           className={cn(
-            "flex items-center gap-3 rounded-lg border px-3 py-2 text-sm",
+            "flex items-center gap-12 rounded-lg border px-12 py-8 text-14",
             f.error ? "border-error-200 bg-error-50" : "border-stone-400 bg-white"
           )}
         >
           {f.error ? (
-            <AlertCircle className="size-4 shrink-0 text-error-500" />
+            <AlertCircle className="size-16 shrink-0 text-error-500" />
           ) : (
-            <File className="size-4 shrink-0 text-stone-600" />
+            <File className="size-16 shrink-0 text-stone-600" />
           )}
           <div className="flex-1 min-w-0">
             <p className={cn("font-medium truncate", f.error ? "text-error-700" : "text-foreground")}>
               {f.file.name}
             </p>
-            <p className={cn("text-xs", f.error ? "text-error-500" : "text-stone-600")}>
+            <p className={cn("text-12", f.error ? "text-error-500" : "text-stone-600")}>
               {f.error || formatFileSize(f.file.size)}
             </p>
           </div>
@@ -197,9 +197,9 @@ function FileList({
             <button
               type="button"
               onClick={() => onRemove(f.id)}
-              className="rounded-sm p-1 hover:bg-stone-100 transition-colors shrink-0"
+              className="rounded-sm p-4 hover:bg-stone-100 transition-colors shrink-0"
             >
-              <X className="size-4 text-stone-600" />
+              <X className="size-16 text-stone-600" />
             </button>
           )}
         </div>
@@ -230,7 +230,7 @@ function FileUploadField({
   const hasError = !!errorText
 
   return (
-    <div data-slot="file-upload-field" className={cn("flex flex-col gap-1", className)}>
+    <div data-slot="file-upload-field" className={cn("flex flex-col gap-4", className)}>
       {label && (
         <Label
           htmlFor={generatedId}
@@ -243,14 +243,14 @@ function FileUploadField({
         </Label>
       )}
 
-      <div className={cn(label && "mt-1")}>
+      <div className={cn(label && "mt-4")}>
         <FileUpload error={hasError} disabled={disabled} {...props} />
       </div>
 
       {errorText ? (
-        <p className="mt-1 text-xs font-medium text-error-500">{errorText}</p>
+        <p className="mt-4 text-12 font-medium text-error-500">{errorText}</p>
       ) : hintText ? (
-        <p className="mt-1 text-xs font-medium text-stone-700">{hintText}</p>
+        <p className="mt-4 text-12 font-medium text-stone-700">{hintText}</p>
       ) : null}
     </div>
   )

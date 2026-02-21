@@ -28,7 +28,7 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     data-slot="tabs-content"
-    className={cn("mt-4 focus-visible:outline-none", className)}
+    className={cn("mt-16 focus-visible:outline-none", className)}
     {...props}
   />
 ))
@@ -46,13 +46,13 @@ function TriggerContent({
 }: Pick<TabTriggerProps, "icon" | "badge" | "subtext" | "children">) {
   return (
     <>
-      <span className="inline-flex items-center gap-2">
-        {icon && <span className="[&_svg]:size-4">{icon}</span>}
+      <span className="inline-flex items-center gap-8">
+        {icon && <span className="[&_svg]:size-16">{icon}</span>}
         <span>{children}</span>
         {badge}
       </span>
       {subtext && (
-        <span className="block text-xs font-medium text-stone-700">
+        <span className="block text-12 font-medium text-stone-700">
           {subtext}
         </span>
       )}
@@ -72,7 +72,7 @@ const NeutralTabsList = React.forwardRef<
     ref={ref}
     data-slot="neutral-tabs-list"
     className={cn(
-      "inline-flex gap-1 rounded-lg bg-stone-100 p-1",
+      "inline-flex gap-4 rounded-lg bg-stone-100 p-4",
       className,
     )}
     {...props}
@@ -88,7 +88,7 @@ const NeutralTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="neutral-tabs-trigger"
     className={cn(
-      "rounded-md px-4 py-2 text-sm font-semibold text-black transition-colors",
+      "rounded-md px-16 py-8 text-14 font-semibold text-black transition-colors",
       "hover:bg-stone-200",
       "data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm",
       "disabled:cursor-not-allowed disabled:text-stone-600",
@@ -114,7 +114,7 @@ const BrandTabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     data-slot="brand-tabs-list"
-    className={cn("inline-flex gap-1 rounded-lg p-1", className)}
+    className={cn("inline-flex gap-4 rounded-lg p-4", className)}
     {...props}
   />
 ))
@@ -128,7 +128,7 @@ const BrandTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="brand-tabs-trigger"
     className={cn(
-      "rounded-md px-4 py-2 text-sm font-semibold text-black transition-colors",
+      "rounded-md px-16 py-8 text-14 font-semibold text-black transition-colors",
       "hover:bg-primary-brand-25",
       "data-[state=active]:bg-primary-brand-50 data-[state=active]:text-primary-brand-700",
       "disabled:cursor-not-allowed disabled:text-stone-600",
@@ -168,7 +168,7 @@ const UnderlinedTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="underlined-tabs-trigger"
     className={cn(
-      "-mb-px border-b-2 border-transparent px-4 py-2 text-sm font-semibold text-black transition-colors",
+      "-mb-px border-b-2 border-transparent px-16 py-8 text-14 font-semibold text-black transition-colors",
       "hover:text-black",
       "data-[state=active]:border-primary-brand-700 data-[state=active]:text-primary-brand-700",
       "disabled:cursor-not-allowed disabled:text-stone-600",
@@ -194,7 +194,7 @@ const VerticalTabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     data-slot="vertical-tabs-list"
-    className={cn("flex flex-col gap-1 p-1", className)}
+    className={cn("flex flex-col gap-4 p-4", className)}
     {...props}
   />
 ))
@@ -208,7 +208,7 @@ const VerticalTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="vertical-tabs-trigger"
     className={cn(
-      "w-full rounded-md px-4 py-2 text-left text-sm font-semibold text-black transition-colors",
+      "w-full rounded-md px-16 py-8 text-left text-14 font-semibold text-black transition-colors",
       "hover:bg-stone-100",
       "data-[state=active]:bg-primary-brand-50 data-[state=active]:text-primary-brand-700",
       "disabled:cursor-not-allowed disabled:text-stone-600",

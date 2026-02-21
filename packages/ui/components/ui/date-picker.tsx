@@ -44,21 +44,21 @@ function DatePicker({
           type="button"
           data-slot="date-picker-trigger"
           className={cn(
-            "flex w-full items-center justify-between gap-2 rounded-lg bg-white border transition-all font-medium outline-none text-left",
+            "flex w-full items-center justify-between gap-8 rounded-lg bg-white border transition-all font-medium outline-none text-left",
             "hover:border-stone-600",
             "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
-            isLarge ? "h-12 px-4 py-3 text-base" : "h-10 px-3 py-2 text-sm",
+            isLarge ? "h-48 px-16 py-12 text-16" : "h-40 px-12 py-8 text-14",
             error
-              ? "border-error-500 data-[state=open]:border-error-500 data-[state=open]:shadow-[0px_0px_0px_4px_#FAD5CC] focus-visible:border-error-500 focus-visible:shadow-[0px_0px_0px_4px_#FAD5CC]"
-              : "border-stone-500 data-[state=open]:border-primary-brand-500 data-[state=open]:shadow-[0px_0px_0px_4px_#FFCB9B] focus-visible:border-primary-brand-500 focus-visible:shadow-[0px_0px_0px_4px_#FFCB9B]",
+              ? "border-error-500 data-[state=open]:border-error-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-error-100)] focus-visible:border-error-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-error-100)]"
+              : "border-stone-500 data-[state=open]:border-primary-brand-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)] focus-visible:border-primary-brand-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]",
             className
           )}
         >
-          <span className={cn("flex items-center gap-2", !value && "text-stone-600")}>
-            <CalendarDays className="size-4 shrink-0" />
+          <span className={cn("flex items-center gap-8", !value && "text-stone-600")}>
+            <CalendarDays className="size-16 shrink-0" />
             {value ? formatDate(value, dateFormat) : placeholder}
           </span>
-          <ChevronDown className={cn("size-4 shrink-0 text-stone-600 transition-transform duration-200", open && "rotate-180")} />
+          <ChevronDown className={cn("size-16 shrink-0 text-stone-600 transition-transform duration-200", open && "rotate-180")} />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
@@ -137,21 +137,21 @@ function DateRangePicker({
           type="button"
           data-slot="date-range-picker-trigger"
           className={cn(
-            "flex w-full items-center justify-between gap-2 rounded-lg bg-white border transition-all font-medium outline-none text-left",
+            "flex w-full items-center justify-between gap-8 rounded-lg bg-white border transition-all font-medium outline-none text-left",
             "hover:border-stone-600",
             "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
-            isLarge ? "h-12 px-4 py-3 text-base" : "h-10 px-3 py-2 text-sm",
+            isLarge ? "h-48 px-16 py-12 text-16" : "h-40 px-12 py-8 text-14",
             error
-              ? "border-error-500 data-[state=open]:border-error-500 data-[state=open]:shadow-[0px_0px_0px_4px_#FAD5CC] focus-visible:border-error-500 focus-visible:shadow-[0px_0px_0px_4px_#FAD5CC]"
-              : "border-stone-500 data-[state=open]:border-primary-brand-500 data-[state=open]:shadow-[0px_0px_0px_4px_#FFCB9B] focus-visible:border-primary-brand-500 focus-visible:shadow-[0px_0px_0px_4px_#FFCB9B]",
+              ? "border-error-500 data-[state=open]:border-error-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-error-100)] focus-visible:border-error-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-error-100)]"
+              : "border-stone-500 data-[state=open]:border-primary-brand-500 data-[state=open]:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)] focus-visible:border-primary-brand-500 focus-visible:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]",
             className
           )}
         >
-          <span className={cn("flex items-center gap-2", !displayValue && "text-stone-600")}>
-            <CalendarDays className="size-4 shrink-0" />
+          <span className={cn("flex items-center gap-8", !displayValue && "text-stone-600")}>
+            <CalendarDays className="size-16 shrink-0" />
             {displayValue || placeholder}
           </span>
-          <ChevronDown className={cn("size-4 shrink-0 text-stone-600 transition-transform duration-200", open && "rotate-180")} />
+          <ChevronDown className={cn("size-16 shrink-0 text-stone-600 transition-transform duration-200", open && "rotate-180")} />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
@@ -211,7 +211,7 @@ function DatePickerField({
   const isLarge = inputSize === "large"
 
   return (
-    <div data-slot="date-picker-field" className={cn("flex flex-col gap-1", className)}>
+    <div data-slot="date-picker-field" className={cn("flex flex-col gap-4", className)}>
       {label && (
         <Label
           htmlFor={generatedId}
@@ -224,16 +224,16 @@ function DatePickerField({
         </Label>
       )}
 
-      <div className={cn(label && "mt-1")}>
+      <div className={cn(label && "mt-4")}>
         <DatePicker inputSize={inputSize} error={hasError} disabled={disabled} {...props} />
       </div>
 
       {errorText ? (
-        <p className={cn("mt-1 font-medium text-error-500", isLarge ? "text-sm" : "text-xs")}>
+        <p className={cn("mt-4 font-medium text-error-500", isLarge ? "text-14" : "text-12")}>
           {errorText}
         </p>
       ) : hintText ? (
-        <p className={cn("mt-1 font-medium text-stone-700", isLarge ? "text-sm" : "text-xs")}>
+        <p className={cn("mt-4 font-medium text-stone-700", isLarge ? "text-14" : "text-12")}>
           {hintText}
         </p>
       ) : null}
@@ -265,7 +265,7 @@ function DateRangePickerField({
   const isLarge = inputSize === "large"
 
   return (
-    <div data-slot="date-range-picker-field" className={cn("flex flex-col gap-1", className)}>
+    <div data-slot="date-range-picker-field" className={cn("flex flex-col gap-4", className)}>
       {label && (
         <Label
           htmlFor={generatedId}
@@ -278,16 +278,16 @@ function DateRangePickerField({
         </Label>
       )}
 
-      <div className={cn(label && "mt-1")}>
+      <div className={cn(label && "mt-4")}>
         <DateRangePicker inputSize={inputSize} error={hasError} disabled={disabled} {...props} />
       </div>
 
       {errorText ? (
-        <p className={cn("mt-1 font-medium text-error-500", isLarge ? "text-sm" : "text-xs")}>
+        <p className={cn("mt-4 font-medium text-error-500", isLarge ? "text-14" : "text-12")}>
           {errorText}
         </p>
       ) : hintText ? (
-        <p className={cn("mt-1 font-medium text-stone-700", isLarge ? "text-sm" : "text-xs")}>
+        <p className={cn("mt-4 font-medium text-stone-700", isLarge ? "text-14" : "text-12")}>
           {hintText}
         </p>
       ) : null}

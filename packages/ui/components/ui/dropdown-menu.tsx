@@ -22,7 +22,7 @@ const DropdownMenuContent = React.forwardRef<
       sideOffset={sideOffset}
       align={align}
       className={cn(
-        "z-50 min-w-[180px] bg-white rounded-lg border border-stone-500 py-1",
+        "z-50 min-w-[180px] bg-white rounded-lg border border-stone-500 py-4",
         "shadow-[0px_12px_16px_0px_rgba(16,24,40,0.08),0px_4px_6px_0px_rgba(16,24,40,0.03)]",
         "animate-in fade-in-0 zoom-in-95",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
@@ -43,17 +43,17 @@ const DropdownMenuItem = React.forwardRef<
     destructive?: boolean
   }
 >(({ className, inset, destructive, children, ...props }, ref) => (
-  <div className="px-1.5 py-0.5">
+  <div className="px-6 py-2">
     <DropdownMenuPrimitive.Item
       ref={ref}
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold cursor-pointer outline-none transition-colors",
-        "[&_svg]:size-4",
+        "flex items-center gap-8 px-16 py-8 rounded-md text-14 font-semibold cursor-pointer outline-none transition-colors",
+        "[&_svg]:size-16",
         destructive
           ? "text-error-500 data-[highlighted]:bg-error-50"
           : "text-foreground data-[highlighted]:bg-stone-100",
         "data-[disabled]:text-stone-600 data-[disabled]:cursor-not-allowed",
-        inset && "pl-8",
+        inset && "pl-32",
         className
       )}
       {...props}
@@ -68,11 +68,11 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
-  <div className="px-1.5 py-0.5">
+  <div className="px-6 py-2">
     <DropdownMenuPrimitive.CheckboxItem
       ref={ref}
       className={cn(
-        "relative flex items-center gap-2 pl-8 pr-4 py-2 rounded-md text-sm font-semibold cursor-pointer outline-none transition-colors",
+        "relative flex items-center gap-8 pl-32 pr-16 py-8 rounded-md text-14 font-semibold cursor-pointer outline-none transition-colors",
         "text-foreground data-[highlighted]:bg-stone-100",
         "data-[disabled]:text-stone-600 data-[disabled]:cursor-not-allowed",
         className
@@ -80,9 +80,9 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       checked={checked}
       {...props}
     >
-      <span className="absolute left-3 flex size-4 items-center justify-center">
+      <span className="absolute left-12 flex size-16 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <Check className="size-4" />
+          <Check className="size-16" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -96,20 +96,20 @@ const DropdownMenuRadioItem = React.forwardRef<
   React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
-  <div className="px-1.5 py-0.5">
+  <div className="px-6 py-2">
     <DropdownMenuPrimitive.RadioItem
       ref={ref}
       className={cn(
-        "relative flex items-center gap-2 pl-8 pr-4 py-2 rounded-md text-sm font-semibold cursor-pointer outline-none transition-colors",
+        "relative flex items-center gap-8 pl-32 pr-16 py-8 rounded-md text-14 font-semibold cursor-pointer outline-none transition-colors",
         "text-foreground data-[highlighted]:bg-stone-100",
         "data-[disabled]:text-stone-600 data-[disabled]:cursor-not-allowed",
         className
       )}
       {...props}
     >
-      <span className="absolute left-3 flex size-4 items-center justify-center">
+      <span className="absolute left-12 flex size-16 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <Circle className="size-2 fill-current" />
+          <Circle className="size-8 fill-current" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -127,8 +127,8 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      "px-5.5 py-1.5 text-xs font-semibold text-stone-600",
-      inset && "pl-8",
+      "px-22 py-6 text-12 font-semibold text-stone-600",
+      inset && "pl-32",
       className
     )}
     {...props}
@@ -142,7 +142,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn("mx-1.5 my-1 h-px bg-stone-400", className)}
+    className={cn("mx-6 my-4 h-px bg-stone-400", className)}
     {...props}
   />
 ))
@@ -154,20 +154,20 @@ const DropdownMenuSubTrigger = React.forwardRef<
     inset?: boolean
   }
 >(({ className, inset, children, ...props }, ref) => (
-  <div className="px-1.5 py-0.5">
+  <div className="px-6 py-2">
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-semibold cursor-pointer outline-none transition-colors",
-        "[&_svg]:size-4",
+        "flex items-center gap-8 px-16 py-8 rounded-md text-14 font-semibold cursor-pointer outline-none transition-colors",
+        "[&_svg]:size-16",
         "text-foreground data-[highlighted]:bg-stone-100 data-[state=open]:bg-stone-100",
-        inset && "pl-8",
+        inset && "pl-32",
         className
       )}
       {...props}
     >
       {children}
-      <ChevronRight className="ml-auto size-4" />
+      <ChevronRight className="ml-auto size-16" />
     </DropdownMenuPrimitive.SubTrigger>
   </div>
 ))
@@ -182,7 +182,7 @@ const DropdownMenuSubContent = React.forwardRef<
     <DropdownMenuPrimitive.SubContent
       ref={ref}
       className={cn(
-        "z-50 min-w-[180px] bg-white rounded-lg border border-stone-500 py-1",
+        "z-50 min-w-[180px] bg-white rounded-lg border border-stone-500 py-4",
         "shadow-[0px_12px_16px_0px_rgba(16,24,40,0.08),0px_4px_6px_0px_rgba(16,24,40,0.03)]",
         "animate-in fade-in-0 zoom-in-95",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",

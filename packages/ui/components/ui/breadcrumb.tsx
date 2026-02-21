@@ -80,7 +80,7 @@ const BreadcrumbList = React.forwardRef<HTMLOListElement, BreadcrumbListProps>(
         <ol
           ref={ref}
           data-slot="breadcrumb-list"
-          className={cn("flex items-center gap-2", className)}
+          className={cn("flex items-center gap-8", className)}
           {...props}
         >
           {children}
@@ -100,7 +100,7 @@ const BreadcrumbItem = React.forwardRef<
   BreadcrumbItemProps
 >(({ className, href, children, ...rest }, ref) => {
   const itemClasses =
-    "text-xs font-medium text-stone-800 px-2 py-1 rounded-md hover:bg-stone-100 cursor-pointer"
+    "text-12 font-medium text-stone-800 px-8 py-4 rounded-md hover:bg-stone-100 cursor-pointer"
   if (href != null) {
     return (
       <li data-slot="breadcrumb-item">
@@ -143,7 +143,7 @@ const BreadcrumbSeparator = React.forwardRef<
         ref={ref}
         role="presentation"
         data-slot="breadcrumb-separator"
-        className={cn("text-stone-600 text-xs", className)}
+        className={cn("text-stone-600 text-12", className)}
         {...props}
       >
         /
@@ -165,7 +165,7 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, BreadcrumbPageProps>(
         data-slot="breadcrumb-page"
         aria-current="page"
         className={cn(
-          "text-foreground font-semibold text-xs px-2 py-1",
+          "text-foreground font-semibold text-12 px-8 py-4",
           className,
         )}
         {...props}
@@ -190,7 +190,7 @@ const BreadcrumbEllipsis = React.forwardRef<
       ref={ref}
       role="presentation"
       data-slot="breadcrumb-ellipsis"
-      className={cn("text-stone-600 text-xs", className)}
+      className={cn("text-stone-600 text-12", className)}
       {...props}
     >
       …

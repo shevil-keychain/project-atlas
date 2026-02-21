@@ -12,7 +12,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -36,20 +36,20 @@ export default function PaginationDemoPage() {
   const [customPageSize, setCustomPageSize] = React.useState(15)
 
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-3xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-3xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Pagination</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Pagination</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Page navigation with range label, numbered or arrow-only, and results per page selector.
           </p>
         </div>
 
         <Section title="Many Pages">
           <div className="rounded-lg border border-stone-300 bg-white">
-            <div className="border-b border-stone-300 px-4 py-3">
-              <p className="text-sm text-stone-600">225 items, 10 per page → 23 pages</p>
+            <div className="border-b border-stone-300 px-16 py-12">
+              <p className="text-14 text-stone-600">225 items, 10 per page → 23 pages</p>
             </div>
             <Pagination
               currentPage={manyPage}
@@ -65,8 +65,8 @@ export default function PaginationDemoPage() {
 
         <Section title="Few Pages">
           <div className="rounded-lg border border-stone-300 bg-white">
-            <div className="border-b border-stone-300 px-4 py-3">
-              <p className="text-sm text-stone-600">50 items, 10 per page → 5 pages, no ellipsis</p>
+            <div className="border-b border-stone-300 px-16 py-12">
+              <p className="text-14 text-stone-600">50 items, 10 per page → 5 pages, no ellipsis</p>
             </div>
             <Pagination
               currentPage={fewPage}
@@ -82,8 +82,8 @@ export default function PaginationDemoPage() {
 
         <Section title="Single Page">
           <div className="rounded-lg border border-stone-300 bg-white">
-            <div className="border-b border-stone-300 px-4 py-3">
-              <p className="text-sm text-stone-600">8 items, 10 per page → only page 1</p>
+            <div className="border-b border-stone-300 px-16 py-12">
+              <p className="text-14 text-stone-600">8 items, 10 per page → only page 1</p>
             </div>
             <Pagination
               currentPage={singlePage}
@@ -99,8 +99,8 @@ export default function PaginationDemoPage() {
 
         <Section title="Without Page Numbers">
           <div className="rounded-lg border border-stone-300 bg-white">
-            <div className="border-b border-stone-300 px-4 py-3">
-              <p className="text-sm text-stone-600">475 items, first / prev / next / last only</p>
+            <div className="border-b border-stone-300 px-16 py-12">
+              <p className="text-14 text-stone-600">475 items, first / prev / next / last only</p>
             </div>
             <Pagination
               currentPage={noNumbersPage}
@@ -116,8 +116,8 @@ export default function PaginationDemoPage() {
 
         <Section title="Custom Page Sizes">
           <div className="rounded-lg border border-stone-300 bg-white">
-            <div className="border-b border-stone-300 px-4 py-3">
-              <p className="text-sm text-stone-600">100 items, options 5 / 15 / 30, default 15</p>
+            <div className="border-b border-stone-300 px-16 py-12">
+              <p className="text-14 text-stone-600">100 items, options 5 / 15 / 30, default 15</p>
             </div>
             <Pagination
               currentPage={customPage}

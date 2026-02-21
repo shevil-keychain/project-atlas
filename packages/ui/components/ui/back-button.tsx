@@ -5,9 +5,9 @@ export function BackButton() {
   return (
     <Link
       href="/"
-      className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground mb-4 transition-colors hover:opacity-70"
+      className="inline-flex items-center gap-6 text-14 font-medium text-foreground mb-16 transition-colors hover:opacity-70"
     >
-      <ArrowLeft className="size-4" />
+      <ArrowLeft className="size-16" />
       Back
     </Link>
   )

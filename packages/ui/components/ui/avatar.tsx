@@ -29,10 +29,10 @@ function getInitials(name: string): string {
 }
 
 const sizeClasses = {
-  xs: "size-6 text-[10.5px]",
-  sm: "size-8 text-sm",
-  md: "size-10 text-[17.5px]",
-  lg: "size-12 text-[21px]",
+  xs: "size-24 text-[10.5px]",
+  sm: "size-32 text-14",
+  md: "size-40 text-[17.5px]",
+  lg: "size-48 text-[21px]",
 } as const
 
 type AvatarProps = {

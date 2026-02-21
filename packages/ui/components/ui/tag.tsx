@@ -6,7 +6,7 @@ import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const tagVariants = cva(
-  "rounded-full pl-3 pr-2 inline-flex items-center gap-1.5 text-xs py-1 font-medium bg-stone-200 text-foreground [&_[data-tag-remove]:hover]:bg-stone-300"
+  "rounded-full pl-12 pr-8 inline-flex items-center gap-6 text-12 py-4 font-medium bg-stone-200 text-foreground [&_[data-tag-remove]:hover]:bg-stone-300"
 )
 
 export type TagProps = React.ComponentProps<"span"> & {
@@ -28,7 +28,7 @@ function Tag({
       {...props}
     >
       {icon && (
-        <span className="inline-flex items-center justify-center [&_svg]:size-3.5 [&_svg]:shrink-0">
+        <span className="inline-flex items-center justify-center [&_svg]:size-14 [&_svg]:shrink-0">
           {icon}
         </span>
       )}
@@ -47,10 +47,10 @@ function Tag({
             onRemove(e as unknown as React.MouseEvent)
           }
         }}
-        className="size-5 rounded p-0.5 inline-flex items-center justify-center transition-colors cursor-pointer"
+        className="size-20 rounded p-2 inline-flex items-center justify-center transition-colors cursor-pointer"
         aria-label="Remove"
       >
-        <X className="size-3.5" />
+        <X className="size-14" />
       </span>
     </span>
   )

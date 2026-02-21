@@ -13,7 +13,7 @@ import { BackButton } from "@/components/ui/back-button"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -22,12 +22,12 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function CardPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Card</h1>
-          <p className="mt-1 text-sm text-foreground">
+          <h1 className="text-24 font-bold text-foreground">Card</h1>
+          <p className="mt-4 text-14 text-foreground">
             Flexible card container with header, body, and footer.
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function CardPage() {
               <CardTitle>Project overview</CardTitle>
             </CardHeader>
             <CardBody>
-              <p className="text-sm text-foreground">
+              <p className="text-14 text-foreground">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
                 exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -50,14 +50,14 @@ export default function CardPage() {
         <Section title="With Header Actions">
           <Card>
             <CardHeader className="flex-row justify-between items-center">
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-6">
                 <CardTitle>Project overview</CardTitle>
                 <CardDescription>View and manage your project details.</CardDescription>
               </div>
               <Button variant="secondary">Edit</Button>
             </CardHeader>
             <CardBody>
-              <p className="text-sm text-foreground">
+              <p className="text-14 text-foreground">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
                 incididunt ut labore et dolore magna aliqua.
               </p>
@@ -67,14 +67,14 @@ export default function CardPage() {
 
         <Section title="With Image">
           <Card>
-            <div className="p-2">
+            <div className="p-8">
               <div className="bg-stone-200 h-40 rounded-md" />
             </div>
             <CardHeader>
               <CardTitle>Featured project</CardTitle>
             </CardHeader>
             <CardBody>
-              <p className="text-sm text-foreground">
+              <p className="text-14 text-foreground">
                 A short description of the project with an image at the top.
               </p>
             </CardBody>
@@ -84,8 +84,8 @@ export default function CardPage() {
         <Section title="Stats Card">
           <Card>
             <CardBody>
-              <p className="text-2xl font-bold text-foreground">2,847</p>
-              <p className="text-sm text-foreground">Total conversations</p>
+              <p className="text-24 font-bold text-foreground">2,847</p>
+              <p className="text-14 text-foreground">Total conversations</p>
             </CardBody>
           </Card>
         </Section>
@@ -96,8 +96,8 @@ export default function CardPage() {
               <CardTitle>QA Score</CardTitle>
             </CardHeader>
             <CardBody>
-              <p className="text-2xl font-bold text-foreground">94%</p>
-              <p className="text-sm text-foreground">Up 2% from last week</p>
+              <p className="text-24 font-bold text-foreground">94%</p>
+              <p className="text-14 text-foreground">Up 2% from last week</p>
             </CardBody>
           </Card>
         </Section>
@@ -109,7 +109,7 @@ export default function CardPage() {
               <CardDescription>Review and confirm your updates before saving.</CardDescription>
             </CardHeader>
             <CardBody>
-              <p className="text-sm text-foreground">
+              <p className="text-14 text-foreground">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
                 incididunt ut labore et dolore magna aliqua.
               </p>

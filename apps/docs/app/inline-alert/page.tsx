@@ -12,8 +12,8 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+    <div className="space-y-16">
+      <h2 className="text-18 font-semibold text-foreground">{title}</h2>
       {children}
     </div>
   )
@@ -21,21 +21,21 @@ function Section({
 
 export default function InlineAlertDemoPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-xxl font-bold text-foreground">
+          <h1 className="text-24 font-bold text-foreground">
             Inline Alert / Banner
           </h1>
-          <p className="mt-1 text-default text-stone-700 font-medium">
+          <p className="mt-4 text-14 text-stone-700 font-medium">
             Full-width contextual banners for info, success, warning, and error
             states.
           </p>
         </div>
 
         <Section title="All variants">
-          <div className="space-y-3">
+          <div className="space-y-12">
             <InlineAlert variant="info" title="Information" />
             <InlineAlert variant="success" title="Success" />
             <InlineAlert variant="warning" title="Warning" />
@@ -44,14 +44,14 @@ export default function InlineAlertDemoPage() {
         </Section>
 
         <Section title="Title only">
-          <div className="space-y-3">
+          <div className="space-y-12">
             <InlineAlert variant="info" title="Your session will expire in 5 minutes." />
             <InlineAlert variant="success" title="Your changes have been saved." />
           </div>
         </Section>
 
         <Section title="Title + description">
-          <div className="space-y-3">
+          <div className="space-y-12">
             <InlineAlert
               variant="info"
               title="New feature available"
@@ -71,7 +71,7 @@ export default function InlineAlertDemoPage() {
         </Section>
 
         <Section title="With action button">
-          <div className="space-y-3">
+          <div className="space-y-12">
             <InlineAlert
               variant="info"
               title="Review our updated privacy policy"
@@ -87,7 +87,7 @@ export default function InlineAlertDemoPage() {
         </Section>
 
         <Section title="Dismissible">
-          <div className="space-y-3">
+          <div className="space-y-12">
             <InlineAlert
               variant="info"
               title="Tip: Use keyboard shortcuts to work faster."

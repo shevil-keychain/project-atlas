@@ -39,7 +39,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
     const isLarge = inputSize === "large"
 
     return (
-      <div data-slot="input-field" className={cn("flex flex-col gap-1", className)}>
+      <div data-slot="input-field" className={cn("flex flex-col gap-4", className)}>
         {label && (
           <Label
             htmlFor={id}
@@ -52,12 +52,12 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
           </Label>
         )}
 
-        <div className={cn("relative", label && "mt-1")}>
+        <div className={cn("relative", label && "mt-4")}>
           {iconLeft && (
             <span
               className={cn(
-                "absolute top-0 bottom-0 flex items-center text-stone-600 [&_svg]:size-4 font-medium",
-                isLarge ? "left-4" : "left-3"
+                "absolute top-0 bottom-0 flex items-center text-stone-600 [&_svg]:size-16 font-medium",
+                isLarge ? "left-16" : "left-12"
               )}
             >
               {iconLeft}
@@ -71,8 +71,8 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
             error={hasError}
             disabled={disabled}
             className={cn(
-              iconLeft && (isLarge ? "pl-12" : "pl-10"),
-              iconRight && (isLarge ? "pr-12" : "pr-10")
+              iconLeft && (isLarge ? "pl-48" : "pl-40"),
+              iconRight && (isLarge ? "pr-48" : "pr-40")
             )}
             {...props}
           />
@@ -80,9 +80,9 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
           {iconRight && (
             <span
               className={cn(
-                "absolute top-0 bottom-0 flex items-center [&_svg]:size-4",
+                "absolute top-0 bottom-0 flex items-center [&_svg]:size-16",
                 hasError ? "text-error-500 font-medium" : "text-stone-600 font-medium",
-                isLarge ? "right-4" : "right-3"
+                isLarge ? "right-16" : "right-12"
               )}
             >
               {iconRight}
@@ -93,8 +93,8 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
         {errorText ? (
           <p
             className={cn(
-              "mt-1 font-medium text-error-500",
-              isLarge ? "text-sm font-medium" : "text-xs font-medium"
+              "mt-4 font-medium text-error-500",
+              isLarge ? "text-14 font-medium" : "text-12 font-medium"
             )}
           >
             {errorText}
@@ -102,8 +102,8 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
         ) : hintText ? (
           <p
             className={cn(
-              "mt-1 font-medium text-stone-700",
-              isLarge ? "text-sm font-medium" : "text-xs font-medium"
+              "mt-4 font-medium text-stone-700",
+              isLarge ? "text-14 font-medium" : "text-12 font-medium"
             )}
           >
             {hintText}

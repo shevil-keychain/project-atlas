@@ -82,7 +82,7 @@ function DialogHeader({ children, description, className }: DialogHeaderProps) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between px-8 py-6",
+        "flex items-center justify-between px-32 py-24",
         isScrollable && "border-b border-stone-300",
         className
       )}
@@ -92,13 +92,13 @@ function DialogHeader({ children, description, className }: DialogHeaderProps) {
           {children}
         </DialogPrimitive.Title>
         {description && (
-          <DialogPrimitive.Description className="text-sm text-stone-700 mt-1">
+          <DialogPrimitive.Description className="text-14 text-stone-700 mt-4">
             {description}
           </DialogPrimitive.Description>
         )}
       </div>
-      <DialogPrimitive.Close className="size-10 rounded-lg hover:bg-stone-100 flex items-center justify-center">
-        <X className="size-5" />
+      <DialogPrimitive.Close className="size-40 rounded-lg hover:bg-stone-100 flex items-center justify-center">
+        <X className="size-20" />
       </DialogPrimitive.Close>
     </div>
   )
@@ -128,7 +128,7 @@ function DialogBody({
   }, [setScrollable])
 
   return (
-    <div ref={bodyRef} className={cn("flex-1 overflow-y-auto px-8 py-2 text-foreground", className)}>
+    <div ref={bodyRef} className={cn("flex-1 overflow-y-auto px-32 py-8 text-foreground", className)}>
       {children}
     </div>
   )
@@ -145,7 +145,7 @@ function DialogFooter({
   return (
     <div
       className={cn(
-        "flex items-center justify-end gap-3 px-8 py-8",
+        "flex items-center justify-end gap-12 px-32 py-32",
         isScrollable && "border-t border-stone-300",
         className
       )}

@@ -13,7 +13,7 @@ export default function MainNavPage() {
       <div className="flex flex-1 items-center justify-center bg-stone-50">
         <div className="text-center font-medium">
           <BackButton />
-          <h1 className="text-xxl font-bold tracking-tight text-stone-900 mb-2">
+          <h1 className="text-24 font-bold tracking-tight text-stone-900 mb-8">
             Main Navigation Component
           </h1>
           <p className="text-stone-500 font-medium">

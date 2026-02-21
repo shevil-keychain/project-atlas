@@ -23,7 +23,7 @@ export default function Page() {
       <MainNav activeItem="Analytics" />
       <div className="flex flex-1 flex-col">
         <TopBar organizationName="Acme Corp" />
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto p-24">
           {/* page content */}
         </main>
       </div>
@@ -69,7 +69,7 @@ import {
 
 <PageHeader variant="default|subtle" withBorder>
   <PageHeaderRow>
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-16">
       <PageHeaderBackButton onClick={() => router.back()} />
       <PageHeaderTitle size="xl|2xl">Page title</PageHeaderTitle>
     </div>
@@ -113,7 +113,7 @@ import { Button } from "@level/ui/components/ui/button"
 ```
 
 **Variants:** `default` (orange primary), `destructive` (red), `secondary` (outlined), `ghost`, `linkPrimary`, `linkSecondary`
-**Sizes:** `sm` (h-8), `default` (h-10), `lg` (h-12), `icon` (size-9), `icon-sm` (size-8), `icon-lg` (size-10)
+**Sizes:** `sm` (h-32), `default` (h-40), `lg` (h-48), `icon` (size-36), `icon-sm` (size-32), `icon-lg` (size-40)
 
 ### Checkbox
 

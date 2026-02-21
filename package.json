@@ -10,6 +10,7 @@
     "dev:docs": "turbo dev --filter=@level/docs"
   },
   "devDependencies": {
+    "puppeteer": "^24.37.5",
     "turbo": "^2.8.10"
   }
 }

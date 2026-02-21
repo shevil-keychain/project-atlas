@@ -25,7 +25,7 @@ const TooltipContent = React.forwardRef<
       sideOffset={sideOffset}
       data-slot="tooltip-content"
       className={cn(
-        "z-50 rounded-lg px-3 py-2 text-xs font-semibold",
+        "z-50 rounded-lg px-12 py-8 text-12 font-semibold",
         "animate-in fade-in-0 zoom-in-95",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
         "data-[side=bottom]:slide-in-from-top-2",
@@ -77,11 +77,11 @@ function SimpleTooltip({
 }: SimpleTooltipProps) {
   const tooltipBody =
     title && description ? (
-      <div className="flex flex-col gap-1">
-        <span className="text-xs font-semibold">{title}</span>
+      <div className="flex flex-col gap-4">
+        <span className="text-12 font-semibold">{title}</span>
         <span
           className={cn(
-            "text-xs font-medium",
+            "text-12 font-medium",
             theme === "dark" ? "text-stone-400 font-medium" : "text-stone-700 font-medium"
           )}
         >

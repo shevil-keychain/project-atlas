@@ -18,7 +18,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -34,7 +34,7 @@ const TriggerButton = React.forwardRef<
       ref={ref}
       className={
         className ??
-        "inline-flex items-center justify-center rounded-md border border-stone-300 bg-white px-4 py-2 text-default font-semibold text-foreground hover:bg-stone-100 transition-colors"
+        "inline-flex items-center justify-center rounded-md border border-stone-300 bg-white px-16 py-8 text-14 font-semibold text-foreground hover:bg-stone-100 transition-colors"
       }
       {...props}
     >
@@ -46,19 +46,19 @@ const TriggerButton = React.forwardRef<
 export default function TooltipDemoPage() {
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="min-h-screen bg-background p-10">
-        <div className="mx-auto max-w-2xl space-y-12">
+      <div className="min-h-screen bg-background p-40">
+        <div className="mx-auto max-w-2xl space-y-48">
           <div>
             <BackButton />
-            <h1 className="text-xxl font-bold text-foreground">Tooltip</h1>
-            <p className="mt-1 text-default text-stone-700 font-medium">
+            <h1 className="text-24 font-bold text-foreground">Tooltip</h1>
+            <p className="mt-4 text-14 text-stone-700 font-medium">
               Contextual information on hover with light and dark themes.
             </p>
           </div>
 
           {/* Dark Theme */}
           <Section title="Dark Theme (Default)">
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-16">
               {(["top", "bottom", "left", "right"] as const).map((side) => (
                 <Tooltip key={side}>
                   <TooltipTrigger asChild>
@@ -76,7 +76,7 @@ export default function TooltipDemoPage() {
 
           {/* Light Theme */}
           <Section title="Light Theme">
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-16">
               {(["top", "bottom", "left", "right"] as const).map((side) => (
                 <Tooltip key={side}>
                   <TooltipTrigger asChild>
@@ -94,7 +94,7 @@ export default function TooltipDemoPage() {
 
           {/* Simple Tooltips */}
           <Section title="Simple Tooltips">
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-16">
               <SimpleTooltip content="Basic dark tooltip">
                 <TriggerButton>Basic (dark)</TriggerButton>
               </SimpleTooltip>
@@ -122,7 +122,7 @@ export default function TooltipDemoPage() {
 
           {/* Alignment */}
           <Section title="Alignment">
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-16">
               {(["start", "center", "end"] as const).map((align) => (
                 <Tooltip key={align}>
                   <TooltipTrigger asChild>
@@ -138,17 +138,17 @@ export default function TooltipDemoPage() {
 
           {/* Detailed Tooltips */}
           <Section title="Detailed Tooltips">
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-16">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <TriggerButton>Dark Detailed</TriggerButton>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-small font-semibold">
+                  <div className="flex flex-col gap-4">
+                    <span className="text-14all font-semibold">
                       Analytics Dashboard
                     </span>
-                    <span className="text-small font-medium text-stone-400">
+                    <span className="text-14all font-medium text-stone-400">
                       View real-time metrics and conversation insights
                     </span>
                   </div>
@@ -160,11 +160,11 @@ export default function TooltipDemoPage() {
                   <TriggerButton>Light Detailed</TriggerButton>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" theme="light">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-small font-semibold">
+                  <div className="flex flex-col gap-4">
+                    <span className="text-14all font-semibold">
                       Analytics Dashboard
                     </span>
-                    <span className="text-small font-medium text-stone-700">
+                    <span className="text-14all font-medium text-stone-700">
                       View real-time metrics and conversation insights
                     </span>
                   </div>

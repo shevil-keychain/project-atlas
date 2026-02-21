@@ -21,7 +21,7 @@ function Label({
     <label
       data-slot="label"
       className={cn(
-        "text-sm font-semibold leading-tight",
+        "text-14 font-semibold leading-tight",
         error ? "text-error-500" : "text-foreground",
         disabled && "text-stone-600",
         className
@@ -29,9 +29,9 @@ function Label({
       {...props}
     >
       {children}
-      {required && <span className="text-error-500 ml-0.5 font-medium">*</span>}
+      {required && <span className="text-error-500 ml-2 font-medium">*</span>}
       {optional && (
-        <span className="text-stone-600 font-medium ml-1">(optional)</span>
+        <span className="text-stone-600 font-medium ml-4">(optional)</span>
       )}
     </label>
   )

@@ -49,7 +49,7 @@ const SheetContent = React.forwardRef<
         <Dialog.Content
           ref={ref}
           className={cn(
-            "fixed right-2 top-2 bottom-2 z-50 bg-white border border-stone-300 shadow-xl rounded-lg",
+            "fixed right-8 top-8 bottom-8 z-50 bg-white border border-stone-300 shadow-xl rounded-lg",
             "flex flex-col",
             "animate-in slide-in-from-right duration-300",
             "data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=closed]:duration-200",
@@ -79,7 +79,7 @@ function SheetHeader({
   return (
     <div
       className={cn(
-        "flex items-center justify-between px-8 py-6",
+        "flex items-center justify-between px-32 py-24",
         isScrollable && "border-b border-stone-300",
         className
       )}
@@ -89,13 +89,13 @@ function SheetHeader({
           {children}
         </Dialog.Title>
         {description && (
-          <Dialog.Description className="mt-1 text-sm text-stone-700">
+          <Dialog.Description className="mt-4 text-14 text-stone-700">
             {description}
           </Dialog.Description>
         )}
       </div>
-      <Dialog.Close className="size-8 rounded-lg hover:bg-stone-100 flex items-center justify-center">
-        <X className="size-5" />
+      <Dialog.Close className="size-32 rounded-lg hover:bg-stone-100 flex items-center justify-center">
+        <X className="size-20" />
       </Dialog.Close>
     </div>
   )
@@ -125,7 +125,7 @@ function SheetBody({
   }, [setScrollable])
 
   return (
-    <div ref={bodyRef} className={cn("flex-1 overflow-y-auto px-6 py-4 text-foreground", className)}>
+    <div ref={bodyRef} className={cn("flex-1 overflow-y-auto px-24 py-16 text-foreground", className)}>
       {children}
     </div>
   )
@@ -142,7 +142,7 @@ function SheetFooter({
   return (
     <div
       className={cn(
-        "flex items-center justify-end gap-3 px-8 py-8",
+        "flex items-center justify-end gap-12 px-32 py-32",
         isScrollable && "border-t border-stone-300",
         className
       )}

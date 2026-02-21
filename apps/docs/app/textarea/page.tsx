@@ -14,8 +14,8 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+    <div className="space-y-16">
+      <h2 className="text-18 font-semibold text-foreground">{title}</h2>
       {children}
     </div>
   )
@@ -23,12 +23,12 @@ function Section({
 
 export default function TextareaDemoPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-xxl font-bold text-foreground">Textarea</h1>
-          <p className="mt-1 text-default text-stone-700 font-medium">
+          <h1 className="text-24 font-bold text-foreground">Textarea</h1>
+          <p className="mt-4 text-14 text-stone-700 font-medium">
             Multiline text input with label, character count, and error states.
           </p>
         </div>
@@ -60,7 +60,7 @@ export default function TextareaDemoPage() {
         </Section>
 
         <Section title="Required & Optional">
-          <div className="space-y-6">
+          <div className="space-y-24">
             <TextareaField
               label="Summary"
               required
@@ -92,9 +92,9 @@ export default function TextareaDemoPage() {
           />
         </Section>
 
-        <div className="border-t border-stone-300 pt-12">
-          <h1 className="text-xxl font-bold text-foreground">Rich Text Editor</h1>
-          <p className="mt-1 text-default text-stone-700 font-medium">
+        <div className="border-t border-stone-300 pt-48">
+          <h1 className="text-24 font-bold text-foreground">Rich Text Editor</h1>
+          <p className="mt-4 text-14 text-stone-700 font-medium">
             Tiptap-based editor with formatting toolbar.
           </p>
         </div>

@@ -7,7 +7,7 @@ import { Info, CheckCircle, AlertTriangle, AlertCircle, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const inlineAlertVariants = cva(
-  "w-full rounded-lg border px-4 py-3 flex flex-row items-start gap-3",
+  "w-full rounded-lg border px-16 py-12 flex flex-row items-start gap-12",
   {
     variants: {
       variant: {
@@ -29,10 +29,10 @@ const defaultIcons: Record<
   NonNullable<VariantProps<typeof inlineAlertVariants>["variant"]>,
   React.ReactNode
 > = {
-  info: <Info className="size-5 shrink-0" />,
-  success: <CheckCircle className="size-5 shrink-0" />,
-  warning: <AlertTriangle className="size-5 shrink-0" />,
-  error: <AlertCircle className="size-5 shrink-0" />,
+  info: <Info className="size-20 shrink-0" />,
+  success: <CheckCircle className="size-20 shrink-0" />,
+  warning: <AlertTriangle className="size-20 shrink-0" />,
+  error: <AlertCircle className="size-20 shrink-0" />,
 }
 
 export type InlineAlertProps = React.ComponentProps<"div"> &
@@ -64,23 +64,23 @@ function InlineAlert({
       {...props}
     >
       {iconNode && (
-        <span className="shrink-0 [&>svg]:size-5" aria-hidden>
+        <span className="shrink-0 [&>svg]:size-20" aria-hidden>
           {iconNode}
         </span>
       )}
-      <div className="min-w-0 flex-1 flex flex-col gap-0.5">
+      <div className="min-w-0 flex-1 flex flex-col gap-2">
         {title != null && (
-          <span className="text-sm font-semibold">{title}</span>
+          <span className="text-14 font-semibold">{title}</span>
         )}
         {description != null && (
-          <span className="text-xs font-medium">{description}</span>
+          <span className="text-12 font-medium">{description}</span>
         )}
       </div>
       {action && (
         <button
           type="button"
           onClick={action.onClick}
-          className="shrink-0 text-sm font-medium underline underline-offset-4 transition-colors hover:no-underline"
+          className="shrink-0 text-14 font-medium underline underline-offset-4 transition-colors hover:no-underline"
         >
           {action.label}
         </button>
@@ -89,10 +89,10 @@ function InlineAlert({
         <button
           type="button"
           onClick={onDismiss}
-          className="shrink-0 rounded p-1 transition-opacity hover:opacity-70"
+          className="shrink-0 rounded p-4 transition-opacity hover:opacity-70"
           aria-label="Dismiss"
         >
-          <X className="size-5" />
+          <X className="size-20" />
         </button>
       )}
     </div>

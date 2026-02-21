@@ -18,7 +18,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -27,12 +27,12 @@ function Section({
 
 export default function AccordionDemoPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-3xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-3xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Accordion</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Accordion</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Collapsible card sections with single or multiple expansion, smooth
             height animation, and icon support.
           </p>
@@ -73,7 +73,7 @@ export default function AccordionDemoPage() {
             <AccordionItem value="features">
               <AccordionTrigger>Features</AccordionTrigger>
               <AccordionContent>
-                <ul className="list-disc pl-4 space-y-1">
+                <ul className="list-disc pl-16 space-y-4">
                   <li>Real-time conversation intelligence and analytics</li>
                   <li>Automated quality assurance across 100% of interactions</li>
                   <li>AI-powered agent coaching and performance insights</li>
@@ -102,7 +102,7 @@ export default function AccordionDemoPage() {
         <Section title="With Icons">
           <Accordion type="single" collapsible>
             <AccordionItem value="profile">
-              <AccordionTrigger icon={<User className="size-4" />}>
+              <AccordionTrigger icon={<User className="size-16" />}>
                 Profile
               </AccordionTrigger>
               <AccordionContent>
@@ -111,7 +111,7 @@ export default function AccordionDemoPage() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="notifications">
-              <AccordionTrigger icon={<Bell className="size-4" />}>
+              <AccordionTrigger icon={<Bell className="size-16" />}>
                 Notifications
               </AccordionTrigger>
               <AccordionContent>
@@ -120,7 +120,7 @@ export default function AccordionDemoPage() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="security">
-              <AccordionTrigger icon={<Shield className="size-4" />}>
+              <AccordionTrigger icon={<Shield className="size-16" />}>
                 Security
               </AccordionTrigger>
               <AccordionContent>
@@ -129,7 +129,7 @@ export default function AccordionDemoPage() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="billing">
-              <AccordionTrigger icon={<CreditCard className="size-4" />}>
+              <AccordionTrigger icon={<CreditCard className="size-16" />}>
                 Billing
               </AccordionTrigger>
               <AccordionContent>
@@ -177,7 +177,7 @@ export default function AccordionDemoPage() {
                   platform. You can update your personal information, manage
                   connected integrations, and configure your workspace.
                 </p>
-                <p className="mt-3">
+                <p className="mt-12">
                   Changes to account settings take effect immediately. Some
                   settings, such as SSO configuration, may require admin
                   approval before they are applied.
@@ -191,7 +191,7 @@ export default function AccordionDemoPage() {
                   Use the Level AI REST API to integrate conversation
                   intelligence into your existing tools and workflows.
                 </p>
-                <code className="block bg-stone-100 rounded p-3 text-xs font-mono mt-2">
+                <code className="block bg-stone-100 rounded p-12 text-12 font-mono mt-8">
                   {`curl -X GET https://api.level.ai/v1/conversations \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json"`}

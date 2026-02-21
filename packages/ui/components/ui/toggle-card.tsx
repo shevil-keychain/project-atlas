@@ -30,7 +30,7 @@ function ToggleCard({
     <label
       data-slot="toggle-card"
       className={cn(
-        "group flex flex-col rounded-lg border px-4 py-3 transition-colors cursor-pointer select-none",
+        "group flex flex-col rounded-lg border px-16 py-12 transition-colors cursor-pointer select-none",
         checked
           ? "border-primary-brand-100"
           : "border-stone-300",
@@ -38,16 +38,16 @@ function ToggleCard({
         className
       )}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-12">
         {icon && (
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-[8px] bg-stone-200">
+          <div className="flex size-32 shrink-0 items-center justify-center rounded-[8px] bg-stone-200">
             {icon}
           </div>
         )}
         <div className="flex min-w-0 flex-1 flex-col">
           <span
             className={cn(
-              "text-sm font-semibold text-foreground leading-tight",
+              "text-14 font-semibold text-foreground leading-tight",
               disabled && "text-stone-600"
             )}
           >
@@ -56,7 +56,7 @@ function ToggleCard({
           {subtext && (
             <span
               className={cn(
-                "text-xs font-medium text-stone-700 leading-tight mt-1.5",
+                "text-12 font-medium text-stone-700 leading-tight mt-6",
                 disabled && "text-stone-600"
               )}
             >
@@ -68,11 +68,11 @@ function ToggleCard({
           checked={checked}
           onCheckedChange={onCheckedChange}
           disabled={disabled}
-          className="mt-0.5"
+          className="mt-2"
         />
       </div>
       {image && (
-        <div className="mt-3 overflow-hidden rounded-md">
+        <div className="mt-12 overflow-hidden rounded-md">
           {image}
         </div>
       )}

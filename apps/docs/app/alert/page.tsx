@@ -14,8 +14,8 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+    <div className="space-y-16">
+      <h2 className="text-18 font-semibold text-foreground">{title}</h2>
       {children}
     </div>
   )
@@ -23,18 +23,18 @@ function Section({
 
 export default function AlertDemoPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-xxl font-bold text-foreground">Alert / Toast</h1>
-          <p className="mt-1 text-default text-stone-700 font-medium">
+          <h1 className="text-24 font-bold text-foreground">Alert / Toast</h1>
+          <p className="mt-4 text-14 text-stone-700 font-medium">
             Dark notification bars with animations and imperative toast API.
           </p>
         </div>
 
         <Section title="Static Alerts">
-          <div className="space-y-3">
+          <div className="space-y-12">
             <AlertToast title="Changes saved" onClose={() => {}} />
 
             <AlertToast
@@ -61,11 +61,11 @@ export default function AlertDemoPage() {
         </Section>
 
         <Section title="Toast Demo">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-12">
             <button
               type="button"
               onClick={() => toast({ title: "Changes saved" })}
-              className="rounded-md border border-border bg-white px-4 py-2 text-default font-semibold text-foreground transition-colors hover:bg-stone-100"
+              className="rounded-md border border-border bg-white px-16 py-8 text-14 font-semibold text-foreground transition-colors hover:bg-stone-100"
             >
               Show Basic Toast
             </button>
@@ -78,7 +78,7 @@ export default function AlertDemoPage() {
                   description: "document.pdf was uploaded successfully",
                 })
               }
-              className="rounded-md border border-border bg-white px-4 py-2 text-default font-semibold text-foreground transition-colors hover:bg-stone-100"
+              className="rounded-md border border-border bg-white px-16 py-8 text-14 font-semibold text-foreground transition-colors hover:bg-stone-100"
             >
               Show Toast with Description
             </button>
@@ -92,7 +92,7 @@ export default function AlertDemoPage() {
                   onAction: () => console.log("undo"),
                 })
               }
-              className="rounded-md border border-border bg-white px-4 py-2 text-default font-semibold text-foreground transition-colors hover:bg-stone-100"
+              className="rounded-md border border-border bg-white px-16 py-8 text-14 font-semibold text-foreground transition-colors hover:bg-stone-100"
             >
               Show Toast with Action
             </button>
@@ -102,7 +102,7 @@ export default function AlertDemoPage() {
               onClick={() =>
                 toast({ title: "Processing...", duration: 0 })
               }
-              className="rounded-md border border-border bg-white px-4 py-2 text-default font-semibold text-foreground transition-colors hover:bg-stone-100"
+              className="rounded-md border border-border bg-white px-16 py-8 text-14 font-semibold text-foreground transition-colors hover:bg-stone-100"
             >
               Show Persistent Toast
             </button>

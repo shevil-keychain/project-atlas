@@ -40,7 +40,7 @@ function SkeletonText({
 }) {
   const widths = ["100%", "85%", "65%"]
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn("flex flex-col gap-8", className)}>
       {Array.from({ length: lines }, (_, i) => (
         <Skeleton
           key={i}
@@ -77,10 +77,10 @@ function SkeletonCard({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="p-2">
-        <Skeleton className="h-32 w-full rounded-md" />
+      <div className="p-8">
+        <Skeleton className="h-128 w-full rounded-md" />
       </div>
-      <div className="px-4 py-3">
+      <div className="px-16 py-12">
         <SkeletonText lines={2} />
       </div>
     </div>

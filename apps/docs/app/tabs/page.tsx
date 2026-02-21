@@ -26,12 +26,12 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-2xl border border-stone-300/80 bg-white/90 p-6 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
-      <div className="mb-5">
+    <section className="rounded-2xl border border-stone-300/80 bg-white/90 p-24 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
+      <div className="mb-20">
         <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-        <p className="mt-1 text-sm text-stone-700">{description}</p>
+        <p className="mt-4 text-14 text-stone-700">{description}</p>
       </div>
-      <div className="space-y-3">{children}</div>
+      <div className="space-y-12">{children}</div>
     </section>
   )
 }
@@ -44,11 +44,11 @@ function Row({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-4 sm:flex sm:items-start sm:gap-6">
-      <p className="w-32 shrink-0 text-xs font-semibold uppercase tracking-[0.14em] text-stone-600">
+    <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-16 py-16 sm:flex sm:items-start sm:gap-24">
+      <p className="w-128 shrink-0 text-12 font-semibold uppercase tracking-[0.14em] text-stone-600">
         {label}
       </p>
-      <div className="mt-3 w-full space-y-3 sm:mt-0">{children}</div>
+      <div className="mt-12 w-full space-y-12 sm:mt-0">{children}</div>
     </div>
   )
 }
@@ -61,16 +61,16 @@ function DemoPanel({
   description: string
 }) {
   return (
-    <div className="rounded-lg border border-stone-200 bg-white px-4 py-4">
-      <p className="text-sm font-semibold text-foreground">{title}</p>
-      <p className="mt-1 text-sm text-stone-700">{description}</p>
+    <div className="rounded-lg border border-stone-200 bg-white px-16 py-16">
+      <p className="text-14 font-semibold text-foreground">{title}</p>
+      <p className="mt-4 text-14 text-stone-700">{description}</p>
     </div>
   )
 }
 
 function InlineBadge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-stone-200 px-2 py-0.5 text-xs font-medium text-stone-700">
+    <span className="inline-flex items-center rounded-full bg-stone-200 px-8 py-2 text-12 font-medium text-stone-700">
       {children}
     </span>
   )
@@ -78,38 +78,38 @@ function InlineBadge({ children }: { children: React.ReactNode }) {
 
 export default function TabsDemoPage() {
   return (
-    <div className="min-h-screen bg-[radial-gradient(1100px_420px_at_0%_-10%,#FFF5EB,transparent),radial-gradient(900px_360px_at_100%_0%,#F5FCFF,transparent)] px-4 py-10 sm:px-8">
-      <div className="mx-auto max-w-6xl space-y-8">
-        <header className="rounded-2xl border border-stone-300/80 bg-white/90 p-6 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-600">
+    <div className="min-h-screen bg-[radial-gradient(1100px_420px_at_0%_-10%,#FFF5EB,transparent),radial-gradient(900px_360px_at_100%_0%,#F5FCFF,transparent)] px-16 py-40 sm:px-32">
+      <div className="mx-auto max-w-6xl space-y-32">
+        <header className="rounded-2xl border border-stone-300/80 bg-white/90 p-24 shadow-[0_8px_24px_rgba(40,38,36,0.05)]">
+          <p className="text-12 font-semibold uppercase tracking-[0.16em] text-stone-600">
             Component Demo
           </p>
           <BackButton />
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="mt-8 text-30 font-bold tracking-tight text-foreground">
             Tabs
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-stone-700">
+          <p className="mt-8 max-w-2xl text-14 text-stone-700">
             Neutral, brand, underlined, and vertical tab styles with support for
             icons, badges, subtext, and disabled states.
           </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.12em] text-stone-600">
+          <div className="mt-20 grid gap-12 sm:grid-cols-3">
+            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-16 py-12">
+              <p className="text-12 uppercase tracking-[0.12em] text-stone-600">
                 Tab Styles
               </p>
-              <p className="mt-1 text-xl font-bold text-foreground">4</p>
+              <p className="mt-4 text-xl font-bold text-foreground">4</p>
             </div>
-            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.12em] text-stone-600">
+            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-16 py-12">
+              <p className="text-12 uppercase tracking-[0.12em] text-stone-600">
                 Orientations
               </p>
-              <p className="mt-1 text-xl font-bold text-foreground">2</p>
+              <p className="mt-4 text-xl font-bold text-foreground">2</p>
             </div>
-            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-4 py-3">
-              <p className="text-xs uppercase tracking-[0.12em] text-stone-600">
+            <div className="rounded-xl border border-stone-200 bg-stone-50/70 px-16 py-12">
+              <p className="text-12 uppercase tracking-[0.12em] text-stone-600">
                 Trigger Features
               </p>
-              <p className="mt-1 text-xl font-bold text-foreground">3</p>
+              <p className="mt-4 text-xl font-bold text-foreground">3</p>
             </div>
           </div>
         </header>
@@ -252,8 +252,8 @@ export default function TabsDemoPage() {
 
           <Row label="Vertical">
             <Tabs defaultValue="general" orientation="vertical">
-              <div className="flex flex-col gap-4 md:flex-row md:gap-6">
-                <VerticalTabsList className="w-full shrink-0 rounded-lg border border-stone-200 bg-white p-2 md:w-56">
+              <div className="flex flex-col gap-16 md:flex-row md:gap-24">
+                <VerticalTabsList className="w-full shrink-0 rounded-lg border border-stone-200 bg-white p-8 md:w-[224px]">
                   <VerticalTabsTrigger value="general">General</VerticalTabsTrigger>
                   <VerticalTabsTrigger value="security">Security</VerticalTabsTrigger>
                   <VerticalTabsTrigger value="notifications">
@@ -338,8 +338,8 @@ export default function TabsDemoPage() {
 
           <Row label="Subtext">
             <Tabs defaultValue="plan-pro" orientation="vertical">
-              <div className="flex flex-col gap-4 md:flex-row md:gap-6">
-                <VerticalTabsList className="w-full shrink-0 rounded-lg border border-stone-200 bg-white p-2 md:w-60">
+              <div className="flex flex-col gap-16 md:flex-row md:gap-24">
+                <VerticalTabsList className="w-full shrink-0 rounded-lg border border-stone-200 bg-white p-8 md:w-240">
                   <VerticalTabsTrigger value="plan-free" subtext="$0/month">
                     Free
                   </VerticalTabsTrigger>

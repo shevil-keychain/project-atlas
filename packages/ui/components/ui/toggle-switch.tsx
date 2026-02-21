@@ -13,7 +13,7 @@ function ToggleSwitch({
     <SwitchPrimitive.Root
       data-slot="toggle-switch"
       className={cn(
-        "peer inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors cursor-pointer",
+        "peer inline-flex h-16 w-28 shrink-0 items-center rounded-full transition-colors cursor-pointer",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         "bg-stone-500",
         "hover:bg-stone-600",
@@ -30,8 +30,8 @@ function ToggleSwitch({
     >
       <SwitchPrimitive.Thumb
         className={cn(
-          "pointer-events-none block size-3 rounded-full bg-white shadow-sm transition-transform",
-          "translate-x-0.5 data-[state=checked]:translate-x-3.5"
+          "pointer-events-none block size-12 rounded-full bg-white shadow-sm transition-transform",
+          "translate-x-2 data-[state=checked]:translate-x-3.5"
         )}
       />
     </SwitchPrimitive.Root>

@@ -12,8 +12,8 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+    <div className="space-y-16">
+      <h2 className="text-18 font-semibold text-foreground">{title}</h2>
       {children}
     </div>
   )
@@ -21,18 +21,18 @@ function Section({
 
 export default function TagDemoPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-xxl font-bold text-foreground">Tag</h1>
-          <p className="mt-1 text-default text-stone-700 font-medium">
+          <h1 className="text-24 font-bold text-foreground">Tag</h1>
+          <p className="mt-4 text-14 text-stone-700 font-medium">
             Pills for labels, filters, and removable chips.
           </p>
         </div>
 
         <Section title="Removable tags">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-12">
             <Tag onRemove={() => {}}>Support</Tag>
             <Tag onRemove={() => {}}>Customer</Tag>
             <Tag onRemove={() => {}}>Billing</Tag>
@@ -40,7 +40,7 @@ export default function TagDemoPage() {
         </Section>
 
         <Section title="With icon + remove">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-12">
             <Tag icon={<TagIcon />} onRemove={() => {}}>
               Support
             </Tag>

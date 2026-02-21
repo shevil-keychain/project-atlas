@@ -21,7 +21,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -30,12 +30,12 @@ function Section({
 
 export default function SheetDemoPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Sheet</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Sheet</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Right-side panel drawer with slide animation, scrollable content,
             and preset widths.
           </p>
@@ -49,23 +49,23 @@ export default function SheetDemoPage() {
             <SheetContent>
               <SheetHeader>Accessibility issue finder</SheetHeader>
               <SheetBody>
-                <p className="text-sm text-foreground">
+                <p className="text-14 text-foreground">
                   Scan your conversations for accessibility issues across all
                   channels. Results are grouped by severity and include
                   actionable recommendations.
                 </p>
-                <div className="mt-6 space-y-4">
+                <div className="mt-24 space-y-16">
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-14 font-medium text-foreground">
                       Scan scope
                     </p>
-                    <p className="text-sm text-foreground">All conversations</p>
+                    <p className="text-14 text-foreground">All conversations</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-14 font-medium text-foreground">
                       Last run
                     </p>
-                    <p className="text-sm text-foreground">Feb 18, 2026</p>
+                    <p className="text-14 text-foreground">Feb 18, 2026</p>
                   </div>
                 </div>
               </SheetBody>
@@ -87,26 +87,26 @@ export default function SheetDemoPage() {
             <SheetContent size="sm">
               <SheetHeader>Quick Settings</SheetHeader>
               <SheetBody>
-                <div className="space-y-4">
+                <div className="space-y-16">
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-14 font-medium text-foreground">
                       Notifications
                     </p>
-                    <p className="text-sm text-foreground">
+                    <p className="text-14 text-foreground">
                       Email and in-app alerts enabled
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-14 font-medium text-foreground">
                       Language
                     </p>
-                    <p className="text-sm text-foreground">English (US)</p>
+                    <p className="text-14 text-foreground">English (US)</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-14 font-medium text-foreground">
                       Timezone
                     </p>
-                    <p className="text-sm text-foreground">
+                    <p className="text-14 text-foreground">
                       Pacific Time (PT)
                     </p>
                   </div>
@@ -127,7 +127,7 @@ export default function SheetDemoPage() {
             <SheetContent size="lg">
               <SheetHeader>Detailed Report</SheetHeader>
               <SheetBody>
-                <div className="space-y-4 text-sm text-foreground">
+                <div className="space-y-16 text-14 text-foreground">
                   <p>
                     This report covers agent performance metrics across all
                     queues for the current quarter. Key highlights include a 12%
@@ -169,28 +169,28 @@ export default function SheetDemoPage() {
             <SheetContent>
               <SheetHeader>Edit Worker</SheetHeader>
               <SheetBody>
-                <div className="space-y-6">
+                <div className="space-y-24">
                   <div>
-                    <p className="text-sm font-medium text-foreground mb-1">
+                    <p className="text-14 font-medium text-foreground mb-4">
                       Agent Name
                     </p>
-                    <div className="h-10 rounded-md border border-stone-300 bg-stone-50 px-3 flex items-center text-sm text-stone-500">
+                    <div className="h-40 rounded-md border border-stone-300 bg-stone-50 px-12 flex items-center text-14 text-stone-500">
                       Sarah Connor
                     </div>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground mb-1">
+                    <p className="text-14 font-medium text-foreground mb-4">
                       Conversation Date
                     </p>
-                    <div className="h-10 rounded-md border border-stone-300 bg-stone-50 px-3 flex items-center text-sm text-stone-500">
+                    <div className="h-40 rounded-md border border-stone-300 bg-stone-50 px-12 flex items-center text-14 text-stone-500">
                       February 20, 2026
                     </div>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground mb-1">
+                    <p className="text-14 font-medium text-foreground mb-4">
                       Queue Assignment
                     </p>
-                    <div className="h-10 rounded-md border border-stone-300 bg-stone-50 px-3 flex items-center text-sm text-stone-500">
+                    <div className="h-40 rounded-md border border-stone-300 bg-stone-50 px-12 flex items-center text-14 text-stone-500">
                       Billing Support
                     </div>
                   </div>
@@ -214,7 +214,7 @@ export default function SheetDemoPage() {
             <SheetContent>
               <SheetHeader>Activity Log</SheetHeader>
               <SheetBody>
-                <div className="space-y-3 text-sm text-foreground">
+                <div className="space-y-12 text-14 text-foreground">
                   {[
                     { time: "10:42 AM", agent: "Sarah Connor", action: "Picked up ticket #4021", detail: "Customer reported billing discrepancy on the March invoice. Assigned to billing queue.", tag: "Billing" },
                     { time: "10:38 AM", agent: "System", action: "Escalation created for Acme Corp", detail: "SLA breach imminent. Ticket #4018 escalated to Tier 2 support automatically.", tag: "Escalation" },
@@ -229,14 +229,14 @@ export default function SheetDemoPage() {
                     { time: "9:58 AM", agent: "Sarah Connor", action: "Tag added: priority-high — ticket #4019", detail: "Customer identified as enterprise tier. Priority tag applied and account manager notified.", tag: "Tag" },
                     { time: "9:54 AM", agent: "David Kim", action: "Transferred to tech support", detail: "Ticket #4016 transferred after determining the issue was API-related, outside billing scope.", tag: "Transfer" },
                   ].map((entry, i) => (
-                    <div key={i} className="rounded-lg border border-stone-200 p-3 space-y-1">
+                    <div key={i} className="rounded-lg border border-stone-200 p-12 space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold">{entry.agent}</span>
-                        <span className="text-xs text-stone-500">{entry.time}</span>
+                        <span className="text-12 text-stone-500">{entry.time}</span>
                       </div>
                       <p className="font-medium">{entry.action}</p>
                       <p className="text-stone-600 leading-relaxed">{entry.detail}</p>
-                      <span className="inline-block text-xs bg-stone-100 text-stone-700 rounded px-2 py-0.5">{entry.tag}</span>
+                      <span className="inline-block text-12 bg-stone-100 text-stone-700 rounded px-8 py-2">{entry.tag}</span>
                     </div>
                   ))}
                 </div>

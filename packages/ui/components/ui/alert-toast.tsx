@@ -35,7 +35,7 @@ function AlertToast({
     <div
       data-slot="alert-toast"
       className={cn(
-        "flex min-h-[56px] max-w-[480px] items-center gap-3 rounded-lg bg-stone-800 p-4",
+        "flex min-h-[56px] max-w-[480px] items-center gap-12 rounded-lg bg-stone-800 p-16",
         closing
           ? "animate-[toast-fade-out_0.3s_ease-in_forwards]"
           : "animate-[toast-slide-in_0.3s_ease-out]",
@@ -62,10 +62,10 @@ function AlertToast({
         {icon ?? <CheckCircle size={16} />}
       </span>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="text-sm font-semibold text-white">{title}</span>
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <span className="text-14 font-semibold text-white">{title}</span>
         {description && (
-          <span className="text-xs font-medium text-stone-600">
+          <span className="text-12 font-medium text-stone-600">
             {description}
           </span>
         )}
@@ -75,7 +75,7 @@ function AlertToast({
         <button
           type="button"
           onClick={onAction}
-          className="shrink-0 rounded-md border border-stone-300 bg-white px-3 py-1.5 text-sm font-semibold text-stone-800 transition-colors hover:bg-stone-100"
+          className="shrink-0 rounded-md border border-stone-300 bg-white px-12 py-6 text-14 font-semibold text-stone-800 transition-colors hover:bg-stone-100"
         >
           {actionLabel}
         </button>

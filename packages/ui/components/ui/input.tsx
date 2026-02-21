@@ -20,11 +20,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "hover:border-stone-600",
           "disabled:bg-stone-200 disabled:border-stone-500 disabled:cursor-not-allowed disabled:text-stone-600",
           inputSize === "large"
-            ? "h-12 px-4 py-3 text-base font-medium"
-            : "h-10 px-3 py-2 text-sm font-medium",
+            ? "h-48 px-16 py-12 text-16 font-medium"
+            : "h-40 px-12 py-8 text-14 font-medium",
           error
-            ? "border-error-500 focus:border-error-500 focus:shadow-[0px_0px_0px_4px_#FAD5CC]"
-            : "border-stone-500 focus:border-primary-brand-500 focus:shadow-[0px_0px_0px_4px_#FFCB9B]",
+            ? "border-error-500 focus:border-error-500 focus:shadow-[0px_0px_0px_4px_var(--color-error-100)]"
+            : "border-stone-500 focus:border-primary-brand-500 focus:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]",
           className
         )}
         {...props}

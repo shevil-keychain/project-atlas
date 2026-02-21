@@ -13,7 +13,7 @@ interface ChatAreaProps {
 
 function BotAvatar() {
   return (
-    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-brand-400 to-primary-brand-600 shadow-lg shadow-primary-brand-200">
+    <div className="flex h-64 w-64 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-brand-400 to-primary-brand-600 shadow-lg shadow-primary-brand-200">
       <Stars01 size={32} className="text-white" />
     </div>
   );
@@ -33,13 +33,13 @@ export function ChatArea({ selectedWorkerId }: ChatAreaProps) {
   return (
     <div className="flex min-w-0 flex-1 flex-col bg-stone-50">
       {/* Empty state / greeting */}
-      <div className="flex flex-1 flex-col items-center justify-center px-8">
+      <div className="flex flex-1 flex-col items-center justify-center px-32">
         <BotAvatar />
-        <h1 className="mt-6 text-2xl font-bold text-stone-800">
+        <h1 className="mt-24 text-24 font-bold text-stone-800">
           How can I help you today?
         </h1>
         {selectedWorker ? (
-          <p className="mt-2 text-sm text-stone-500">
+          <p className="mt-8 text-14 text-stone-500">
             You&apos;re chatting with the{" "}
             <span className="font-semibold text-primary-brand-600">
               {selectedWorker.name}
@@ -47,19 +47,19 @@ export function ChatArea({ selectedWorkerId }: ChatAreaProps) {
             worker
           </p>
         ) : (
-          <p className="mt-2 text-sm text-stone-500">
+          <p className="mt-8 text-14 text-stone-500">
             Select a worker or ask anything to get started
           </p>
         )}
 
         {/* Suggested prompts */}
-        <div className="mt-8 grid max-w-2xl grid-cols-2 gap-2">
+        <div className="mt-32 grid max-w-2xl grid-cols-2 gap-8">
           {suggestedPrompts.map((prompt) => (
             <button
               key={prompt}
               type="button"
               onClick={() => setMessage(prompt)}
-              className="rounded-xl border border-stone-200 bg-white px-4 py-3 text-left text-sm text-stone-600 transition-all hover:border-stone-300 hover:shadow-sm"
+              className="rounded-xl border border-stone-200 bg-white px-16 py-12 text-left text-14 text-stone-600 transition-all hover:border-stone-300 hover:shadow-sm"
             >
               {prompt}
             </button>
@@ -68,17 +68,17 @@ export function ChatArea({ selectedWorkerId }: ChatAreaProps) {
       </div>
 
       {/* Message input */}
-      <div className="border-t border-stone-200 bg-white p-4">
+      <div className="border-t border-stone-200 bg-white p-16">
         <div className="mx-auto max-w-3xl">
           <div
             className={cn(
-              "flex items-end gap-2 rounded-2xl border bg-white px-4 py-3 transition-colors",
+              "flex items-end gap-8 rounded-2xl border bg-white px-16 py-12 transition-colors",
               "border-stone-300 focus-within:border-primary-brand-400 focus-within:ring-2 focus-within:ring-primary-brand-100"
             )}
           >
             <button
               type="button"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
+              className="flex h-32 w-32 shrink-0 items-center justify-center rounded-lg text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-600"
             >
               <Paperclip size={18} />
             </button>
@@ -96,7 +96,7 @@ export function ChatArea({ selectedWorkerId }: ChatAreaProps) {
                   : "Ask anything..."
               }
               rows={1}
-              className="min-h-[32px] max-h-[120px] flex-1 resize-none bg-transparent text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none"
+              className="min-h-[32px] max-h-[120px] flex-1 resize-none bg-transparent text-14 text-stone-800 placeholder:text-stone-400 focus:outline-none"
             />
             <Button
               size="icon-sm"
@@ -111,7 +111,7 @@ export function ChatArea({ selectedWorkerId }: ChatAreaProps) {
               <ArrowUp size={16} />
             </Button>
           </div>
-          <p className="mt-2 text-center text-xs text-stone-400">
+          <p className="mt-8 text-center text-12 text-stone-400">
             AI Workers analyze your real conversation data to provide
             evidence-based insights
           </p>

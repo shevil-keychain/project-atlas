@@ -62,7 +62,7 @@ const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
     return (
       <div
         data-slot="textarea-field"
-        className={cn("flex flex-col gap-1", className)}
+        className={cn("flex flex-col gap-4", className)}
       >
         {label && (
           <Label
@@ -81,7 +81,7 @@ const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
           id={id}
           error={hasError}
           disabled={disabled}
-          className={cn(label && "mt-1")}
+          className={cn(label && "mt-4")}
           maxLength={maxLength}
           value={isControlled ? valueProp : undefined}
           defaultValue={isControlled ? undefined : defaultValue}
@@ -90,11 +90,11 @@ const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
         />
 
         {(errorText || hintText || showCount) && (
-          <div className="mt-1 flex justify-between gap-2">
+          <div className="mt-4 flex justify-between gap-8">
             {errorText ? (
-              <p className="text-xs font-medium text-error-500">{errorText}</p>
+              <p className="text-12 font-medium text-error-500">{errorText}</p>
             ) : hintText ? (
-              <p className="text-xs font-medium text-stone-700">{hintText}</p>
+              <p className="text-12 font-medium text-stone-700">{hintText}</p>
             ) : (
               <span />
             )}
@@ -102,7 +102,7 @@ const TextareaField = React.forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
             {showCount && maxLength !== undefined && (
               <p
                 className={cn(
-                  "text-xs font-medium tabular-nums shrink-0",
+                  "text-12 font-medium tabular-nums shrink-0",
                   isOverLimit || isNearLimit
                     ? "text-error-500 font-medium"
                     : "text-stone-700 font-medium"

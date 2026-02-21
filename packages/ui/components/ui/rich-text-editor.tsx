@@ -169,7 +169,7 @@ function RichTextEditor({
         aria-label={ariaLabel}
         aria-pressed={active}
         className={cn(
-          "size-8 rounded-md flex items-center justify-center transition-colors",
+          "size-32 rounded-md flex items-center justify-center transition-colors",
           isDisabled
             ? "text-stone-400 cursor-not-allowed"
             : active
@@ -177,7 +177,7 @@ function RichTextEditor({
               : "text-black hover:bg-stone-200"
         )}
       >
-        <Icon className="size-4" />
+        <Icon className="size-16" />
       </button>
     )
   }
@@ -185,7 +185,7 @@ function RichTextEditor({
   return (
     <div
       data-slot="rich-text-editor"
-      className={cn("flex flex-col gap-1", className)}
+      className={cn("flex flex-col gap-4", className)}
     >
       {label && (
         <Label
@@ -202,24 +202,24 @@ function RichTextEditor({
       <div
         id={id}
         className={cn(
-          label && "mt-1",
+          label && "mt-4",
           "rounded-lg overflow-hidden border transition-all",
           disabled
             ? "bg-stone-200 border-stone-500"
             : hasError
-              ? "border-error-500 focus-within:border-error-500 focus-within:shadow-[0px_0px_0px_4px_#FAD5CC]"
-              : "border-stone-500 hover:border-stone-600 focus-within:border-primary-brand-500 focus-within:shadow-[0px_0px_0px_4px_#FFCB9B]"
+              ? "border-error-500 focus-within:border-error-500 focus-within:shadow-[0px_0px_0px_4px_var(--color-error-100)]"
+              : "border-stone-500 hover:border-stone-600 focus-within:border-primary-brand-500 focus-within:shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]"
         )}
       >
-        <div className="flex gap-1 px-2 py-1.5 border-b border-stone-300 bg-white">
+        <div className="flex gap-4 px-8 py-6 border-b border-stone-300 bg-white">
           {toolbarButtons.map((btn) => (
             <ToolbarButton key={btn.label} {...btn} />
           ))}
-          <div className="w-px h-5 bg-stone-300 mx-1 self-center" />
+          <div className="w-px h-20 bg-stone-300 mx-4 self-center" />
           {listButtons.map((btn) => (
             <ToolbarButton key={btn.label} {...btn} />
           ))}
-          <div className="w-px h-5 bg-stone-300 mx-1 self-center" />
+          <div className="w-px h-20 bg-stone-300 mx-4 self-center" />
           {historyButtons.map((btn) => (
             <ToolbarButton key={btn.label} {...btn} />
           ))}
@@ -228,12 +228,12 @@ function RichTextEditor({
         <EditorContent
           editor={editor}
           className={cn(
-            "px-3 py-2 min-h-[120px] text-sm font-medium text-foreground",
+            "px-12 py-8 min-h-[120px] text-14 font-medium text-foreground",
             "[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[120px]",
             "[&_.ProseMirror_p.is-editor-empty:first-child::before]:text-stone-600 [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0 [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none",
-            "[&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-6",
-            "[&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-6",
-            "[&_.ProseMirror_li]:my-1",
+            "[&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-24",
+            "[&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-24",
+            "[&_.ProseMirror_li]:my-4",
             "[&_.ProseMirror_strong]:font-bold",
             "[&_.ProseMirror_em]:italic",
             "[&_.ProseMirror_s]:line-through"
@@ -242,9 +242,9 @@ function RichTextEditor({
       </div>
 
       {errorText ? (
-        <p className="mt-1 text-xs font-medium text-error-500">{errorText}</p>
+        <p className="mt-4 text-12 font-medium text-error-500">{errorText}</p>
       ) : hintText ? (
-        <p className="mt-1 text-xs font-medium text-stone-700">{hintText}</p>
+        <p className="mt-4 text-12 font-medium text-stone-700">{hintText}</p>
       ) : null}
     </div>
   )

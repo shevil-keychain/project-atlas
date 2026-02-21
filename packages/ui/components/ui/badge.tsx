@@ -16,8 +16,8 @@ const badgeVariants = cva(
         purple: "bg-secondary-purple-50 text-secondary-purple-800",
       },
       size: {
-        sm: "text-xs px-2 py-1 gap-1 [&_svg]:size-3",
-        md: "text-sm px-2.5 py-1 gap-1.5 [&_svg]:size-3.5",
+        sm: "text-12 px-8 py-4 gap-4 [&_svg]:size-12",
+        md: "text-14 px-10 py-4 gap-6 [&_svg]:size-14",
       },
     },
     defaultVariants: {

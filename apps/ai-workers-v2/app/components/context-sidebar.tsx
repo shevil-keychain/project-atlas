@@ -25,7 +25,7 @@ function SidebarSection({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-semibold text-stone-800 transition-colors hover:bg-stone-50"
+        className="flex w-full items-center gap-8 px-16 py-12 text-left text-14 font-semibold text-stone-800 transition-colors hover:bg-stone-50"
       >
         <span className="text-stone-500">{icon}</span>
         <span className="flex-1">{title}</span>
@@ -35,7 +35,7 @@ function SidebarSection({
           <ChevronRight size={14} className="text-stone-400" />
         )}
       </button>
-      {open && <div className="px-4 pb-3">{children}</div>}
+      {open && <div className="px-16 pb-12">{children}</div>}
     </div>
   );
 }
@@ -52,7 +52,7 @@ function KnowledgeItem({ icon, label, detail, active }: KnowledgeItemProps) {
     <button
       type="button"
       className={cn(
-        "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm transition-colors",
+        "flex w-full items-center gap-10 rounded-lg px-10 py-8 text-left text-14 transition-colors",
         active
           ? "bg-primary-brand-50 text-primary-brand-700"
           : "text-stone-600 hover:bg-stone-100"
@@ -62,7 +62,7 @@ function KnowledgeItem({ icon, label, detail, active }: KnowledgeItemProps) {
       <div className="min-w-0 flex-1">
         <div className="truncate font-medium">{label}</div>
         {detail && (
-          <div className="truncate text-xs text-stone-400">{detail}</div>
+          <div className="truncate text-12 text-stone-400">{detail}</div>
         )}
       </div>
     </button>
@@ -83,16 +83,16 @@ function PreferenceToggle({
   onChange,
 }: PreferenceToggleProps) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-lg px-2.5 py-2 transition-colors hover:bg-stone-50">
+    <label className="flex cursor-pointer items-start gap-12 rounded-lg px-10 py-8 transition-colors hover:bg-stone-50">
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 h-4 w-4 rounded border-stone-300 text-primary-brand-500 accent-primary-brand-500"
+        className="mt-2 h-16 w-16 rounded border-stone-300 text-primary-brand-500 accent-primary-brand-500"
       />
       <div className="min-w-0">
-        <div className="text-sm font-medium text-stone-700">{label}</div>
-        <div className="text-xs text-stone-400">{description}</div>
+        <div className="text-14 font-medium text-stone-700">{label}</div>
+        <div className="text-12 text-stone-400">{description}</div>
       </div>
     </label>
   );
@@ -104,9 +104,9 @@ export function ContextSidebar() {
 
   return (
     <aside className="flex w-[260px] shrink-0 flex-col border-r border-stone-200 bg-white">
-      <div className="flex items-center gap-2 border-b border-stone-200 px-4 py-3">
+      <div className="flex items-center gap-8 border-b border-stone-200 px-16 py-12">
         <Settings size={16} className="text-stone-500" />
-        <h2 className="text-sm font-semibold text-stone-800">Settings</h2>
+        <h2 className="text-14 font-semibold text-stone-800">Settings</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto">
@@ -115,7 +115,7 @@ export function ContextSidebar() {
           icon={<BookOpen size={16} />}
           defaultOpen={true}
         >
-          <div className="space-y-0.5">
+          <div className="space-y-2">
             <KnowledgeItem
               icon={<Database size={14} />}
               label="Conversations"
@@ -145,7 +145,7 @@ export function ContextSidebar() {
           icon={<Settings size={16} />}
           defaultOpen={true}
         >
-          <div className="space-y-1">
+          <div className="space-y-4">
             <PreferenceToggle
               label="Clarify Assumptions"
               description="Ask clarifying questions before analysis"
@@ -163,14 +163,14 @@ export function ContextSidebar() {
       </div>
 
       {/* All Workers indicator */}
-      <div className="border-t border-stone-200 px-4 py-3">
-        <div className="flex items-center gap-2 text-sm font-medium text-stone-700">
-          <div className="flex h-4 w-4 items-center justify-center rounded-full bg-green-100">
+      <div className="border-t border-stone-200 px-16 py-12">
+        <div className="flex items-center gap-8 text-14 font-medium text-stone-700">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
             <Check size={10} className="text-green-600" />
           </div>
           <span>All Workers</span>
         </div>
-        <p className="mt-1 pl-6 text-xs text-stone-400">
+        <p className="mt-4 pl-24 text-12 text-stone-400">
           7 workers available
         </p>
       </div>

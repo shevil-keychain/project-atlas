@@ -14,7 +14,7 @@ import { BackButton } from "@/components/ui/back-button"
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -23,12 +23,12 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function ModalPage() {
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-2xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-2xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Modal</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Modal</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Dialog overlays with preset sizes, scrollable content, and destructive confirmation variant.
           </p>
         </div>
@@ -41,7 +41,7 @@ export default function ModalPage() {
             <DialogContent>
               <DialogHeader>Create project</DialogHeader>
               <DialogBody>
-                <p className="text-sm">
+                <p className="text-14">
                   Start a new project to organize your work. You can invite collaborators,
                   set deadlines, and track progress all in one place. Projects help you stay
                   focused and keep everything related to a single initiative together.
@@ -68,7 +68,7 @@ export default function ModalPage() {
                 <input
                   type="text"
                   placeholder="Enter new file name"
-                  className="w-full rounded-md border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full rounded-md border border-stone-300 px-12 py-8 text-14 focus:outline-none focus:ring-2 focus:ring-ring"
                 />
               </DialogBody>
               <DialogFooter>
@@ -89,7 +89,7 @@ export default function ModalPage() {
             <DialogContent size="lg">
               <DialogHeader>Project settings</DialogHeader>
               <DialogBody>
-                <div className="space-y-4 text-sm">
+                <div className="space-y-16 text-14">
                   <p>
                     Configure your project settings to match your team&apos;s workflow.
                     These settings apply to all members of the project and affect how
@@ -126,7 +126,7 @@ export default function ModalPage() {
             <DialogContent size="sm">
               <DialogHeader>Delete Accessibility issues finder</DialogHeader>
               <DialogBody>
-                <p className="text-sm">
+                <p className="text-14">
                   Are you sure you want to delete this worker? This action cannot be undone.
                 </p>
               </DialogBody>
@@ -148,7 +148,7 @@ export default function ModalPage() {
             <DialogContent>
               <DialogHeader>Terms &amp; Conditions</DialogHeader>
               <DialogBody>
-                <div className="space-y-4 text-sm">
+                <div className="space-y-16 text-14">
                   <p>
                     By accessing and using this service, you agree to be bound by these
                     terms and conditions. Please read them carefully before proceeding.
@@ -225,24 +225,24 @@ export default function ModalPage() {
             <DialogContent size="xl">
               <DialogHeader>Analytics Dashboard</DialogHeader>
               <DialogBody>
-                <div className="space-y-4 text-sm">
+                <div className="space-y-16 text-14">
                   <p>
                     Your analytics dashboard provides a comprehensive overview of key
                     metrics, trends, and performance indicators across all active projects.
                     Use the filters above to narrow data by date range, team, or project.
                   </p>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="rounded-lg border border-stone-200 p-4">
-                      <p className="text-xs text-stone-500">Total Views</p>
-                      <p className="text-2xl font-bold text-foreground">24,521</p>
+                  <div className="grid grid-cols-3 gap-16">
+                    <div className="rounded-lg border border-stone-200 p-16">
+                      <p className="text-12 text-stone-500">Total Views</p>
+                      <p className="text-24 font-bold text-foreground">24,521</p>
                     </div>
-                    <div className="rounded-lg border border-stone-200 p-4">
-                      <p className="text-xs text-stone-500">Conversion Rate</p>
-                      <p className="text-2xl font-bold text-foreground">3.2%</p>
+                    <div className="rounded-lg border border-stone-200 p-16">
+                      <p className="text-12 text-stone-500">Conversion Rate</p>
+                      <p className="text-24 font-bold text-foreground">3.2%</p>
                     </div>
-                    <div className="rounded-lg border border-stone-200 p-4">
-                      <p className="text-xs text-stone-500">Active Users</p>
-                      <p className="text-2xl font-bold text-foreground">1,847</p>
+                    <div className="rounded-lg border border-stone-200 p-16">
+                      <p className="text-12 text-stone-500">Active Users</p>
+                      <p className="text-24 font-bold text-foreground">1,847</p>
                     </div>
                   </div>
                 </div>

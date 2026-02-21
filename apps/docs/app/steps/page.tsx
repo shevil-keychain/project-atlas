@@ -13,7 +13,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -39,12 +39,12 @@ export default function StepsDemoPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-3xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-3xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Steps</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Steps</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Pill-based horizontal step indicator for multi-step flows.
           </p>
         </div>
@@ -53,7 +53,7 @@ export default function StepsDemoPage() {
           <div className="overflow-hidden rounded-lg border border-stone-300">
             <Steps steps={defaultSteps} currentStep={currentStep} />
           </div>
-          <div className="mt-3 flex items-center gap-2">
+          <div className="mt-12 flex items-center gap-8">
             <Button
               variant="secondary"
               onClick={() =>
@@ -71,7 +71,7 @@ export default function StepsDemoPage() {
             >
               Next
             </Button>
-            <p className="text-sm text-stone-700">
+            <p className="text-14 text-stone-700">
               Current index: {currentStep}
             </p>
           </div>
@@ -85,7 +85,7 @@ export default function StepsDemoPage() {
               onStepClick={setClickStep}
             />
           </div>
-          <p className="mt-2 text-sm text-stone-600">
+          <p className="mt-8 text-14 text-stone-600">
             Click any step to navigate. Active: index {clickStep}.
           </p>
         </Section>
@@ -94,7 +94,7 @@ export default function StepsDemoPage() {
           <div className="overflow-hidden rounded-lg border border-stone-300">
             <Steps steps={stepsWithDisabled} currentStep={1} />
           </div>
-          <p className="mt-2 text-sm text-stone-600">
+          <p className="mt-8 text-14 text-stone-600">
             The last step is disabled and cannot be clicked.
           </p>
         </Section>

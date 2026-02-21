@@ -22,7 +22,7 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-16">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       {children}
     </div>
@@ -90,12 +90,12 @@ export default function TableDemoPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background p-10">
-      <div className="mx-auto max-w-4xl space-y-12">
+    <div className="min-h-screen bg-background p-40">
+      <div className="mx-auto max-w-4xl space-y-48">
         <div>
           <BackButton />
-          <h1 className="text-2xl font-bold text-foreground">Table</h1>
-          <p className="mt-1 text-sm text-stone-700">
+          <h1 className="text-24 font-bold text-foreground">Table</h1>
+          <p className="mt-4 text-14 text-stone-700">
             Data tables with sortable headers, selection, and reusable
             primitives.
           </p>
@@ -168,7 +168,7 @@ export default function TableDemoPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-12">
+                <TableHead className="w-48">
                   <Checkbox
                     checked={
                       allSelected
@@ -191,7 +191,7 @@ export default function TableDemoPage() {
                   key={row.id}
                   data-state={selectedRows.has(row.id) ? "selected" : undefined}
                 >
-                  <TableCell className="w-12">
+                  <TableCell className="w-48">
                     <Checkbox
                       checked={selectedRows.has(row.id)}
                       onCheckedChange={() => toggleRow(row.id)}
@@ -219,7 +219,7 @@ export default function TableDemoPage() {
               {agentData.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-12">
                       <Avatar name={row.name} size="xs" />
                       <span>{row.name}</span>
                     </div>
@@ -278,7 +278,7 @@ export default function TableDemoPage() {
               <TableRow>
                 <TableCell
                   colSpan={3}
-                  className="text-center text-stone-500 py-8"
+                  className="text-center text-stone-500 py-32"
                 >
                   No results found
                 </TableCell>

@@ -16,7 +16,7 @@ function Checkbox({
       data-slot="checkbox"
       checked={checked}
       className={cn(
-        "peer size-4 shrink-0 rounded-[4px] border transition-colors cursor-pointer",
+        "peer size-16 shrink-0 rounded-[4px] border transition-colors cursor-pointer",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         "bg-white border-stone-600",
         "hover:border-stone-700",
@@ -38,9 +38,9 @@ function Checkbox({
     >
       <CheckboxPrimitive.Indicator className="flex items-center justify-center text-white font-medium">
         {checked === "indeterminate" ? (
-          <Minus className="size-3" />
+          <Minus className="size-12" />
         ) : (
-          <Check className="size-3" />
+          <Check className="size-12" />
         )}
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>

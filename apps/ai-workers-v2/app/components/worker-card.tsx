@@ -101,7 +101,7 @@ export function WorkerCard({
         type="button"
         onClick={onClick}
         className={cn(
-          "flex w-[140px] shrink-0 flex-col items-center gap-2 rounded-xl border p-3 text-center transition-all",
+          "flex w-[140px] shrink-0 flex-col items-center gap-8 rounded-xl border p-12 text-center transition-all",
           selected
             ? "border-primary-brand-300 bg-primary-brand-50 shadow-sm"
             : "border-stone-200 bg-white hover:border-stone-300 hover:shadow-sm"
@@ -109,7 +109,7 @@ export function WorkerCard({
       >
         <div
           className={cn(
-            "flex h-9 w-9 items-center justify-center rounded-lg",
+            "flex h-36 w-36 items-center justify-center rounded-lg",
             selected
               ? "bg-primary-brand-100 text-primary-brand-600"
               : "bg-stone-100 text-stone-500"
@@ -117,7 +117,7 @@ export function WorkerCard({
         >
           {workerIcons[worker.id] || <Stars01 size={18} />}
         </div>
-        <span className="text-xs font-semibold text-stone-800 leading-tight">
+        <span className="text-12 font-semibold text-stone-800 leading-tight">
           {worker.name}
         </span>
       </button>
@@ -129,7 +129,7 @@ export function WorkerCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all",
+        "flex w-full items-center gap-12 rounded-xl border px-12 py-10 text-left transition-all",
         selected
           ? "border-primary-brand-300 bg-primary-brand-50 shadow-sm"
           : "border-stone-200 bg-white hover:border-stone-300 hover:shadow-sm"
@@ -137,7 +137,7 @@ export function WorkerCard({
     >
       <div
         className={cn(
-          "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg",
+          "flex h-36 w-36 shrink-0 items-center justify-center rounded-lg",
           selected
             ? "bg-primary-brand-100 text-primary-brand-600"
             : "bg-stone-100 text-stone-500"
@@ -146,15 +146,15 @@ export function WorkerCard({
         {workerIcons[worker.id] || <Stars01 size={18} />}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
-          <span className="truncate text-sm font-semibold text-stone-800">
+        <div className="flex items-center gap-8">
+          <span className="truncate text-14 font-semibold text-stone-800">
             {worker.name}
           </span>
           <Badge size="sm" color={categoryColors[worker.category] || "gray"}>
             {worker.category}
           </Badge>
         </div>
-        <p className="mt-0.5 truncate text-xs text-stone-500">
+        <p className="mt-2 truncate text-12 text-stone-500">
           {worker.description}
         </p>
       </div>

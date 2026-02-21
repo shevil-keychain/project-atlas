@@ -55,19 +55,18 @@ When implementing any design change, look up the closest token before reaching f
 
 | Request | Token class | Value |
 |---|---|---|
-| "Make the text 12px" | `text-xs` | 12px |
-| "Make the text 14px" | `text-sm` | 14px |
-| "Make the text 16px" | `text-base` | 16px |
-| "Make the text 18px" | `text-lg` | 18px |
-| "Make the text 20px" | `text-xl` | 20px |
-| "Make the text 24px" | `text-2xl` | 24px |
-| "Make the text 30px" | `text-3xl` | 30px |
-| "Make the text 36px" | `text-4xl` | 36px |
-| "Make the text 48px" | `text-5xl` | 48px |
+| "Make the text 10px" | `text-10` | 10px / 16px line-height |
+| "Make the text 12px" | `text-12` | 12px / 16px line-height |
+| "Make the text 14px" | `text-14` | 14px / 20px line-height |
+| "Make the text 16px" | `text-16` | 16px / 24px line-height |
+| "Make the text 18px" | `text-18` or `text-lg` | 18px / 28px line-height |
+| "Make the text 20px" | `text-20` or `text-xl` | 20px / 28px line-height |
+| "Make the text 24px" | `text-24` | 24px / 32px line-height |
+| "Make the text 30px" | `text-30` | 30px / 36px line-height |
 
 **Do this:**
 ```tsx
-<p className="text-sm">Label</p>   // 14px via token
+<p className="text-14">Label</p>   // 14px via token
 ```
 **Not this:**
 ```tsx
@@ -191,27 +190,30 @@ Prefix with `bg-`, `text-`, or `border-` as needed (e.g. `bg-stone-100`, `text-s
 
 ## Spacing Tokens
 
-Tailwind uses a base-4 spacing scale. `1` unit = `4px`.
+All spacing uses pixel-based token names. The class name matches the pixel value directly.
 
 | Request | Token | Value |
 |---|---|---|
-| "4px spacing" | `p-1` / `m-1` / `gap-1` | 4px |
-| "8px spacing" | `p-2` / `m-2` / `gap-2` | 8px |
-| "12px spacing" | `p-3` / `m-3` / `gap-3` | 12px |
-| "16px spacing" | `p-4` / `m-4` / `gap-4` | 16px |
-| "20px spacing" | `p-5` / `m-5` / `gap-5` | 20px |
-| "24px spacing" | `p-6` / `m-6` / `gap-6` | 24px |
-| "28px spacing" | `p-7` / `m-7` / `gap-7` | 28px |
-| "32px spacing" | `p-8` / `m-8` / `gap-8` | 32px |
-| "40px spacing" | `p-10` / `m-10` / `gap-10` | 40px |
-| "48px spacing" | `p-12` / `m-12` / `gap-12` | 48px |
-| "64px spacing" | `p-16` / `m-16` / `gap-16` | 64px |
+| "1px spacing" | `p-1` / `m-1` / `gap-1` | 1px |
+| "2px spacing" | `p-2` / `m-2` / `gap-2` | 2px |
+| "4px spacing" | `p-4` / `m-4` / `gap-4` | 4px |
+| "6px spacing" | `p-6` / `m-6` / `gap-6` | 6px |
+| "8px spacing" | `p-8` / `m-8` / `gap-8` | 8px |
+| "10px spacing" | `p-10` / `m-10` / `gap-10` | 10px |
+| "12px spacing" | `p-12` / `m-12` / `gap-12` | 12px |
+| "16px spacing" | `p-16` / `m-16` / `gap-16` | 16px |
+| "20px spacing" | `p-20` / `m-20` / `gap-20` | 20px |
+| "24px spacing" | `p-24` / `m-24` / `gap-24` | 24px |
+| "32px spacing" | `p-32` / `m-32` / `gap-32` | 32px |
+| "40px spacing" | `p-40` / `m-40` / `gap-40` | 40px |
+| "48px spacing" | `p-48` / `m-48` / `gap-48` | 48px |
+| "64px spacing" | `p-64` / `m-64` / `gap-64` | 64px |
 
 Use directional variants as needed: `px-*` (horizontal), `py-*` (vertical), `pt-*`, `pb-*`, `pl-*`, `pr-*`.
 
 **Do this:**
 ```tsx
-<div className="px-4 py-2">...</div>   // 16px / 8px via tokens
+<div className="px-16 py-8">...</div>   // 16px / 8px via tokens
 ```
 **Not this:**
 ```tsx
@@ -249,17 +251,29 @@ Use directional variants as needed: `px-*` (horizontal), `py-*` (vertical), `pt-
 
 | Request | Token | Value |
 |---|---|---|
-| "Height 32px" | `h-8` | 32px |
-| "Height 36px" | `h-9` | 36px |
-| "Height 40px" | `h-10` | 40px |
-| "Height 44px" | `h-11` | 44px |
-| "Height 48px" | `h-12` | 48px |
+| "Height 32px" | `h-32` | 32px |
+| "Height 36px" | `h-36` | 36px |
+| "Height 40px" | `h-40` | 40px |
+| "Height 44px" | `h-44` | 44px |
+| "Height 48px" | `h-48` | 48px |
 | "Width 100%" | `w-full` | 100% |
 | "Width auto" | `w-auto` | auto |
 
 ---
 
 ## Shadow & Focus Ring Tokens
+
+### Shadow Scale
+
+| Token class | Value |
+|---|---|
+| `shadow-sm` | 0 1px 2px 0 rgb(0 0 0 / 0.05) |
+| `shadow` | 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) |
+| `shadow-md` | 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) |
+| `shadow-lg` | 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) |
+| `shadow-xl` | 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) |
+| `shadow-2xl` | 0 25px 50px -12px rgb(0 0 0 / 0.25) |
+| `shadow-none` | none |
 
 Prefer ring utilities for focus states rather than custom box-shadows with hardcoded colors.
 
@@ -281,11 +295,11 @@ className="shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]"
 
 | You say... | Use this |
 |---|---|
-| "Make the text 14px" | `text-sm` |
+| "Make the text 14px" | `text-14` |
 | "Make the text orange / brand color" | `text-primary-brand-500` or `text-primary` |
 | "Make the background light gray" | `bg-stone-100` or `bg-secondary` |
-| "Add 16px padding" | `p-4` |
-| "Add 24px gap between items" | `gap-6` |
+| "Add 16px padding" | `p-16` |
+| "Add 24px gap between items" | `gap-24` |
 | "Make it 8px rounded" | `rounded-lg` |
 | "Make it fully rounded / pill shape" | `rounded-full` |
 | "Use the error red" | `text-error-500` / `bg-error-50` |
@@ -295,7 +309,7 @@ className="shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]"
 | "Use the border color" | `border-border` |
 | "Make the text muted / secondary" | `text-muted-foreground` |
 | "Disabled state background" | `bg-muted` |
-| "Height 40px" | `h-10` |
+| "Height 40px" | `h-40` |
 
 ---
 
