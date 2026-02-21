@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
-import "./globals.css";
+import "@level/ui/globals.css";
+import { AppShell } from "./shell";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -8,8 +9,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Level AI Design System",
-  description: "Component library for Level AI prototypes",
+  title: "Workers Reimagined",
+  description: "Level AI Workers Reimagined prototype",
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.variable} font-sans antialiased`}>
-        {children}
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

@@ -1,34 +1,49 @@
 # Level Design System
 
-A component library built with Next.js, Tailwind CSS v4, and shadcn/ui, using Manrope as the primary typeface.
+A Turborepo monorepo with a shared component library (`@level/ui`) and independent app workspaces for prototypes and demos. Built with Next.js 16, React 19, Tailwind CSS v4, and shadcn/ui, using Manrope as the primary typeface.
 
 ## Getting Started
 
 ```bash
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to browse the component demos.
+
+### Creating a new prototype
+
+```bash
+cp -r apps/docs apps/my-prototype
+```
+
+Then update `apps/my-prototype/package.json` (change the name and port), run `pnpm install`, and start building. Your prototype automatically uses every component and token from `@level/ui`.
 
 ---
 
 ## Project Structure
 
 ```
-├── app/                  # Next.js App Router — one page per component demo
-├── components/
-│   ├── ui/               # Base UI components (Button, Input, Badge, etc.)
-│   └── patterns/         # Composite patterns (MainNav, TopBar, PageHeader)
-├── hooks/                # Shared hooks (e.g., useToast)
-├── lib/utils.ts          # cn() helper (clsx + tailwind-merge)
-└── app/globals.css       # All design tokens defined here via @theme
+packages/
+  ui/                     # @level/ui — shared design system package
+    components/
+      ui/                 # Base UI components (Button, Input, Badge, etc.)
+      patterns/           # Composite patterns (MainNav, TopBar, PageHeader)
+      icons/              # 974 custom SVG icons
+    hooks/                # Shared hooks (useToast)
+    lib/utils.ts          # cn() helper (clsx + tailwind-merge)
+    globals.css           # All design tokens defined here via @theme
+
+apps/
+  docs/                   # Component browser & demo pages
+  <prototype>/            # Each prototype is an independent Next.js app
 ```
 
 ---
 
 ## Token-First Development
 
-> **Critical rule:** Never hardcode raw values (pixels, hex colors, named CSS colors). Always use the tokens defined in `app/globals.css`. This keeps the system consistent and easy to update.
+> **Critical rule:** Never hardcode raw values (pixels, hex colors, named CSS colors). Always use the tokens defined in `packages/ui/globals.css`. This keeps the system consistent and easy to update.
 
 When implementing any design change, look up the closest token before reaching for an arbitrary value. The sections below map common requests to their correct tokens.
 
@@ -83,7 +98,7 @@ The entire app uses **Manrope** (`font-sans`) by default. There is no need to se
 
 ## Color Tokens
 
-All colors are CSS variables defined in `app/globals.css`. Use the Tailwind utility classes below — never use raw hex values.
+All colors are CSS variables defined in `packages/ui/globals.css`. Use the Tailwind utility classes below — never use raw hex values.
 
 ### Semantic Tokens (use these first)
 
@@ -286,10 +301,10 @@ className="shadow-[0px_0px_0px_4px_var(--color-primary-brand-200)]"
 
 ## Adding New Tokens
 
-If a value is used more than once and doesn't map to any existing token, add it to the `@theme` block in `app/globals.css` — never introduce one-off values inline.
+If a value is used more than once and doesn't map to any existing token, add it to the `@theme` block in `packages/ui/globals.css` — never introduce one-off values inline.
 
 ```css
-/* app/globals.css */
+/* packages/ui/globals.css */
 @theme {
   --color-my-new-token: #AABBCC;
 }
@@ -301,7 +316,10 @@ Then use it as a Tailwind class: `bg-my-new-token`, `text-my-new-token`.
 
 ## Tech Stack
 
-- [Next.js 15](https://nextjs.org/) — App Router
+- [Turborepo](https://turbo.build/) — Monorepo orchestration
+- [pnpm](https://pnpm.io/) — Package manager with workspaces
+- [Next.js 16](https://nextjs.org/) — App Router
+- [React 19](https://react.dev/)
 - [Tailwind CSS v4](https://tailwindcss.com/) — Utility-first CSS with `@theme` token system
 - [shadcn/ui](https://ui.shadcn.com/) — Accessible component primitives
 - [Radix UI](https://www.radix-ui.com/) — Headless UI primitives

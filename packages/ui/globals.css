@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@source "./components/**/*.tsx";
+@source "./hooks/**/*.ts";
+@source "./lib/**/*.ts";
+@source "../../apps/**/*.tsx";
+
 @theme {
   /* Base Colors */
   --color-white: #FFFFFF;

@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["../../packages/ui/*"],
+      "@level/ui/*": ["../../packages/ui/*"]
     }
   },
   "include": [

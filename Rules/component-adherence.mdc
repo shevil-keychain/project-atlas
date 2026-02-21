@@ -1,0 +1,86 @@
+---
+description: Enforces design system component reuse and token adherence for all UI code
+globs:
+  - "**"
+alwaysApply: true
+---
+
+# Component Adherence
+
+## Mandatory First Step
+
+Before writing or modifying any UI code, you MUST read these two files in full:
+
+1. `COMPONENTS.md` — the complete component API reference (imports, props, variants, sizes)
+2. `README.md` — design tokens (colors, spacing, typography, radius, shadows)
+
+Do not skip this step. Do not rely on memory or assumptions about what components exist.
+
+## Rules
+
+### 1. Use existing components — never recreate
+
+If a component in `packages/ui/components/ui/` or `packages/ui/components/patterns/` covers the need, use it. Do not build a custom replacement. Common violations:
+
+- Building a custom toggle when `ToggleSwitch` exists
+- Creating a hand-rolled select dropdown when `Select` / `SelectField` exists
+- Writing a custom alert banner when `InlineAlert` exists
+- Making a manual breadcrumb when `Breadcrumb` exists
+
+When unsure whether a component exists, check `COMPONENTS.md` or browse the `packages/ui/components/ui/` directory.
+
+### 2. Use design tokens — never hardcode values
+
+All colors, spacing, font sizes, border radii, and shadows must come from the token system defined in `packages/ui/globals.css` and documented in `README.md`.
+
+**Correct:**
+```tsx
+<div className="bg-stone-100 text-stone-700 p-4 rounded-lg text-sm font-semibold">
+```
+
+**Wrong:**
+```tsx
+<div className="bg-[#F9F8F8] text-[#7C7972] p-[16px] rounded-[8px] text-[14px] font-[600]">
+```
+
+### 3. Use `cn()` for conditional classes
+
+```tsx
+import { cn } from "@level/ui/lib/utils"
+
+className={cn("base-classes", isActive && "bg-primary-brand-50")}
+```
+
+### 4. Follow the import convention
+
+Always import from `@level/ui/`:
+
+```tsx
+import { Button } from "@level/ui/components/ui/button"
+import { MainNav } from "@level/ui/components/patterns/main-nav"
+import { AlertCircle } from "@level/ui/components/icons"
+import { cn } from "@level/ui/lib/utils"
+```
+
+### 5. Build incrementally
+
+Build one component or section at a time. Do not attempt to scaffold an entire page in a single pass. Order:
+
+1. Layout shell (MainNav + TopBar + content area)
+2. Page header
+3. Individual sections/widgets as separate components
+4. Compose sections into the page
+
+### 6. Use component demo pages as reference
+
+Each component has a demo page at `apps/docs/app/[component-name]/page.tsx`. When the `COMPONENTS.md` reference says "see the demo page," read that file for full usage examples, variants, and edge cases.
+
+### 7. Extending the system
+
+Only create new components when no existing component can be composed or extended to meet the requirement. When you must create a new component:
+
+- Place it in `packages/ui/components/ui/` (base) or `packages/ui/components/patterns/` (composite)
+- Use design tokens exclusively — no hardcoded values
+- Follow the same prop patterns as existing components (variant, size, className)
+- Use `cn()` for class merging
+- Use CVA (`class-variance-authority`) for variant definitions
