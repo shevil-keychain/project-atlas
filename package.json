@@ -8,7 +8,8 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "dev:docs": "turbo dev --filter=@level/docs",
-    "dev:ai-workers-codex-crazy": "turbo dev --filter=@level/ai-workers-codex-crazy"
+    "dev:ai-workers-codex-crazy": "turbo dev --filter=@level/ai-workers-codex-crazy",
+    "dev:qa-case-assignment": "turbo dev --filter=@level/qa-case-assignment"
   },
   "devDependencies": {
     "puppeteer": "^24.37.5",
