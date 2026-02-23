@@ -36,6 +36,7 @@ import {
 } from "@level/ui/components/ui/modal"
 import { InlineAlert } from "@level/ui/components/ui/inline-alert"
 import { Multiselect, type MultiselectOption } from "@level/ui/components/ui/multiselect"
+import { EmptyState } from "@level/ui/components/ui/empty-state"
 import {
   Select,
   SelectContent,
@@ -71,6 +72,7 @@ import {
   ChevronRight,
   DotsVertical,
   File01,
+  PrivateCalibration,
   SearchMd,
   Settings01,
 } from "@level/ui/components/icons"
@@ -1707,6 +1709,7 @@ function ActivityPanel() {
     }
   }
   const activeTabIndex = orderedActivityTabs.findIndex((tab) => tab === activeActivityTab)
+  const isEvaluatorCalibrationMode = activeActivityModeTab === "evaluator_calibration"
   const isUpcomingWeek = activeTabIndex === 0
   const isPastWeek = activeTabIndex >= 2
   const shouldShowIssueCodeBadges = true
@@ -1750,6 +1753,12 @@ function ActivityPanel() {
           getPersonDisplayName(issue.agentName)
         )
       : []
+
+  React.useEffect(() => {
+    if (isEvaluatorCalibrationMode) {
+      setSheetStack([])
+    }
+  }, [isEvaluatorCalibrationMode])
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-16 lg:flex-row lg:overflow-hidden">
@@ -1806,78 +1815,50 @@ function ActivityPanel() {
         </div>
 
         <div className="space-y-16">
-          {(activeTabIndex === 0 || activeTabIndex === 1) && (
-            <InlineAlert
-              className="w-full max-w-3xl"
-              variant="info"
-              description={
-                <span className="text-14 font-medium text-secondary-blue-700">
-                  {activeTabIndex === 0
-                    ? "Predicted based on current rules and schedules. Changes to rules will update these predictions."
-                    : `This week is in progress and not complete yet. Final coverage may change before the cycle ends. Current status: ${hasCoverageGap ? "Off track" : "On track"}.`}
-                </span>
-              }
-            />
-          )}
-
-          <Card className="w-full max-w-3xl border-border-subtle shadow-sm">
-            <div className="p-4">
-              <div
-                className={cn(
-                  "flex cursor-pointer items-center justify-between gap-12 rounded-lg px-16 py-16 focus-visible:outline-none",
-                  hasCoverageGap ? "bg-surface-error-subtle" : "bg-surface-success-subtle"
-                )}
-                role="button"
-                tabIndex={0}
-                onClick={openCoverageRunDetails}
-                onKeyDown={(event) => handleRowKeyDown(event, openCoverageRunDetails)}
-              >
-                <div className="flex min-w-0 items-center gap-12">
-                  <SimpleTooltip
-                    content={hasCoverageGap ? (isUpcomingWeek ? "At risk" : "Not covered") : "Covered"}
-                    side="right"
-                  >
-                    <span className="inline-flex shrink-0">
-                      <Image
-                        src={coverageIconPath}
-                        alt=""
-                        width={16}
-                        height={16}
-                        aria-hidden="true"
-                      />
+          {isEvaluatorCalibrationMode ? (
+            <Card className="w-full max-w-3xl border-border-subtle">
+              <EmptyState
+                className="min-h-240"
+                icon={<PrivateCalibration size={20} className="text-icon-secondary" />}
+                title="No evaluator calibration added yet."
+              />
+            </Card>
+          ) : (
+            <>
+              {(activeTabIndex === 0 || activeTabIndex === 1) && (
+                <InlineAlert
+                  className="w-full max-w-3xl"
+                  variant="info"
+                  description={
+                    <span className="text-14 font-medium text-secondary-blue-700">
+                      {activeTabIndex === 0
+                        ? "Predicted based on current rules and schedules. Changes to rules will update these predictions."
+                        : `This week is in progress and not complete yet. Final coverage may change before the cycle ends. Current status: ${hasCoverageGap ? "Off track" : "On track"}.`}
                     </span>
-                  </SimpleTooltip>
-                  <p className="text-16 font-semibold text-text-primary">{coverageCopy}</p>
-                </div>
-                <ChevronRight size={16} className="shrink-0 text-icon-secondary" />
-              </div>
-            </div>
-          </Card>
+                  }
+                />
+              )}
 
-          <Card className="w-full max-w-3xl border-border-subtle">
-            <div className="border-b border-border-subtle px-16 py-12">
-              <p className="text-12 font-semibold text-text-primary">
-                {activeTabIndex === 0 ? "Rule-wise predictions" : "Rule-wise assignment"}
-              </p>
-            </div>
-
-            <div>
-              {visibleActivityRules.map((rule, index) => (
-                <div key={rule.id}>
-                  {index > 0 && <div className="border-t border-border-subtle" />}
-
+              <Card className="w-full max-w-3xl border-border-subtle shadow-sm">
+                <div className="p-4">
                   <div
-                    className="flex cursor-pointer flex-col gap-16 px-16 py-16 hover:bg-surface-subtle focus-visible:outline-none lg:flex-row lg:items-center lg:justify-between"
+                    className={cn(
+                      "flex cursor-pointer items-center justify-between gap-12 rounded-lg px-16 py-16 focus-visible:outline-none",
+                      hasCoverageGap ? "bg-surface-error-subtle" : "bg-surface-success-subtle"
+                    )}
                     role="button"
                     tabIndex={0}
-                    onClick={() => openRuleRunDetails(rule)}
-                    onKeyDown={(event) => handleRowKeyDown(event, () => openRuleRunDetails(rule))}
+                    onClick={openCoverageRunDetails}
+                    onKeyDown={(event) => handleRowKeyDown(event, openCoverageRunDetails)}
                   >
-                    <div className="flex min-w-0 items-start gap-12">
-                      <SimpleTooltip content={getStatusTooltip(rule.status)} side="right">
-                        <span className="mt-2 inline-flex shrink-0">
+                    <div className="flex min-w-0 items-center gap-12">
+                      <SimpleTooltip
+                        content={hasCoverageGap ? (isUpcomingWeek ? "At risk" : "Not covered") : "Covered"}
+                        side="right"
+                      >
+                        <span className="inline-flex shrink-0">
                           <Image
-                            src={getStatusIconPath(rule.status)}
+                            src={coverageIconPath}
                             alt=""
                             width={16}
                             height={16}
@@ -1885,54 +1866,94 @@ function ActivityPanel() {
                           />
                         </span>
                       </SimpleTooltip>
-
-                      <div className="min-w-0 space-y-8">
-                        <p className="text-14 font-semibold text-text-primary">{rule.name}</p>
-
-                        {shouldShowIssueCodeBadges &&
-                        rule.mainPageReasonLines &&
-                        rule.mainPageReasonLines.length > 0 ? (
-                          <div className="flex flex-col gap-4">
-                            {rule.mainPageReasonLines.map((reasonLine) => (
-                              <Badge
-                                key={`${rule.id}-${reasonLine}`}
-                                color="gray"
-                                size="sm"
-                                className="w-fit"
-                              >
-                                {reasonLine}
-                              </Badge>
-                            ))}
-                          </div>
-                        ) : rule.note ? (
-                          <p className="text-12 font-medium text-text-secondary">{rule.note}</p>
-                        ) : null}
-                      </div>
+                      <p className="text-16 font-semibold text-text-primary">{coverageCopy}</p>
                     </div>
-
-                    <div className="flex items-center gap-16 self-end lg:self-auto">
-                      <div className="text-right">
-                        {isUpcomingWeek ? (
-                          <>
-                            <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
-                            <p className="text-12 font-medium text-text-tertiary">
-                              {`${rule.assignments} expected`}
-                            </p>
-                          </>
-                        ) : (
-                          <>
-                            <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
-                            <p className="text-12 font-medium text-text-tertiary">{rule.assignments}</p>
-                          </>
-                        )}
-                      </div>
-                      <ChevronRight size={16} className="shrink-0 text-icon-secondary" />
-                    </div>
+                    <ChevronRight size={16} className="shrink-0 text-icon-secondary" />
                   </div>
                 </div>
-              ))}
-            </div>
-          </Card>
+              </Card>
+
+              <Card className="w-full max-w-3xl border-border-subtle">
+                <div className="border-b border-border-subtle px-16 py-12">
+                  <p className="text-12 font-semibold text-text-primary">
+                    {activeTabIndex === 0 ? "Rule-wise predictions" : "Rule-wise assignment"}
+                  </p>
+                </div>
+
+                <div>
+                  {visibleActivityRules.map((rule, index) => (
+                    <div key={rule.id}>
+                      {index > 0 && <div className="border-t border-border-subtle" />}
+
+                      <div
+                        className="flex cursor-pointer flex-col gap-16 px-16 py-16 hover:bg-surface-subtle focus-visible:outline-none lg:flex-row lg:items-center lg:justify-between"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => openRuleRunDetails(rule)}
+                        onKeyDown={(event) => handleRowKeyDown(event, () => openRuleRunDetails(rule))}
+                      >
+                        <div className="flex min-w-0 items-start gap-12">
+                          <SimpleTooltip content={getStatusTooltip(rule.status)} side="right">
+                            <span className="mt-2 inline-flex shrink-0">
+                              <Image
+                                src={getStatusIconPath(rule.status)}
+                                alt=""
+                                width={16}
+                                height={16}
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </SimpleTooltip>
+
+                          <div className="min-w-0 space-y-8">
+                            <p className="text-14 font-semibold text-text-primary">{rule.name}</p>
+
+                            {shouldShowIssueCodeBadges &&
+                            rule.mainPageReasonLines &&
+                            rule.mainPageReasonLines.length > 0 ? (
+                              <div className="flex flex-col gap-4">
+                                {rule.mainPageReasonLines.map((reasonLine) => (
+                                  <Badge
+                                    key={`${rule.id}-${reasonLine}`}
+                                    color="gray"
+                                    size="sm"
+                                    className="w-fit"
+                                  >
+                                    {reasonLine}
+                                  </Badge>
+                                ))}
+                              </div>
+                            ) : rule.note ? (
+                              <p className="text-12 font-medium text-text-secondary">{rule.note}</p>
+                            ) : null}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-16 self-end lg:self-auto">
+                          <div className="text-right">
+                            {isUpcomingWeek ? (
+                              <>
+                                <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
+                                <p className="text-12 font-medium text-text-tertiary">
+                                  {`${rule.assignments} expected`}
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
+                                <p className="text-12 font-medium text-text-tertiary">{rule.assignments}</p>
+                              </>
+                            )}
+                          </div>
+                          <ChevronRight size={16} className="shrink-0 text-icon-secondary" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </>
+          )}
         </div>
       </div>
 

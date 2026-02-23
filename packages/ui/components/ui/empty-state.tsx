@@ -17,19 +17,19 @@ const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
         ref={ref}
         data-slot="empty-state"
         className={cn(
-          "flex w-full flex-col items-center justify-center gap-12 rounded-xl border border-border-subtle bg-surface-subtle px-24 py-32 text-center",
+          "flex w-full flex-col items-center justify-center gap-12 px-24 py-32 text-center",
           className
         )}
         {...props}
       >
         <span
-          className="flex size-48 shrink-0 items-center justify-center rounded-full bg-surface-page text-icon-secondary [&>svg]:size-24"
+          className="flex shrink-0 items-center justify-center text-icon-primary [&>svg]:size-20"
           aria-hidden
         >
           {icon}
         </span>
         <div className="flex flex-col items-center gap-4">
-          <p className="text-18 font-semibold text-text-primary">{title}</p>
+          <p className="text-14 font-semibold text-text-primary">{title}</p>
           {description != null ? (
             <p className="text-14 font-medium text-text-secondary">
               {description}
