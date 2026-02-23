@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
   "installCommand": "pnpm install",
-  "buildCommand": "pnpm turbo build --filter=@level/docs",
-  "outputDirectory": "apps/docs/.next"
+  "buildCommand": "pnpm turbo build --filter=@level/qa-case-assignment",
+  "outputDirectory": "apps/qa-case-assignment/.next"
 }
