@@ -78,6 +78,11 @@ import { ToastContainer } from "@level/ui/components/ui/toast-container"
 import { toast } from "@level/ui/hooks/use-toast"
 import { cn } from "@level/ui/lib/utils"
 import { AlertTriangle, CheckCircle2, ChevronLeft, Info } from "lucide-react"
+import {
+  mockDbActivityByTab,
+  mockDbOrderedActivityTabs,
+  mockDbRuleSheetByRuleRowId,
+} from "./data/mock-db-activity"
 
 type SettingsSection = {
   heading?: string
@@ -115,7 +120,6 @@ type IssueCodeLabel =
   | "No conversations in period"
   | "Conversations didn't match filters"
   | "All evaluators at capacity"
-  | "Evaluator workload limit reached"
   | "Evaluator unavailable"
   | "Rule did not execute"
   | "Rule execution interrupted"
@@ -176,13 +180,19 @@ type CoverageSheetDetails = {
   issues: CoverageIssue[]
 }
 
-type RuleAgentWarningReason = "no_matching_conversations" | "all_evaluators_capacity"
+type RuleAgentWarningReason =
+  | "no_matching_conversations"
+  | "all_evaluators_capacity"
+  | "no_conversations_in_period"
+  | "evaluator_unavailable"
+  | "rule_interrupted"
 
 type RuleAgentRow = {
   id: string
   name: string
   status: "warning" | "success" | "fyi"
   warningReason?: RuleAgentWarningReason
+  issueCodeLabel?: IssueCodeLabel
   detailText?: string
   assignmentText?: string
   viaRuleName?: string
@@ -193,6 +203,7 @@ type RuleEvaluatorRow = {
   name: string
   status: "warning" | "success"
   loadText: string
+  issueCodeLabel?: IssueCodeLabel
   detailText?: string
 }
 
@@ -211,6 +222,8 @@ type RuleSheetDetails = {
   evaluatorsWithIssues: RuleEvaluatorRow[]
   activeEvaluators: RuleEvaluatorRow[]
 }
+
+type MockDbRuleSheetData = Omit<RuleSheetDetails, "panel" | "title" | "subtitle">
 
 type RunSheetView = CoverageSheetDetails | RuleSheetDetails
 
@@ -254,8 +267,6 @@ const issueCodeDescriptions: Record<IssueCodeLabel, string> = {
     "This agent had conversations, but none matched the rule's conditions (e.g., duration, tags, disposition). Review the rule's filters.",
   "All evaluators at capacity":
     "Eligible conversations existed for this agent, but every evaluator in the rule had already reached their workload limit.",
-  "Evaluator workload limit reached":
-    "This evaluator's assignment limit was met before all conversations could be distributed.",
   "Evaluator unavailable":
     "This evaluator was marked as unavailable or on leave when the rule ran.",
   "Rule did not execute":
@@ -270,7 +281,6 @@ const partialIssueCodes: IssueCodeLabel[] = [
   "No conversations in period",
   "Conversations didn't match filters",
   "All evaluators at capacity",
-  "Evaluator workload limit reached",
   "Evaluator unavailable",
   "Rule execution interrupted",
   "Quota met by another rule",
@@ -425,7 +435,7 @@ function getMainPageReasonLines(
   return []
 }
 
-const orderedActivityTabs: ActivityTab[] = Array.from(
+const fallbackOrderedActivityTabs: ActivityTab[] = Array.from(
   { length: ACTIVITY_TAB_COUNT },
   (_, index) => `week_${index + 1}` as ActivityTab
 )
@@ -600,6 +610,74 @@ const coverageIssueSortOrder: Record<CoverageIssueType, number> = {
   no_matching_conversations: 2,
 }
 
+const coverageAgentFirstNames = [
+  "Tom",
+  "Priya",
+  "Dan",
+  "Avery",
+  "Jordan",
+  "Mia",
+  "Ethan",
+  "Lina",
+  "Noah",
+  "Sara",
+  "Leo",
+  "Nina",
+  "Arjun",
+  "Emma",
+  "Ravi",
+  "Olivia",
+]
+
+const coverageAgentLastNames = [
+  "Rivera",
+  "Nair",
+  "Wu",
+  "Cole",
+  "Morris",
+  "Patel",
+  "Johnson",
+  "Chen",
+  "Brooks",
+  "Khan",
+  "Diaz",
+  "Singh",
+]
+
+const coverageAgentTeams = [
+  "Sales team",
+  "Support team",
+  "Billing team",
+  "Retention team",
+  "Operations team",
+]
+
+function getNormalizedAgentName(name: string) {
+  return name.normalize("NFKC").replace(/\s+/g, " ").trim().toLowerCase()
+}
+
+function getUniqueByAgentName<T>(items: T[], getName: (item: T) => string) {
+  const seenNames = new Set<string>()
+  return items.filter((item) => {
+    const normalizedName = getNormalizedAgentName(getName(item))
+    if (seenNames.has(normalizedName)) {
+      return false
+    }
+    seenNames.add(normalizedName)
+    return true
+  })
+}
+
+function getCoverageAgentName(index: number) {
+  const firstName = coverageAgentFirstNames[index % coverageAgentFirstNames.length]
+  const lastName = coverageAgentLastNames[index % coverageAgentLastNames.length]
+  return `${firstName} ${lastName}`
+}
+
+function getCoverageAgentTeam(index: number) {
+  return coverageAgentTeams[index % coverageAgentTeams.length]
+}
+
 function getCoverageIssueLabel(issueType: CoverageIssueType) {
   if (issueType === "not_in_rule") {
     return "Not in any rule"
@@ -625,8 +703,24 @@ function getCoverageIssueCodeLabel(issue: CoverageIssue): IssueCodeLabel {
 }
 
 function getRuleAgentIssueCodeLabel(agent: RuleAgentRow): IssueCodeLabel | undefined {
+  if (agent.issueCodeLabel) {
+    return agent.issueCodeLabel
+  }
+
   if (agent.status !== "warning") {
     return undefined
+  }
+
+  if (agent.warningReason === "rule_interrupted") {
+    return "Rule did not execute"
+  }
+
+  if (agent.warningReason === "evaluator_unavailable") {
+    return "Evaluator unavailable"
+  }
+
+  if (agent.warningReason === "no_conversations_in_period") {
+    return "No conversations in period"
   }
 
   if (agent.warningReason === "all_evaluators_capacity") {
@@ -644,6 +738,10 @@ function getRuleAgentIssueCodeLabel(agent: RuleAgentRow): IssueCodeLabel | undef
 function getRuleEvaluatorIssueCodeLabel(
   evaluator: RuleEvaluatorRow
 ): IssueCodeLabel | undefined {
+  if (evaluator.issueCodeLabel) {
+    return evaluator.issueCodeLabel
+  }
+
   if (evaluator.status !== "warning") {
     return undefined
   }
@@ -653,7 +751,7 @@ function getRuleEvaluatorIssueCodeLabel(
     return "Evaluator unavailable"
   }
 
-  return "Evaluator workload limit reached"
+  return "Evaluator unavailable"
 }
 
 function getRuleStatusLabel(status: ActivityRuleStatus) {
@@ -713,6 +811,8 @@ function buildCoverageRunSheetDetails(activityData: ActivityData): CoverageSheet
     return {
       ...template,
       id: `${template.id}-${index + 1}`,
+      agentName: getCoverageAgentName(index),
+      teamName: getCoverageAgentTeam(index),
     }
   }).sort((leftIssue, rightIssue) => {
     const issueOrderDifference =
@@ -738,10 +838,20 @@ function buildRuleRunSheetDetails(
   activityData: ActivityData,
   mode: ActivityModeTab
 ): RuleSheetDetails {
+  const mockDbRuleSheet = (mockDbRuleSheetByRuleRowId as unknown as Record<string, MockDbRuleSheetData>)[
+    rule.id
+  ]
+  if (mockDbRuleSheet) {
+    return {
+      panel: "rule",
+      title: rule.name,
+      subtitle: `${mockDbRuleSheet.statusLabel} · ${mockDbRuleSheet.progressLabel}`,
+      ...mockDbRuleSheet,
+    }
+  }
+
   const { completed, target } = parseAssignmentProgress(rule.assignments)
   const missedAssignments = Math.max(target - completed, 0)
-  const rulePosition = Number.parseInt(rule.id.split("-").at(-1) ?? "0", 10)
-  const isSystemFailure = rule.status === "failed" && rulePosition % 4 === 0
   const modeLabel = mode === "agent_evaluation" ? "Agent evaluation" : "Evaluator calibration"
   const sampledRange = activityData.tabLabel
   const runTimestamp = `Mon · ${sampledRange} · 9:02 AM EST`
@@ -875,7 +985,8 @@ function buildRuleRunSheetDetails(
         name: "Sarah Kim",
         status: "warning",
         loadText: "24/24",
-        detailText: "Workload limit reached",
+        detailText: "Evaluator unavailable for part of this run window.",
+        issueCodeLabel: "Evaluator unavailable",
       },
     ]
 
@@ -893,57 +1004,26 @@ function buildRuleRunSheetDetails(
         loadText: "20/24",
       },
     ]
-  } else if (isSystemFailure) {
+  } else {
     metadata = [
       { label: "Scheduled", value: scheduledTimestamp },
       { label: "Status", value: "Did not execute" },
-      { label: "Mode", value: modeLabel },
-    ]
-
-    reasonSummary = "Rule did not execute — system error"
-  } else {
-    metadata = [
-      { label: "Ran", value: runTimestamp },
-      { label: "Sampled", value: sampledRange },
       { label: "Mode", value: modeLabel },
       { label: "Expected", value: `${target} assignments` },
       { label: "Made", value: `${completed}` },
       { label: "Missed", value: `${missedAssignments}` },
     ]
 
-    reasonSummary = "No assignments made — evaluator capacity reached across all segments"
+    reasonSummary = "Rule did not execute — system error"
 
     agentsWithoutQa = sampleAgentNames.slice(0, 6).map((agentName, index) => ({
-      id: `failed-capacity-warning-${index + 1}`,
+      id: `failed-system-warning-${index + 1}`,
       name: agentName,
       status: "warning",
-      warningReason: "all_evaluators_capacity",
-      detailText: "All evaluators at capacity",
+      warningReason: "rule_interrupted",
+      issueCodeLabel: "Rule did not execute",
+      detailText: "Rule did not execute due to a system error.",
     }))
-
-    evaluatorsWithIssues = [
-      {
-        id: "failed-capacity-evaluator-1",
-        name: "Sarah Kim",
-        status: "warning",
-        loadText: "24/24",
-        detailText: "Workload limit reached",
-      },
-      {
-        id: "failed-capacity-evaluator-2",
-        name: "Mike Johnson",
-        status: "warning",
-        loadText: "24/24",
-        detailText: "Workload limit reached",
-      },
-      {
-        id: "failed-capacity-evaluator-3",
-        name: "Amy Torres",
-        status: "warning",
-        loadText: "24/24",
-        detailText: "Workload limit reached",
-      },
-    ]
   }
 
   const statusLabel = getRuleStatusLabel(rule.status)
@@ -1013,7 +1093,7 @@ function getWeekQualifier(tabIndex: number) {
   return undefined
 }
 
-const activityByTab: Record<ActivityTab, ActivityData> = orderedActivityTabs.reduce(
+const fallbackActivityByTab: Record<ActivityTab, ActivityData> = fallbackOrderedActivityTabs.reduce(
   (accumulator, tabKey, tabIndex) => {
     const currentWeekStart = getWeekStart(new Date())
     const weekStart = new Date(currentWeekStart)
@@ -1072,6 +1152,18 @@ const activityByTab: Record<ActivityTab, ActivityData> = orderedActivityTabs.red
   },
   {} as Record<ActivityTab, ActivityData>
 )
+
+const dbOrderedActivityTabs = mockDbOrderedActivityTabs as readonly ActivityTab[]
+
+const orderedActivityTabs: ActivityTab[] =
+  dbOrderedActivityTabs.length > 0
+    ? [...dbOrderedActivityTabs]
+    : fallbackOrderedActivityTabs
+
+const activityByTab: Record<ActivityTab, ActivityData> =
+  Object.keys(mockDbActivityByTab).length > 0
+    ? (mockDbActivityByTab as unknown as Record<ActivityTab, ActivityData>)
+    : fallbackActivityByTab
 
 function SettingsSidebar() {
   return (
@@ -1233,13 +1325,6 @@ function CoverageIssueCard({
   const details: string[] = []
   const issueCodeLabel = showIssueCodeBadge ? getCoverageIssueCodeLabel(issue) : undefined
 
-  if (issue.issueType === "not_in_rule") {
-    details.push(issue.lastCovered ? `Last covered ${issue.lastCovered}` : "Never covered")
-    if (issue.dropReason) {
-      details.push(issue.dropReason)
-    }
-  }
-
   if (issue.issueType === "all_evaluators_capacity") {
     if (issue.ruleName) {
       details.push(issue.ruleName)
@@ -1368,7 +1453,13 @@ function RuleAgentRowCard({
                 <p className="text-14 font-semibold text-text-warning">
                   {agent.warningReason === "no_matching_conversations"
                     ? "No matching conversations"
-                    : "All evaluators at capacity"}
+                    : agent.warningReason === "no_conversations_in_period"
+                      ? "No conversations in period"
+                      : agent.warningReason === "evaluator_unavailable"
+                        ? "Evaluator unavailable"
+                        : agent.warningReason === "rule_interrupted"
+                          ? "Rule did not execute"
+                          : "All evaluators at capacity"}
                 </p>
                 {agent.detailText && <p className="text-12 text-text-secondary">{agent.detailText}</p>}
               </>
@@ -1568,6 +1659,14 @@ function ActivityPanel() {
       : isPastWeek
         ? "All agents were covered"
         : "All agents covered"
+  const uniqueCoveredAgents =
+    activeSheetView && activeSheetView.panel === "rule"
+      ? getUniqueByAgentName(activeSheetView.coveredAgents, (agent) => agent.name)
+      : []
+  const uniqueCoverageIssues =
+    activeSheetView && activeSheetView.panel === "coverage"
+      ? getUniqueByAgentName(activeSheetView.issues, (issue) => issue.agentName)
+      : []
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-16 lg:flex-row lg:overflow-hidden">
@@ -1786,8 +1885,8 @@ function ActivityPanel() {
                   <InlineAlert
                     variant={activeSheetView.issues.length > 0 ? "error" : "success"}
                     title={
-                      activeSheetView.issues.length > 0
-                        ? `${activeSheetView.issues.length} ${activeSheetView.issues.length === 1 ? "agent" : "agents"} ${isPastWeek ? "were not covered" : "not covered"}`
+                      uniqueCoverageIssues.length > 0
+                        ? `${uniqueCoverageIssues.length} ${uniqueCoverageIssues.length === 1 ? "agent" : "agents"} ${isPastWeek ? "were not covered" : "not covered"}`
                         : isPastWeek
                           ? "All agents were covered"
                           : "All agents covered"
@@ -1799,11 +1898,11 @@ function ActivityPanel() {
                     }
                   />
 
-                  {activeSheetView.issues.length > 0 && (
+                  {uniqueCoverageIssues.length > 0 && (
                     <div className="space-y-8">
                       <p className="text-12 font-semibold text-text-tertiary">Impacted agents</p>
                       <div className="space-y-8">
-                        {activeSheetView.issues.map((issue) => (
+                        {uniqueCoverageIssues.map((issue) => (
                           <CoverageIssueCard
                             key={issue.id}
                             issue={issue}
@@ -1861,17 +1960,17 @@ function ActivityPanel() {
                         )}
 
                         {activeSheetView.agentsWithoutQa.length > 0 &&
-                          activeSheetView.coveredAgents.length > 0 && (
+                          uniqueCoveredAgents.length > 0 && (
                             <div className="border-t border-border-subtle" />
                           )}
 
-                        {activeSheetView.coveredAgents.length > 0 && (
+                        {uniqueCoveredAgents.length > 0 && (
                           <p className="text-12 font-semibold text-text-tertiary">Covered</p>
                         )}
 
                         {(showAllCoveredAgents
-                          ? activeSheetView.coveredAgents
-                          : activeSheetView.coveredAgents.slice(0, 5)
+                          ? uniqueCoveredAgents
+                          : uniqueCoveredAgents.slice(0, 5)
                         ).map((agent) => (
                           <RuleAgentRowCard
                             key={agent.id}
@@ -1880,13 +1979,13 @@ function ActivityPanel() {
                           />
                         ))}
 
-                        {!showAllCoveredAgents && activeSheetView.coveredAgents.length > 5 && (
+                        {!showAllCoveredAgents && uniqueCoveredAgents.length > 5 && (
                           <Button
                             variant="linkSecondary"
                             className="h-auto p-0"
                             onClick={() => setShowAllCoveredAgents(true)}
                           >
-                            +{activeSheetView.coveredAgents.length - 5} more agents
+                            +{uniqueCoveredAgents.length - 5} more agents
                           </Button>
                         )}
                       </AccordionContent>

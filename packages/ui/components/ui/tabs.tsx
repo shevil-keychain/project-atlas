@@ -154,7 +154,7 @@ const UnderlinedTabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     data-slot="underlined-tabs-list"
-    className={cn("inline-flex border-b border-border-subtle", className)}
+    className={cn("inline-flex gap-12 border-b border-border-subtle", className)}
     {...props}
   />
 ))
@@ -168,7 +168,7 @@ const UnderlinedTabsTrigger = React.forwardRef<
     ref={ref}
     data-slot="underlined-tabs-trigger"
     className={cn(
-      "-mb-px border-b-2 border-transparent px-16 py-8 text-14 font-semibold text-text-primary transition-colors",
+      "-mb-px border-b-2 border-transparent py-8 text-14 font-semibold text-text-primary transition-colors",
       "hover:text-text-primary",
       "data-[state=active]:border-text-brand data-[state=active]:text-text-brand",
       "disabled:cursor-not-allowed disabled:text-text-disabled",

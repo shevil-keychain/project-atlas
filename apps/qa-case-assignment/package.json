@@ -6,7 +6,8 @@
     "dev": "next dev --port 3011",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync:mock-db-data": "node mock-db/scripts/export-activity-data.mjs"
   },
   "dependencies": {
     "@level/ui": "workspace:*",
