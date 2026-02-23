@@ -486,7 +486,7 @@ const assignmentRules: AssignmentRule[] = [
     status: "Active",
   },
   {
-    name: "Mortgage Queue",
+    name: "Billing QA",
     createdBy: "David Kim",
     creatorColor: "var(--color-secondary-blue-700)",
     createdOn: "Oct 18, 2025",
@@ -652,6 +652,44 @@ const coverageAgentTeams = [
   "Operations team",
 ]
 
+const evaluatorFirstNames = [
+  "Sarah",
+  "Mike",
+  "Asha",
+  "David",
+  "Priyanka",
+  "Omar",
+  "Nora",
+  "Lucas",
+  "Mei",
+  "Carlos",
+  "Anita",
+  "Brian",
+  "Fatima",
+  "Henry",
+  "Isha",
+  "Kevin",
+  "Leah",
+  "Marcus",
+  "Nina",
+  "Owen",
+]
+
+const evaluatorLastNames = [
+  "Kim",
+  "Johnson",
+  "Patel",
+  "Brown",
+  "Lopez",
+  "Singh",
+  "Chen",
+  "Davis",
+  "Garcia",
+  "Shah",
+  "Williams",
+  "Miller",
+]
+
 function getNormalizedAgentName(name: string) {
   return name.normalize("NFKC").replace(/\s+/g, " ").trim().toLowerCase()
 }
@@ -676,6 +714,29 @@ function getCoverageAgentName(index: number) {
 
 function getCoverageAgentTeam(index: number) {
   return coverageAgentTeams[index % coverageAgentTeams.length]
+}
+
+function getEvaluatorDisplayName(index: number) {
+  const firstName = evaluatorFirstNames[index % evaluatorFirstNames.length]
+  const lastName = evaluatorLastNames[index % evaluatorLastNames.length]
+  return `${firstName} ${lastName}`
+}
+
+function getPersonDisplayName(name: string) {
+  const trimmedName = name.trim()
+  const agentMatch = /^Agent\s+(\d+)$/i.exec(trimmedName)
+  if (agentMatch) {
+    const numericIndex = Number.parseInt(agentMatch[1] ?? "1", 10)
+    return getCoverageAgentName(Math.max(0, numericIndex - 1))
+  }
+
+  const evaluatorMatch = /^Evaluator\s+(\d+)$/i.exec(trimmedName)
+  if (evaluatorMatch) {
+    const numericIndex = Number.parseInt(evaluatorMatch[1] ?? "1", 10)
+    return getEvaluatorDisplayName(Math.max(0, numericIndex - 1))
+  }
+
+  return trimmedName
 }
 
 function getCoverageIssueLabel(issueType: CoverageIssueType) {
@@ -1324,6 +1385,7 @@ function CoverageIssueCard({
 }) {
   const details: string[] = []
   const issueCodeLabel = showIssueCodeBadge ? getCoverageIssueCodeLabel(issue) : undefined
+  const issueAgentDisplayName = getPersonDisplayName(issue.agentName)
 
   if (issue.issueType === "all_evaluators_capacity") {
     if (issue.ruleName) {
@@ -1351,7 +1413,7 @@ function CoverageIssueCard({
           <div className="flex items-start gap-12">
             <AlertTriangle size={16} className="mt-2 shrink-0 text-icon-warning" />
             <div className="min-w-0">
-              <p className="text-14 font-semibold text-text-primary">{issue.agentName}</p>
+              <p className="text-14 font-semibold text-text-primary">{issueAgentDisplayName}</p>
               <p className="text-12 font-medium text-text-tertiary">{issue.teamName}</p>
               {issueCodeLabel ? (
                 <SimpleTooltip
@@ -1390,7 +1452,7 @@ function CoverageIssueCard({
                 {rules.map((rule) => (
                   <DropdownMenuItem
                     key={`${issue.id}-${rule.id}`}
-                    onClick={() => onAddToRule(issue.agentName, rule.name)}
+                    onClick={() => onAddToRule(issueAgentDisplayName, rule.name)}
                   >
                     {rule.name}
                   </DropdownMenuItem>
@@ -1427,6 +1489,7 @@ function RuleAgentRowCard({
         ? "bg-surface-brand-subtle"
         : "bg-surface-subtle"
   const issueCodeLabel = showIssueCodeBadge ? getRuleAgentIssueCodeLabel(agent) : undefined
+  const agentDisplayName = getPersonDisplayName(agent.name)
 
   if (agent.status === "warning") {
     return (
@@ -1434,7 +1497,7 @@ function RuleAgentRowCard({
         <div className="flex items-start gap-12">
           <AlertTriangle size={16} className="mt-2 shrink-0 text-icon-warning" />
           <div className="min-w-0">
-            <p className="text-14 font-semibold text-text-primary">{agent.name}</p>
+            <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
             {issueCodeLabel ? (
               <SimpleTooltip
                 side="bottom"
@@ -1476,7 +1539,7 @@ function RuleAgentRowCard({
         <div className="flex items-start gap-12">
           <Info size={16} className="mt-2 shrink-0 text-icon-brand" />
           <div className="min-w-0">
-            <p className="text-14 font-semibold text-text-primary">{agent.name}</p>
+            <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
             <p className="text-14 text-text-secondary">{agent.assignmentText}</p>
           </div>
         </div>
@@ -1489,7 +1552,7 @@ function RuleAgentRowCard({
       <div className="flex items-start gap-12">
         <CheckCircle2 size={16} className="mt-2 shrink-0 text-icon-success" />
         <div className="min-w-0">
-          <p className="text-14 font-semibold text-text-primary">{agent.name}</p>
+          <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
           <p className="text-14 text-text-secondary">{agent.assignmentText}</p>
         </div>
       </div>
@@ -1509,6 +1572,7 @@ function RuleEvaluatorRowCard({
   const issueCodeLabel = showIssueCodeBadge
     ? getRuleEvaluatorIssueCodeLabel(evaluator)
     : undefined
+  const evaluatorDisplayName = getPersonDisplayName(evaluator.name)
 
   if (evaluator.status === "warning") {
     return (
@@ -1517,7 +1581,7 @@ function RuleEvaluatorRowCard({
           <AlertTriangle size={16} className="mt-2 shrink-0 text-icon-warning" />
           <div className="min-w-0">
             <p className="text-14 font-semibold text-text-primary">
-              {evaluator.name} · {evaluator.loadText}
+              {evaluatorDisplayName} · {evaluator.loadText}
             </p>
             {issueCodeLabel ? (
               <SimpleTooltip
@@ -1549,7 +1613,7 @@ function RuleEvaluatorRowCard({
         <CheckCircle2 size={16} className="mt-2 shrink-0 text-icon-success" />
         <div className="min-w-0">
           <p className="text-14 font-semibold text-text-primary">
-            {evaluator.name} · {evaluator.loadText}
+            {evaluatorDisplayName} · {evaluator.loadText}
           </p>
         </div>
       </div>
@@ -1645,6 +1709,21 @@ function ActivityPanel() {
   const activeTabIndex = orderedActivityTabs.findIndex((tab) => tab === activeActivityTab)
   const isUpcomingWeek = activeTabIndex === 0
   const isPastWeek = activeTabIndex >= 2
+  const shouldShowIssueCodeBadges = true
+  const visibleActivityRules = isUpcomingWeek
+    ? (() => {
+        const upcomingRules = activityData.rules.filter((rule) => rule.name !== "Mortgage Queue")
+        const billingRuleIndex = upcomingRules.findIndex((rule) => rule.name === "Billing QA")
+
+        if (billingRuleIndex <= 0) {
+          return upcomingRules
+        }
+
+        const billingRule = upcomingRules[billingRuleIndex]
+        const withoutBillingRule = upcomingRules.filter((_, index) => index !== billingRuleIndex)
+        return [withoutBillingRule[0], billingRule, ...withoutBillingRule.slice(1)]
+      })()
+    : activityData.rules
   const agentsWithoutAssignment = activityData.summary.agentsWithoutAssignment
   const hasCoverageGap = agentsWithoutAssignment > 0
   const coverageIconPath = hasCoverageGap
@@ -1661,11 +1740,15 @@ function ActivityPanel() {
         : "All agents covered"
   const uniqueCoveredAgents =
     activeSheetView && activeSheetView.panel === "rule"
-      ? getUniqueByAgentName(activeSheetView.coveredAgents, (agent) => agent.name)
+      ? getUniqueByAgentName(activeSheetView.coveredAgents, (agent) =>
+          getPersonDisplayName(agent.name)
+        )
       : []
   const uniqueCoverageIssues =
     activeSheetView && activeSheetView.panel === "coverage"
-      ? getUniqueByAgentName(activeSheetView.issues, (issue) => issue.agentName)
+      ? getUniqueByAgentName(activeSheetView.issues, (issue) =>
+          getPersonDisplayName(issue.agentName)
+        )
       : []
 
   return (
@@ -1779,7 +1862,7 @@ function ActivityPanel() {
             </div>
 
             <div>
-              {activityData.rules.map((rule, index) => (
+              {visibleActivityRules.map((rule, index) => (
                 <div key={rule.id}>
                   {index > 0 && <div className="border-t border-border-subtle" />}
 
@@ -1806,7 +1889,7 @@ function ActivityPanel() {
                       <div className="min-w-0 space-y-8">
                         <p className="text-14 font-semibold text-text-primary">{rule.name}</p>
 
-                        {(isPastWeek || isUpcomingWeek) &&
+                        {shouldShowIssueCodeBadges &&
                         rule.mainPageReasonLines &&
                         rule.mainPageReasonLines.length > 0 ? (
                           <div className="flex flex-col gap-4">
@@ -1906,10 +1989,10 @@ function ActivityPanel() {
                           <CoverageIssueCard
                             key={issue.id}
                             issue={issue}
-                            rules={activityData.rules}
+                            rules={visibleActivityRules}
                             onAddToRule={handleAddAgentToRule}
                             onViewRule={openRuleFromCoverage}
-                            showIssueCodeBadge={isPastWeek}
+                            showIssueCodeBadge={shouldShowIssueCodeBadges}
                           />
                         ))}
                       </div>
@@ -1953,7 +2036,7 @@ function ActivityPanel() {
                               <RuleAgentRowCard
                                 key={agent.id}
                                 agent={agent}
-                                showIssueCodeBadge={isPastWeek}
+                                showIssueCodeBadge={shouldShowIssueCodeBadges}
                               />
                             ))}
                           </>
@@ -1975,7 +2058,7 @@ function ActivityPanel() {
                           <RuleAgentRowCard
                             key={agent.id}
                             agent={agent}
-                            showIssueCodeBadge={isPastWeek}
+                            showIssueCodeBadge={shouldShowIssueCodeBadges}
                           />
                         ))}
 
@@ -2008,7 +2091,7 @@ function ActivityPanel() {
                               <RuleEvaluatorRowCard
                                 key={evaluator.id}
                                 evaluator={evaluator}
-                                showIssueCodeBadge={isPastWeek}
+                                showIssueCodeBadge={shouldShowIssueCodeBadges}
                               />
                             ))}
                           </>
@@ -2030,7 +2113,7 @@ function ActivityPanel() {
                           <RuleEvaluatorRowCard
                             key={evaluator.id}
                             evaluator={evaluator}
-                            showIssueCodeBadge={isPastWeek}
+                            showIssueCodeBadge={shouldShowIssueCodeBadges}
                           />
                         ))}
 
@@ -2059,7 +2142,7 @@ function ActivityPanel() {
                             <RuleAgentRowCard
                               key={agent.id}
                               agent={agent}
-                              showIssueCodeBadge={isPastWeek}
+                              showIssueCodeBadge={shouldShowIssueCodeBadges}
                             />
                           ))}
 
