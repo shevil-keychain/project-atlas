@@ -12,6 +12,7 @@ const components = [
   { name: "Tooltip", href: "/tooltip" },
   { name: "Label", href: "/label" },
   { name: "Input", href: "/input" },
+  { name: "Empty State", href: "/empty-state" },
   { name: "Textarea & Rich Text Editor", href: "/textarea" },
   { name: "Select", href: "/select" },
   { name: "Combobox", href: "/combobox" },

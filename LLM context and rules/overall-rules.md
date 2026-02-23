@@ -66,3 +66,14 @@ MainNav and TopBar are the outermost shell components. They are mandatory on eve
 ```
 
 Do not omit MainNav or TopBar from any page. Do not replace them with custom alternatives. Do not put them inside the scrollable area.
+
+---
+
+## Rule 5: Page-Level Containers Must Be Edge-to-Edge
+
+The first content container inside `<main>` must be edge-to-edge relative to the shell area (between MainNav and viewport right edge, and between TopBar and viewport bottom).
+
+- Do not add an outer rounded corner on this first container.
+- Do not add an outer border on this first container.
+- Do not add page-level inset padding that creates a framed card look around the full page content.
+- Apply borders/radius only to inner components (tables, cards, panels), not to the full-page wrapper.
