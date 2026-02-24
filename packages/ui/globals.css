@@ -5,6 +5,11 @@
 @source "./hooks/**/*.ts";
 @source "./lib/**/*.ts";
 @source "../../apps/**/*.tsx";
+@source "../../node_modules/streamdown/dist/*.js";
+@source "../../node_modules/@streamdown/code/dist/*.js";
+@source "../../node_modules/@streamdown/math/dist/*.js";
+@source "../../node_modules/@streamdown/mermaid/dist/*.js";
+@source "../../node_modules/@streamdown/cjk/dist/*.js";
 
 @theme {
   /* ═══════════════════════════════════════════════════════════
@@ -197,6 +202,7 @@
   --spacing-240: 240px;
   --spacing-256: 256px;
   --spacing-288: 288px;
+  --spacing-360: 360px;
   --spacing-720: 720px;
 
   /* Typography Size Tokens (pixel-based) */

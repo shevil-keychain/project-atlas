@@ -31,7 +31,7 @@ function ToggleSwitch({
       <SwitchPrimitive.Thumb
         className={cn(
           "pointer-events-none block size-12 rounded-full bg-white shadow-sm transition-transform",
-          "translate-x-2 data-[state=checked]:translate-x-3.5"
+          "translate-x-2 data-[state=checked]:translate-x-14"
         )}
       />
     </SwitchPrimitive.Root>
