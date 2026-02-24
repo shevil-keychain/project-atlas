@@ -19,12 +19,12 @@ type ToastContainerProps = {
 const positionClasses: Record<ToastPosition, string> = {
   "top-center": "fixed top-16 left-1/2 -translate-x-1/2",
   "top-right": "fixed top-16 right-16",
-  "bottom-center": "fixed bottom-16 left-1/2 -translate-x-1/2",
-  "bottom-right": "fixed bottom-16 right-16",
+  "bottom-center": "fixed bottom-40 left-1/2 -translate-x-1/2",
+  "bottom-right": "fixed bottom-40 right-16",
 }
 
 function ToastContainer({
-  position = "top-center",
+  position = "bottom-center",
   className,
 }: ToastContainerProps) {
   const { toasts } = useToast()
@@ -49,6 +49,7 @@ function ToastContainer({
           actionLabel={t.actionLabel}
           onAction={t.onAction}
           onClose={() => dismissToast(t.id)}
+          slideFrom={position.startsWith("bottom") ? "bottom" : "top"}
         />
       ))}
     </div>

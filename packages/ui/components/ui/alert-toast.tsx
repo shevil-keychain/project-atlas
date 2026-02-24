@@ -12,6 +12,7 @@ type AlertToastProps = {
   actionLabel?: string
   onAction?: () => void
   onClose?: () => void
+  slideFrom?: "top" | "bottom"
   className?: string
 }
 
@@ -22,6 +23,7 @@ function AlertToast({
   actionLabel,
   onAction,
   onClose,
+  slideFrom = "top",
   className,
 }: AlertToastProps) {
   const [closing, setClosing] = React.useState(false)
@@ -38,7 +40,9 @@ function AlertToast({
         "flex min-h-[56px] max-w-[480px] items-center gap-12 rounded-lg bg-stone-800 p-16",
         closing
           ? "animate-[toast-fade-out_0.3s_ease-in_forwards]"
-          : "animate-[toast-slide-in_0.3s_ease-out]",
+          : slideFrom === "bottom"
+            ? "animate-[toast-slide-in-from-bottom_0.3s_ease-out]"
+            : "animate-[toast-slide-in-from-top_0.3s_ease-out]",
         className,
       )}
       style={
@@ -48,8 +52,12 @@ function AlertToast({
       }
     >
       <style>{`
-        @keyframes toast-slide-in {
+        @keyframes toast-slide-in-from-top {
           from { transform: translateY(-100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toast-slide-in-from-bottom {
+          from { transform: translateY(100%); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
         @keyframes toast-fade-out {

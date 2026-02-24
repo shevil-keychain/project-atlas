@@ -5,9 +5,13 @@ import { MainNav } from "@level/ui/components/patterns/main-nav"
 import { TopBar } from "@level/ui/components/patterns/top-bar"
 import { Button } from "@level/ui/components/ui/button"
 import { Card, CardBody } from "@level/ui/components/ui/card"
+import { EmptyState } from "@level/ui/components/ui/empty-state"
+import { Input } from "@level/ui/components/ui/input"
 import { Dialog, DialogBody, DialogContent, DialogHeader } from "@level/ui/components/ui/modal"
 import { Textarea } from "@level/ui/components/ui/textarea"
+import { ToastContainer } from "@level/ui/components/ui/toast-container"
 import { ToggleWithLabel } from "@level/ui/components/ui/toggle-with-label"
+import { toast } from "@level/ui/hooks/use-toast"
 import { cn } from "@level/ui/lib/utils"
 import {
   ArrowUp,
@@ -21,6 +25,7 @@ import {
   Plus,
   Sliders04,
   Star04,
+  X,
   Zap,
 } from "@level/ui/components/icons"
 import {
@@ -41,7 +46,8 @@ type ChatMessage = {
   id: string
   role: "assistant" | "user"
   content: string
-  isThinking?: boolean
+  isStreaming?: boolean
+  reasoning?: string
 }
 
 type ModelChatMessage = {
@@ -102,6 +108,23 @@ const quickActions = [
   },
 ]
 
+const railMinRatio = 0.18
+const railMaxRatio = 0.46
+const contentMinRatio = 0.4
+const contentMaxRatio = 0.82
+const defaultRailExpandedRatio = 0.24
+const dictionaryPromptDelayMs = 3000
+
+const getClampedRailRatio = (ratio: number) => {
+  const minAllowedRatio = Math.max(railMinRatio, 1 - contentMaxRatio)
+  const maxAllowedRatio = Math.min(railMaxRatio, 1 - contentMinRatio)
+  if (minAllowedRatio > maxAllowedRatio) {
+    return minAllowedRatio
+  }
+
+  return Math.min(maxAllowedRatio, Math.max(minAllowedRatio, ratio))
+}
+
 const initialThreadTitles = [
   "Analyze refund intent drivers for last 30 days",
   "Coach plan for reducing first response time",
@@ -142,23 +165,32 @@ const createUserMessage = (content: string): ChatMessage => ({
 const createAssistantMessage = (content: string): ChatMessage => ({
   content,
   id: createId(),
-  isThinking: false,
   role: "assistant",
 })
 
-const createThinkingMessage = (id: string): ChatMessage => ({
-  content: "Thinking",
+const createStreamingMessage = (id: string): ChatMessage => ({
+  content: "",
   id,
-  isThinking: true,
+  isStreaming: true,
+  reasoning: "",
   role: "assistant",
 })
 
-const createResolvedAssistantMessage = (id: string, content: string): ChatMessage => ({
+const createResolvedAssistantMessage = (id: string, content: string, reasoning?: string): ChatMessage => ({
   content,
   id,
-  isThinking: false,
+  isStreaming: false,
+  reasoning,
   role: "assistant",
 })
+
+function ThinkingMessage() {
+  return (
+    <Shimmer as="p" className="text-14 font-semibold" duration={4} spread={2}>
+      Thinking
+    </Shimmer>
+  )
+}
 
 const extractErrorMessage = (error: unknown) => {
   if (!(error instanceof Error)) {
@@ -210,14 +242,33 @@ const moveThreadToTop = (threads: ChatThread[], threadId: string) => {
   return threads
 }
 
-const createSeedThread = (title: string, index: number): ChatThread => ({
-  ageLabel: "1d",
-  id: `seed-${index}`,
-  messages: [createUserMessage(title), createAssistantMessage(buildAssistantReply(defaultWorker, title))],
-  pendingLibrarySuggestion: null,
-  title,
-  worker: defaultWorker,
-})
+const seedWorkers = ["Search analyst", "Coach", "Executive summary worker"] as const
+
+const getSeedWorker = (title: string, index: number) => {
+  const normalized = title.toLowerCase()
+  if (normalized.includes("executive summary")) {
+    return "Executive summary worker"
+  }
+
+  if (normalized.includes("coach")) {
+    return "Coach"
+  }
+
+  return seedWorkers[index % seedWorkers.length]
+}
+
+const createSeedThread = (title: string, index: number): ChatThread => {
+  const worker = getSeedWorker(title, index)
+
+  return {
+    ageLabel: "1d",
+    id: `seed-${index}`,
+    messages: [createUserMessage(title), createAssistantMessage(buildAssistantReply(worker, title))],
+    pendingLibrarySuggestion: null,
+    title,
+    worker,
+  }
+}
 
 const normalizeSaveSuggestion = (suggestion: SaveSuggestion | null | undefined): SaveSuggestion | null => {
   if (!suggestion) {
@@ -239,13 +290,223 @@ const normalizeSaveSuggestion = (suggestion: SaveSuggestion | null | undefined):
   }
 }
 
+const semanticQuestionRegex =
+  /\b(mean|means|stand for|refers to|what is|what does|when you say|do you mean|interpret|clarify)\b/i
+const transactionalKeywordRegex =
+  /\b(last|previous|next|quarter|month|week|day|date|range|window|ytd|year[- ]to[- ]date|season|daily|weekly|monthly|time period|cadence)\b/i
+const affirmativeRegex = /^(yes|yep|yeah|correct|right|exactly|that is right|that's right)\b/i
+
+const collapseWhitespace = (value: string) => value.replace(/\s+/g, " ").trim()
+const stripWrapperQuotes = (value: string) => value.replace(/^[\s"'`]+|[\s"'`]+$/g, "").trim()
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+const normalizeForCompare = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+
+const normalizeSuggestionTerm = (rawTerm: string) => {
+  const cleaned = collapseWhitespace(stripWrapperQuotes(rawTerm))
+  if (!cleaned) {
+    return ""
+  }
+
+  if (cleaned.length > 32 || /[.?!,:;]/.test(cleaned)) {
+    return ""
+  }
+
+  const wordCount = cleaned.split(" ").filter(Boolean).length
+  if (wordCount > 4) {
+    return ""
+  }
+
+  if (/^(yes|no|correct|right|exactly)$/i.test(cleaned)) {
+    return ""
+  }
+
+  return cleaned
+}
+
+const normalizeSuggestionMeaning = (rawMeaning: string, term: string) => {
+  let cleaned = collapseWhitespace(stripWrapperQuotes(rawMeaning))
+  if (!cleaned) {
+    return ""
+  }
+
+  if (term) {
+    const escapedTerm = escapeRegExp(term)
+    cleaned = cleaned.replace(
+      new RegExp(`^["'\`]?${escapedTerm}["'\`]?\\s*(?:means|refers to|stands for|:|=)\\s*`, "i"),
+      ""
+    )
+  }
+
+  cleaned = cleaned
+    .replace(/^(it|this|that)\s+(means|refers to|stands for|is)\s+/i, "")
+    .replace(/^you should interpret (it|this|that) as\s+/i, "")
+    .replace(/^it should be treated as\s+/i, "")
+
+  cleaned = collapseWhitespace(stripWrapperQuotes(cleaned))
+  if (!cleaned) {
+    return ""
+  }
+
+  cleaned = cleaned.split(/\n/)[0]?.trim() ?? cleaned
+  cleaned = cleaned.split(/[.?!]\s+/)[0]?.trim() ?? cleaned
+  cleaned = collapseWhitespace(stripWrapperQuotes(cleaned))
+
+  const words = cleaned.split(" ").filter(Boolean)
+  if (words.length > 12) {
+    cleaned = words.slice(0, 12).join(" ")
+  }
+
+  if (!cleaned || cleaned.length > 96) {
+    return ""
+  }
+
+  return cleaned
+}
+
+const getCandidateTermFromClarification = (assistantQuestion: string, previousUserMessage: string) => {
+  const quotedToken = assistantQuestion.match(/["']([A-Za-z][A-Za-z0-9_-]{1,24})["']/)?.[1]
+  if (quotedToken) {
+    return quotedToken
+  }
+
+  const abbreviationInQuestion = assistantQuestion.match(/\b[A-Z][A-Z0-9]{1,9}\b/g)?.[0]
+  if (abbreviationInQuestion) {
+    return abbreviationInQuestion
+  }
+
+  const abbreviationInUserMessage = previousUserMessage.match(/\b[A-Z][A-Z0-9]{1,9}\b/g)?.[0]
+  if (abbreviationInUserMessage) {
+    return abbreviationInUserMessage
+  }
+
+  return ""
+}
+
+const getMeaningFromClarificationQuestion = (assistantQuestion: string) => {
+  const doYouMeanMatch = assistantQuestion.match(/\bdo you mean\s+(.+?)(?:\?|$)/i)?.[1]
+  if (doYouMeanMatch) {
+    return doYouMeanMatch.trim()
+  }
+
+  const interpretAsMatch =
+    assistantQuestion.match(/\binterpret(?:\s+it)?\s+as\s+(.+?)(?:\?|$)/i)?.[1]
+  if (interpretAsMatch) {
+    return interpretAsMatch.replace(/\s+or\s+something\s+else$/i, "").trim()
+  }
+
+  const meanMatch =
+    assistantQuestion.match(/\b(?:means?|refers to|stands for)\s+(.+?)(?:\?|$)/i)?.[1]
+  if (meanMatch) {
+    return meanMatch.trim()
+  }
+
+  return ""
+}
+
+const buildProvisionalLibrarySuggestion = ({
+  assistantQuestion,
+  previousUserMessage,
+  userAnswer,
+  dictionaryEntries,
+}: {
+  assistantQuestion: string
+  previousUserMessage: string
+  userAnswer: string
+  dictionaryEntries: LibraryEntry[]
+}) => {
+  if (!assistantQuestion || !semanticQuestionRegex.test(assistantQuestion)) {
+    return null
+  }
+
+  const term = normalizeSuggestionTerm(
+    getCandidateTermFromClarification(assistantQuestion, previousUserMessage)
+  )
+  if (!term || transactionalKeywordRegex.test(term)) {
+    return null
+  }
+
+  const explicitMeaning = affirmativeRegex.test(userAnswer)
+    ? getMeaningFromClarificationQuestion(assistantQuestion)
+    : userAnswer
+  const meaning = normalizeSuggestionMeaning(explicitMeaning, term)
+  if (!meaning || transactionalKeywordRegex.test(meaning)) {
+    return null
+  }
+
+  if (normalizeForCompare(meaning) === normalizeForCompare(term)) {
+    return null
+  }
+
+  const suggestion: SaveSuggestion = {
+    instruction: `Interpret "${term}" as "${meaning}".`,
+    reason: `You clarified what "${term}" means.`,
+    term,
+  }
+
+  const alreadyInDictionary = dictionaryEntries.some(
+    (entry) =>
+      entry.term.toLowerCase() === suggestion.term.toLowerCase() &&
+      entry.instruction.toLowerCase() === suggestion.instruction.toLowerCase()
+  )
+
+  return alreadyInDictionary ? null : suggestion
+}
+
+const getProvisionalLibrarySuggestion = ({
+  messages,
+  userAnswer,
+  dictionaryEntries,
+}: {
+  messages: ChatMessage[]
+  userAnswer: string
+  dictionaryEntries: LibraryEntry[]
+}) => {
+  if (!userAnswer.trim()) {
+    return null
+  }
+
+  let assistantQuestion = ""
+  let previousUserMessage = ""
+
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    const message = messages[index]
+    if (!assistantQuestion && message.role === "assistant") {
+      assistantQuestion = message.content.trim()
+      continue
+    }
+
+    if (assistantQuestion && message.role === "user") {
+      previousUserMessage = message.content.trim()
+      break
+    }
+  }
+
+  if (!assistantQuestion) {
+    return null
+  }
+
+  return buildProvisionalLibrarySuggestion({
+    assistantQuestion,
+    dictionaryEntries,
+    previousUserMessage,
+    userAnswer,
+  })
+}
+
 function ThreadRow({
   title,
+  worker,
   ageLabel,
   isSelected,
   onSelect,
 }: {
   title: string
+  worker: string
   ageLabel: string
   isSelected: boolean
   onSelect: () => void
@@ -262,7 +523,14 @@ function ThreadRow({
       )}
       onClick={onSelect}
     >
-      <span className="min-w-0 truncate text-14 text-text-primary">{title}</span>
+      <span className="flex min-w-0 items-center gap-8">
+        <img
+          src={workerIconByLabel[worker] ?? "/ai-worker-avatar.svg"}
+          alt={`${worker} icon`}
+          className="h-16 w-16 shrink-0 object-contain"
+        />
+        <span className="min-w-0 truncate text-14 text-text-primary">{title}</span>
+      </span>
       <span className="shrink-0 text-12 text-text-tertiary">{ageLabel}</span>
     </Button>
   )
@@ -350,18 +618,36 @@ function DictionarySavePrompt({
   )
 }
 
-function ThinkingMessage() {
-  return (
-    <Shimmer as="p" className="text-14 font-semibold" duration={4} spread={2}>
-      Thinking
-    </Shimmer>
-  )
+type StreamEvent =
+  | { type: "reasoning"; content: string }
+  | { type: "text"; content: string }
+  | { type: "finish"; mode: "clarify" | "answer"; saveSuggestion?: { term: string; instruction: string; reason?: string } | null }
+  | { type: "error"; message: string }
+
+const parseSSEEvents = (chunk: string): Array<StreamEvent | null> => {
+  const events: Array<StreamEvent | null> = []
+  const parts = chunk.split("\n\n")
+  for (const part of parts) {
+    const trimmed = part.trim()
+    if (!trimmed || !trimmed.startsWith("data: ")) continue
+    const data = trimmed.slice(6)
+    try {
+      events.push(JSON.parse(data) as StreamEvent)
+    } catch {
+      // skip unparseable events
+    }
+  }
+  return events
 }
 
 export default function Page() {
   const workerTransitionDurationMs = 350
-  const minimumThinkingDurationMs = 5000
+
   const [isRailCollapsed, setIsRailCollapsed] = useState(false)
+  const [railExpandedRatio, setRailExpandedRatio] = useState(() =>
+    getClampedRailRatio(defaultRailExpandedRatio)
+  )
+  const [isRailResizing, setIsRailResizing] = useState(false)
   const [isCursorInCanvas, setIsCursorInCanvas] = useState(false)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
   const [activeWorker, setActiveWorker] = useState(defaultWorker)
@@ -380,7 +666,9 @@ export default function Page() {
 
   const workerSwapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const assistantAbortControllerRef = useRef<AbortController | null>(null)
+  const librarySuggestionTimersRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
   const conversationRef = useRef<HTMLDivElement | null>(null)
+  const splitLayoutRef = useRef<HTMLDivElement | null>(null)
 
   const scrollConversationToBottom = useCallback(() => {
     requestAnimationFrame(() => {
@@ -419,6 +707,24 @@ export default function Page() {
     })
   }
 
+  const handleRailResizeStart = (event: MouseEvent<HTMLButtonElement>) => {
+    if (isRailCollapsed) {
+      return
+    }
+
+    event.preventDefault()
+
+    if (splitLayoutRef.current) {
+      const layoutBounds = splitLayoutRef.current.getBoundingClientRect()
+      if (layoutBounds.width > 0) {
+        const nextRatio = getClampedRailRatio((event.clientX - layoutBounds.left) / layoutBounds.width)
+        setRailExpandedRatio(nextRatio)
+      }
+    }
+
+    setIsRailResizing(true)
+  }
+
   useEffect(() => {
     return () => {
       if (workerSwapTimerRef.current) {
@@ -429,8 +735,51 @@ export default function Page() {
         assistantAbortControllerRef.current.abort()
         assistantAbortControllerRef.current = null
       }
+
+      Object.values(librarySuggestionTimersRef.current).forEach((timer) => {
+        clearTimeout(timer)
+      })
+      librarySuggestionTimersRef.current = {}
     }
   }, [])
+
+  useEffect(() => {
+    if (!isRailResizing) {
+      return
+    }
+
+    const handleMouseMove = (event: globalThis.MouseEvent) => {
+      if (isRailCollapsed || !splitLayoutRef.current) {
+        return
+      }
+
+      const layoutBounds = splitLayoutRef.current.getBoundingClientRect()
+      if (layoutBounds.width <= 0) {
+        return
+      }
+
+      const nextRatio = getClampedRailRatio((event.clientX - layoutBounds.left) / layoutBounds.width)
+      setRailExpandedRatio(nextRatio)
+    }
+
+    const handleMouseUp = () => {
+      setIsRailResizing(false)
+    }
+
+    window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("mouseup", handleMouseUp)
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove)
+      window.removeEventListener("mouseup", handleMouseUp)
+    }
+  }, [isRailCollapsed, isRailResizing])
+
+  useEffect(() => {
+    if (isRailCollapsed && isRailResizing) {
+      setIsRailResizing(false)
+    }
+  }, [isRailCollapsed, isRailResizing])
 
   const handleWorkerSelect = (worker: string) => {
     if (worker === activeWorker) {
@@ -457,20 +806,182 @@ export default function Page() {
         : "opacity-0 translate-y-8 delay-0"
     )
 
+  const updateStreamingMessage = (
+    threadId: string,
+    messageId: string,
+    updater: (message: ChatMessage) => ChatMessage
+  ) => {
+    setRecentThreads((currentThreads) =>
+      currentThreads.map((thread) => {
+        if (thread.id !== threadId) return thread
+        return {
+          ...thread,
+          messages: thread.messages.map((message) =>
+            message.id === messageId ? updater(message) : message
+          ),
+        }
+      })
+    )
+  }
+
+  const clearLibrarySuggestionTimer = (threadId: string) => {
+    const timer = librarySuggestionTimersRef.current[threadId]
+    if (!timer) {
+      return
+    }
+
+    clearTimeout(timer)
+    delete librarySuggestionTimersRef.current[threadId]
+  }
+
+  const scheduleThreadLibrarySuggestion = (
+    threadId: string,
+    suggestion: SaveSuggestion | null
+  ) => {
+    clearLibrarySuggestionTimer(threadId)
+
+    if (!suggestion) {
+      setRecentThreads((currentThreads) =>
+        currentThreads.map((thread) =>
+          thread.id === threadId
+            ? { ...thread, pendingLibrarySuggestion: null }
+            : thread
+        )
+      )
+      return
+    }
+
+    librarySuggestionTimersRef.current[threadId] = setTimeout(() => {
+      setRecentThreads((currentThreads) =>
+        currentThreads.map((thread) =>
+          thread.id === threadId
+            ? { ...thread, pendingLibrarySuggestion: suggestion }
+            : thread
+        )
+      )
+      delete librarySuggestionTimersRef.current[threadId]
+    }, dictionaryPromptDelayMs)
+  }
+
+  const handleStreamResponse = async (
+    response: Response,
+    threadId: string,
+    assistantMessageId: string,
+    accumulatedReasoning: { value: string }
+  ) => {
+    const reader = response.body!.getReader()
+    const decoder = new TextDecoder()
+    let sseBuffer = ""
+    let finishEvent: StreamEvent | null = null
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      sseBuffer += decoder.decode(value, { stream: true })
+
+      while (true) {
+        const eventEnd = sseBuffer.indexOf("\n\n")
+        if (eventEnd === -1) break
+
+        const rawEvent = sseBuffer.slice(0, eventEnd)
+        sseBuffer = sseBuffer.slice(eventEnd + 2)
+
+        for (const event of parseSSEEvents(rawEvent + "\n\n")) {
+          if (!event) continue
+
+          if (event.type === "reasoning") {
+            accumulatedReasoning.value += event.content
+            const currentReasoning = accumulatedReasoning.value
+            updateStreamingMessage(threadId, assistantMessageId, (msg) => ({
+              ...msg,
+              reasoning: currentReasoning,
+            }))
+          } else if (event.type === "text") {
+            updateStreamingMessage(threadId, assistantMessageId, (msg) => ({
+              ...msg,
+              content: event.content,
+              isStreaming: false,
+            }))
+          } else if (event.type === "finish") {
+            finishEvent = event
+          } else if (event.type === "error") {
+            updateStreamingMessage(threadId, assistantMessageId, (msg) => ({
+              ...msg,
+              content: event.message,
+              isStreaming: false,
+            }))
+          }
+        }
+      }
+    }
+
+    return finishEvent
+  }
+
+  const handleJsonResponse = async (
+    response: Response,
+    threadId: string,
+    assistantMessageId: string,
+    {
+      preservePendingLibrarySuggestion = false,
+    }: {
+      preservePendingLibrarySuggestion?: boolean
+    } = {}
+  ) => {
+    const payload = (await response.json()) as AssistantTurnResponse
+    const assistantReply = payload.message?.trim()
+    if (!assistantReply) {
+      throw new Error("Assistant returned an empty response.")
+    }
+
+    const pendingLibrarySuggestion =
+      payload.mode === "answer" ? normalizeSaveSuggestion(payload.saveSuggestion) : null
+
+    setRecentThreads((currentThreads) => {
+      const updatedThreads = currentThreads.map((thread) => {
+        if (thread.id !== threadId) return thread
+
+        let found = false
+        const updatedMessages = thread.messages.map((message) => {
+          if (message.id !== assistantMessageId) return message
+          found = true
+          return createResolvedAssistantMessage(assistantMessageId, assistantReply)
+        })
+
+        return {
+          ...thread,
+          ageLabel: "now",
+          messages: found
+            ? updatedMessages
+            : [...updatedMessages, createResolvedAssistantMessage(assistantMessageId, assistantReply)],
+        }
+      })
+
+      return moveThreadToTop(updatedThreads, threadId)
+    })
+
+    if (!preservePendingLibrarySuggestion) {
+      scheduleThreadLibrarySuggestion(threadId, pendingLibrarySuggestion)
+    }
+  }
+
   const requestAssistantReply = async ({
     threadId,
     worker,
     messages,
     libraryEntries,
     assistantMessageId: providedAssistantMessageId,
-    shouldInsertThinkingMessage = true,
+    shouldInsertStreamingMessage = true,
+    initialPendingLibrarySuggestion = null,
   }: {
     threadId: string
     worker: string
     messages: ModelChatMessage[]
     libraryEntries: LibraryEntry[]
     assistantMessageId?: string
-    shouldInsertThinkingMessage?: boolean
+    shouldInsertStreamingMessage?: boolean
+    initialPendingLibrarySuggestion?: SaveSuggestion | null
   }) => {
     if (assistantAbortControllerRef.current) {
       assistantAbortControllerRef.current.abort()
@@ -478,29 +989,18 @@ export default function Page() {
 
     const controller = new AbortController()
     const assistantMessageId = providedAssistantMessageId ?? createId()
-    const thinkingStartedAt = Date.now()
+    const preservePendingLibrarySuggestion = Boolean(initialPendingLibrarySuggestion)
     assistantAbortControllerRef.current = controller
     setIsAssistantResponding(true)
 
-    const waitForMinimumThinkingTime = async () => {
-      const elapsedTimeMs = Date.now() - thinkingStartedAt
-      const remainingTimeMs = Math.max(0, minimumThinkingDurationMs - elapsedTimeMs)
-      if (remainingTimeMs > 0) {
-        await new Promise((resolve) => setTimeout(resolve, remainingTimeMs))
-      }
-    }
-
-    if (shouldInsertThinkingMessage) {
+    if (shouldInsertStreamingMessage) {
       setRecentThreads((currentThreads) => {
         const updatedThreads = currentThreads.map((thread) => {
-          if (thread.id !== threadId) {
-            return thread
-          }
-
+          if (thread.id !== threadId) return thread
           return {
             ...thread,
             ageLabel: "now",
-            messages: [...thread.messages, createThinkingMessage(assistantMessageId)],
+            messages: [...thread.messages, createStreamingMessage(assistantMessageId)],
             pendingLibrarySuggestion: null,
           }
         })
@@ -513,10 +1013,12 @@ export default function Page() {
       const response = await fetch("/api/chat", {
         body: JSON.stringify({
           allowClarifyingAssumptions,
-          libraryEntries: libraryEntries.map((entry) => ({
-            instruction: entry.instruction,
-            term: entry.term,
-          })),
+          libraryEntries: libraryEntries
+            .map((entry) => ({
+              instruction: entry.instruction.trim(),
+              term: entry.term.trim(),
+            }))
+            .filter((entry) => entry.term && entry.instruction),
           messages,
           worker,
         }),
@@ -530,45 +1032,32 @@ export default function Page() {
         throw new Error(errorText || `Assistant reply failed with status ${response.status}.`)
       }
 
-      const payload = (await response.json()) as AssistantTurnResponse
-      const assistantReply = payload.message?.trim()
-      if (!assistantReply) {
-        throw new Error("Assistant returned an empty response.")
-      }
+      const contentType = response.headers.get("Content-Type") ?? ""
 
-      const pendingLibrarySuggestion =
-        payload.mode === "answer" ? normalizeSaveSuggestion(payload.saveSuggestion) : null
+      if (contentType.includes("text/event-stream") && response.body) {
+        const accumulatedReasoning = { value: "" }
+        const finishEvent = await handleStreamResponse(
+          response,
+          threadId,
+          assistantMessageId,
+          accumulatedReasoning
+        )
 
-      await waitForMinimumThinkingTime()
+        if (finishEvent && finishEvent.type === "finish") {
+          const pendingLibrarySuggestion =
+            finishEvent.mode === "answer"
+              ? normalizeSaveSuggestion(finishEvent.saveSuggestion)
+              : null
 
-      setRecentThreads((currentThreads) => {
-        const updatedThreads = currentThreads.map((thread) => {
-          if (thread.id !== threadId) {
-            return thread
+          if (!preservePendingLibrarySuggestion) {
+            scheduleThreadLibrarySuggestion(threadId, pendingLibrarySuggestion)
           }
-
-          let hasThinkingMessage = false
-          const updatedMessages = thread.messages.map((message) => {
-            if (message.id !== assistantMessageId) {
-              return message
-            }
-
-            hasThinkingMessage = true
-            return createResolvedAssistantMessage(assistantMessageId, assistantReply)
-          })
-
-          return {
-            ...thread,
-            ageLabel: "now",
-            messages: hasThinkingMessage
-              ? updatedMessages
-              : [...updatedMessages, createResolvedAssistantMessage(assistantMessageId, assistantReply)],
-            pendingLibrarySuggestion,
-          }
+        }
+      } else {
+        await handleJsonResponse(response, threadId, assistantMessageId, {
+          preservePendingLibrarySuggestion,
         })
-
-        return moveThreadToTop(updatedThreads, threadId)
-      })
+      }
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         setRecentThreads((currentThreads) =>
@@ -584,41 +1073,26 @@ export default function Page() {
         return
       }
 
-      await waitForMinimumThinkingTime()
       const errorMessage = toDisplayableAssistantError(error)
 
       setRecentThreads((currentThreads) => {
         const updatedThreads = currentThreads.map((thread) => {
-          if (thread.id !== threadId) {
-            return thread
-          }
+          if (thread.id !== threadId) return thread
 
-          let hasThinkingMessage = false
+          let found = false
           const updatedMessages = thread.messages.map((message) => {
-            if (message.id !== assistantMessageId) {
-              return message
-            }
-
-            hasThinkingMessage = true
-            return createResolvedAssistantMessage(
-              assistantMessageId,
-              errorMessage
-            )
+            if (message.id !== assistantMessageId) return message
+            found = true
+            return createResolvedAssistantMessage(assistantMessageId, errorMessage)
           })
 
           return {
             ...thread,
             ageLabel: "now",
-            messages: hasThinkingMessage
+            messages: found
               ? updatedMessages
-              : [
-                  ...updatedMessages,
-                  createResolvedAssistantMessage(
-                    assistantMessageId,
-                    errorMessage
-                  ),
-                ],
-            pendingLibrarySuggestion: null,
+              : [...updatedMessages, createResolvedAssistantMessage(assistantMessageId, errorMessage)],
+            pendingLibrarySuggestion: thread.pendingLibrarySuggestion,
           }
         })
 
@@ -645,7 +1119,7 @@ export default function Page() {
     const newThread: ChatThread = {
       ageLabel: "now",
       id: newThreadId,
-      messages: [createUserMessage(normalizedPrompt), createThinkingMessage(assistantMessageId)],
+      messages: [createUserMessage(normalizedPrompt), createStreamingMessage(assistantMessageId)],
       pendingLibrarySuggestion: null,
       title: getThreadTitle(normalizedPrompt),
       worker: threadWorker,
@@ -662,7 +1136,7 @@ export default function Page() {
       messages: [{ role: "user", content: normalizedPrompt }],
       libraryEntries: dictionaryEntries,
       assistantMessageId,
-      shouldInsertThinkingMessage: false,
+      shouldInsertStreamingMessage: false,
     })
   }
 
@@ -685,6 +1159,11 @@ export default function Page() {
       })),
       { role: "user", content: normalizedPrompt },
     ]
+    const provisionalLibrarySuggestion = getProvisionalLibrarySuggestion({
+      dictionaryEntries,
+      messages: selectedThread.messages,
+      userAnswer: normalizedPrompt,
+    })
 
     setRecentThreads((currentThreads) => {
       const updatedThreads = currentThreads.map((thread) => {
@@ -699,12 +1178,14 @@ export default function Page() {
             ...thread.messages,
             createUserMessage(normalizedPrompt),
           ],
+          pendingLibrarySuggestion: null,
           title: getThreadTitle(thread.messages[0]?.content ?? normalizedPrompt),
         }
       })
 
       return moveThreadToTop(updatedThreads, targetThreadId)
     })
+    scheduleThreadLibrarySuggestion(targetThreadId, provisionalLibrarySuggestion)
 
     setChatPromptValue("")
     scrollConversationToBottom()
@@ -713,6 +1194,7 @@ export default function Page() {
       worker: threadWorker,
       messages: nextModelMessages,
       libraryEntries: dictionaryEntries,
+      initialPendingLibrarySuggestion: provisionalLibrarySuggestion,
     })
   }
 
@@ -738,6 +1220,7 @@ export default function Page() {
   }
 
   const clearThreadLibrarySuggestion = (threadId: string) => {
+    clearLibrarySuggestionTimer(threadId)
     setRecentThreads((currentThreads) =>
       currentThreads.map((thread) =>
         thread.id === threadId
@@ -757,6 +1240,10 @@ export default function Page() {
       clearThreadLibrarySuggestion(selectedThread.id)
       return
     }
+
+    const isExistingEntry = dictionaryEntries.some(
+      (entry) => entry.term.toLowerCase() === suggestion.term.toLowerCase()
+    )
 
     setDictionaryEntries((currentEntries) => {
       const existingIndex = currentEntries.findIndex(
@@ -779,6 +1266,11 @@ export default function Page() {
       return [nextEntry, ...currentEntries]
     })
 
+    toast({
+      title: isExistingEntry ? "Dictionary entry updated" : "Added to dictionary",
+      description: suggestion.term,
+    })
+
     clearThreadLibrarySuggestion(selectedThread.id)
   }
 
@@ -796,19 +1288,49 @@ export default function Page() {
     )
   }
 
+  const handleAddDictionaryEntry = () => {
+    setDictionaryEntries((currentEntries) => [
+      ...currentEntries,
+      {
+        id: createId(),
+        instruction: "",
+        term: "",
+      },
+    ])
+  }
+
+  const handleDictionaryEntryChange = (
+    entryId: string,
+    field: "term" | "instruction",
+    value: string
+  ) => {
+    setDictionaryEntries((currentEntries) =>
+      currentEntries.map((entry) =>
+        entry.id === entryId
+          ? {
+              ...entry,
+              [field]: value,
+            }
+          : entry
+      )
+    )
+  }
+
   return (
-    <div className="flex h-screen bg-surface-page">
+    <div className={cn("flex h-screen bg-surface-page", isRailResizing && "cursor-col-resize select-none")}>
       <MainNav activeItem="AI workers" />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar avatarInitial="JD" avatarColor="var(--color-secondary-purple-600)" />
 
         <main className="flex-1 overflow-auto">
-          <div className="flex h-full min-h-0 overflow-hidden bg-surface-page">
+          <div ref={splitLayoutRef} className="flex h-full min-h-0 overflow-hidden bg-surface-page">
             <aside
+              style={isRailCollapsed ? undefined : { width: `${railExpandedRatio * 100}%` }}
               className={cn(
-                "flex h-full min-h-0 shrink-0 flex-col bg-surface-subtle pb-20 pt-12 transition-[width] duration-300 ease-in-out",
-                isRailCollapsed ? "w-56 px-12" : "w-288 px-8"
+                "relative flex h-full min-h-0 shrink-0 flex-col bg-surface-subtle pb-20 pt-12",
+                isRailResizing ? "transition-none" : "transition-[width] duration-300 ease-in-out",
+                isRailCollapsed ? "w-56 px-12" : "px-8"
               )}
             >
               <div className="flex items-center justify-start">
@@ -849,6 +1371,7 @@ export default function Page() {
                       <ThreadRow
                         key={thread.id}
                         title={thread.title}
+                        worker={thread.worker}
                         ageLabel={thread.ageLabel}
                         isSelected={thread.id === selectedThreadId}
                         onSelect={() => handleThreadSelect(thread.id)}
@@ -874,6 +1397,25 @@ export default function Page() {
                   />
                 </div>
               </div>
+
+              {!isRailCollapsed ? (
+                <button
+                  type="button"
+                  aria-label="Resize panel width"
+                  aria-orientation="vertical"
+                  className={cn(
+                    "group absolute bottom-0 right-0 top-0 flex w-8 translate-x-1/2 cursor-col-resize items-center justify-center bg-transparent"
+                  )}
+                  onMouseDown={handleRailResizeStart}
+                >
+                  <span
+                    className={cn(
+                      "h-64 w-2 rounded-full transition-colors duration-150",
+                      isRailResizing ? "bg-border-focus" : "bg-border-subtle group-hover:bg-border-strong"
+                    )}
+                  />
+                </button>
+              ) : null}
             </aside>
 
             <section
@@ -910,13 +1452,12 @@ export default function Page() {
                                 : "w-full rounded-none border-none bg-transparent px-0 py-0 text-text-primary"
                             )}
                           >
-                            {message.isThinking ? (
-                              <ThinkingMessage />
-                            ) : (
+                            {message.isStreaming && message.role === "assistant" ? <ThinkingMessage /> : null}
+                            {!message.isStreaming && message.content ? (
                               <MessageResponse className={message.role === "user" ? "w-auto" : "w-full"}>
                                 {message.content}
                               </MessageResponse>
-                            )}
+                            ) : null}
                           </MessageContent>
                         </Message>
                       ))}
@@ -1142,7 +1683,7 @@ export default function Page() {
         </main>
 
         <Dialog open={isPreferencesOpen} onOpenChange={setIsPreferencesOpen}>
-          <DialogContent size="sm" className="top-240 -translate-y-0">
+          <DialogContent size="sm">
             <DialogHeader description="Manage your personal preferences for AI workers">
               Preferences
             </DialogHeader>
@@ -1158,60 +1699,81 @@ export default function Page() {
         </Dialog>
 
         <Dialog open={isDictionaryOpen} onOpenChange={setIsDictionaryOpen}>
-          <DialogContent size="sm" className="top-240 -translate-y-0">
+          <DialogContent size="lg">
             <DialogHeader description="Saved terms and clarifications reused across chats">
               Dictionary
             </DialogHeader>
-            <DialogBody className="pb-24 pt-12">
+            <DialogBody className="flex min-h-0 flex-col overflow-hidden pb-24 pt-12">
               {dictionaryEntries.length === 0 ? (
-                <Card className="border-border-default bg-surface-page shadow-sm">
-                  <CardBody className="px-16 py-16">
-                    <p className="text-14 text-text-secondary">
-                      No dictionary entries yet. Approve a clarification to save it here.
-                    </p>
-                  </CardBody>
-                </Card>
+                <div className="min-h-0 flex-1">
+                  <EmptyState
+                    icon={<LayersThree02 />}
+                    title="No dictionary entries yet"
+                    description="Approve a clarification or add one manually to save it here."
+                    className="h-256 rounded-lg border border-border-default bg-surface-page"
+                  />
+                </div>
               ) : (
-                <div className="flex max-h-256 flex-col gap-12 overflow-auto pr-4">
-                  {dictionaryEntries.map((entry) => (
-                    <Card key={entry.id} className="border-border-default bg-surface-page shadow-sm">
-                      <CardBody className="flex flex-col gap-12 px-16 py-16">
-                        <div className="space-y-4">
-                          <p className="text-12 text-text-tertiary">Term</p>
-                          <p className="text-14 font-semibold text-text-primary">{entry.term}</p>
+                <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-auto pr-4">
+                  {dictionaryEntries.map((entry, index) => (
+                    <div
+                      key={entry.id}
+                      className="flex items-stretch overflow-hidden rounded-lg border border-border-default bg-surface-page"
+                    >
+                      <div className="grid min-w-0 flex-1 grid-cols-10">
+                        <div className="col-span-3 min-w-0">
+                          <Input
+                            value={entry.term}
+                            onChange={(event) =>
+                              handleDictionaryEntryChange(entry.id, "term", event.target.value)
+                            }
+                            placeholder="Title"
+                            aria-label={`Dictionary title ${index + 1}`}
+                            className="min-w-0 rounded-none border-0 bg-transparent focus:border-0 focus:shadow-none hover:border-0"
+                          />
                         </div>
-
-                        <div className="space-y-4">
-                          <p className="text-12 text-text-tertiary">Instruction</p>
-                          <p className="text-14 text-text-primary">{entry.instruction}</p>
+                        <div className="col-span-7 min-w-0 border-l border-border-default">
+                          <Input
+                            value={entry.instruction}
+                            onChange={(event) =>
+                              handleDictionaryEntryChange(entry.id, "instruction", event.target.value)
+                            }
+                            placeholder="Definition"
+                            aria-label={`Dictionary definition ${index + 1}`}
+                            className="min-w-0 rounded-none border-0 bg-transparent focus:border-0 focus:shadow-none hover:border-0"
+                          />
                         </div>
-
-                        {entry.reason ? (
-                          <div className="space-y-4">
-                            <p className="text-12 text-text-tertiary">Reason</p>
-                            <p className="text-14 text-text-secondary">{entry.reason}</p>
-                          </div>
-                        ) : null}
-
-                        <div className="flex justify-end">
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            type="button"
-                            onClick={() => handleRemoveDictionaryEntry(entry.id)}
-                          >
-                            Remove
-                          </Button>
-                        </div>
-                      </CardBody>
-                    </Card>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon-lg"
+                        type="button"
+                        className="h-40 w-40 rounded-none border-l border-border-default"
+                        aria-label={`Remove dictionary entry ${index + 1}`}
+                        onClick={() => handleRemoveDictionaryEntry(entry.id)}
+                        iconLeft={<X size={16} className="text-icon-secondary" />}
+                      />
+                    </div>
                   ))}
                 </div>
               )}
+
+              <div className="mt-16">
+                <Button
+                  variant="secondary"
+                  size="default"
+                  type="button"
+                  iconLeft={<Plus size={16} className="text-icon-secondary" />}
+                  onClick={handleAddDictionaryEntry}
+                >
+                  Add
+                </Button>
+              </div>
             </DialogBody>
           </DialogContent>
         </Dialog>
       </div>
+      <ToastContainer position="bottom-center" />
     </div>
   )
 }

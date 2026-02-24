@@ -29,14 +29,14 @@ type AssistantTurnResponse = {
   saveSuggestion: SaveSuggestion | null
 }
 
-type OpenRouterContentPart = {
+type OpenAIContentPart = {
   text?: string
 }
 
-type OpenRouterResponsePayload = {
+type OpenAIResponsePayload = {
   choices?: Array<{
     message?: {
-      content?: string | OpenRouterContentPart[] | null
+      content?: string | OpenAIContentPart[] | null
     }
   }>
   error?: {
@@ -53,19 +53,17 @@ type OpenRouterResponsePayload = {
 }
 
 const fallbackAssistantMessage = "I hit an issue generating a response. Please try again."
-const defaultOpenRouterModel = "stepfun/step-3.5-flash:free"
-const defaultOpenRouterFallbackModels = [
-  "upstage/solar-pro-3:free",
-  "nvidia/nemotron-3-nano-30b-a3b:free",
-]
-const maxOpenRouterModels = 3
+const defaultOpenAIModel = "gpt-5-mini"
+const defaultOpenAIFallbackModels = ["gpt-4o-mini", "gpt-4.1-mini"]
+const maxOpenAIModels = 3
+const enableQualityRetry = process.env.OPENAI_ENABLE_QUALITY_RETRY === "true"
 const semanticQuestionRegex =
   /\b(mean|means|stand for|refers to|what is|what does|when you say|do you mean|interpret)\b/i
 const transactionalKeywordRegex =
   /\b(last|previous|next|quarter|month|week|day|date|range|window|ytd|year[- ]to[- ]date|season|daily|weekly|monthly|time period|cadence)\b/i
 const affirmativeRegex = /^(yes|yep|yeah|correct|right|exactly|that is right|that's right)\b/i
 
-const getOpenRouterText = (payload: OpenRouterResponsePayload) => {
+const getOpenAIText = (payload: OpenAIResponsePayload) => {
   const content = payload.choices?.[0]?.message?.content
   if (typeof content === "string") {
     return content.trim()
@@ -82,33 +80,17 @@ const getOpenRouterText = (payload: OpenRouterResponsePayload) => {
   return ""
 }
 
-const getOpenRouterErrorText = (rawText: string) => {
+const getOpenAIErrorText = (rawText: string) => {
   const trimmed = rawText.trim()
   if (!trimmed) {
     return ""
   }
 
   try {
-    const parsed = JSON.parse(trimmed) as OpenRouterResponsePayload
+    const parsed = JSON.parse(trimmed) as OpenAIResponsePayload
     const message = parsed.error?.message?.trim()
     if (!message) {
       return trimmed
-    }
-
-    if (message.toLowerCase() === "provider returned error" && parsed.error?.metadata?.raw) {
-      try {
-        const providerRaw = JSON.parse(parsed.error.metadata.raw) as {
-          error?: {
-            message?: string
-          }
-        }
-        const providerMessage = providerRaw.error?.message?.trim()
-        if (providerMessage) {
-          return `${message}: ${providerMessage}`
-        }
-      } catch {
-        // Ignore provider metadata parse issues and return the top-level message.
-      }
     }
 
     return message
@@ -119,44 +101,55 @@ const getOpenRouterErrorText = (rawText: string) => {
   return trimmed
 }
 
-const resolveOpenRouterModel = (rawModel: string | undefined) => {
+const normalizeOpenAIModel = (rawModel: string | undefined) => {
   const normalized = rawModel?.trim() ?? ""
   if (!normalized) {
-    return defaultOpenRouterModel
+    return defaultOpenAIModel
   }
 
-  if (!normalized.startsWith("openrouter/auto")) {
-    return normalized
-  }
+  const withoutAutoPrefix = normalized.toLowerCase().startsWith("openrouter/auto")
+    ? normalized.slice("openrouter/auto".length).trim()
+    : normalized
 
-  const suffix = normalized.slice("openrouter/auto".length).trim()
-  return suffix || defaultOpenRouterModel
+  const withoutOpenAIProviderPrefix = withoutAutoPrefix.replace(/^openai\//i, "").trim()
+  return withoutOpenAIProviderPrefix || defaultOpenAIModel
 }
 
-const parseOpenRouterModelList = (rawModels: string | undefined) =>
+const parseOpenAIModelList = (rawModels: string | undefined) =>
   (rawModels ?? "")
     .split(",")
     .map((model) => model.trim())
     .filter(Boolean)
 
-const dedupeOpenRouterModels = (models: string[]) =>
-  Array.from(new Set(models)).slice(0, maxOpenRouterModels)
+const dedupeOpenAIModels = (models: string[]) => Array.from(new Set(models)).slice(0, maxOpenAIModels)
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
 
-const isRetryableOpenRouterFailure = (message: string) => {
+const isRetryableOpenAIFailure = (message: string) => {
   const normalized = message.toLowerCase()
   return (
-    normalized.includes("openrouter request failed (429)") ||
-    normalized.includes("openrouter request failed (500)") ||
-    normalized.includes("openrouter request failed (502)") ||
-    normalized.includes("openrouter request failed (503)") ||
-    normalized.includes("openrouter request failed (504)") ||
+    normalized.includes("openai request failed (429)") ||
+    normalized.includes("openai request failed (500)") ||
+    normalized.includes("openai request failed (502)") ||
+    normalized.includes("openai request failed (503)") ||
+    normalized.includes("openai request failed (504)") ||
     normalized.includes("rate limit") ||
     normalized.includes("too many requests") ||
-    normalized.includes("provider returned error") ||
     normalized.includes("temporarily unavailable") ||
-    normalized.includes("overloaded")
+    normalized.includes("overloaded") ||
+    normalized.includes("server_error")
+  )
+}
+
+const isFallbackEligibleOpenAIFailure = (message: string) => {
+  const normalized = message.toLowerCase()
+  return (
+    isRetryableOpenAIFailure(message) ||
+    normalized.includes("model not found") ||
+    normalized.includes("no such model") ||
+    normalized.includes("does not exist") ||
+    normalized.includes("unsupported model") ||
+    normalized.includes("invalid model")
   )
 }
 
@@ -701,16 +694,18 @@ const getAssistantErrorMessage = ({
     return "I couldn't generate a response due to an unknown service error. Please try again."
   }
 
-  if (normalized.includes("missing openrouter_api_key")) {
-    return "I couldn't generate a response because OPENROUTER_API_KEY is missing on the server."
+  if (normalized.includes("missing openai_api_key")) {
+    return "I couldn't generate a response because OPENAI_API_KEY is missing on the server."
   }
 
   if (
+    normalized.includes("insufficient_quota") ||
     normalized.includes("insufficient credits") ||
-    normalized.includes("payment required") ||
+    normalized.includes("billing") ||
+    normalized.includes("quota") ||
     normalized.includes("402")
   ) {
-    return "I couldn't generate a response because the OpenRouter account has insufficient credits."
+    return "I couldn't generate a response because the OpenAI account has insufficient quota or billing access."
   }
 
   if (
@@ -718,7 +713,7 @@ const getAssistantErrorMessage = ({
     normalized.includes("rate limit") ||
     normalized.includes("too many requests")
   ) {
-    return "I couldn't generate a response because the OpenRouter rate limit was exceeded. Please try again shortly."
+    return "I couldn't generate a response because the OpenAI rate limit was exceeded. Please try again shortly."
   }
 
   if (
@@ -726,30 +721,23 @@ const getAssistantErrorMessage = ({
     normalized.includes("unauthorized") ||
     normalized.includes("invalid api key")
   ) {
-    return "I couldn't generate a response because the OpenRouter API key is invalid or lacks permission."
+    return "I couldn't generate a response because the OpenAI API key is invalid or lacks permission."
   }
 
   if (
-    (normalized.includes("404") && normalized.includes("openrouter request failed")) ||
+    (normalized.includes("404") && normalized.includes("openai request failed")) ||
     normalized.includes("model not found") ||
-    normalized.includes("no endpoints found")
+    normalized.includes("no such model")
   ) {
-    if (normalized.includes("data policy")) {
-      return "I couldn't generate a response because OpenRouter data policy settings are blocking this model. Use a different model or enable Free model publication in OpenRouter privacy settings."
-    }
     return `I couldn't generate a response because the configured model "${model}" is unavailable.`
   }
 
-  if (normalized.includes("provider returned error")) {
-    return "I couldn't generate a response because the selected model provider returned an upstream error. Please retry or switch OPENROUTER_MODEL."
+  if (normalized.includes("failed to parse openai response")) {
+    return "I couldn't generate a response because the OpenAI response could not be parsed."
   }
 
-  if (normalized.includes("failed to parse openrouter response")) {
-    return "I couldn't generate a response because the OpenRouter response could not be parsed."
-  }
-
-  if (normalized.includes("openrouter returned an empty response")) {
-    return "I couldn't generate a response because OpenRouter returned an empty result."
+  if (normalized.includes("openai returned an empty response")) {
+    return "I couldn't generate a response because OpenAI returned an empty result."
   }
 
   return `I couldn't generate a response because the AI service failed: ${rawMessage}`
@@ -817,17 +805,17 @@ const getSystemPrompt = (
       : "No saved dictionary entries."
 
   return [
-    `You are ${worker}. Give concise, practical answers focused on analytics work in support operations.`,
+    `You are ${worker}. Give practical answers focused on analytics work in support operations.`,
     allowClarifyingAssumptions
       ? "Ask at most one clarification question, then provide the report in the next turn after the user answers."
-      : "Do not ask clarification questions. If details are missing, make explicit assumptions and proceed with a best-effort answer.",
+      : "Do not ask clarification questions. If details are missing, make explicit assumptions and proceed.",
     "Use saved dictionary entries as defaults when relevant so the user is not asked for repeated clarifications.",
     "Dictionary entries are semantic vocabulary mappings (acronym/jargon -> meaning), not transactional preferences.",
     "Never create dictionary entries for date ranges, time windows, report period, cadence, or other one-off parameters.",
     "If the latest user message clarifies an acronym/jargon meaning, include saveSuggestion.",
     "Respond with valid JSON only (no markdown fences) using this exact schema:",
     '{"mode":"clarify"|"answer","message":"string","saveSuggestion":{"term":"string","instruction":"string","reason":"string"}|null}',
-    'Rules: mode="clarify" must ask exactly one concise question and set saveSuggestion to null.',
+    'Rules: mode="clarify" must ask exactly one question and set saveSuggestion to null.',
     'Rules: mode="answer" must provide the report and must not ask another clarification question.',
     'Rules: saveSuggestion must use semantic mapping wording like Interpret "TERM" as "MEANING".',
     "Saved dictionary entries:",
@@ -835,27 +823,46 @@ const getSystemPrompt = (
   ].join("\n")
 }
 
-const requestOpenRouter = async ({
+const getStreamingSystemPrompt = (
+  worker: string,
+  libraryEntries: LibraryEntry[],
+  allowClarifyingAssumptions: boolean
+) => {
+  const basePrompt = getSystemPrompt(worker, libraryEntries, allowClarifyingAssumptions)
+  return [
+    basePrompt,
+    "",
+    "Before your JSON response, think through the request inside <thinking> tags.",
+    "Example:",
+    "<thinking>The user wants an analysis of refund intent drivers. I should examine key categories, volume trends, and outliers over the requested period.</thinking>",
+    '{"mode":"answer","message":"...","saveSuggestion":null}',
+  ].join("\n")
+}
+
+type OpenAIStreamChunk = {
+  choices?: Array<{
+    delta?: {
+      content?: string
+    }
+    finish_reason?: string | null
+  }>
+}
+
+const requestOpenAI = async ({
   apiKey,
-  appTitle,
-  appUrl,
-  models,
+  model,
   messages,
   systemPrompt,
   signal,
 }: {
   apiKey: string
-  appTitle?: string
-  appUrl?: string
-  models: string[]
+  model: string
   messages: ModelMessage[]
   systemPrompt: string
   signal: AbortSignal
 }) => {
-  const endpoint = "https://openrouter.ai/api/v1/chat/completions"
-  const primaryModel = models[0] ?? defaultOpenRouterModel
-  const routedModels = dedupeOpenRouterModels(models)
-  const openRouterMessages = [
+  const endpoint = "https://api.openai.com/v1/chat/completions"
+  const openAIMessages = [
     {
       content: systemPrompt,
       role: "system" as const,
@@ -865,7 +872,7 @@ const requestOpenRouter = async ({
       role: message.role,
     })),
   ]
-  const openRouterMessagesWithInlineSystem = [
+  const openAIMessagesWithInlineSystem = [
     {
       content: `System instructions:\n${systemPrompt}`,
       role: "user" as const,
@@ -881,24 +888,10 @@ const requestOpenRouter = async ({
     "Content-Type": "application/json",
   }
 
-  if (appUrl) {
-    headers["HTTP-Referer"] = appUrl
-  }
-
-  if (appTitle) {
-    headers["X-Title"] = appTitle
-  }
-
-  const requestBody = {
-    messages: openRouterMessages,
-    model: primaryModel,
-    ...(routedModels.length > 1 ? { models: routedModels } : {}),
-    provider: {
-      allow_fallbacks: true,
-      require_parameters: false,
-    },
-    temperature: 0.2,
-  }
+  const buildRequestBody = (requestMessages: Array<{ role: "assistant" | "system" | "user"; content: string }>) => ({
+    messages: requestMessages,
+    model,
+  })
 
   const requestWithBody = (body: unknown) =>
     fetch(endpoint, {
@@ -909,15 +902,16 @@ const requestOpenRouter = async ({
     })
 
   let response = await requestWithBody({
-    ...requestBody,
+    ...buildRequestBody(openAIMessages),
     response_format: {
       type: "json_object",
     },
   })
 
   if (!response.ok) {
-    const errorText = getOpenRouterErrorText(await response.text())
+    const errorText = getOpenAIErrorText(await response.text())
     const normalizedErrorText = errorText.toLowerCase()
+
     const shouldRetryForCompatibility =
       response.status === 400 &&
       (normalizedErrorText.includes("response_format") ||
@@ -929,52 +923,41 @@ const requestOpenRouter = async ({
         normalizedErrorText.includes("system role"))
 
     if (!shouldRetryForCompatibility) {
-      throw new Error(`OpenRouter request failed (${response.status}): ${errorText}`)
+      throw new Error(`OpenAI request failed (${response.status}): ${errorText}`)
     }
 
-    response = await requestWithBody({
-      messages: openRouterMessagesWithInlineSystem,
-      model: primaryModel,
-      ...(routedModels.length > 1 ? { models: routedModels } : {}),
-      provider: {
-        allow_fallbacks: true,
-        require_parameters: false,
-      },
-      temperature: 0.2,
-    })
+    response = await requestWithBody(buildRequestBody(openAIMessagesWithInlineSystem))
 
     if (!response.ok) {
-      const retryErrorText = getOpenRouterErrorText(await response.text())
-      throw new Error(`OpenRouter request failed (${response.status}): ${retryErrorText}`)
+      const retryErrorText = getOpenAIErrorText(await response.text())
+      throw new Error(`OpenAI request failed (${response.status}): ${retryErrorText}`)
     }
   }
 
-  let payload: OpenRouterResponsePayload
+  let payload: OpenAIResponsePayload
   try {
-    payload = (await response.json()) as OpenRouterResponsePayload
+    payload = (await response.json()) as OpenAIResponsePayload
   } catch {
-    throw new Error("Failed to parse OpenRouter response.")
+    throw new Error("Failed to parse OpenAI response.")
   }
 
-  const rawText = getOpenRouterText(payload)
+  const rawText = getOpenAIText(payload)
   if (!rawText) {
-    throw new Error("OpenRouter returned an empty response.")
+    throw new Error("OpenAI returned an empty response.")
   }
 
   return rawText
 }
 
-const requestOpenRouterWithRetries = async (
-  args: Parameters<typeof requestOpenRouter>[0]
-) => {
+const requestOpenAIWithRetries = async (args: Parameters<typeof requestOpenAI>[0]) => {
   const maxAttempts = 2
 
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     try {
-      return await requestOpenRouter(args)
+      return await requestOpenAI(args)
     } catch (error) {
       const message = error instanceof Error ? error.message : ""
-      const shouldRetry = isRetryableOpenRouterFailure(message) && attempt < maxAttempts
+      const shouldRetry = isRetryableOpenAIFailure(message) && attempt < maxAttempts
 
       if (!shouldRetry) {
         throw error
@@ -984,7 +967,204 @@ const requestOpenRouterWithRetries = async (
     }
   }
 
-  throw new Error("OpenRouter retry flow exhausted.")
+  throw new Error("OpenAI retry flow exhausted.")
+}
+
+const requestOpenAIWithModelFallbacks = async ({
+  apiKey,
+  models,
+  messages,
+  systemPrompt,
+  signal,
+}: {
+  apiKey: string
+  models: string[]
+  messages: ModelMessage[]
+  systemPrompt: string
+  signal: AbortSignal
+}) => {
+  const modelSet = dedupeOpenAIModels(models)
+  const modelsToTry = modelSet.length > 0 ? modelSet : [defaultOpenAIModel]
+  let lastError: unknown = null
+
+  for (const model of modelsToTry) {
+    try {
+      return await requestOpenAIWithRetries({
+        apiKey,
+        messages,
+        model,
+        signal,
+        systemPrompt,
+      })
+    } catch (error) {
+      lastError = error
+      const message = error instanceof Error ? error.message : ""
+      if (!isFallbackEligibleOpenAIFailure(message)) {
+        throw error
+      }
+    }
+  }
+
+  throw lastError ?? new Error("OpenAI model fallback flow exhausted.")
+}
+
+const requestOpenAIStream = async ({
+  apiKey,
+  model,
+  messages,
+  systemPrompt,
+  signal,
+}: {
+  apiKey: string
+  model: string
+  messages: ModelMessage[]
+  systemPrompt: string
+  signal: AbortSignal
+}) => {
+  const endpoint = "https://api.openai.com/v1/chat/completions"
+  const response = await fetch(endpoint, {
+    body: JSON.stringify({
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...messages.map((m) => ({ role: m.role, content: m.content })),
+      ],
+      model,
+      stream: true,
+    }),
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    signal,
+  })
+
+  if (!response.ok) {
+    const errorText = getOpenAIErrorText(await response.text())
+    throw new Error(`OpenAI request failed (${response.status}): ${errorText}`)
+  }
+
+  if (!response.body) {
+    throw new Error("OpenAI returned no response body for streaming request.")
+  }
+
+  return response
+}
+
+const createStreamingResponse = (
+  openAIResponse: Response,
+  messages: ModelMessage[],
+  libraryEntries: LibraryEntry[],
+  model: string
+) => {
+  const encoder = new TextEncoder()
+
+  const readable = new ReadableStream({
+    async start(controller) {
+      const reader = openAIResponse.body!.getReader()
+      const decoder = new TextDecoder()
+      let sseBuffer = ""
+      let fullText = ""
+      let reasoningEmitted = ""
+      let state: "pre_thinking" | "thinking" | "json" = "pre_thinking"
+
+      const emit = (event: Record<string, unknown>) => {
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`))
+      }
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          sseBuffer += decoder.decode(value, { stream: true })
+
+          while (true) {
+            const eventEnd = sseBuffer.indexOf("\n\n")
+            if (eventEnd === -1) break
+
+            const rawEvent = sseBuffer.slice(0, eventEnd)
+            sseBuffer = sseBuffer.slice(eventEnd + 2)
+
+            for (const line of rawEvent.split("\n")) {
+              if (!line.startsWith("data: ")) continue
+              const data = line.slice(6).trim()
+              if (data === "[DONE]") continue
+
+              let content = ""
+              try {
+                const chunk = JSON.parse(data) as OpenAIStreamChunk
+                content = chunk.choices?.[0]?.delta?.content ?? ""
+              } catch {
+                continue
+              }
+
+              if (!content) continue
+              fullText += content
+
+              if (state === "pre_thinking") {
+                if (fullText.includes("<thinking>")) {
+                  state = "thinking"
+                  const afterTag = fullText.split("<thinking>").slice(1).join("")
+                  if (afterTag && !afterTag.includes("</thinking>")) {
+                    reasoningEmitted = afterTag
+                    emit({ type: "reasoning", content: afterTag })
+                  }
+                } else if (fullText.length > 40 && !fullText.trimStart().startsWith("<")) {
+                  state = "json"
+                }
+              } else if (state === "thinking") {
+                if (fullText.includes("</thinking>")) {
+                  const thinkingBlock =
+                    fullText.split("<thinking>").slice(1).join("").split("</thinking>")[0] ?? ""
+                  const newContent = thinkingBlock.slice(reasoningEmitted.length)
+                  if (newContent) {
+                    emit({ type: "reasoning", content: newContent })
+                  }
+                  state = "json"
+                } else {
+                  const thinkingBlock = fullText.split("<thinking>").slice(1).join("")
+                  const newContent = thinkingBlock.slice(reasoningEmitted.length)
+                  if (newContent) {
+                    reasoningEmitted += newContent
+                    emit({ type: "reasoning", content: newContent })
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        let jsonPart = fullText
+        if (fullText.includes("</thinking>")) {
+          jsonPart = fullText.split("</thinking>").slice(1).join("")
+        }
+
+        const parsed = parseAssistantTurn(jsonPart.trim(), messages, libraryEntries)
+        emit({ type: "text", content: parsed.message })
+        emit({
+          type: "finish",
+          mode: parsed.mode,
+          saveSuggestion: parsed.mode === "answer" ? parsed.saveSuggestion : null,
+        })
+      } catch (error) {
+        emit({
+          type: "error",
+          message: getAssistantErrorMessage({ error, model }),
+        })
+      } finally {
+        controller.close()
+      }
+    },
+  })
+
+  return new Response(readable, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    },
+  })
 }
 
 export async function POST(request: Request) {
@@ -1019,32 +1199,32 @@ export async function POST(request: Request) {
     return NextResponse.json(deterministicClarification)
   }
 
-  const apiKey = process.env.OPENROUTER_API_KEY?.trim()
-  const primaryModel = resolveOpenRouterModel(process.env.OPENROUTER_MODEL)
-  const envFallbackModels = parseOpenRouterModelList(process.env.OPENROUTER_FALLBACK_MODELS)
+  const apiKey = process.env.OPENAI_API_KEY?.trim()
+  const primaryModel = normalizeOpenAIModel(process.env.OPENAI_MODEL ?? process.env.OPENROUTER_MODEL)
+  const envFallbackModels = parseOpenAIModelList(
+    process.env.OPENAI_FALLBACK_MODELS ?? process.env.OPENROUTER_FALLBACK_MODELS
+  )
   const fallbackModels =
     envFallbackModels.length > 0
-      ? envFallbackModels.map((model) => resolveOpenRouterModel(model))
-      : defaultOpenRouterFallbackModels
-  const models = dedupeOpenRouterModels([primaryModel, ...fallbackModels])
-  const model = models[0] ?? defaultOpenRouterModel
-  const appUrl = process.env.OPENROUTER_APP_URL?.trim()
-  const appTitle = process.env.OPENROUTER_APP_TITLE?.trim()
+      ? envFallbackModels.map((model) => normalizeOpenAIModel(model))
+      : defaultOpenAIFallbackModels
+  const models = dedupeOpenAIModels([primaryModel, ...fallbackModels])
+  const model = models[0] ?? defaultOpenAIModel
   const systemPrompt = getSystemPrompt(worker, libraryEntries, allowClarifyingAssumptions)
 
   if (!apiKey) {
     return NextResponse.json(
       toAssistantErrorTurn(
-        "I couldn't generate a response because OPENROUTER_API_KEY is missing on the server."
+        "I couldn't generate a response because OPENAI_API_KEY is missing on the server."
       )
     )
   }
 
   try {
     const forceAnswer = shouldForceAnswerAfterClarification(messages)
-    let assistantTurn: AssistantTurnResponse
 
     if (forceAnswer) {
+      let assistantTurn: AssistantTurnResponse
       const strictAnswerPrompt = [
         systemPrompt,
         "You already asked a clarification question and the user answered.",
@@ -1054,10 +1234,8 @@ export async function POST(request: Request) {
         "Do not just restate the user's last sentence.",
       ].join("\n")
 
-      const forcedRawText = await requestOpenRouterWithRetries({
+      const forcedRawText = await requestOpenAIWithModelFallbacks({
         apiKey,
-        appTitle,
-        appUrl,
         messages,
         models,
         signal: request.signal,
@@ -1071,7 +1249,7 @@ export async function POST(request: Request) {
         isLikelyQuestion(assistantTurn.message) ||
         isWeakAnswer(assistantTurn.message, messages)
 
-      if (needsEnhancedAnswer) {
+      if (enableQualityRetry && needsEnhancedAnswer) {
         const enhancedAnswerPrompt = [
           strictAnswerPrompt,
           "Your previous answer was too brief.",
@@ -1079,10 +1257,8 @@ export async function POST(request: Request) {
           "Use concrete details inferred from user context and worker role.",
         ].join("\n")
 
-        const enhancedRawText = await requestOpenRouterWithRetries({
+        const enhancedRawText = await requestOpenAIWithModelFallbacks({
           apiKey,
-          appTitle,
-          appUrl,
           messages,
           models,
           signal: request.signal,
@@ -1104,23 +1280,38 @@ export async function POST(request: Request) {
             assistantTurn.saveSuggestion ?? buildFallbackSaveSuggestion(messages, libraryEntries),
         }
       }
+      return NextResponse.json(assistantTurn)
     } else {
-      const rawText = await requestOpenRouterWithRetries({
-        apiKey,
-        appTitle,
-        appUrl,
-        messages,
-        models,
-        signal: request.signal,
-        systemPrompt,
-      })
+      try {
+        const streamingPrompt = getStreamingSystemPrompt(
+          worker,
+          libraryEntries,
+          allowClarifyingAssumptions
+        )
+        const openAIResponse = await requestOpenAIStream({
+          apiKey,
+          model,
+          messages,
+          systemPrompt: streamingPrompt,
+          signal: request.signal,
+        })
+        return createStreamingResponse(openAIResponse, messages, libraryEntries, model)
+      } catch (streamError) {
+        console.error("[ai-workers-codex-crazy] Streaming failed, falling back to non-streaming.", streamError)
+        const rawText = await requestOpenAIWithModelFallbacks({
+          apiKey,
+          messages,
+          models,
+          signal: request.signal,
+          systemPrompt,
+        })
 
-      assistantTurn = parseAssistantTurn(rawText, messages, libraryEntries)
+        const assistantTurn = parseAssistantTurn(rawText, messages, libraryEntries)
+        return NextResponse.json(assistantTurn)
+      }
     }
-
-    return NextResponse.json(assistantTurn)
   } catch (error) {
-    console.error("[ai-workers-codex-crazy] OpenRouter request failed.", error)
+    console.error("[ai-workers-codex-crazy] OpenAI request failed.", error)
     return NextResponse.json(
       toAssistantErrorTurn(
         getAssistantErrorMessage({
