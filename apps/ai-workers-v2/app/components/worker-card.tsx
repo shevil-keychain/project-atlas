@@ -3,16 +3,6 @@
 import { cn } from "@level/ui/lib/utils";
 import { Badge } from "@level/ui/components/ui/badge";
 import { Stars01 } from "@level/ui/components/icons";
-import {
-  BarChart3,
-  FileSearch,
-  GraduationCap,
-  ClipboardCheck,
-  Users,
-  Megaphone,
-  Package,
-} from "lucide-react";
-import type { ReactNode } from "react";
 
 export interface Worker {
   id: string;
@@ -66,14 +56,14 @@ export const workers: Worker[] = [
   },
 ];
 
-const workerIcons: Record<string, ReactNode> = {
-  "exec-summary": <BarChart3 size={18} />,
-  "search-analyst": <FileSearch size={18} />,
-  coach: <GraduationCap size={18} />,
-  "qa-analyst": <ClipboardCheck size={18} />,
-  "team-analyst": <Users size={18} />,
-  "voc-analyst": <Megaphone size={18} />,
-  "product-gaps": <Package size={18} />,
+const workerIconPaths: Record<string, string> = {
+  "exec-summary": "/worker-icons/executive-summary.png",
+  "search-analyst": "/worker-icons/search-analyst.png",
+  coach: "/worker-icons/coach.png",
+  "qa-analyst": "/worker-icons/qa-analyst.png",
+  "team-analyst": "/worker-icons/team-analyst.png",
+  "voc-analyst": "/worker-icons/voc-analyst.png",
+  "product-gaps": "/worker-icons/product-gaps.png",
 };
 
 const categoryColors: Record<string, "primary" | "blue" | "purple"> = {
@@ -115,7 +105,15 @@ export function WorkerCard({
               : "bg-stone-100 text-stone-500"
           )}
         >
-          {workerIcons[worker.id] || <Stars01 size={18} />}
+          {workerIconPaths[worker.id] ? (
+            <img
+              src={workerIconPaths[worker.id]}
+              alt={`${worker.name} icon`}
+              className="h-20 w-20 object-contain"
+            />
+          ) : (
+            <Stars01 size={18} />
+          )}
         </div>
         <span className="text-12 font-semibold text-stone-800 leading-tight">
           {worker.name}
@@ -143,7 +141,15 @@ export function WorkerCard({
             : "bg-stone-100 text-stone-500"
         )}
       >
-        {workerIcons[worker.id] || <Stars01 size={18} />}
+        {workerIconPaths[worker.id] ? (
+          <img
+            src={workerIconPaths[worker.id]}
+            alt={`${worker.name} icon`}
+            className="h-20 w-20 object-contain"
+          />
+        ) : (
+          <Stars01 size={18} />
+        )}
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-8">

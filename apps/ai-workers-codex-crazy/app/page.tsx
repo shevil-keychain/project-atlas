@@ -1,6 +1,6 @@
 "use client"
 
-import { type MouseEvent, type ReactNode, useState } from "react"
+import { type MouseEvent, type ReactNode, useEffect, useRef, useState } from "react"
 import { MainNav } from "@level/ui/components/patterns/main-nav"
 import { TopBar } from "@level/ui/components/patterns/top-bar"
 import { Button } from "@level/ui/components/ui/button"
@@ -50,10 +50,23 @@ const threads = [
 ]
 
 const workerAlternativeRows = [
-  ["Coach", "QA analyst", "VoC analyst", "Team analyst"],
+  ["Search analyst", "Coach", "QA analyst", "VoC analyst", "Team analyst"],
   ["Resolution insights worker", "Sentiment insights worker", "iCSAT insights worker"],
   ["Executive summary worker", "Product gaps analyst"],
 ]
+
+const workerIconByLabel: Record<string, string> = {
+  "Search analyst": "/worker-icons/search-analyst.png",
+  Coach: "/worker-icons/coach.png",
+  "QA analyst": "/worker-icons/qa-analyst.png",
+  "VoC analyst": "/worker-icons/voc-analyst.png",
+  "Team analyst": "/worker-icons/team-analyst.png",
+  "Resolution insights worker": "/worker-icons/resolution-insights.png",
+  "Sentiment insights worker": "/worker-icons/sentiment-insights.png",
+  "iCSAT insights worker": "/worker-icons/icsat-insights.png",
+  "Executive summary worker": "/worker-icons/executive-summary.png",
+  "Product gaps analyst": "/worker-icons/product-gaps.png",
+}
 
 function ThreadRow({ title }: { title: string }) {
   return (
@@ -87,9 +100,13 @@ function RailActionButton({
 }
 
 export default function Page() {
+  const workerTransitionDurationMs = 350
   const [isRailCollapsed, setIsRailCollapsed] = useState(false)
   const [isCursorInCanvas, setIsCursorInCanvas] = useState(false)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
+  const [activeWorker, setActiveWorker] = useState("Search analyst")
+  const [isWorkerContentVisible, setIsWorkerContentVisible] = useState(true)
+  const workerSwapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleCanvasPointerMove = (event: MouseEvent<HTMLElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -98,6 +115,39 @@ export default function Page() {
       y: event.clientY - rect.top,
     })
   }
+
+  useEffect(() => {
+    return () => {
+      if (workerSwapTimerRef.current) {
+        clearTimeout(workerSwapTimerRef.current)
+      }
+    }
+  }, [])
+
+  const handleWorkerSelect = (worker: string) => {
+    if (worker === activeWorker) {
+      return
+    }
+
+    if (workerSwapTimerRef.current) {
+      clearTimeout(workerSwapTimerRef.current)
+    }
+
+    setIsWorkerContentVisible(false)
+    workerSwapTimerRef.current = setTimeout(() => {
+      setActiveWorker(worker)
+      setIsWorkerContentVisible(true)
+      workerSwapTimerRef.current = null
+    }, workerTransitionDurationMs)
+  }
+
+  const getWorkerRevealClass = (visibleDelayClass: string) =>
+    cn(
+      "transition-all duration-300 ease-out",
+      isWorkerContentVisible
+        ? `opacity-100 translate-y-0 ${visibleDelayClass}`
+        : "opacity-0 translate-y-8 delay-0"
+    )
 
   return (
     <div className="flex h-screen bg-surface-page">
@@ -175,7 +225,7 @@ export default function Page() {
               onMouseLeave={() => setIsCursorInCanvas(false)}
             >
               <div className="pointer-events-none absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-b from-surface-page via-surface-page to-surface-warning-subtle opacity-100" />
+                <div className="absolute inset-0 bg-surface-page opacity-100" />
 
                 <div
                   className={cn(
@@ -186,45 +236,59 @@ export default function Page() {
                 />
               </div>
 
-              <div className="relative z-10 flex flex-1 items-center justify-center px-24">
+              <div
+                className={cn(
+                  "relative z-10 flex flex-1 items-center justify-center px-24",
+                  !isWorkerContentVisible && "pointer-events-none"
+                )}
+              >
                 <div className="flex w-full max-w-720 flex-col items-center gap-12 text-center">
-                  <div className="flex h-48 w-48 items-center justify-center rounded-full border border-border-default bg-surface-card">
-                    <img src="/ai-worker-avatar.svg" alt="AI worker avatar" className="h-36 w-36 rounded-full" />
-                  </div>
-                  <div className="flex flex-col items-center gap-4">
-                    <p className="text-18 text-text-tertiary">Start a new chat with</p>
-                    <p className="text-24 font-semibold text-text-primary">Search analyst</p>
+                  <img
+                    src={workerIconByLabel[activeWorker] ?? "/ai-worker-avatar.svg"}
+                    alt={`${activeWorker} icon`}
+                    className={cn("h-48 w-48 object-contain", getWorkerRevealClass("delay-0"))}
+                  />
+                  <div className={cn("flex flex-col items-center gap-4", getWorkerRevealClass("delay-100"))}>
+                    <p className="text-24 font-bold text-text-tertiary">Start a new chat with</p>
+                    <p className="text-24 font-bold text-text-primary">{activeWorker}</p>
                   </div>
 
-                  <p className="mt-40 mb-16 text-14 text-text-tertiary">Or switch to</p>
+                  <p className={cn("mt-40 mb-16 text-14 font-medium text-text-tertiary", getWorkerRevealClass("delay-200"))}>Or switch to</p>
 
-                  <div className="flex w-full flex-col items-center gap-8 text-left">
+                  <div className={cn("flex w-full flex-col items-center gap-y-8 text-left", getWorkerRevealClass("delay-300"))}>
                     {workerAlternativeRows.map((row, rowIndex) => (
-                      <div key={`worker-row-${rowIndex}`} className="flex flex-wrap items-center justify-center gap-8">
+                      <div key={`worker-row-${rowIndex}`} className="flex flex-wrap items-center justify-center gap-x-8 gap-y-8">
                         {row.map((worker) => (
-                          <div
+                          <Button
                             key={worker}
-                            className="w-fit shrink-0 rounded-full border border-border-subtle bg-surface-card/60 py-10 pl-12 pr-16 backdrop-blur-md"
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleWorkerSelect(worker)}
+                            className={cn(
+                              "h-auto shrink-0 rounded-full border py-8 pl-10 pr-12 backdrop-blur-md",
+                              worker === activeWorker
+                                ? "border-focus-ring bg-surface-brand-subtle hover:bg-surface-brand-subtle"
+                                : "border-border-subtle bg-surface-card/60 hover:bg-surface-card/60",
+                            )}
                           >
-                            <div className="flex items-center gap-8">
+                            <span className="flex items-center gap-8">
                               <img
-                                src="/ai-worker-avatar.svg"
-                                alt={`${worker} avatar`}
-                                className="h-20 w-20 rounded-full"
+                                src={workerIconByLabel[worker] ?? "/ai-worker-avatar.svg"}
+                                alt={`${worker} icon`}
+                                className="h-16 w-16 object-contain"
                               />
-                              <div>
-                                <p className="whitespace-nowrap text-14 font-semibold text-text-secondary">
-                                  {worker}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
+                              <span className="whitespace-nowrap text-12 font-medium text-text-primary">
+                                {worker}
+                              </span>
+                            </span>
+                          </Button>
                         ))}
                       </div>
                     ))}
                   </div>
 
-                  <Button variant="ghost" size="sm" className="mt-12">
+                  <Button variant="ghost" size="sm" className={cn("mt-12", getWorkerRevealClass("delay-500"))}>
                     Browse all workers
                   </Button>
                 </div>
@@ -233,7 +297,7 @@ export default function Page() {
               <div className="relative z-10 px-24 pb-40">
                 <div className="mx-auto mt-12 w-full max-w-720 rounded-xl border border-border-default bg-surface-card px-12 py-8 shadow-md">
                   <Textarea
-                    placeholder="Ask Codex anything, @ to add files, / for commands"
+                    placeholder={`Ask ${activeWorker} anything, @ to add files, / for commands`}
                     className="h-72 min-h-72 resize-none border-none bg-transparent px-0 py-8 text-14 text-text-primary placeholder:text-text-tertiary focus:border-none focus:shadow-none hover:border-none"
                   />
 
