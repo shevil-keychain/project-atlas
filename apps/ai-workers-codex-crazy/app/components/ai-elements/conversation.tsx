@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { forwardRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,13 +10,18 @@ import { useCallback } from "react";
 
 export type ConversationProps = ComponentProps<"div">;
 
-export const Conversation = ({ className, ...props }: ConversationProps) => (
-  <div
-    className={cn("relative flex-1 overflow-y-auto", className)}
-    role="log"
-    {...props}
-  />
+export const Conversation = forwardRef<HTMLDivElement, ConversationProps>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn("relative flex-1 overflow-y-auto", className)}
+      role="log"
+      {...props}
+    />
+  )
 );
+
+Conversation.displayName = "Conversation";
 
 export type ConversationContentProps = ComponentProps<"div">;
 

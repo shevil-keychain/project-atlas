@@ -1,6 +1,6 @@
 "use client"
 
-import { type MouseEvent, type ReactNode, useEffect, useMemo, useRef, useState } from "react"
+import { type MouseEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { MainNav } from "@level/ui/components/patterns/main-nav"
 import { TopBar } from "@level/ui/components/patterns/top-bar"
 import { Button } from "@level/ui/components/ui/button"
@@ -380,6 +380,22 @@ export default function Page() {
 
   const workerSwapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const assistantAbortControllerRef = useRef<AbortController | null>(null)
+  const conversationRef = useRef<HTMLDivElement | null>(null)
+
+  const scrollConversationToBottom = useCallback(() => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (!conversationRef.current) {
+          return
+        }
+
+        conversationRef.current.scrollTo({
+          top: conversationRef.current.scrollHeight,
+          behavior: "smooth",
+        })
+      })
+    })
+  }, [])
 
   const selectedThread = useMemo(
     () => recentThreads.find((thread) => thread.id === selectedThreadId) ?? null,
@@ -639,6 +655,7 @@ export default function Page() {
     setSelectedThreadId(newThreadId)
     setPromptValue("")
     setChatPromptValue("")
+    scrollConversationToBottom()
     void requestAssistantReply({
       threadId: newThreadId,
       worker: threadWorker,
@@ -690,6 +707,7 @@ export default function Page() {
     })
 
     setChatPromptValue("")
+    scrollConversationToBottom()
     void requestAssistantReply({
       threadId: targetThreadId,
       worker: threadWorker,
@@ -881,7 +899,7 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <Conversation className="min-h-0 flex-1">
+                  <Conversation ref={conversationRef} className="min-h-0 flex-1">
                     <ConversationContent className="mx-auto w-full max-w-720 gap-32 py-24">
                       {selectedThread.messages.map((message) => (
                         <Message key={message.id} from={message.role}>
