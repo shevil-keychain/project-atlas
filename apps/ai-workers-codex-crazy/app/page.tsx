@@ -352,7 +352,7 @@ function DictionarySavePrompt({
 
 function ThinkingMessage() {
   return (
-    <Shimmer as="p" className="text-14 font-semibold" duration={3}>
+    <Shimmer as="p" className="text-14 font-semibold" duration={4} spread={2}>
       Thinking
     </Shimmer>
   )

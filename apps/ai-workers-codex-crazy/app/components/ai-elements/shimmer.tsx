@@ -1,45 +1,76 @@
 "use client"
 
-import { cn } from "@level/ui/lib/utils"
-import { type CSSProperties, memo } from "react"
+import type { MotionProps } from "motion/react"
+import type { CSSProperties, ElementType, JSX } from "react"
 
-type ShimmerElement = "div" | "p" | "span"
+import { cn } from "@level/ui/lib/utils"
+import { motion } from "motion/react"
+import { memo, useMemo } from "react"
+
+type MotionHTMLProps = MotionProps & Record<string, unknown>
+
+const motionComponentCache = new Map<
+  keyof JSX.IntrinsicElements,
+  React.ComponentType<MotionHTMLProps>
+>()
+
+const getMotionComponent = (element: keyof JSX.IntrinsicElements) => {
+  let component = motionComponentCache.get(element)
+  if (!component) {
+    component = motion.create(element)
+    motionComponentCache.set(element, component)
+  }
+  return component
+}
 
 export type TextShimmerProps = {
   children: string
-  as?: ShimmerElement
+  as?: ElementType
   className?: string
   duration?: number
+  spread?: number
 }
 
 const ShimmerComponent = ({
   children,
   as: Component = "p",
   className,
-  duration = 3,
+  duration = 2,
+  spread = 2,
 }: TextShimmerProps) => {
+  const MotionComponent = getMotionComponent(
+    Component as keyof JSX.IntrinsicElements
+  )
+
+  const dynamicSpread = useMemo(
+    () => (children?.length ?? 0) * spread,
+    [children, spread]
+  )
+
   return (
-    <>
-      <style>{`
-        @keyframes text-shimmer {
-          from { background-position: 0% center; }
-          to { background-position: 100% center; }
-        }
-      `}</style>
-      <Component
-        className={cn("inline-block bg-clip-text text-transparent", className)}
-        style={
-          {
-            backgroundImage:
-              "linear-gradient(90deg, var(--color-text-tertiary) 0%, var(--color-text-primary) 50%, var(--color-text-tertiary) 100%)",
-            backgroundSize: "200% 100%",
-            animation: `text-shimmer ${duration}s ease-in-out infinite alternate`,
-          } as CSSProperties
-        }
-      >
-        {children}
-      </Component>
-    </>
+    <MotionComponent
+      animate={{ backgroundPosition: "0% center" }}
+      className={cn(
+        "relative inline-block bg-[length:250%_100%,auto] bg-clip-text text-transparent",
+        "[--bg:linear-gradient(90deg,#0000_calc(50%-var(--spread)),var(--color-text-primary),#0000_calc(50%+var(--spread)))] [background-repeat:no-repeat,padding-box]",
+        className
+      )}
+      initial={{ backgroundPosition: "100% center" }}
+      style={
+        {
+          "--spread": `${dynamicSpread}px`,
+          backgroundImage:
+            "var(--bg), linear-gradient(var(--color-text-tertiary), var(--color-text-tertiary))",
+        } as CSSProperties
+      }
+      transition={{
+        duration,
+        ease: "linear",
+        repeat: Number.POSITIVE_INFINITY,
+      }}
+    >
+      {children}
+    </MotionComponent>
   )
 }
 
