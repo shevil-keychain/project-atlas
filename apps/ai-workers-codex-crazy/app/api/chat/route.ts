@@ -657,23 +657,6 @@ const parseAssistantTurn = (
   )
 }
 
-const buildDeterministicFinalAnswer = (messages: ModelMessage[]) => {
-  const firstUserMessage = messages.find((message) => message.role === "user")?.content.trim() || "your request"
-  const latestUserMessage = getLatestUserMessage(messages)?.content.trim() || "your clarification"
-
-  return [
-    "Thanks for the clarification. I generated a report using the details provided.",
-    "",
-    `- Request: ${firstUserMessage}`,
-    `- Clarification applied: ${latestUserMessage}`,
-    "",
-    "### Report",
-    "1. Key signals and trends relevant to your request.",
-    "2. Notable outliers and areas requiring follow-up.",
-    "3. Recommended actions for the next cycle.",
-  ].join("\n")
-}
-
 const toAssistantErrorTurn = (message: string): AssistantTurnResponse => ({
   mode: "answer",
   message,
@@ -1268,18 +1251,6 @@ export async function POST(request: Request) {
         assistantTurn = parseAssistantTurn(enhancedRawText, messages, libraryEntries)
       }
 
-      if (
-        assistantTurn.mode === "clarify" ||
-        isLikelyQuestion(assistantTurn.message) ||
-        isWeakAnswer(assistantTurn.message, messages)
-      ) {
-        assistantTurn = {
-          mode: "answer",
-          message: buildDeterministicFinalAnswer(messages),
-          saveSuggestion:
-            assistantTurn.saveSuggestion ?? buildFallbackSaveSuggestion(messages, libraryEntries),
-        }
-      }
       return NextResponse.json(assistantTurn)
     } else {
       try {
