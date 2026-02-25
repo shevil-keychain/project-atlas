@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "pnpm run sync:mock-db-data",
+    "predev": "pnpm run sync:mock-db-data:if-available",
     "dev": "next dev --port 3011",
-    "prebuild": "pnpm run sync:mock-db-data",
+    "prebuild": "pnpm run sync:mock-db-data:if-available",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "sync:mock-db-data": "node mock-db/scripts/export-activity-data.mjs",
+    "sync:mock-db-data:if-available": "sh -c 'if command -v sqlite3 >/dev/null 2>&1; then pnpm run sync:mock-db-data; else echo \"sqlite3 not found; using committed mock-db-activity.ts\"; fi'",
     "db:inspect": "node mock-db/scripts/inspect-db.mjs",
     "db:verify-sync": "node mock-db/scripts/verify-ui-sync.mjs"
   },
