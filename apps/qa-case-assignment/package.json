@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "pnpm run sync:mock-db-data",
     "dev": "next dev --port 3011",
+    "prebuild": "pnpm run sync:mock-db-data",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "sync:mock-db-data": "node mock-db/scripts/export-activity-data.mjs"
+    "sync:mock-db-data": "node mock-db/scripts/export-activity-data.mjs",
+    "db:inspect": "node mock-db/scripts/inspect-db.mjs",
+    "db:verify-sync": "node mock-db/scripts/verify-ui-sync.mjs"
   },
   "dependencies": {
     "@level/ui": "workspace:*",

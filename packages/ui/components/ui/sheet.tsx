@@ -69,10 +69,12 @@ SheetContent.displayName = "SheetContent"
 function SheetHeader({
   children,
   description,
+  actions,
   className,
 }: {
   children: React.ReactNode
   description?: string
+  actions?: React.ReactNode
   className?: string
 }) {
   const { isScrollable } = React.useContext(SheetScrollContext)
@@ -94,9 +96,12 @@ function SheetHeader({
           </Dialog.Description>
         )}
       </div>
-      <Dialog.Close className="size-32 rounded-lg hover:bg-stone-100 flex items-center justify-center">
-        <X className="size-20" />
-      </Dialog.Close>
+      <div className="flex items-center gap-12">
+        {actions}
+        <Dialog.Close className="size-32 rounded-lg hover:bg-stone-100 flex items-center justify-center">
+          <X className="size-20" />
+        </Dialog.Close>
+      </div>
     </div>
   )
 }

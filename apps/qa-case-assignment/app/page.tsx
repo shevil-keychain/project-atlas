@@ -79,7 +79,7 @@ import {
 import { ToastContainer } from "@level/ui/components/ui/toast-container"
 import { toast } from "@level/ui/hooks/use-toast"
 import { cn } from "@level/ui/lib/utils"
-import { AlertTriangle, CheckCircle2, ChevronLeft, Info } from "lucide-react"
+import { ChevronLeft, ExternalLink } from "lucide-react"
 import {
   mockDbActivityByTab,
   mockDbOrderedActivityTabs,
@@ -119,10 +119,15 @@ type WeekdayValue =
 
 type IssueCodeLabel =
   | "Agent not in any rule"
+  | "Insufficient matching conversations"
+  | "Evaluators' workload limit reached"
+  | "Rule execution failed"
   | "No conversations in period"
   | "Conversations didn't match filters"
   | "All evaluators at capacity"
   | "Evaluator unavailable"
+  | "Workload limit reached"
+  | `Time off for ${number} days in the week`
   | "Rule did not execute"
   | "Rule execution interrupted"
   | "Quota met by another rule"
@@ -164,7 +169,8 @@ type CoverageIssueType =
 type CoverageIssue = {
   id: string
   agentName: string
-  teamName: string
+  teamName?: string
+  teamNames?: string[]
   issueType: CoverageIssueType
   ruleId?: string
   ruleName?: string
@@ -211,6 +217,7 @@ type RuleEvaluatorRow = {
 
 type RuleSheetDetails = {
   panel: "rule"
+  ruleId: string
   title: string
   subtitle: string
   status: ActivityRuleStatus
@@ -225,7 +232,7 @@ type RuleSheetDetails = {
   activeEvaluators: RuleEvaluatorRow[]
 }
 
-type MockDbRuleSheetData = Omit<RuleSheetDetails, "panel" | "title" | "subtitle">
+type MockDbRuleSheetData = Omit<RuleSheetDetails, "panel" | "ruleId" | "title" | "subtitle">
 
 type RunSheetView = CoverageSheetDetails | RuleSheetDetails
 
@@ -260,9 +267,15 @@ const failedRuleNotes = [
   "Execution missed target due to cascading eligibility conflicts",
 ]
 
-const issueCodeDescriptions: Record<IssueCodeLabel, string> = {
+const issueCodeDescriptions: Record<string, string> = {
   "Agent not in any rule":
     "This agent isn't included in any active assignment rule — manually or through dynamic selection. Add them to a rule to ensure QA coverage.",
+  "Insufficient matching conversations":
+    "No eligible conversations matched this rule during the run window.",
+  "Evaluators' workload limit reached":
+    "Evaluator workload or availability constraints blocked assignment.",
+  "Rule execution failed":
+    "The rule did not complete successfully in this run.",
   "No conversations in period":
     "This agent had zero conversations during the sampling period. They may have been off or on leave.",
   "Conversations didn't match filters":
@@ -271,12 +284,30 @@ const issueCodeDescriptions: Record<IssueCodeLabel, string> = {
     "Eligible conversations existed for this agent, but every evaluator in the rule had already reached their workload limit.",
   "Evaluator unavailable":
     "This evaluator was marked as unavailable or on leave when the rule ran.",
+  "Workload limit reached":
+    "This evaluator has reached the workload limit configured for the rule in this run.",
   "Rule did not execute":
     "The rule was scheduled but did not run due to a system error.",
   "Rule execution interrupted":
     "The rule started but timed out before processing all agents.",
   "Quota met by another rule":
     "This agent's QA goal was already met by a different rule. Not a failure — they received QA.",
+}
+
+function getIssueCodeDescription(issueCodeLabel: string) {
+  const staticDescription = issueCodeDescriptions[issueCodeLabel]
+  if (staticDescription) {
+    return staticDescription
+  }
+
+  const timeOffMatch = /^Time off for (\d+) days? in the week$/i.exec(issueCodeLabel)
+  if (timeOffMatch?.[1]) {
+    const parsedDays = Number.parseInt(timeOffMatch[1], 10)
+    const dayCount = Number.isFinite(parsedDays) && parsedDays > 0 ? parsedDays : 1
+    return `This evaluator is planned out for ${dayCount} ${dayCount === 1 ? "day" : "days"} in this week.`
+  }
+
+  return "No additional details available."
 }
 
 const partialIssueCodes: IssueCodeLabel[] = [
@@ -595,6 +626,90 @@ function getStatusTooltip(status: ActivityRuleStatus) {
   return "Not covered"
 }
 
+function getCompactLoadValue(loadText: string) {
+  const normalizedValue = loadText.replace(/\s+assigned\b/gi, "").trim()
+  const [numerator] = normalizedValue.split("/")
+  return numerator?.trim() || normalizedValue
+}
+
+function getAssignmentDisplayParts(assignmentText?: string) {
+  const ensureAssignmentFraction = (value: string) => {
+    const normalized = value.trim()
+
+    if (!normalized) {
+      return "0/1"
+    }
+
+    if (normalized.includes("/")) {
+      return normalized
+    }
+
+    if (/^\d+$/.test(normalized)) {
+      return `${normalized}/1`
+    }
+
+    return normalized
+  }
+
+  if (!assignmentText) {
+    return {
+      count: "0/1",
+      note: undefined,
+    }
+  }
+
+  const normalizedValue = assignmentText.replace(/\s+assigned\b/gi, "").trim()
+  const viaSplit = normalizedValue.split(" via ")
+
+  if (viaSplit.length > 1) {
+    return {
+      count: ensureAssignmentFraction(viaSplit[0]?.trim() || "0/1"),
+      note: `via ${viaSplit.slice(1).join(" via ").trim()}`,
+    }
+  }
+
+  return {
+    count: ensureAssignmentFraction(normalizedValue || "0/1"),
+    note: undefined,
+  }
+}
+
+function getViaRuleFromAssignmentText(assignmentText?: string) {
+  if (!assignmentText) {
+    return undefined
+  }
+
+  const viaMatch = assignmentText.match(/\bvia\b\s+(.+)$/i)
+  if (!viaMatch?.[1]) {
+    return undefined
+  }
+
+  return viaMatch[1].replace(/^["']|["']$/g, "").trim()
+}
+
+function isGenericViaRuleName(ruleName?: string) {
+  if (!ruleName) {
+    return true
+  }
+
+  const normalizedRuleName = ruleName.trim().toLowerCase()
+  return normalizedRuleName === "another rule"
+}
+
+function getTimeOffDaysFromText(text?: string) {
+  if (!text) {
+    return 1
+  }
+
+  const dayMatch = text.match(/(\d+)\s+days?/i)
+  if (!dayMatch?.[1]) {
+    return 1
+  }
+
+  const parsedDays = Number.parseInt(dayMatch[1], 10)
+  return Number.isFinite(parsedDays) && parsedDays > 0 ? parsedDays : 1
+}
+
 function parseAssignmentProgress(assignments: string) {
   const [completedPart, targetPart] = assignments.split("/")
   const completed = Number.parseInt(completedPart ?? "0", 10)
@@ -718,6 +833,15 @@ function getCoverageAgentTeam(index: number) {
   return coverageAgentTeams[index % coverageAgentTeams.length]
 }
 
+function getCoverageAgentTeams(index: number) {
+  const teamCount = 1 + (index % 4)
+  const startIndex = (index * 2) % coverageAgentTeams.length
+  return Array.from({ length: teamCount }, (_, offset) => {
+    const teamIndex = (startIndex + offset) % coverageAgentTeams.length
+    return coverageAgentTeams[teamIndex]
+  })
+}
+
 function getEvaluatorDisplayName(index: number) {
   const firstName = evaluatorFirstNames[index % evaluatorFirstNames.length]
   const lastName = evaluatorLastNames[index % evaluatorLastNames.length]
@@ -743,14 +867,14 @@ function getPersonDisplayName(name: string) {
 
 function getCoverageIssueLabel(issueType: CoverageIssueType) {
   if (issueType === "not_in_rule") {
-    return "Not in any rule"
+    return "Agent not in any rule"
   }
 
   if (issueType === "all_evaluators_capacity") {
-    return "All evaluators at capacity"
+    return "Evaluators' workload limit reached"
   }
 
-  return "No matching conversations"
+  return "Insufficient matching conversations"
 }
 
 function getCoverageIssueCodeLabel(issue: CoverageIssue): IssueCodeLabel {
@@ -759,10 +883,10 @@ function getCoverageIssueCodeLabel(issue: CoverageIssue): IssueCodeLabel {
   }
 
   if (issue.issueType === "all_evaluators_capacity") {
-    return "All evaluators at capacity"
+    return "Evaluators' workload limit reached"
   }
 
-  return "Conversations didn't match filters"
+  return "Insufficient matching conversations"
 }
 
 function getRuleAgentIssueCodeLabel(agent: RuleAgentRow): IssueCodeLabel | undefined {
@@ -775,19 +899,19 @@ function getRuleAgentIssueCodeLabel(agent: RuleAgentRow): IssueCodeLabel | undef
   }
 
   if (agent.warningReason === "rule_interrupted") {
-    return "Rule did not execute"
+    return "Rule execution failed"
   }
 
   if (agent.warningReason === "evaluator_unavailable") {
-    return "Evaluator unavailable"
+    return "Evaluators' workload limit reached"
   }
 
   if (agent.warningReason === "no_conversations_in_period") {
-    return "No conversations in period"
+    return "Insufficient matching conversations"
   }
 
   if (agent.warningReason === "all_evaluators_capacity") {
-    return "All evaluators at capacity"
+    return "Evaluators' workload limit reached"
   }
 
   const detailText = agent.detailText?.toLowerCase() ?? ""
@@ -795,13 +919,25 @@ function getRuleAgentIssueCodeLabel(agent: RuleAgentRow): IssueCodeLabel | undef
     return "No conversations in period"
   }
 
-  return "Conversations didn't match filters"
+  return "Insufficient matching conversations"
 }
 
 function getRuleEvaluatorIssueCodeLabel(
   evaluator: RuleEvaluatorRow
 ): IssueCodeLabel | undefined {
   if (evaluator.issueCodeLabel) {
+    if (evaluator.issueCodeLabel === "Evaluator unavailable") {
+      const timeOffDays = getTimeOffDaysFromText(evaluator.detailText)
+      return `Time off for ${timeOffDays} days in the week`
+    }
+
+    if (
+      evaluator.issueCodeLabel === "All evaluators at capacity" ||
+      evaluator.issueCodeLabel === "Evaluators' workload limit reached"
+    ) {
+      return "Workload limit reached"
+    }
+
     return evaluator.issueCodeLabel
   }
 
@@ -810,11 +946,16 @@ function getRuleEvaluatorIssueCodeLabel(
   }
 
   const detailText = evaluator.detailText?.toLowerCase() ?? ""
-  if (detailText.includes("unavailable") || detailText.includes("leave")) {
-    return "Evaluator unavailable"
+  if (
+    detailText.includes("time off") ||
+    detailText.includes("unavailable") ||
+    detailText.includes("leave")
+  ) {
+    const timeOffDays = getTimeOffDaysFromText(evaluator.detailText)
+    return `Time off for ${timeOffDays} days in the week`
   }
 
-  return "Evaluator unavailable"
+  return "Workload limit reached"
 }
 
 function getRuleStatusLabel(status: ActivityRuleStatus) {
@@ -842,7 +983,7 @@ function buildCoverageRunSheetDetails(activityData: ActivityData): CoverageSheet
     {
       id: "coverage-not-in-rule",
       agentName: "Tom Rivera",
-      teamName: "Sales team",
+      teamNames: ["Sales team"],
       issueType: "not_in_rule",
       lastCovered: "Feb 10-16",
       dropReason: "(was in \"Billing QA\" until Feb 14)",
@@ -850,7 +991,7 @@ function buildCoverageRunSheetDetails(activityData: ActivityData): CoverageSheet
     {
       id: "coverage-capacity",
       agentName: "Priya Nair",
-      teamName: "Support team",
+      teamNames: ["Support team"],
       issueType: "all_evaluators_capacity",
       ruleId: capacityRule?.id,
       ruleName: capacityRule?.name,
@@ -860,7 +1001,7 @@ function buildCoverageRunSheetDetails(activityData: ActivityData): CoverageSheet
     {
       id: "coverage-no-match",
       agentName: "Dan Wu",
-      teamName: "Billing team",
+      teamNames: ["Billing team"],
       issueType: "no_matching_conversations",
       ruleId: matchingRule?.id,
       ruleName: matchingRule?.name,
@@ -871,11 +1012,13 @@ function buildCoverageRunSheetDetails(activityData: ActivityData): CoverageSheet
 
   const selectedIssues = Array.from({ length: requestedIssueCount }, (_, index) => {
     const template = issueTemplates[index % issueTemplates.length]
+    const teamNames = getCoverageAgentTeams(index)
     return {
       ...template,
       id: `${template.id}-${index + 1}`,
       agentName: getCoverageAgentName(index),
-      teamName: getCoverageAgentTeam(index),
+      teamName: teamNames[0] ?? getCoverageAgentTeam(index),
+      teamNames,
     }
   }).sort((leftIssue, rightIssue) => {
     const issueOrderDifference =
@@ -890,7 +1033,7 @@ function buildCoverageRunSheetDetails(activityData: ActivityData): CoverageSheet
 
   return {
     panel: "coverage",
-    title: `Agents not covered · ${activityData.tabLabel}`,
+    title: selectedIssues.length > 0 ? "Agents not covered" : "Agents covered",
     subtitle: `${selectedIssues.length} ${selectedIssues.length === 1 ? "agent" : "agents"} received zero QA this week`,
     issues: selectedIssues,
   }
@@ -905,11 +1048,26 @@ function buildRuleRunSheetDetails(
     rule.id
   ]
   if (mockDbRuleSheet) {
+    const resolvedStatus = mockDbRuleSheet.status ?? rule.status
+    const resolvedStatusLabel = mockDbRuleSheet.statusLabel ?? getRuleStatusLabel(resolvedStatus)
+    const resolvedProgressLabel =
+      mockDbRuleSheet.progressLabel ?? `${rule.metric} (${rule.assignments})`
+
     return {
       panel: "rule",
+      ruleId: rule.id,
       title: rule.name,
-      subtitle: `${mockDbRuleSheet.statusLabel} · ${mockDbRuleSheet.progressLabel}`,
-      ...mockDbRuleSheet,
+      subtitle: `${resolvedStatusLabel} · ${resolvedProgressLabel}`,
+      status: resolvedStatus,
+      statusLabel: resolvedStatusLabel,
+      progressLabel: resolvedProgressLabel,
+      metadata: mockDbRuleSheet.metadata ?? [],
+      reasonSummary: mockDbRuleSheet.reasonSummary,
+      agentsWithoutQa: mockDbRuleSheet.agentsWithoutQa ?? [],
+      coveredAgents: mockDbRuleSheet.coveredAgents ?? [],
+      quotaMetElsewhere: mockDbRuleSheet.quotaMetElsewhere ?? [],
+      evaluatorsWithIssues: mockDbRuleSheet.evaluatorsWithIssues ?? [],
+      activeEvaluators: mockDbRuleSheet.activeEvaluators ?? [],
     }
   }
 
@@ -1093,6 +1251,7 @@ function buildRuleRunSheetDetails(
 
   return {
     panel: "rule",
+    ruleId: rule.id,
     title: rule.name,
     subtitle: `${statusLabel} · ${rule.metric} (${rule.assignments})`,
     status: rule.status,
@@ -1356,19 +1515,49 @@ function AssignmentTable() {
 
 function RunMetadataSection({ rows }: { rows: ExecutionMetadataRow[] }) {
   return (
-    <Card className="border-border-subtle">
-      <div className="px-16 py-12">
-        <p className="text-12 font-semibold text-text-tertiary">Run details</p>
-      </div>
-      <div className="grid grid-cols-1 gap-12 px-16 pb-16 sm:grid-cols-2">
-        {rows.map((row) => (
-          <div key={`metadata-${row.label}`} className="space-y-4">
-            <p className="text-12 font-medium text-text-tertiary">{row.label}</p>
-            <p className="text-14 font-semibold text-text-primary">{row.value}</p>
-          </div>
-        ))}
-      </div>
-    </Card>
+    <div className="space-y-16 px-20 py-20">
+      {rows.map((row) => (
+        <div key={`metadata-${row.label}`} className="space-y-6">
+          <p className="text-12 font-medium text-text-secondary">{row.label}</p>
+          <p className="text-14 font-medium text-text-primary">{row.value}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function SideSheetColumnHeader({
+  leftLabel,
+  rightLabel,
+}: {
+  leftLabel: string
+  rightLabel: string
+}) {
+  return (
+    <div className="flex items-center justify-between gap-12 px-4 text-12 font-medium text-text-tertiary">
+      <span>{leftLabel}</span>
+      <span>{rightLabel}</span>
+    </div>
+  )
+}
+
+function SideSheetStatusRail({
+  tone,
+  children,
+}: {
+  tone: "error" | "success"
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex items-stretch gap-12">
+      <div
+        className={cn(
+          "mt-2 mb-2 w-4 shrink-0 self-stretch rounded-full",
+          tone === "error" ? "bg-surface-error" : "bg-success-600"
+        )}
+      />
+      <div className="min-w-0 flex-1">{children}</div>
+    </div>
   )
 }
 
@@ -1378,16 +1567,22 @@ function CoverageIssueCard({
   onAddToRule,
   onViewRule,
   showIssueCodeBadge,
+  canAddToRule,
 }: {
   issue: CoverageIssue
   rules: ActivityRuleRow[]
   onAddToRule: (agentName: string, ruleName: string) => void
   onViewRule: (ruleId: string) => void
   showIssueCodeBadge: boolean
+  canAddToRule: boolean
 }) {
   const details: string[] = []
   const issueCodeLabel = showIssueCodeBadge ? getCoverageIssueCodeLabel(issue) : undefined
+  const shouldShowTeams = issueCodeLabel === "Agent not in any rule"
   const issueAgentDisplayName = getPersonDisplayName(issue.agentName)
+  const allTeamNames = issue.teamNames?.filter(Boolean) ?? (issue.teamName ? [issue.teamName] : [])
+  const visibleTeamNames = allTeamNames.slice(0, 2)
+  const hiddenTeamNames = allTeamNames.slice(2)
 
   if (issue.issueType === "all_evaluators_capacity") {
     if (issue.ruleName) {
@@ -1409,71 +1604,90 @@ function CoverageIssueCard({
   }
 
   return (
-    <Card className="border-border-subtle">
-      <div className="flex items-start justify-between gap-12 px-16 py-16">
-        <div className="min-w-0 space-y-8">
-          <div className="flex items-start gap-12">
-            <AlertTriangle size={16} className="mt-2 shrink-0 text-icon-warning" />
-            <div className="min-w-0">
-              <p className="text-14 font-semibold text-text-primary">{issueAgentDisplayName}</p>
-              <p className="text-12 font-medium text-text-tertiary">{issue.teamName}</p>
-              {issueCodeLabel ? (
-                <SimpleTooltip
-                  side="bottom"
-                  content={
-                    <span className="block max-w-200 whitespace-normal">
-                      {issueCodeDescriptions[issueCodeLabel]}
-                    </span>
-                  }
-                >
-                  <Badge color="gray" size="sm" className="mt-8 w-fit">
-                    {issueCodeLabel}
-                  </Badge>
-                </SimpleTooltip>
-              ) : (
-                <p className="text-12 font-medium text-text-tertiary">
-                  {getCoverageIssueLabel(issue.issueType)}
-                </p>
-              )}
-            </div>
+    <div className="flex items-start justify-between gap-12 py-10">
+      <div className="min-w-0 space-y-8">
+        <div className="flex items-start gap-12">
+          <Avatar name={issueAgentDisplayName} size="xs" />
+          <div className="min-w-0">
+            <p className="text-14 font-semibold text-text-primary">{issueAgentDisplayName}</p>
+            {shouldShowTeams && allTeamNames.length > 0 && (
+              <p className="text-12 font-medium text-text-tertiary">
+                {visibleTeamNames.join(", ")}
+                {hiddenTeamNames.length > 0 && (
+                  <>
+                    {visibleTeamNames.length > 0 ? ", " : ""}
+                    <SimpleTooltip
+                      side="bottom"
+                      content={
+                        <span className="block max-w-200 whitespace-normal">
+                          {hiddenTeamNames.join(", ")}
+                        </span>
+                      }
+                    >
+                      <span className="cursor-default text-text-secondary hover:text-text-secondary">
+                        +{hiddenTeamNames.length}
+                      </span>
+                    </SimpleTooltip>
+                  </>
+                )}
+              </p>
+            )}
+            {issueCodeLabel ? (
+              <SimpleTooltip
+                side="bottom"
+                content={
+                  <span className="block max-w-200 whitespace-normal">
+                    {getIssueCodeDescription(issueCodeLabel)}
+                  </span>
+                }
+              >
+                <Badge color="gray" size="sm" className="mt-8 w-fit">
+                  {issueCodeLabel}
+                </Badge>
+              </SimpleTooltip>
+            ) : (
+              <p className="text-12 font-medium text-text-tertiary">
+                {getCoverageIssueLabel(issue.issueType)}
+              </p>
+            )}
           </div>
+        </div>
 
-          {!issueCodeLabel && details.length > 0 && (
-            <p className="pl-28 text-12 font-medium text-text-secondary">{details.join(" · ")}</p>
-          )}
-        </div>
-        <div className="shrink-0 pl-8">
-          {issue.issueType === "not_in_rule" ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="sm">
-                  Add to rule
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                {rules.map((rule) => (
-                  <DropdownMenuItem
-                    key={`${issue.id}-${rule.id}`}
-                    onClick={() => onAddToRule(issueAgentDisplayName, rule.name)}
-                  >
-                    {rule.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : issue.ruleId ? (
-            <Button
-              variant="linkPrimary"
-              className="h-auto p-0"
-              onClick={() => onViewRule(issue.ruleId!)}
-              iconRight={<ChevronRight size={14} className="text-icon-brand" />}
-            >
-              View rule
-            </Button>
-          ) : null}
-        </div>
+        {!issueCodeLabel && details.length > 0 && (
+          <p className="pl-28 text-12 font-medium text-text-secondary">{details.join(" · ")}</p>
+        )}
       </div>
-    </Card>
+      <div className="shrink-0 pl-8">
+        {issue.issueType === "not_in_rule" && canAddToRule ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="sm">
+                Add to rule
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {rules.map((rule) => (
+                <DropdownMenuItem
+                  key={`${issue.id}-${rule.id}`}
+                  onClick={() => onAddToRule(issueAgentDisplayName, rule.name)}
+                >
+                  {rule.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : issue.ruleId ? (
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => onViewRule(issue.ruleId!)}
+            iconRight={<ExternalLink size={14} className="text-icon-secondary" />}
+          >
+            View rule
+          </Button>
+        ) : null}
+      </div>
+    </div>
   )
 }
 
@@ -1484,79 +1698,58 @@ function RuleAgentRowCard({
   agent: RuleAgentRow
   showIssueCodeBadge: boolean
 }) {
-  const rowStyle =
-    agent.status === "warning"
-      ? "bg-surface-warning-subtle"
-      : agent.status === "fyi"
-        ? "bg-surface-brand-subtle"
-        : "bg-surface-subtle"
   const issueCodeLabel = showIssueCodeBadge ? getRuleAgentIssueCodeLabel(agent) : undefined
   const agentDisplayName = getPersonDisplayName(agent.name)
-
-  if (agent.status === "warning") {
-    return (
-      <div className={cn("rounded-lg px-12 py-10", rowStyle)}>
-        <div className="flex items-start gap-12">
-          <AlertTriangle size={16} className="mt-2 shrink-0 text-icon-warning" />
-          <div className="min-w-0">
-            <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
-            {issueCodeLabel ? (
-              <SimpleTooltip
-                side="bottom"
-                content={
-                  <span className="block max-w-200 whitespace-normal">
-                    {issueCodeDescriptions[issueCodeLabel]}
-                  </span>
-                }
-              >
-                <Badge color="gray" size="sm" className="mt-8 w-fit">
-                  {issueCodeLabel}
-                </Badge>
-              </SimpleTooltip>
-            ) : (
-              <>
-                <p className="text-14 font-semibold text-text-warning">
-                  {agent.warningReason === "no_matching_conversations"
-                    ? "No matching conversations"
-                    : agent.warningReason === "no_conversations_in_period"
-                      ? "No conversations in period"
-                      : agent.warningReason === "evaluator_unavailable"
-                        ? "Evaluator unavailable"
-                        : agent.warningReason === "rule_interrupted"
-                          ? "Rule did not execute"
-                          : "All evaluators at capacity"}
-                </p>
-                {agent.detailText && <p className="text-12 text-text-secondary">{agent.detailText}</p>}
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (agent.status === "fyi") {
-    return (
-      <div className={cn("rounded-lg px-12 py-10", rowStyle)}>
-        <div className="flex items-start gap-12">
-          <Info size={16} className="mt-2 shrink-0 text-icon-brand" />
-          <div className="min-w-0">
-            <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
-            <p className="text-14 text-text-secondary">{agent.assignmentText}</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const assignmentParts = getAssignmentDisplayParts(agent.assignmentText)
+  const viaRuleLabel =
+    agent.viaRuleName && !isGenericViaRuleName(agent.viaRuleName)
+      ? `via ${agent.viaRuleName}`
+      : assignmentParts.note
+  const warningLabel =
+    agent.warningReason === "no_matching_conversations"
+      ? "No matching conversations"
+      : agent.warningReason === "no_conversations_in_period"
+        ? "No conversations in period"
+        : agent.warningReason === "evaluator_unavailable"
+          ? "Evaluator unavailable"
+          : agent.warningReason === "rule_interrupted"
+            ? "Rule did not execute"
+            : "All evaluators at capacity"
 
   return (
-    <div className={cn("rounded-lg px-12 py-10", rowStyle)}>
-      <div className="flex items-start gap-12">
-        <CheckCircle2 size={16} className="mt-2 shrink-0 text-icon-success" />
+    <div className="py-10">
+      <div className="flex items-start justify-between gap-12">
         <div className="min-w-0">
-          <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
-          <p className="text-14 text-text-secondary">{agent.assignmentText}</p>
+          <div className="flex items-start gap-8">
+            <Avatar name={agentDisplayName} size="xs" />
+            <div className="min-w-0">
+              <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
+              {issueCodeLabel ? (
+                <SimpleTooltip
+                  side="bottom"
+                  content={
+                    <span className="block max-w-200 whitespace-normal">
+                      {getIssueCodeDescription(issueCodeLabel)}
+                    </span>
+                  }
+                >
+                  <Badge color="gray" size="sm" className="mt-8 w-fit">
+                    {issueCodeLabel}
+                  </Badge>
+                </SimpleTooltip>
+              ) : agent.status === "warning" ? (
+                <p className="mt-4 text-12 font-medium text-text-secondary">{warningLabel}</p>
+              ) : null}
+              {agent.detailText && !issueCodeLabel && (
+                <p className="mt-4 text-12 font-medium text-text-tertiary">{agent.detailText}</p>
+              )}
+              {agent.status === "fyi" && viaRuleLabel && (
+                <p className="mt-4 text-12 font-medium text-text-tertiary">{viaRuleLabel}</p>
+              )}
+            </div>
+          </div>
         </div>
+        <p className="shrink-0 text-14 font-semibold text-text-primary">{assignmentParts.count}</p>
       </div>
     </div>
   )
@@ -1569,69 +1762,61 @@ function RuleEvaluatorRowCard({
   evaluator: RuleEvaluatorRow
   showIssueCodeBadge: boolean
 }) {
-  const rowStyle =
-    evaluator.status === "warning" ? "bg-surface-warning-subtle" : "bg-surface-subtle"
   const issueCodeLabel = showIssueCodeBadge
     ? getRuleEvaluatorIssueCodeLabel(evaluator)
     : undefined
   const evaluatorDisplayName = getPersonDisplayName(evaluator.name)
-
-  if (evaluator.status === "warning") {
-    return (
-      <div className={cn("rounded-lg px-12 py-10", rowStyle)}>
-        <div className="flex items-start gap-12">
-          <AlertTriangle size={16} className="mt-2 shrink-0 text-icon-warning" />
-          <div className="min-w-0">
-            <p className="text-14 font-semibold text-text-primary">
-              {evaluatorDisplayName} · {evaluator.loadText}
-            </p>
-            {issueCodeLabel ? (
-              <SimpleTooltip
-                side="bottom"
-                content={
-                  <span className="block max-w-200 whitespace-normal">
-                    {issueCodeDescriptions[issueCodeLabel]}
-                  </span>
-                }
-              >
-                <Badge color="gray" size="sm" className="mt-8 w-fit">
-                  {issueCodeLabel}
-                </Badge>
-              </SimpleTooltip>
-            ) : (
-              evaluator.detailText && (
-                <p className="text-12 text-text-secondary">{evaluator.detailText}</p>
-              )
-            )}
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const workloadValue = getCompactLoadValue(evaluator.loadText)
 
   return (
-    <div className={cn("rounded-lg px-12 py-10", rowStyle)}>
-      <div className="flex items-start gap-12">
-        <CheckCircle2 size={16} className="mt-2 shrink-0 text-icon-success" />
+    <div className="py-10">
+      <div className="flex items-start justify-between gap-12">
         <div className="min-w-0">
-          <p className="text-14 font-semibold text-text-primary">
-            {evaluatorDisplayName} · {evaluator.loadText}
-          </p>
+          <div className="flex items-start gap-8">
+            <Avatar name={evaluatorDisplayName} size="xs" />
+            <div className="min-w-0">
+              <p className="text-14 font-semibold text-text-primary">{evaluatorDisplayName}</p>
+              {issueCodeLabel ? (
+                <SimpleTooltip
+                  side="bottom"
+                  content={
+                    <span className="block max-w-200 whitespace-normal">
+                      {getIssueCodeDescription(issueCodeLabel)}
+                    </span>
+                  }
+                >
+                  <Badge color="gray" size="sm" className="mt-8 w-fit">
+                    {issueCodeLabel}
+                  </Badge>
+                </SimpleTooltip>
+              ) : null}
+              {evaluator.detailText && !issueCodeLabel && (
+                <p className="mt-4 text-12 font-medium text-text-tertiary">{evaluator.detailText}</p>
+              )}
+            </div>
+          </div>
         </div>
+        <p className="shrink-0 text-14 font-semibold text-text-primary">{workloadValue}</p>
       </div>
     </div>
   )
 }
 
-function ActivityPanel() {
+function ActivityPanel({
+  onOpenRuleSetup,
+}: {
+  onOpenRuleSetup: () => void
+}) {
   const [activeActivityModeTab, setActiveActivityModeTab] =
     React.useState<ActivityModeTab>("agent_evaluation")
   const [activeActivityTab, setActiveActivityTab] = React.useState<ActivityTab>("week_1")
   const [sheetStack, setSheetStack] = React.useState<RunSheetView[]>([])
-  const [expandedRuleSections, setExpandedRuleSections] = React.useState<string[]>([])
+  const [activeRuleSheetTab, setActiveRuleSheetTab] = React.useState<
+    "agents" | "evaluators" | "run_details"
+  >("agents")
+  const [expandedAgentSections, setExpandedAgentSections] = React.useState<string[]>([])
   const [showAllCoveredAgents, setShowAllCoveredAgents] = React.useState(false)
   const [showAllActiveEvaluators, setShowAllActiveEvaluators] = React.useState(false)
-  const [showAllQuotaAgents, setShowAllQuotaAgents] = React.useState(false)
   const activityData = activityByTab[activeActivityTab]
   const activeSheetView = sheetStack.at(-1) ?? null
 
@@ -1671,6 +1856,11 @@ function ActivityPanel() {
     })
   }, [])
 
+  const handleOpenRuleSetup = React.useCallback(() => {
+    onOpenRuleSetup()
+    setSheetStack([])
+  }, [onOpenRuleSetup])
+
   const handleAddAgentToRule = React.useCallback((agentName: string, ruleName: string) => {
     toast({
       title: "Agent added to rule",
@@ -1683,20 +1873,18 @@ function ActivityPanel() {
       return
     }
 
-    const initialExpandedSections: string[] = []
-
+    const initialExpandedAgentSections: string[] = []
     if (activeSheetView.agentsWithoutQa.length > 0) {
-      initialExpandedSections.push("agents")
+      initialExpandedAgentSections.push("agents-not-covered")
+    }
+    if (activeSheetView.coveredAgents.length + activeSheetView.quotaMetElsewhere.length > 0) {
+      initialExpandedAgentSections.push("agents-covered")
     }
 
-    if (activeSheetView.evaluatorsWithIssues.length > 0) {
-      initialExpandedSections.push("evaluators")
-    }
-
-    setExpandedRuleSections(initialExpandedSections)
+    setActiveRuleSheetTab("agents")
+    setExpandedAgentSections(initialExpandedAgentSections)
     setShowAllCoveredAgents(false)
     setShowAllActiveEvaluators(false)
-    setShowAllQuotaAgents(false)
   }, [activeSheetView])
 
   const handleRowKeyDown = (
@@ -1753,7 +1941,63 @@ function ActivityPanel() {
           getPersonDisplayName(issue.agentName)
         )
       : []
+  const hasCoverageIssues = uniqueCoverageIssues.length > 0
+  const activeRuleSheet = activeSheetView && activeSheetView.panel === "rule" ? activeSheetView : null
+  const quotaCoveredAgentsWithResolvedRule =
+    activeRuleSheet
+      ? activeRuleSheet.quotaMetElsewhere.map((agent) => {
+          const viaRuleFromAssignment = getViaRuleFromAssignmentText(agent.assignmentText)
+          const explicitViaRule =
+            agent.viaRuleName && !isGenericViaRuleName(agent.viaRuleName)
+              ? agent.viaRuleName
+              : viaRuleFromAssignment && !isGenericViaRuleName(viaRuleFromAssignment)
+                ? viaRuleFromAssignment
+                : undefined
 
+          if (explicitViaRule) {
+            return {
+              ...agent,
+              viaRuleName: explicitViaRule,
+            }
+          }
+
+          const fallbackRuleName = activityData.rules.find(
+            (rule) => rule.id !== activeRuleSheet.ruleId
+          )?.name
+
+          if (!fallbackRuleName) {
+            return agent
+          }
+
+          return {
+            ...agent,
+            viaRuleName: fallbackRuleName,
+          }
+        })
+      : []
+  const coveredAgentsIncludingQuota =
+    activeRuleSheet
+      ? getUniqueByAgentName(
+          [...uniqueCoveredAgents, ...quotaCoveredAgentsWithResolvedRule],
+          (agent) => getPersonDisplayName(agent.name)
+        )
+      : []
+  const evaluatorWorkloadRows =
+    activeRuleSheet
+      ? getUniqueByAgentName(
+          [...activeRuleSheet.evaluatorsWithIssues, ...activeRuleSheet.activeEvaluators],
+          (evaluator) => getPersonDisplayName(evaluator.name)
+        )
+      : []
+  const statusDisplayLabel =
+    activeRuleSheet?.statusLabel?.trim() || (activeRuleSheet ? getRuleStatusLabel(activeRuleSheet.status) : "")
+  const progressDisplayLabel =
+    activeRuleSheet?.progressLabel?.trim() ||
+    activeRuleSheet?.subtitle
+      ?.split("·")
+      .map((part) => part.trim())
+      .filter(Boolean)[1] ||
+    ""
   React.useEffect(() => {
     if (isEvaluatorCalibrationMode) {
       setSheetStack([])
@@ -1833,7 +2077,7 @@ function ActivityPanel() {
                     <span className="text-14 font-medium text-secondary-blue-700">
                       {activeTabIndex === 0
                         ? "Predicted based on current rules and schedules. Changes to rules will update these predictions."
-                        : `This week is in progress and not complete yet. Final coverage may change before the cycle ends. Current status: ${hasCoverageGap ? "Off track" : "On track"}.`}
+                        : "This week is in progress and not complete yet. Final coverage may change before the cycle ends."}
                     </span>
                   }
                 />
@@ -1912,9 +2156,9 @@ function ActivityPanel() {
                             rule.mainPageReasonLines &&
                             rule.mainPageReasonLines.length > 0 ? (
                               <div className="flex flex-col gap-4">
-                                {rule.mainPageReasonLines.map((reasonLine) => (
+                                {rule.mainPageReasonLines.map((reasonLine, reasonLineIndex) => (
                                   <Badge
-                                    key={`${rule.id}-${reasonLine}`}
+                                    key={`${rule.id}-${reasonLine}-${reasonLineIndex}`}
                                     color="gray"
                                     size="sm"
                                     className="w-fit"
@@ -1967,221 +2211,257 @@ function ActivityPanel() {
       >
         {activeSheetView && (
           <SheetContent size="md">
-            <SheetHeader>
-              <div className="flex items-center gap-8">
-                {sheetStack.length > 1 && (
+            <SheetHeader
+              description={activityData.tabLabel}
+              actions={
+                activeSheetView.panel === "rule" ? (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={handleOpenRuleSetup}
+                    iconRight={<ExternalLink size={14} className="text-icon-secondary" />}
+                  >
+                    Rule setup
+                  </Button>
+                ) : undefined
+              }
+            >
+              {activeSheetView.title}
+            </SheetHeader>
+
+            <SheetBody className="space-y-16">
+              {sheetStack.length > 1 && (
+                <div className="-mt-8">
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    className="-ml-8"
                     aria-label="Go back"
                     onClick={handleSheetBack}
                     iconLeft={<ChevronLeft size={16} className="text-icon-primary" />}
                   />
-                )}
-                <span className="block truncate">{activeSheetView.title}</span>
-              </div>
-            </SheetHeader>
-
-            <SheetBody className="space-y-16">
+                </div>
+              )}
               {activeSheetView.panel === "coverage" ? (
-                <>
-                  <InlineAlert
-                    variant={activeSheetView.issues.length > 0 ? "error" : "success"}
-                    title={
-                      uniqueCoverageIssues.length > 0
-                        ? `${uniqueCoverageIssues.length} ${uniqueCoverageIssues.length === 1 ? "agent" : "agents"} ${isPastWeek ? "were not covered" : "not covered"}`
-                        : isPastWeek
-                          ? "All agents were covered"
-                          : "All agents covered"
-                    }
-                    description={
-                      activeSheetView.issues.length > 0
-                        ? "Review impacted agents and adjust rules or evaluator capacity."
-                        : "No follow-up action is required for this cycle."
-                    }
-                  />
-
-                  {uniqueCoverageIssues.length > 0 && (
-                    <div className="space-y-8">
-                      <p className="text-12 font-semibold text-text-tertiary">Impacted agents</p>
-                      <div className="space-y-8">
-                        {uniqueCoverageIssues.map((issue) => (
-                          <CoverageIssueCard
-                            key={issue.id}
-                            issue={issue}
-                            rules={visibleActivityRules}
-                            onAddToRule={handleAddAgentToRule}
-                            onViewRule={openRuleFromCoverage}
-                            showIssueCodeBadge={shouldShowIssueCodeBadges}
-                          />
-                        ))}
-                      </div>
+                hasCoverageIssues ? (
+                  <>
+                    <div className="mb-24 flex flex-col items-center gap-8 py-12 text-center">
+                      <Image
+                        src="/status-icons/alert-circle.svg"
+                        alt=""
+                        width={32}
+                        height={32}
+                        aria-hidden="true"
+                      />
+                      <p className="text-24 font-semibold text-text-primary">
+                        {`${uniqueCoverageIssues.length} ${uniqueCoverageIssues.length === 1 ? "agent" : "agents"} ${isPastWeek ? "were not covered" : "not covered"}`}
+                      </p>
                     </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <InlineAlert
-                    variant={
-                      activeSheetView.status === "success"
-                        ? "success"
-                        : activeSheetView.status === "partial"
-                          ? "warning"
-                          : "error"
-                    }
-                    title={`${activeSheetView.statusLabel} · ${activeSheetView.progressLabel}`}
-                    description={
-                      activeSheetView.reasonSummary ??
-                      "Assignments were completed without coverage gaps."
-                    }
-                  />
 
-                  <Accordion
-                    type="multiple"
-                    value={expandedRuleSections}
-                    onValueChange={(value) => setExpandedRuleSections(value as string[])}
-                    className="gap-12"
-                  >
-                    <AccordionItem value="agents" className="rounded-xl border-border-subtle bg-surface-card">
-                      <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary hover:bg-surface-subtle">
-                        {activeSheetView.agentsWithoutQa.length > 0
-                          ? `Agents at risk (${activeSheetView.agentsWithoutQa.length})`
-                          : "Agents (all covered)"}
-                      </AccordionTrigger>
-                      <AccordionContent className="space-y-12 text-text-primary">
-                        {activeSheetView.agentsWithoutQa.length > 0 && (
-                          <>
-                            <p className="text-12 font-semibold text-text-tertiary">Needs attention</p>
-                            {activeSheetView.agentsWithoutQa.map((agent) => (
-                              <RuleAgentRowCard
-                                key={agent.id}
-                                agent={agent}
-                                showIssueCodeBadge={shouldShowIssueCodeBadges}
-                              />
-                            ))}
-                          </>
-                        )}
-
-                        {activeSheetView.agentsWithoutQa.length > 0 &&
-                          uniqueCoveredAgents.length > 0 && (
-                            <div className="border-t border-border-subtle" />
-                          )}
-
-                        {uniqueCoveredAgents.length > 0 && (
-                          <p className="text-12 font-semibold text-text-tertiary">Covered</p>
-                        )}
-
-                        {(showAllCoveredAgents
-                          ? uniqueCoveredAgents
-                          : uniqueCoveredAgents.slice(0, 5)
-                        ).map((agent) => (
-                          <RuleAgentRowCard
-                            key={agent.id}
-                            agent={agent}
-                            showIssueCodeBadge={shouldShowIssueCodeBadges}
-                          />
-                        ))}
-
-                        {!showAllCoveredAgents && uniqueCoveredAgents.length > 5 && (
-                          <Button
-                            variant="linkSecondary"
-                            className="h-auto p-0"
-                            onClick={() => setShowAllCoveredAgents(true)}
-                          >
-                            +{uniqueCoveredAgents.length - 5} more agents
-                          </Button>
-                        )}
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem
-                      value="evaluators"
-                      className="rounded-xl border-border-subtle bg-surface-card"
-                    >
-                      <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary hover:bg-surface-subtle">
-                        {activeSheetView.evaluatorsWithIssues.length > 0
-                          ? `Evaluators with constraints (${activeSheetView.evaluatorsWithIssues.length})`
-                          : "Evaluators (all active)"}
-                      </AccordionTrigger>
-                      <AccordionContent className="space-y-12 text-text-primary">
-                        {activeSheetView.evaluatorsWithIssues.length > 0 && (
-                          <>
-                            <p className="text-12 font-semibold text-text-tertiary">Needs attention</p>
-                            {activeSheetView.evaluatorsWithIssues.map((evaluator) => (
-                              <RuleEvaluatorRowCard
-                                key={evaluator.id}
-                                evaluator={evaluator}
-                                showIssueCodeBadge={shouldShowIssueCodeBadges}
-                              />
-                            ))}
-                          </>
-                        )}
-
-                        {activeSheetView.evaluatorsWithIssues.length > 0 &&
-                          activeSheetView.activeEvaluators.length > 0 && (
-                            <div className="border-t border-border-subtle" />
-                          )}
-
-                        {activeSheetView.activeEvaluators.length > 0 && (
-                          <p className="text-12 font-semibold text-text-tertiary">Available</p>
-                        )}
-
-                        {(showAllActiveEvaluators
-                          ? activeSheetView.activeEvaluators
-                          : activeSheetView.activeEvaluators.slice(0, 5)
-                        ).map((evaluator) => (
-                          <RuleEvaluatorRowCard
-                            key={evaluator.id}
-                            evaluator={evaluator}
-                            showIssueCodeBadge={shouldShowIssueCodeBadges}
-                          />
-                        ))}
-
-                        {!showAllActiveEvaluators && activeSheetView.activeEvaluators.length > 5 && (
-                          <Button
-                            variant="linkSecondary"
-                            className="h-auto p-0"
-                            onClick={() => setShowAllActiveEvaluators(true)}
-                          >
-                            +{activeSheetView.activeEvaluators.length - 5} more evaluators
-                          </Button>
-                        )}
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    {activeSheetView.quotaMetElsewhere.length > 0 && (
-                      <AccordionItem value="quota" className="rounded-xl border-border-subtle bg-surface-card">
-                        <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary hover:bg-surface-subtle">
-                          Covered by other rules ({activeSheetView.quotaMetElsewhere.length})
-                        </AccordionTrigger>
-                        <AccordionContent className="space-y-12 text-text-primary">
-                          {(showAllQuotaAgents
-                            ? activeSheetView.quotaMetElsewhere
-                            : activeSheetView.quotaMetElsewhere.slice(0, 5)
-                          ).map((agent) => (
-                            <RuleAgentRowCard
-                              key={agent.id}
-                              agent={agent}
+                    <Card className="border-border-subtle">
+                      <div className="space-y-8 px-16 py-16">
+                        <p className="text-12 font-semibold text-text-tertiary">Impacted agents</p>
+                        <div className="divide-y divide-border-subtle">
+                          {uniqueCoverageIssues.map((issue) => (
+                            <CoverageIssueCard
+                              key={issue.id}
+                              issue={issue}
+                              rules={visibleActivityRules}
+                              onAddToRule={handleAddAgentToRule}
+                              onViewRule={openRuleFromCoverage}
                               showIssueCodeBadge={shouldShowIssueCodeBadges}
+                              canAddToRule={!isPastWeek}
                             />
                           ))}
+                        </div>
+                      </div>
+                    </Card>
+                  </>
+                ) : (
+                  <div className="flex min-h-full flex-col items-center justify-center py-24 text-center">
+                    <Image
+                      src="/status-icons/check-circle.svg"
+                      alt=""
+                      width={32}
+                      height={32}
+                      aria-hidden="true"
+                    />
+                    <p className="mt-8 text-24 font-semibold text-text-primary">
+                      {isPastWeek ? "All agents were covered" : "All agents covered"}
+                    </p>
+                  </div>
+                )
+              ) : (
+                <>
+                  <div className="flex flex-col items-center gap-8 py-12 text-center">
+                    <Image
+                      src={getStatusIconPath(activeSheetView.status)}
+                      alt=""
+                      width={32}
+                      height={32}
+                      aria-hidden="true"
+                    />
+                    <p className="text-24 font-semibold text-text-primary">
+                      {statusDisplayLabel}
+                    </p>
+                    <p className="text-14 font-medium text-text-secondary">
+                      {progressDisplayLabel}
+                    </p>
+                  </div>
 
-                          {!showAllQuotaAgents && activeSheetView.quotaMetElsewhere.length > 5 && (
+                  <Tabs
+                    value={activeRuleSheetTab}
+                    onValueChange={(value) =>
+                      setActiveRuleSheetTab(value as "agents" | "evaluators" | "run_details")
+                    }
+                    className="space-y-12"
+                  >
+                    <NeutralTabsList className="w-full p-4">
+                      <NeutralTabsTrigger value="agents" className="h-36 flex-1 px-8 py-6 text-12">
+                        Agents
+                      </NeutralTabsTrigger>
+                      <NeutralTabsTrigger value="evaluators" className="h-36 flex-1 px-8 py-6 text-12">
+                        Evaluators
+                      </NeutralTabsTrigger>
+                      <NeutralTabsTrigger
+                        value="run_details"
+                        className="h-36 flex-1 px-8 py-6 text-12"
+                      >
+                        Run Details
+                      </NeutralTabsTrigger>
+                    </NeutralTabsList>
+
+                    <TabsContent value="agents" className="mt-0">
+                      <Accordion
+                        type="multiple"
+                        value={expandedAgentSections}
+                        onValueChange={(value) => setExpandedAgentSections(value as string[])}
+                        className="space-y-12"
+                      >
+                        <AccordionItem
+                          value="agents-not-covered"
+                          className="rounded-xl border border-border-subtle"
+                        >
+                          <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary">
+                            {`Agents not covered (${activeSheetView.agentsWithoutQa.length})`}
+                          </AccordionTrigger>
+                          <AccordionContent className="space-y-12 px-16 pb-16 text-text-primary">
+                            {activeSheetView.agentsWithoutQa.length > 0 ? (
+                              <>
+                                <SideSheetColumnHeader leftLabel="Name" rightLabel="Assign" />
+                                <SideSheetStatusRail tone="error">
+                                  <div className="divide-y divide-border-subtle">
+                                    {activeSheetView.agentsWithoutQa.map((agent) => (
+                                      <RuleAgentRowCard
+                                        key={agent.id}
+                                        agent={agent}
+                                        showIssueCodeBadge={shouldShowIssueCodeBadges}
+                                      />
+                                    ))}
+                                  </div>
+                                </SideSheetStatusRail>
+                              </>
+                            ) : (
+                              <p className="text-12 font-medium text-text-tertiary">
+                                No agents not covered.
+                              </p>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+
+                        <AccordionItem
+                          value="agents-covered"
+                          className="rounded-xl border border-border-subtle"
+                        >
+                          <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary">
+                            {`Agents covered (${coveredAgentsIncludingQuota.length})`}
+                          </AccordionTrigger>
+                          <AccordionContent className="space-y-12 px-16 pb-16 text-text-primary">
+                            {(showAllCoveredAgents
+                              ? coveredAgentsIncludingQuota
+                              : coveredAgentsIncludingQuota.slice(0, 5)
+                            ).length > 0 ? (
+                              <>
+                                <SideSheetColumnHeader leftLabel="Name" rightLabel="Assign" />
+                                <SideSheetStatusRail tone="success">
+                                  <div className="divide-y divide-border-subtle">
+                                    {(showAllCoveredAgents
+                                      ? coveredAgentsIncludingQuota
+                                      : coveredAgentsIncludingQuota.slice(0, 5)
+                                    ).map((agent) => (
+                                      <RuleAgentRowCard
+                                        key={agent.id}
+                                        agent={agent}
+                                        showIssueCodeBadge={shouldShowIssueCodeBadges}
+                                      />
+                                    ))}
+                                  </div>
+                                </SideSheetStatusRail>
+                              </>
+                            ) : (
+                              <p className="text-12 font-medium text-text-tertiary">
+                                No covered agents.
+                              </p>
+                            )}
+
+                            {!showAllCoveredAgents && coveredAgentsIncludingQuota.length > 5 && (
+                              <Button
+                                variant="linkSecondary"
+                                className="h-auto p-0"
+                                onClick={() => setShowAllCoveredAgents(true)}
+                              >
+                                +{coveredAgentsIncludingQuota.length - 5} more agents
+                              </Button>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    </TabsContent>
+
+                    <TabsContent value="evaluators" className="mt-0">
+                      <Card className="border-border-subtle">
+                        <div className="space-y-12 px-16 py-16 text-text-primary">
+                          <p className="text-14 font-semibold text-text-primary">Evaluator Workload</p>
+                          <SideSheetColumnHeader leftLabel="Evaluator" rightLabel="Workload" />
+
+                          {(showAllActiveEvaluators
+                            ? evaluatorWorkloadRows
+                            : evaluatorWorkloadRows.slice(0, 5)
+                          ).length > 0 ? (
+                            <div className="divide-y divide-border-subtle">
+                              {(showAllActiveEvaluators
+                                ? evaluatorWorkloadRows
+                                : evaluatorWorkloadRows.slice(0, 5)
+                              ).map((evaluator) => (
+                                <RuleEvaluatorRowCard
+                                  key={evaluator.id}
+                                  evaluator={evaluator}
+                                  showIssueCodeBadge={shouldShowIssueCodeBadges}
+                                />
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-12 font-medium text-text-tertiary">
+                              No evaluator workload data for this run.
+                            </p>
+                          )}
+
+                          {!showAllActiveEvaluators && evaluatorWorkloadRows.length > 5 && (
                             <Button
                               variant="linkSecondary"
                               className="h-auto p-0"
-                              onClick={() => setShowAllQuotaAgents(true)}
+                              onClick={() => setShowAllActiveEvaluators(true)}
                             >
-                              +{activeSheetView.quotaMetElsewhere.length - 5} more agents
+                              +{evaluatorWorkloadRows.length - 5} more evaluators
                             </Button>
                           )}
-                        </AccordionContent>
-                      </AccordionItem>
-                    )}
-                  </Accordion>
+                        </div>
+                      </Card>
+                    </TabsContent>
 
-                  <RunMetadataSection rows={activeSheetView.metadata} />
+                    <TabsContent value="run_details" className="mt-16">
+                      <RunMetadataSection rows={activeSheetView.metadata} />
+                    </TabsContent>
+                  </Tabs>
                 </>
               )}
             </SheetBody>
@@ -2310,7 +2590,7 @@ export default function Page() {
                 </TabsContent>
 
                 <TabsContent value="activity" className="mt-0 min-h-0 flex-1">
-                  <ActivityPanel />
+                  <ActivityPanel onOpenRuleSetup={() => setActiveTopTab("rules")} />
                 </TabsContent>
                 </Tabs>
 

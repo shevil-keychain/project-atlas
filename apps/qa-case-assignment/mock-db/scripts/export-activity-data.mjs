@@ -16,6 +16,17 @@ function query(sql) {
   return trimmed.length > 0 ? JSON.parse(trimmed) : []
 }
 
+const issueCatalogRows = query(`
+  SELECT
+    issue_code,
+    label
+  FROM issue_catalog;
+`)
+
+const issueLabelByCode = new Map(
+  issueCatalogRows.map((row) => [String(row.issue_code), String(row.label)])
+)
+
 function toUiStatus(runStatus) {
   if (runStatus === "success" || runStatus === "on_track") {
     return "success"
@@ -41,36 +52,31 @@ function toStatusLabel(uiStatus) {
 }
 
 function toIssueCodeLabel(issueCode) {
-  if (issueCode === "AGENT_NOT_IN_ANY_RULE") {
-    return "Agent not in any rule"
+  return issueLabelByCode.get(String(issueCode))
+}
+
+function getTimeOffDaysFromContextNote(contextNote) {
+  if (!contextNote) {
+    return 1
   }
 
-  if (issueCode === "NO_CONVERSATIONS_IN_PERIOD") {
-    return "No conversations in period"
+  const dayMatch = String(contextNote).match(/(\d+)\s+days?/i)
+  if (!dayMatch?.[1]) {
+    return 1
   }
 
-  if (issueCode === "NO_MATCHING_CONVERSATIONS") {
-    return "Conversations didn't match filters"
-  }
+  const parsedDays = Number.parseInt(dayMatch[1], 10)
+  return Number.isFinite(parsedDays) && parsedDays > 0 ? parsedDays : 1
+}
 
+function toEvaluatorIssueCodeLabel(issueCode, contextNote) {
   if (issueCode === "ALL_EVALUATORS_AT_CAPACITY") {
-    return "All evaluators at capacity"
+    return "Workload limit reached"
   }
 
   if (issueCode === "EVALUATOR_UNAVAILABLE") {
-    return "Evaluator unavailable"
-  }
-
-  if (issueCode === "RULE_DID_NOT_EXECUTE") {
-    return "Rule did not execute"
-  }
-
-  if (issueCode === "RULE_EXECUTION_INTERRUPTED") {
-    return "Rule execution interrupted"
-  }
-
-  if (issueCode === "QUOTA_MET_BY_ANOTHER_RULE") {
-    return "Quota met by another rule"
+    const timeOffDays = getTimeOffDaysFromContextNote(contextNote)
+    return `Time off for ${timeOffDays} days in the week`
   }
 
   return undefined
@@ -96,33 +102,130 @@ function toRuleAgentWarningReason(issueCode) {
   return "all_evaluators_capacity"
 }
 
-function toMainPageReasonLine(issueCode, affectedAgentsCount, uiStatus) {
-  if (issueCode === "NO_CONVERSATIONS_IN_PERIOD") {
-    return `${affectedAgentsCount} agents had no conversations in period`
+function toSentenceCaseLabel(value) {
+  if (!value) {
+    return ""
   }
 
-  if (issueCode === "NO_MATCHING_CONVERSATIONS") {
-    return `${affectedAgentsCount} agents had no matching conversations`
+  const raw = String(value).trim()
+  if (raw.length === 0) {
+    return raw
   }
 
-  if (issueCode === "EVALUATOR_UNAVAILABLE") {
-    return `${affectedAgentsCount} agents unassigned due to evaluator unavailability`
+  return `${raw.charAt(0).toLowerCase()}${raw.slice(1)}`
+}
+
+const countableIssueCodes = new Set([
+  "NO_CONVERSATIONS_IN_PERIOD",
+  "NO_MATCHING_CONVERSATIONS",
+  "ALL_EVALUATORS_AT_CAPACITY",
+  "EVALUATOR_UNAVAILABLE",
+])
+
+const executionIssueCodes = new Set(["RULE_DID_NOT_EXECUTE", "RULE_EXECUTION_INTERRUPTED"])
+
+function isCountableIssueCode(issueCode) {
+  return countableIssueCodes.has(String(issueCode))
+}
+
+function buildReasonLinesFromWarningAgents(warningAgentRows) {
+  const reasonCountByLabel = new Map()
+
+  for (const agentRow of warningAgentRows) {
+    if (!isCountableIssueCode(agentRow.issue_code)) {
+      continue
+    }
+
+    const issueLabel = toIssueCodeLabel(agentRow.issue_code)
+    if (!issueLabel) {
+      continue
+    }
+
+    const sentenceCaseLabel = toSentenceCaseLabel(issueLabel)
+    reasonCountByLabel.set(
+      sentenceCaseLabel,
+      (reasonCountByLabel.get(sentenceCaseLabel) ?? 0) + 1
+    )
   }
 
-  if (issueCode === "RULE_EXECUTION_INTERRUPTED") {
-    return `${affectedAgentsCount} agents not processed as the rule did not execute`
+  return Array.from(reasonCountByLabel.entries()).map(([sentenceCaseLabel, count]) => {
+    const noun = count === 1 ? "agent" : "agents"
+    return `${count} ${noun}: ${sentenceCaseLabel}`
+  })
+}
+
+function getReasonLineAgentCount(reasonLine) {
+  const match = /^(\d+)\s+agents?:/i.exec(String(reasonLine).trim())
+  if (!match?.[1]) {
+    return 0
   }
 
-  if (issueCode === "RULE_DID_NOT_EXECUTE") {
-    return "Rule did not execute"
+  const parsedCount = Number.parseInt(match[1], 10)
+  return Number.isFinite(parsedCount) && parsedCount > 0 ? parsedCount : 0
+}
+
+function distributeWarningTargets(runsForWeek, warningAgentsByRunId, requestedCount) {
+  const targetsByRunId = new Map(
+    runsForWeek.map((run) => [Number(run.rule_run_id), 0])
+  )
+
+  const runStats = runsForWeek
+    .map((run) => {
+      const runId = Number(run.rule_run_id)
+      const availableCount = (warningAgentsByRunId.get(runId) ?? []).filter((agentRow) =>
+        isCountableIssueCode(agentRow.issue_code)
+      ).length
+
+      return {
+        runId,
+        availableCount,
+        isNonSuccess: toUiStatus(run.run_status) !== "success",
+      }
+    })
+    .filter((runStat) => runStat.availableCount > 0)
+
+  let remaining = Math.max(0, Math.floor(Number(requestedCount) || 0))
+  if (remaining === 0 || runStats.length === 0) {
+    return targetsByRunId
   }
 
-  // Capacity tag was removed from partial/upcoming labels.
-  if (issueCode === "ALL_EVALUATORS_AT_CAPACITY") {
-    return uiStatus === "failed" ? "All evaluators at capacity" : undefined
+  const primaryRuns = runStats.filter((runStat) => runStat.isNonSuccess)
+  const fallbackRuns = runStats.filter((runStat) => !runStat.isNonSuccess)
+  const orderedRuns = primaryRuns.length > 0 ? primaryRuns : fallbackRuns
+
+  for (const runStat of orderedRuns) {
+    if (remaining <= 0) {
+      break
+    }
+
+    targetsByRunId.set(runStat.runId, 1)
+    remaining -= 1
   }
 
-  return undefined
+  while (remaining > 0) {
+    let allocatedThisPass = false
+
+    for (const runStat of orderedRuns) {
+      if (remaining <= 0) {
+        break
+      }
+
+      const currentTarget = targetsByRunId.get(runStat.runId) ?? 0
+      if (currentTarget >= runStat.availableCount) {
+        continue
+      }
+
+      targetsByRunId.set(runStat.runId, currentTarget + 1)
+      remaining -= 1
+      allocatedThisPass = true
+    }
+
+    if (!allocatedThisPass) {
+      break
+    }
+  }
+
+  return targetsByRunId
 }
 
 function toMetadataTimestamp(value) {
@@ -220,7 +323,6 @@ const warningAgents = query(`
     assignments_made,
     assignment_goal
   FROM ranked
-  WHERE rn <= 8
   ORDER BY rule_run_id ASC, rn ASC;
 `)
 
@@ -355,19 +457,37 @@ weeks.forEach((week, weekIndex) => {
         ? "Current week"
         : undefined
 
-  const weekRuns = (runsByWeek.get(Number(week.week_id)) ?? []).map((run) => {
+  const weekRunRows = runsByWeek.get(Number(week.week_id)) ?? []
+  const requestedCoverageGapCount =
+    week.week_state === "upcoming" ? 10 : Number(week.agents_without_assignment ?? 0)
+  const warningTargetsByRunId = distributeWarningTargets(
+    weekRunRows,
+    warningAgentsByRunId,
+    requestedCoverageGapCount
+  )
+
+  const weekRuns = weekRunRows.map((run) => {
+    const runId = Number(run.rule_run_id)
     const uiStatus = toUiStatus(run.run_status)
-    const runIssueItems = issuesByRunId.get(Number(run.rule_run_id)) ?? []
+    const runIssueItems = issuesByRunId.get(runId) ?? []
+    const selectedWarningAgentSourceRows = (warningAgentsByRunId.get(runId) ?? [])
+      .filter((agentRow) => isCountableIssueCode(agentRow.issue_code))
+      .slice(0, warningTargetsByRunId.get(runId) ?? 0)
+    const hasRuleExecutionIssue = runIssueItems.some((issueItem) =>
+      executionIssueCodes.has(String(issueItem.issue_code))
+    )
 
-    const mainPageReasonLines = runIssueItems
-      .map((item) =>
-        toMainPageReasonLine(item.issue_code, Number(item.affected_agents_count ?? 0), uiStatus)
-      )
-      .filter(Boolean)
+    const mainPageReasonLines = buildReasonLinesFromWarningAgents(selectedWarningAgentSourceRows)
+    if (hasRuleExecutionIssue) {
+      mainPageReasonLines.push("Rule execution failed")
+    }
 
-    const issueCodeLabel = runIssueItems
-      .map((item) => toIssueCodeLabel(item.issue_code))
-      .find((label) => Boolean(label))
+    const issueCodeLabel =
+      selectedWarningAgentSourceRows.length > 0
+        ? toIssueCodeLabel(selectedWarningAgentSourceRows[0].issue_code)
+        : hasRuleExecutionIssue
+          ? "Rule execution failed"
+          : runIssueItems.map((item) => toIssueCodeLabel(item.issue_code)).find(Boolean)
 
     const roundedCoverage = Math.round(Number(run.coverage_pct ?? 0))
     const assignments = `${Number(run.assigned_assignments ?? 0)}/${Number(run.expected_assignments ?? 0)}`
@@ -375,69 +495,94 @@ weeks.forEach((week, weekIndex) => {
     const statusLabel = toStatusLabel(uiStatus)
     const progressLabel = `${roundedCoverage}% (${assignments})`
 
-    const warningAgentRows = (warningAgentsByRunId.get(Number(run.rule_run_id)) ?? []).map(
-      (agentRow, index) => ({
-        id: `warning-agent-${Number(run.rule_run_id)}-${index + 1}`,
-        name: agentRow.agent_name,
-        status: "warning",
-        warningReason: toRuleAgentWarningReason(agentRow.issue_code),
-        detailText:
-          agentRow.context_note ??
-          `${Number(agentRow.assignments_made ?? 0)}/${Number(agentRow.assignment_goal ?? 1)} assigned`,
-        issueCodeLabel: toIssueCodeLabel(agentRow.issue_code),
-      })
+    const warningAgentRows = selectedWarningAgentSourceRows.map((agentRow, index) => ({
+      id: `warning-agent-${runId}-${index + 1}`,
+      name: agentRow.agent_name,
+      status: "warning",
+      warningReason: toRuleAgentWarningReason(agentRow.issue_code),
+      assignmentText: `${Math.max(0, Math.min(Number(agentRow.assignments_made ?? 0), 2))}/2 assigned`,
+      detailText:
+        agentRow.context_note ??
+        `${Math.max(0, Math.min(Number(agentRow.assignments_made ?? 0), 2))}/2 assigned`,
+      issueCodeLabel: toIssueCodeLabel(agentRow.issue_code),
+    }))
+
+    const coveredAgentRows = (coveredAgentsByRunId.get(runId) ?? []).map((agentRow, index) => ({
+      id: `covered-agent-${runId}-${index + 1}`,
+      name: agentRow.agent_name,
+      status: "success",
+      assignmentText: `${Math.max(0, Math.min(Number(agentRow.assignments_made ?? 2), 2))}/2 assigned`,
+    }))
+
+    const quotaRows = (quotaAgentsByRunId.get(runId) ?? []).map((agentRow, index) => ({
+      id: `quota-agent-${runId}-${index + 1}`,
+      name: agentRow.agent_name,
+      status: "fyi",
+      assignmentText: "2/2 via another rule",
+      viaRuleName: "Another rule",
+      detailText: agentRow.context_note ?? undefined,
+      issueCodeLabel: "Quota met by another rule",
+    }))
+
+    const activeEvaluatorSourceRows = activeEvaluatorsByRunId.get(runId) ?? []
+    const availableEvaluatorCount = activeEvaluatorSourceRows.length
+
+    let warningEvaluatorRowsRaw = (warningEvaluatorsByRunId.get(runId) ?? []).map(
+      (evaluatorRow, index) => {
+        const workloadLimit = Number(evaluatorRow.workload_limit ?? 0)
+        const safeAssignmentsReceived =
+          String(evaluatorRow.issue_code) === "EVALUATOR_UNAVAILABLE"
+            ? 0
+            : Math.max(
+                0,
+                Math.min(
+                  Number(evaluatorRow.assignments_received ?? 0),
+                  workloadLimit,
+                  Math.max(availableEvaluatorCount, 0)
+                )
+              )
+
+        return {
+          id: `warning-evaluator-${runId}-${index + 1}`,
+          name: evaluatorRow.evaluator_name,
+          status: "warning",
+          loadText: `${safeAssignmentsReceived}/${workloadLimit}`,
+          detailText: evaluatorRow.context_note ?? undefined,
+          issueCodeLabel: toEvaluatorIssueCodeLabel(
+            evaluatorRow.issue_code,
+            evaluatorRow.context_note
+          ),
+        }
+      }
     )
 
-    const coveredAgentRows = (coveredAgentsByRunId.get(Number(run.rule_run_id)) ?? []).map(
-      (agentRow, index) => ({
-        id: `covered-agent-${Number(run.rule_run_id)}-${index + 1}`,
-        name: agentRow.agent_name,
-        status: "success",
-        assignmentText: `${Number(agentRow.assignments_made ?? 0)}/${Number(agentRow.assignment_goal ?? 1)} assigned`,
-      })
-    )
+    if (warningAgentRows.length > 0 && warningEvaluatorRowsRaw.length === 0) {
+      const fallbackEvaluator = activeEvaluatorSourceRows[0]
+      if (fallbackEvaluator) {
+        warningEvaluatorRowsRaw = [
+          {
+            id: `warning-evaluator-${runId}-fallback`,
+            name: fallbackEvaluator.evaluator_name,
+            status: "warning",
+            loadText: `0/${Number(fallbackEvaluator.workload_limit ?? 0)}`,
+            detailText: "Workload limit reached for this evaluator in this rule run.",
+            issueCodeLabel: "Workload limit reached",
+          },
+        ]
+      }
+    }
 
-    const quotaRows = (quotaAgentsByRunId.get(Number(run.rule_run_id)) ?? []).map(
-      (agentRow, index) => ({
-        id: `quota-agent-${Number(run.rule_run_id)}-${index + 1}`,
-        name: agentRow.agent_name,
-        status: "fyi",
-        assignmentText: "1/1 via another rule",
-        viaRuleName: "Another rule",
-        detailText: agentRow.context_note ?? undefined,
-        issueCodeLabel: "Quota met by another rule",
-      })
-    )
+    const warningEvaluatorRows = warningAgentRows.length > 0 ? warningEvaluatorRowsRaw : []
 
-    const warningEvaluatorRows = (warningEvaluatorsByRunId.get(Number(run.rule_run_id)) ?? []).map(
-      (evaluatorRow, index) => ({
-        id: `warning-evaluator-${Number(run.rule_run_id)}-${index + 1}`,
-        name: evaluatorRow.evaluator_name,
-        status: "warning",
-        loadText: `${Number(evaluatorRow.assignments_received ?? 0)}/${Number(evaluatorRow.workload_limit ?? 0)}`,
-        detailText: evaluatorRow.context_note ?? undefined,
-        issueCodeLabel: toIssueCodeLabel(evaluatorRow.issue_code),
-      })
-    )
-
-    const activeEvaluatorRows = (activeEvaluatorsByRunId.get(Number(run.rule_run_id)) ?? []).map(
-      (evaluatorRow, index) => ({
-        id: `active-evaluator-${Number(run.rule_run_id)}-${index + 1}`,
-        name: evaluatorRow.evaluator_name,
-        status: "success",
-        loadText: `${Number(evaluatorRow.assignments_received ?? 0)}/${Number(evaluatorRow.workload_limit ?? 0)}`,
-      })
-    )
+    const activeEvaluatorRows = activeEvaluatorSourceRows.map((evaluatorRow, index) => ({
+      id: `active-evaluator-${runId}-${index + 1}`,
+      name: evaluatorRow.evaluator_name,
+      status: "success",
+      loadText: `${Number(evaluatorRow.assignments_received ?? 0)}/${Number(evaluatorRow.workload_limit ?? 0)}`,
+    }))
 
     const reasonSummary =
-      uiStatus === "failed"
-        ? "Rule did not execute — system error"
-        : runIssueItems.length > 0
-          ? runIssueItems
-              .map((issueItem) => issueItem.reason_line)
-              .filter((reasonLine) => Boolean(reasonLine))
-              .join(" · ")
-          : undefined
+      mainPageReasonLines.length > 0 ? mainPageReasonLines.join(" · ") : undefined
 
     ruleSheetByRuleRowId[`rule-${Number(run.week_id)}-${Number(run.rule_id)}`] = {
       status: uiStatus,
@@ -480,11 +625,21 @@ weeks.forEach((week, weekIndex) => {
     }
   })
 
+  const normalizedAgentsWithoutAssignment = weekRuns.reduce((total, ruleRow) => {
+    return (
+      total +
+      (ruleRow.mainPageReasonLines ?? []).reduce(
+        (lineTotal, reasonLine) => lineTotal + getReasonLineAgentCount(reasonLine),
+        0
+      )
+    )
+  }, 0)
+
   activityByTab[tabKey] = {
     tabLabel: week.week_label,
     ...(qualifier ? { tabQualifier: qualifier } : {}),
     summary: {
-      agentsWithoutAssignment: Number(week.agents_without_assignment ?? 0),
+      agentsWithoutAssignment: normalizedAgentsWithoutAssignment,
       evaluatorsWithoutWorkload: Number(week.evaluators_without_workload ?? 0),
     },
     rules: weekRuns,

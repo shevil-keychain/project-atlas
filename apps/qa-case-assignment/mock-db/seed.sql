@@ -199,8 +199,8 @@ INSERT INTO issue_catalog (
   ),
   (
     'NO_CONVERSATIONS_IN_PERIOD',
-    'No conversations in period',
-    'Agent had zero conversations during the sampling window.',
+    'Insufficient matching conversations',
+    'No eligible conversations matched this rule during the run window.',
     'coverage',
     'agent',
     0,
@@ -211,8 +211,8 @@ INSERT INTO issue_catalog (
   ),
   (
     'NO_MATCHING_CONVERSATIONS',
-    'Conversations did not match filters',
-    'Conversations existed but none matched the rule filters.',
+    'Insufficient matching conversations',
+    'No eligible conversations matched this rule during the run window.',
     'coverage',
     'agent',
     1,
@@ -223,8 +223,8 @@ INSERT INTO issue_catalog (
   ),
   (
     'ALL_EVALUATORS_AT_CAPACITY',
-    'All evaluators at capacity',
-    'Eligible conversations existed but evaluator workload limits were reached.',
+    'Evaluators'' workload limit reached',
+    'Evaluator workload or availability constraints blocked assignment.',
     'capacity',
     'rule',
     1,
@@ -235,8 +235,8 @@ INSERT INTO issue_catalog (
   ),
   (
     'EVALUATOR_UNAVAILABLE',
-    'Evaluator unavailable',
-    'Evaluator was unavailable or on leave.',
+    'Evaluators'' workload limit reached',
+    'Evaluator workload or availability constraints blocked assignment.',
     'capacity',
     'evaluator',
     1,
@@ -247,8 +247,8 @@ INSERT INTO issue_catalog (
   ),
   (
     'RULE_DID_NOT_EXECUTE',
-    'Rule did not execute',
-    'Rule was scheduled but did not run due to a system error.',
+    'Rule execution failed',
+    'The rule did not complete successfully in this run.',
     'system',
     'rule',
     0,
@@ -259,8 +259,8 @@ INSERT INTO issue_catalog (
   ),
   (
     'RULE_EXECUTION_INTERRUPTED',
-    'Rule execution interrupted',
-    'Rule started but timed out before processing all agents.',
+    'Rule execution failed',
+    'The rule did not complete successfully in this run.',
     'system',
     'rule',
     0,
@@ -467,10 +467,10 @@ WITH run_agents AS (
     rr.status,
     a.agent_id,
     CASE
-      WHEN rr.status = 'success' THEN 1
+      WHEN rr.status = 'success' THEN 2
       WHEN rr.status = 'failed' THEN 0
       WHEN ((a.agent_id + rr.rule_id * 3 + rr.week_id * 5) % 11) = 0 THEN 0
-      ELSE 1
+      ELSE 2
     END AS assignments_made
   FROM rule_runs rr
   JOIN rule_teams rt ON rt.rule_id = rr.rule_id
@@ -480,12 +480,12 @@ classified AS (
   SELECT
     ra.*,
     CASE
-      WHEN ra.assignments_made = 1 THEN 'covered'
+      WHEN ra.assignments_made >= 1 THEN 'covered'
       WHEN ra.run_kind = 'predicted' THEN 'at_risk'
       ELSE 'not_covered'
     END AS coverage_state,
     CASE
-      WHEN ra.assignments_made = 1 THEN NULL
+      WHEN ra.assignments_made >= 1 THEN NULL
       WHEN ra.status = 'failed' THEN 'RULE_DID_NOT_EXECUTE'
       WHEN ra.run_kind = 'actual' AND ((ra.agent_id + ra.rule_id + ra.week_id) % 5) = 0 THEN 'NO_CONVERSATIONS_IN_PERIOD'
       WHEN ((ra.agent_id + ra.rule_id + ra.week_id) % 3) = 0 THEN 'NO_MATCHING_CONVERSATIONS'
@@ -514,7 +514,7 @@ SELECT
   c.agent_id,
   c.coverage_state,
   c.issue_code,
-  1,
+  2,
   COALESCE(c.assignments_made, 0),
   CASE
     WHEN c.issue_code IN ('NO_CONVERSATIONS_IN_PERIOD', 'RULE_DID_NOT_EXECUTE') THEN 0
@@ -545,6 +545,35 @@ SELECT
   END
 FROM classified c;
 
+WITH team_10_agents AS (
+  SELECT
+    a.agent_id,
+    ROW_NUMBER() OVER (ORDER BY a.agent_id) AS agent_rank
+  FROM agents a
+  WHERE a.team_id = 10
+),
+weekly_uncovered_targets AS (
+  SELECT
+    ws.week_id,
+    ws.week_state,
+    CASE
+      WHEN ws.week_state = 'upcoming' THEN 10
+      ELSE
+        CASE ((ws.week_id - 1) % 10)
+          WHEN 0 THEN 0
+          WHEN 1 THEN 3
+          WHEN 2 THEN 0
+          WHEN 3 THEN 4
+          WHEN 4 THEN 0
+          WHEN 5 THEN 6
+          WHEN 6 THEN 0
+          WHEN 7 THEN 3
+          WHEN 8 THEN 0
+          ELSE 8
+        END
+    END AS uncovered_agents_target
+  FROM week_snapshots ws
+)
 INSERT INTO agent_coverage_detail (
   week_id,
   rule_run_id,
@@ -559,24 +588,23 @@ INSERT INTO agent_coverage_detail (
   context_note
 )
 SELECT
-  ws.week_id,
+  wt.week_id,
   NULL,
-  a.agent_id,
-  CASE WHEN ws.week_state = 'upcoming' THEN 'at_risk' ELSE 'not_covered' END,
+  t10.agent_id,
+  CASE WHEN wt.week_state = 'upcoming' THEN 'at_risk' ELSE 'not_covered' END,
   'AGENT_NOT_IN_ANY_RULE',
-  1,
+  2,
   0,
   0,
   0,
   0,
   CASE
-    WHEN ws.week_state = 'upcoming'
+    WHEN wt.week_state = 'upcoming'
       THEN 'Agent is outside all active rule coverage for this upcoming week.'
     ELSE 'Agent was outside all active rules during this completed week.'
   END
-FROM week_snapshots ws
-JOIN agents a ON a.team_id = 10
-WHERE ((a.agent_id + ws.week_id) % 3) <> 0;
+FROM weekly_uncovered_targets wt
+JOIN team_10_agents t10 ON t10.agent_rank <= wt.uncovered_agents_target;
 
 INSERT INTO agent_coverage_detail (
   week_id,
@@ -597,8 +625,8 @@ SELECT
   ac.agent_id,
   'informational',
   'QUOTA_MET_BY_ANOTHER_RULE',
-  1,
-  1,
+  2,
+  2,
   1,
   1,
   0,
@@ -655,7 +683,7 @@ SELECT
   CASE
     WHEN re.status = 'failed' THEN 'RULE_DID_NOT_EXECUTE'
     WHEN re.run_kind = 'predicted' AND ((re.week_id + re.rule_id + re.evaluator_id) % 7) = 0 THEN 'EVALUATOR_UNAVAILABLE'
-    WHEN re.assignments_received = 0 THEN 'EVALUATOR_UNAVAILABLE'
+    WHEN re.assignments_received = 0 THEN 'ALL_EVALUATORS_AT_CAPACITY'
     ELSE NULL
   END AS issue_code,
   re.workload_limit,
@@ -664,9 +692,9 @@ SELECT
     WHEN re.status = 'failed'
       THEN 'Rule did not execute; evaluator assignments were not processed.'
     WHEN re.run_kind = 'predicted' AND ((re.week_id + re.rule_id + re.evaluator_id) % 7) = 0
-      THEN 'Evaluator has upcoming availability risk.'
+      THEN printf('Time off for %d days in the week.', 1 + ((re.week_id + re.rule_id + re.evaluator_id) % 3))
     WHEN re.assignments_received = 0
-      THEN 'Evaluator received zero assignments in this rule run.'
+      THEN 'Workload limit reached for this evaluator in this rule run.'
     ELSE NULL
   END
 FROM run_evals re;
