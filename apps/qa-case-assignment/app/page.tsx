@@ -9,6 +9,8 @@ import {
   PageHeaderTitle,
 } from "@level/ui/components/patterns/page-header"
 import { Avatar } from "@level/ui/components/ui/avatar"
+import { AvatarGroup } from "@level/ui/components/ui/avatar-group"
+import { AlertToast } from "@level/ui/components/ui/alert-toast"
 import { Badge } from "@level/ui/components/ui/badge"
 import { Button } from "@level/ui/components/ui/button"
 import { Card } from "@level/ui/components/ui/card"
@@ -79,7 +81,7 @@ import {
 import { ToastContainer } from "@level/ui/components/ui/toast-container"
 import { toast } from "@level/ui/hooks/use-toast"
 import { cn } from "@level/ui/lib/utils"
-import { ChevronLeft, ExternalLink } from "lucide-react"
+import { ChevronDown, ChevronLeft, ExternalLink } from "lucide-react"
 import {
   mockDbActivityByTab,
   mockDbOrderedActivityTabs,
@@ -145,6 +147,7 @@ type ActivityRuleRow = {
 }
 
 type ActivitySummary = {
+  agentsNotInAnyRuleCount?: number
   agentsWithoutAssignment: number
   evaluatorsWithoutWorkload: number
 }
@@ -165,6 +168,7 @@ type CoverageIssueType =
   | "not_in_rule"
   | "all_evaluators_capacity"
   | "no_matching_conversations"
+  | "rule_execution_failed"
 
 type CoverageIssue = {
   id: string
@@ -241,6 +245,7 @@ const ACTIVITY_RULE_COUNT = 8
 const ACTIVITY_TOTAL_RULE_SLOTS = ACTIVITY_TAB_COUNT * ACTIVITY_RULE_COUNT
 const ACTIVITY_SUCCESS_RULE_COUNT = Math.round(ACTIVITY_TOTAL_RULE_SLOTS * 0.7)
 const ACTIVITY_PARTIAL_RULE_COUNT = Math.round(ACTIVITY_TOTAL_RULE_SLOTS * 0.2)
+const AGENT_POPULATION_COUNT = 240
 
 const activityRuleNames = [
   "Legacy Escalation QA",
@@ -261,11 +266,7 @@ const partialRuleNotes = [
   "Some assignments were rescheduled while replacement evaluators were provisioned",
 ]
 
-const failedRuleNotes = [
-  "Coverage dropped after evaluator availability fell below the required threshold",
-  "Assignment prerequisites were unmet for multiple queue segments",
-  "Execution missed target due to cascading eligibility conflicts",
-]
+const RULE_EXECUTION_FAILED_LABEL = "Rule execution failed"
 
 const issueCodeDescriptions: Record<string, string> = {
   "Agent not in any rule":
@@ -318,13 +319,6 @@ const partialIssueCodes: IssueCodeLabel[] = [
   "Rule execution interrupted",
   "Quota met by another rule",
   "Agent not in any rule",
-]
-
-const failedIssueCodes: IssueCodeLabel[] = [
-  "All evaluators at capacity",
-  "Rule did not execute",
-  "Rule execution interrupted",
-  "Conversations didn't match filters",
 ]
 
 const sampleAgentNames = [
@@ -403,7 +397,7 @@ function getRuleNote(status: ActivityRuleStatus, tabIndex: number, ruleIndex: nu
   }
 
   if (status === "failed") {
-    return failedRuleNotes[(tabIndex + ruleIndex) % failedRuleNotes.length]
+    return RULE_EXECUTION_FAILED_LABEL
   }
 
   return undefined
@@ -419,7 +413,7 @@ function getIssueCodeLabel(
   }
 
   if (status === "failed") {
-    return failedIssueCodes[(tabIndex + ruleIndex) % failedIssueCodes.length]
+    return RULE_EXECUTION_FAILED_LABEL
   }
 
   return undefined
@@ -431,7 +425,7 @@ function getMainPageReasonLines(
   ruleIndex: number
 ): string[] {
   if (status === "partial") {
-    const reasonKinds = ["no_conversations", "no_matching", "unavailable", "interrupted"] as const
+    const reasonKinds = ["no_conversations", "no_matching", "unavailable"] as const
     const firstReasonKind = reasonKinds[(tabIndex + ruleIndex) % reasonKinds.length]
     const secondReasonKind = reasonKinds[(tabIndex + ruleIndex + 2) % reasonKinds.length]
     const selectedReasonKinds =
@@ -451,21 +445,140 @@ function getMainPageReasonLines(
         return `${count} agents unassigned due to evaluator unavailability`
       }
 
-      return `${count} agents not processed as the rule did not execute`
+      return `${count} agents unassigned due to evaluator unavailability`
     })
   }
 
   if (status === "failed") {
-    const failedReasonLines = [
-      "All evaluators at capacity",
-      "No matching conversations found",
-      "Rule did not execute",
-    ]
-
-    return [failedReasonLines[(tabIndex + ruleIndex) % failedReasonLines.length]]
+    return [RULE_EXECUTION_FAILED_LABEL]
   }
 
   return []
+}
+
+function isRuleExecutionFailureLine(reasonLine: string) {
+  const normalizedReasonLine = reasonLine.trim().toLowerCase()
+  return (
+    normalizedReasonLine.includes("rule execution failed") ||
+    normalizedReasonLine.includes("rule did not execute") ||
+    normalizedReasonLine.includes("not processed")
+  )
+}
+
+function normalizeFailedAssignments(assignments: string) {
+  const [completedRawValue, targetRawValue] = assignments.split("/")
+  if (!targetRawValue) {
+    return assignments
+  }
+
+  const parsedTarget = Number.parseInt(targetRawValue.trim(), 10)
+  if (!Number.isFinite(parsedTarget) || parsedTarget < 0) {
+    return assignments
+  }
+
+  const hasCompletedValue = Number.isFinite(Number.parseInt((completedRawValue ?? "").trim(), 10))
+  if (!hasCompletedValue) {
+    return assignments
+  }
+
+  return `0/${parsedTarget}`
+}
+
+function parseAssignmentTarget(assignments: string) {
+  const [, targetRawValue] = assignments.split("/")
+  if (!targetRawValue) {
+    return undefined
+  }
+
+  const parsedTarget = Number.parseInt(targetRawValue.trim(), 10)
+  if (!Number.isFinite(parsedTarget) || parsedTarget <= 0) {
+    return undefined
+  }
+
+  return parsedTarget
+}
+
+function getRuleExecutionFailureSummary(assignments: string) {
+  const target = parseAssignmentTarget(assignments)
+  if (!target) {
+    return RULE_EXECUTION_FAILED_LABEL
+  }
+
+  return `${target} ${target === 1 ? "agent" : "agents"}: ${RULE_EXECUTION_FAILED_LABEL.toLowerCase()}`
+}
+
+function normalizeRuleRow(rule: ActivityRuleRow): ActivityRuleRow {
+  const reasonLines = rule.mainPageReasonLines ?? []
+  const hasExecutionFailureReasonLine = reasonLines.some((reasonLine) =>
+    isRuleExecutionFailureLine(reasonLine)
+  )
+  const hasExecutionFailureIssueCode =
+    rule.issueCodeLabel === "Rule did not execute" || rule.issueCodeLabel === RULE_EXECUTION_FAILED_LABEL
+  const shouldForceFailedRow =
+    rule.status === "failed" || hasExecutionFailureReasonLine || hasExecutionFailureIssueCode
+
+  if (shouldForceFailedRow) {
+    const normalizedAssignments = normalizeFailedAssignments(rule.assignments)
+    const failureSummary = getRuleExecutionFailureSummary(normalizedAssignments)
+
+    return {
+      ...rule,
+      status: "failed",
+      metric: "0%",
+      assignments: normalizedAssignments,
+      note: RULE_EXECUTION_FAILED_LABEL,
+      issueCodeLabel: RULE_EXECUTION_FAILED_LABEL,
+      mainPageReasonLines: [failureSummary],
+    }
+  }
+
+  if (rule.status === "partial") {
+    return {
+      ...rule,
+      mainPageReasonLines: reasonLines.filter(
+        (reasonLine) => !isRuleExecutionFailureLine(reasonLine)
+      ),
+    }
+  }
+
+  return rule
+}
+
+function normalizeCurrentWeekRuleRow(rule: ActivityRuleRow): ActivityRuleRow {
+  const reasonLinesWithoutExecutionFailure = (rule.mainPageReasonLines ?? []).filter(
+    (reasonLine) => !isRuleExecutionFailureLine(reasonLine)
+  )
+  const hasExecutionFailureSignal =
+    rule.status === "failed" ||
+    rule.issueCodeLabel === "Rule did not execute" ||
+    rule.issueCodeLabel === RULE_EXECUTION_FAILED_LABEL ||
+    reasonLinesWithoutExecutionFailure.length !== (rule.mainPageReasonLines ?? []).length
+
+  if (!hasExecutionFailureSignal) {
+    return {
+      ...rule,
+      mainPageReasonLines: reasonLinesWithoutExecutionFailure,
+    }
+  }
+
+  const target = parseAssignmentTarget(rule.assignments)
+  const partialMetric = 92
+  const completedAssignments = target
+    ? Math.max(0, Math.min(target - 1, Math.round((target * partialMetric) / 100)))
+    : undefined
+
+  return {
+    ...rule,
+    status: "partial",
+    metric: `${partialMetric}%`,
+    assignments:
+      target && completedAssignments !== undefined
+        ? `${completedAssignments}/${target}`
+        : rule.assignments,
+    note: "Assignments still in progress for this week.",
+    issueCodeLabel: "All evaluators at capacity",
+    mainPageReasonLines: ["3 agents unassigned due to evaluator unavailability"],
+  }
 }
 
 const fallbackOrderedActivityTabs: ActivityTab[] = Array.from(
@@ -585,18 +698,22 @@ const assignmentRules: AssignmentRule[] = [
 
 const activityTemplates: ActivitySummary[] = [
   {
+    agentsNotInAnyRuleCount: 2,
     agentsWithoutAssignment: 2,
     evaluatorsWithoutWorkload: 1,
   },
   {
+    agentsNotInAnyRuleCount: 1,
     agentsWithoutAssignment: 3,
     evaluatorsWithoutWorkload: 0,
   },
   {
+    agentsNotInAnyRuleCount: 1,
     agentsWithoutAssignment: 1,
     evaluatorsWithoutWorkload: 0,
   },
   {
+    agentsNotInAnyRuleCount: 0,
     agentsWithoutAssignment: 0,
     evaluatorsWithoutWorkload: 0,
   },
@@ -624,6 +741,18 @@ function getStatusTooltip(status: ActivityRuleStatus) {
   }
 
   return "Not covered"
+}
+
+function getRuleStatusPriority(status: ActivityRuleStatus) {
+  if (status === "failed") {
+    return 0
+  }
+
+  if (status === "partial") {
+    return 1
+  }
+
+  return 2
 }
 
 function getCompactLoadValue(loadText: string) {
@@ -719,12 +848,6 @@ function parseAssignmentProgress(assignments: string) {
     completed: Number.isFinite(completed) ? completed : 0,
     target: Number.isFinite(target) ? target : 0,
   }
-}
-
-const coverageIssueSortOrder: Record<CoverageIssueType, number> = {
-  not_in_rule: 0,
-  all_evaluators_capacity: 1,
-  no_matching_conversations: 2,
 }
 
 const coverageAgentFirstNames = [
@@ -866,6 +989,10 @@ function getPersonDisplayName(name: string) {
 }
 
 function getCoverageIssueLabel(issueType: CoverageIssueType) {
+  if (issueType === "rule_execution_failed") {
+    return "Rule execution failed"
+  }
+
   if (issueType === "not_in_rule") {
     return "Agent not in any rule"
   }
@@ -878,6 +1005,10 @@ function getCoverageIssueLabel(issueType: CoverageIssueType) {
 }
 
 function getCoverageIssueCodeLabel(issue: CoverageIssue): IssueCodeLabel {
+  if (issue.issueType === "rule_execution_failed") {
+    return "Rule execution failed"
+  }
+
   if (issue.issueType === "not_in_rule") {
     return "Agent not in any rule"
   }
@@ -887,6 +1018,62 @@ function getCoverageIssueCodeLabel(issue: CoverageIssue): IssueCodeLabel {
   }
 
   return "Insufficient matching conversations"
+}
+
+function getAgentsNotInAnyRuleTitle(issueCount: number) {
+  return `${issueCount} ${issueCount === 1 ? "agent" : "agents"} not added to any rule`
+}
+
+function getRuleAgentIssueGroupLabel(agent: RuleAgentRow) {
+  return (getRuleAgentIssueCodeLabel(agent) ?? "Issue").toLowerCase()
+}
+
+function getRuleAgentIssueSectionValue(label: string) {
+  return `agents-issue-${label.replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase()}`
+}
+
+function canResolveRuleAgentIssueGroup(label: string) {
+  return !label.includes("rule execution failed") && !label.includes("rule did not execute")
+}
+
+function isEvaluatorWorkloadIssueLabel(label: string) {
+  return label.includes("workload limit reached")
+}
+
+function getRuleAgentIssueCtaLabel(label: string) {
+  if (isEvaluatorWorkloadIssueLabel(label)) {
+    return "Adjust evaluators' workload"
+  }
+
+  if (label.includes("insufficient matching conversations")) {
+    return "Adjust conversation filters"
+  }
+
+  return "Resolve"
+}
+
+function getAgentsNotInAnyRuleCardLabel(issueCount: number) {
+  if (issueCount === 1) {
+    return "1 agent not added to any rule"
+  }
+
+  return `${issueCount} agents not added to any rule`
+}
+
+function getRulesWithFailuresLabel(ruleCount: number) {
+  if (ruleCount === 1) {
+    return "1 rule with failure"
+  }
+
+  return `${ruleCount} rules with failures`
+}
+
+function getRulesRanSuccessfullyLabel(ruleCount: number) {
+  if (ruleCount === 1) {
+    return "1 successful rule"
+  }
+
+  return `${ruleCount} successful rules`
 }
 
 function getRuleAgentIssueCodeLabel(agent: RuleAgentRow): IssueCodeLabel | undefined {
@@ -971,70 +1158,24 @@ function getRuleStatusLabel(status: ActivityRuleStatus) {
 }
 
 function buildCoverageRunSheetDetails(activityData: ActivityData): CoverageSheetDetails {
-  const requestedIssueCount = Math.max(0, activityData.summary.agentsWithoutAssignment)
-  const capacityRule =
-    activityData.rules.find((rule) => rule.status !== "success") ?? activityData.rules[0]
-  const matchingRule =
-    activityData.rules.find((rule) => rule.id !== capacityRule?.id) ??
-    activityData.rules[1] ??
-    capacityRule
+  const requestedIssueCount = Math.max(0, activityData.summary.agentsNotInAnyRuleCount ?? 0)
+  const selectedIssues = Array.from({ length: requestedIssueCount }, (_, index) => {
+    const teamNames = getCoverageAgentTeams(index)
 
-  const issueTemplates: CoverageIssue[] = [
-    {
-      id: "coverage-not-in-rule",
-      agentName: "Tom Rivera",
-      teamNames: ["Sales team"],
+    return {
+      id: `coverage-not-in-rule-${index + 1}`,
+      agentName: getCoverageAgentName(index),
+      teamName: teamNames[0] ?? getCoverageAgentTeam(index + 1),
+      teamNames,
       issueType: "not_in_rule",
       lastCovered: "Feb 10-16",
-      dropReason: "(was in \"Billing QA\" until Feb 14)",
-    },
-    {
-      id: "coverage-capacity",
-      agentName: "Priya Nair",
-      teamNames: ["Support team"],
-      issueType: "all_evaluators_capacity",
-      ruleId: capacityRule?.id,
-      ruleName: capacityRule?.name,
-      unassignedCount: 3,
-      evaluatorCapacitySummary: "Sarah Kim 24/24 · Mike Johnson 24/24",
-    },
-    {
-      id: "coverage-no-match",
-      agentName: "Dan Wu",
-      teamNames: ["Billing team"],
-      issueType: "no_matching_conversations",
-      ruleId: matchingRule?.id,
-      ruleName: matchingRule?.name,
-      conversationContext:
-        "6 conversations in period · none matched filters (duration > 10 min)",
-    },
-  ]
-
-  const selectedIssues = Array.from({ length: requestedIssueCount }, (_, index) => {
-    const template = issueTemplates[index % issueTemplates.length]
-    const teamNames = getCoverageAgentTeams(index)
-    return {
-      ...template,
-      id: `${template.id}-${index + 1}`,
-      agentName: getCoverageAgentName(index),
-      teamName: teamNames[0] ?? getCoverageAgentTeam(index),
-      teamNames,
-    }
-  }).sort((leftIssue, rightIssue) => {
-    const issueOrderDifference =
-      coverageIssueSortOrder[leftIssue.issueType] - coverageIssueSortOrder[rightIssue.issueType]
-
-    if (issueOrderDifference !== 0) {
-      return issueOrderDifference
-    }
-
-    return leftIssue.agentName.localeCompare(rightIssue.agentName)
-  })
+    } satisfies CoverageIssue
+  }).sort((leftIssue, rightIssue) => leftIssue.agentName.localeCompare(rightIssue.agentName))
 
   return {
     panel: "coverage",
-    title: selectedIssues.length > 0 ? "Agents not covered" : "Agents covered",
-    subtitle: `${selectedIssues.length} ${selectedIssues.length === 1 ? "agent" : "agents"} received zero QA this week`,
+    title: getAgentsNotInAnyRuleTitle(selectedIssues.length),
+    subtitle: activityData.tabLabel,
     issues: selectedIssues,
   }
 }
@@ -1044,6 +1185,46 @@ function buildRuleRunSheetDetails(
   activityData: ActivityData,
   mode: ActivityModeTab
 ): RuleSheetDetails {
+  const getFailedRunFallbackRows = () => {
+    const failedAgents: RuleAgentRow[] = sampleAgentNames.map((agentName, index) => ({
+      id: `failed-system-warning-${index + 1}`,
+      name: agentName,
+      status: "warning",
+      warningReason: "rule_interrupted",
+      issueCodeLabel: "Rule did not execute",
+      detailText: "Rule did not execute due to a system error.",
+    }))
+
+    const failedEvaluators: RuleEvaluatorRow[] = [
+      {
+        id: "failed-evaluator-warning-1",
+        name: "Mike Johnson",
+        status: "warning",
+        loadText: "0/24",
+        issueCodeLabel: "Rule did not execute",
+        detailText: "Rule did not execute due to a system error.",
+      },
+      {
+        id: "failed-evaluator-warning-2",
+        name: "Sarah Kim",
+        status: "warning",
+        loadText: "0/24",
+        issueCodeLabel: "Rule did not execute",
+        detailText: "Rule did not execute due to a system error.",
+      },
+      {
+        id: "failed-evaluator-warning-3",
+        name: "Amy Torres",
+        status: "warning",
+        loadText: "0/24",
+        issueCodeLabel: "Rule did not execute",
+        detailText: "Rule did not execute due to a system error.",
+      },
+    ]
+
+    return { failedAgents, failedEvaluators }
+  }
+
   const mockDbRuleSheet = (mockDbRuleSheetByRuleRowId as unknown as Record<string, MockDbRuleSheetData>)[
     rule.id
   ]
@@ -1052,6 +1233,11 @@ function buildRuleRunSheetDetails(
     const resolvedStatusLabel = mockDbRuleSheet.statusLabel ?? getRuleStatusLabel(resolvedStatus)
     const resolvedProgressLabel =
       mockDbRuleSheet.progressLabel ?? `${rule.metric} (${rule.assignments})`
+    const { failedAgents, failedEvaluators } = getFailedRunFallbackRows()
+    const isFailedRule = resolvedStatus === "failed"
+    const resolvedAgentsWithoutQa = mockDbRuleSheet.agentsWithoutQa ?? []
+    const resolvedEvaluatorsWithIssues = mockDbRuleSheet.evaluatorsWithIssues ?? []
+    const resolvedActiveEvaluators = mockDbRuleSheet.activeEvaluators ?? []
 
     return {
       panel: "rule",
@@ -1063,11 +1249,16 @@ function buildRuleRunSheetDetails(
       progressLabel: resolvedProgressLabel,
       metadata: mockDbRuleSheet.metadata ?? [],
       reasonSummary: mockDbRuleSheet.reasonSummary,
-      agentsWithoutQa: mockDbRuleSheet.agentsWithoutQa ?? [],
+      agentsWithoutQa:
+        isFailedRule && resolvedAgentsWithoutQa.length === 0 ? failedAgents : resolvedAgentsWithoutQa,
       coveredAgents: mockDbRuleSheet.coveredAgents ?? [],
       quotaMetElsewhere: mockDbRuleSheet.quotaMetElsewhere ?? [],
-      evaluatorsWithIssues: mockDbRuleSheet.evaluatorsWithIssues ?? [],
-      activeEvaluators: mockDbRuleSheet.activeEvaluators ?? [],
+      evaluatorsWithIssues:
+        isFailedRule && resolvedEvaluatorsWithIssues.length === 0
+          ? failedEvaluators
+          : resolvedEvaluatorsWithIssues,
+      activeEvaluators:
+        isFailedRule && resolvedActiveEvaluators.length === 0 ? [] : resolvedActiveEvaluators,
     }
   }
 
@@ -1236,15 +1427,10 @@ function buildRuleRunSheetDetails(
     ]
 
     reasonSummary = "Rule did not execute — system error"
-
-    agentsWithoutQa = sampleAgentNames.slice(0, 6).map((agentName, index) => ({
-      id: `failed-system-warning-${index + 1}`,
-      name: agentName,
-      status: "warning",
-      warningReason: "rule_interrupted",
-      issueCodeLabel: "Rule did not execute",
-      detailText: "Rule did not execute due to a system error.",
-    }))
+    const { failedAgents, failedEvaluators } = getFailedRunFallbackRows()
+    agentsWithoutQa = failedAgents
+    evaluatorsWithIssues = failedEvaluators
+    activeEvaluators = []
   }
 
   const statusLabel = getRuleStatusLabel(rule.status)
@@ -1328,12 +1514,17 @@ const fallbackActivityByTab: Record<ActivityTab, ActivityData> = fallbackOrdered
     const summary = isForcedGreenWeek
       ? {
           ...summaryTemplate,
+          agentsNotInAnyRuleCount: 0,
           agentsWithoutAssignment: 0,
           evaluatorsWithoutWorkload: 0,
         }
       : isUpcomingWeek
         ? {
             ...summaryTemplate,
+            agentsNotInAnyRuleCount:
+              (summaryTemplate.agentsNotInAnyRuleCount ?? 0) > 0
+                ? summaryTemplate.agentsNotInAnyRuleCount
+                : 2,
             agentsWithoutAssignment:
               summaryTemplate.agentsWithoutAssignment > 0
                 ? summaryTemplate.agentsWithoutAssignment
@@ -1382,10 +1573,23 @@ const orderedActivityTabs: ActivityTab[] =
     ? [...dbOrderedActivityTabs]
     : fallbackOrderedActivityTabs
 
-const activityByTab: Record<ActivityTab, ActivityData> =
+const rawActivityByTab: Record<ActivityTab, ActivityData> =
   Object.keys(mockDbActivityByTab).length > 0
     ? (mockDbActivityByTab as unknown as Record<ActivityTab, ActivityData>)
     : fallbackActivityByTab
+
+const initialActivityByTab: Record<ActivityTab, ActivityData> = Object.fromEntries(
+  Object.entries(rawActivityByTab).map(([tabKey, tabData]) => [
+    tabKey,
+    {
+      ...tabData,
+      rules:
+        tabKey === orderedActivityTabs[1]
+          ? tabData.rules.map((rule) => normalizeCurrentWeekRuleRow(normalizeRuleRow(rule)))
+          : tabData.rules.map((rule) => normalizeRuleRow(rule)),
+    },
+  ])
+) as Record<ActivityTab, ActivityData>
 
 function SettingsSidebar() {
   return (
@@ -1571,14 +1775,14 @@ function CoverageIssueCard({
 }: {
   issue: CoverageIssue
   rules: ActivityRuleRow[]
-  onAddToRule: (agentName: string, ruleName: string) => void
+  onAddToRule: (issueId: string, agentName: string, ruleName: string) => void
   onViewRule: (ruleId: string) => void
   showIssueCodeBadge: boolean
   canAddToRule: boolean
 }) {
   const details: string[] = []
   const issueCodeLabel = showIssueCodeBadge ? getCoverageIssueCodeLabel(issue) : undefined
-  const shouldShowTeams = issueCodeLabel === "Agent not in any rule"
+  const shouldShowTeams = issue.issueType === "not_in_rule"
   const issueAgentDisplayName = getPersonDisplayName(issue.agentName)
   const allTeamNames = issue.teamNames?.filter(Boolean) ?? (issue.teamName ? [issue.teamName] : [])
   const visibleTeamNames = allTeamNames.slice(0, 2)
@@ -1603,15 +1807,22 @@ function CoverageIssueCard({
     }
   }
 
+  if (issue.issueType === "rule_execution_failed") {
+    if (issue.ruleName) {
+      details.push(issue.ruleName)
+    }
+    details.push("Rule did not execute due to a system error")
+  }
+
   return (
-    <div className="flex items-start justify-between gap-12 py-10">
+    <div className="flex items-start justify-between gap-12 py-16">
       <div className="min-w-0 space-y-8">
         <div className="flex items-start gap-12">
           <Avatar name={issueAgentDisplayName} size="xs" />
           <div className="min-w-0">
             <p className="text-14 font-semibold text-text-primary">{issueAgentDisplayName}</p>
             {shouldShowTeams && allTeamNames.length > 0 && (
-              <p className="text-12 font-medium text-text-tertiary">
+              <p className="text-12 font-medium text-text-secondary">
                 {visibleTeamNames.join(", ")}
                 {hiddenTeamNames.length > 0 && (
                   <>
@@ -1632,7 +1843,7 @@ function CoverageIssueCard({
                 )}
               </p>
             )}
-            {issueCodeLabel ? (
+            {issue.issueType === "not_in_rule" ? null : issueCodeLabel ? (
               <SimpleTooltip
                 side="bottom"
                 content={
@@ -1653,7 +1864,7 @@ function CoverageIssueCard({
           </div>
         </div>
 
-        {!issueCodeLabel && details.length > 0 && (
+        {issue.issueType !== "not_in_rule" && !issueCodeLabel && details.length > 0 && (
           <p className="pl-28 text-12 font-medium text-text-secondary">{details.join(" · ")}</p>
         )}
       </div>
@@ -1669,7 +1880,7 @@ function CoverageIssueCard({
               {rules.map((rule) => (
                 <DropdownMenuItem
                   key={`${issue.id}-${rule.id}`}
-                  onClick={() => onAddToRule(issueAgentDisplayName, rule.name)}
+                  onClick={() => onAddToRule(issue.id, issueAgentDisplayName, rule.name)}
                 >
                   {rule.name}
                 </DropdownMenuItem>
@@ -1681,7 +1892,7 @@ function CoverageIssueCard({
             variant="secondary"
             size="sm"
             onClick={() => onViewRule(issue.ruleId!)}
-            iconRight={<ExternalLink size={14} className="text-icon-secondary" />}
+            iconRight={<ChevronRight size={14} className="text-icon-secondary" />}
           >
             View rule
           </Button>
@@ -1694,9 +1905,11 @@ function CoverageIssueCard({
 function RuleAgentRowCard({
   agent,
   showIssueCodeBadge,
+  showSupportingText = true,
 }: {
   agent: RuleAgentRow
   showIssueCodeBadge: boolean
+  showSupportingText?: boolean
 }) {
   const issueCodeLabel = showIssueCodeBadge ? getRuleAgentIssueCodeLabel(agent) : undefined
   const agentDisplayName = getPersonDisplayName(agent.name)
@@ -1724,7 +1937,7 @@ function RuleAgentRowCard({
             <Avatar name={agentDisplayName} size="xs" />
             <div className="min-w-0">
               <p className="text-14 font-semibold text-text-primary">{agentDisplayName}</p>
-              {issueCodeLabel ? (
+              {showSupportingText && issueCodeLabel ? (
                 <SimpleTooltip
                   side="bottom"
                   content={
@@ -1737,13 +1950,13 @@ function RuleAgentRowCard({
                     {issueCodeLabel}
                   </Badge>
                 </SimpleTooltip>
-              ) : agent.status === "warning" ? (
+              ) : showSupportingText && agent.status === "warning" ? (
                 <p className="mt-4 text-12 font-medium text-text-secondary">{warningLabel}</p>
               ) : null}
-              {agent.detailText && !issueCodeLabel && (
+              {showSupportingText && agent.detailText && !issueCodeLabel && (
                 <p className="mt-4 text-12 font-medium text-text-tertiary">{agent.detailText}</p>
               )}
-              {agent.status === "fyi" && viaRuleLabel && (
+              {showSupportingText && agent.status === "fyi" && viaRuleLabel && (
                 <p className="mt-4 text-12 font-medium text-text-tertiary">{viaRuleLabel}</p>
               )}
             </div>
@@ -1802,11 +2015,10 @@ function RuleEvaluatorRowCard({
   )
 }
 
-function ActivityPanel({
-  onOpenRuleSetup,
-}: {
-  onOpenRuleSetup: () => void
-}) {
+function ActivityPanel() {
+  const [activityByTab, setActivityByTab] = React.useState<Record<ActivityTab, ActivityData>>(
+    () => initialActivityByTab
+  )
   const [activeActivityModeTab, setActiveActivityModeTab] =
     React.useState<ActivityModeTab>("agent_evaluation")
   const [activeActivityTab, setActiveActivityTab] = React.useState<ActivityTab>("week_1")
@@ -1817,6 +2029,16 @@ function ActivityPanel({
   const [expandedAgentSections, setExpandedAgentSections] = React.useState<string[]>([])
   const [showAllCoveredAgents, setShowAllCoveredAgents] = React.useState(false)
   const [showAllActiveEvaluators, setShowAllActiveEvaluators] = React.useState(false)
+  const [showAllWeeks, setShowAllWeeks] = React.useState(false)
+  const [expandedRunSections, setExpandedRunSections] = React.useState<string[]>([
+    "rules-with-failures",
+  ])
+  const [dismissingCoverageIssueIds, setDismissingCoverageIssueIds] = React.useState<string[]>([])
+  const [coverageSheetToast, setCoverageSheetToast] = React.useState<{
+    title: string
+    description: string
+  } | null>(null)
+  const coverageSheetToastTimeoutRef = React.useRef<number | null>(null)
   const activityData = activityByTab[activeActivityTab]
   const activeSheetView = sheetStack.at(-1) ?? null
 
@@ -1856,17 +2078,82 @@ function ActivityPanel({
     })
   }, [])
 
-  const handleOpenRuleSetup = React.useCallback(() => {
-    onOpenRuleSetup()
-    setSheetStack([])
-  }, [onOpenRuleSetup])
+  const handleAddAgentToRule = React.useCallback(
+    (issueId: string, agentName: string, ruleName: string) => {
+      setDismissingCoverageIssueIds((currentIds) =>
+        currentIds.includes(issueId) ? currentIds : [...currentIds, issueId]
+      )
 
-  const handleAddAgentToRule = React.useCallback((agentName: string, ruleName: string) => {
-    toast({
-      title: "Agent added to rule",
-      description: `${agentName} was added to ${ruleName}.`,
-    })
-  }, [])
+      window.setTimeout(() => {
+        setActivityByTab((currentActivityByTab) => {
+          const currentActivityData = currentActivityByTab[activeActivityTab]
+          if (!currentActivityData) {
+            return currentActivityByTab
+          }
+
+          return {
+            ...currentActivityByTab,
+            [activeActivityTab]: {
+              ...currentActivityData,
+              summary: {
+                ...currentActivityData.summary,
+                agentsNotInAnyRuleCount: Math.max(
+                  0,
+                  (currentActivityData.summary.agentsNotInAnyRuleCount ?? 0) - 1
+                ),
+                agentsWithoutAssignment: Math.max(
+                  0,
+                  currentActivityData.summary.agentsWithoutAssignment - 1
+                ),
+              },
+            },
+          }
+        })
+
+        setSheetStack((currentStack) =>
+          currentStack.map((view) => {
+            if (view.panel !== "coverage") {
+              return view
+            }
+
+            const nextIssues = view.issues.filter((issue) => issue.id !== issueId)
+            const nextIssueCount = nextIssues.length
+
+            return {
+              ...view,
+              issues: nextIssues,
+              title: getAgentsNotInAnyRuleTitle(nextIssueCount),
+            }
+          })
+        )
+        setDismissingCoverageIssueIds((currentIds) => currentIds.filter((id) => id !== issueId))
+      }, 220)
+
+      setCoverageSheetToast({
+        title: "Agent added to rule",
+        description: `${agentName} was added to ${ruleName}.`,
+      })
+
+      if (coverageSheetToastTimeoutRef.current !== null) {
+        window.clearTimeout(coverageSheetToastTimeoutRef.current)
+      }
+
+      coverageSheetToastTimeoutRef.current = window.setTimeout(() => {
+        setCoverageSheetToast(null)
+        coverageSheetToastTimeoutRef.current = null
+      }, 5000)
+    },
+    [activeActivityTab]
+  )
+
+  React.useEffect(
+    () => () => {
+      if (coverageSheetToastTimeoutRef.current !== null) {
+        window.clearTimeout(coverageSheetToastTimeoutRef.current)
+      }
+    },
+    []
+  )
 
   React.useEffect(() => {
     if (!activeSheetView || activeSheetView.panel !== "rule") {
@@ -1875,7 +2162,15 @@ function ActivityPanel({
 
     const initialExpandedAgentSections: string[] = []
     if (activeSheetView.agentsWithoutQa.length > 0) {
-      initialExpandedAgentSections.push("agents-not-covered")
+      initialExpandedAgentSections.push(
+        ...activeSheetView.agentsWithoutQa.reduce((accumulator, agent) => {
+          const sectionValue = getRuleAgentIssueSectionValue(getRuleAgentIssueGroupLabel(agent))
+          if (!accumulator.includes(sectionValue)) {
+            accumulator.push(sectionValue)
+          }
+          return accumulator
+        }, [] as string[])
+      )
     }
     if (activeSheetView.coveredAgents.length + activeSheetView.quotaMetElsewhere.length > 0) {
       initialExpandedAgentSections.push("agents-covered")
@@ -1899,42 +2194,106 @@ function ActivityPanel({
   const activeTabIndex = orderedActivityTabs.findIndex((tab) => tab === activeActivityTab)
   const isEvaluatorCalibrationMode = activeActivityModeTab === "evaluator_calibration"
   const isUpcomingWeek = activeTabIndex === 0
-  const isPastWeek = activeTabIndex >= 2
   const shouldShowIssueCodeBadges = true
-  const visibleActivityRules = isUpcomingWeek
-    ? (() => {
-        const upcomingRules = activityData.rules.filter((rule) => rule.name !== "Mortgage Queue")
-        const billingRuleIndex = upcomingRules.findIndex((rule) => rule.name === "Billing QA")
+  const hasMoreWeeks = orderedActivityTabs.length > 5
+  const visibleOrderedActivityTabs = showAllWeeks
+    ? orderedActivityTabs
+    : orderedActivityTabs.slice(0, 5)
+  const visibleActivityRules = React.useMemo(
+    () =>
+      [...activityData.rules].sort((leftRule, rightRule) => {
+        const statusDelta =
+          getRuleStatusPriority(leftRule.status) - getRuleStatusPriority(rightRule.status)
 
-        if (billingRuleIndex <= 0) {
-          return upcomingRules
+        if (statusDelta !== 0) {
+          return statusDelta
         }
 
-        const billingRule = upcomingRules[billingRuleIndex]
-        const withoutBillingRule = upcomingRules.filter((_, index) => index !== billingRuleIndex)
-        return [withoutBillingRule[0], billingRule, ...withoutBillingRule.slice(1)]
-      })()
-    : activityData.rules
-  const agentsWithoutAssignment = activityData.summary.agentsWithoutAssignment
-  const hasCoverageGap = agentsWithoutAssignment > 0
-  const coverageIconPath = hasCoverageGap
-    ? "/status-icons/alert-circle.svg"
-    : "/status-icons/check-circle.svg"
-  const coverageCopy = hasCoverageGap
-    ? isUpcomingWeek
-      ? `${agentsWithoutAssignment} ${agentsWithoutAssignment === 1 ? "agent" : "agents"} at risk of not being covered`
-      : `${agentsWithoutAssignment} ${agentsWithoutAssignment === 1 ? "agent was not covered" : "agents were not covered"}`
-    : isUpcomingWeek
-      ? "All agents are on track for coverage"
-      : isPastWeek
-        ? "All agents were covered"
-        : "All agents covered"
+        return leftRule.name.localeCompare(rightRule.name)
+      }),
+    [activityData.rules]
+  )
+  const totalRulesCount = visibleActivityRules.length
+  const successfulRulesCount = visibleActivityRules.filter((rule) => rule.status === "success").length
+  const coveredAgentsCount = Math.max(
+    AGENT_POPULATION_COUNT - activityData.summary.agentsWithoutAssignment,
+    0
+  )
+  const agentCoveragePct =
+    AGENT_POPULATION_COUNT > 0
+      ? Math.round((coveredAgentsCount * 100) / AGENT_POPULATION_COUNT)
+      : 100
+  const assignmentTotals = visibleActivityRules.reduce(
+    (accumulator, rule) => {
+      const { completed, target } = parseAssignmentProgress(rule.assignments)
+      return {
+        completed: accumulator.completed + completed,
+        target: accumulator.target + target,
+      }
+    },
+    { completed: 0, target: 0 }
+  )
+  const assignmentsMadePct =
+    assignmentTotals.target > 0
+      ? Math.round((assignmentTotals.completed * 100) / assignmentTotals.target)
+      : 100
+  const metricCards = [
+    {
+      id: "agent-coverage",
+      title: "Agent coverage",
+      value: `${agentCoveragePct}%`,
+      supportingText: `${coveredAgentsCount} / ${AGENT_POPULATION_COUNT}`,
+      isComplete: agentCoveragePct === 100,
+    },
+    {
+      id: "rule-success",
+      title: "Successful rules",
+      value: `${successfulRulesCount} / ${totalRulesCount}`,
+      supportingText: undefined,
+      isComplete: successfulRulesCount === totalRulesCount,
+    },
+    {
+      id: "assignments-made",
+      title: "Conversations assigned",
+      value: `${assignmentsMadePct}%`,
+      supportingText: `${assignmentTotals.completed} / ${assignmentTotals.target}`,
+      isComplete: assignmentsMadePct === 100,
+    },
+  ] as const
+  const agentsNotInAnyRuleCount = Math.max(activityData.summary.agentsNotInAnyRuleCount ?? 0, 0)
+  const agentsNotInAnyRuleAvatarNames = Array.from(
+    { length: agentsNotInAnyRuleCount },
+    (_, index) => sampleAgentNames[index] ?? `Agent ${index + 1}`
+  )
+  const rulesWithFailures = visibleActivityRules.filter((rule) => rule.status !== "success")
+  const successfulRules = visibleActivityRules.filter((rule) => rule.status === "success")
+  const activeRuleSheet = activeSheetView && activeSheetView.panel === "rule" ? activeSheetView : null
   const uniqueCoveredAgents =
-    activeSheetView && activeSheetView.panel === "rule"
-      ? getUniqueByAgentName(activeSheetView.coveredAgents, (agent) =>
+    activeRuleSheet
+      ? getUniqueByAgentName(activeRuleSheet.coveredAgents, (agent) =>
           getPersonDisplayName(agent.name)
         )
       : []
+  const groupedAgentsWithoutQa =
+    activeRuleSheet?.agentsWithoutQa.reduce(
+      (accumulator, agent) => {
+        const label = getRuleAgentIssueGroupLabel(agent)
+        const existingGroup = accumulator.find((group) => group.label === label)
+
+        if (existingGroup) {
+          existingGroup.agents.push(agent)
+          return accumulator
+        }
+
+        accumulator.push({
+          label,
+          sectionValue: getRuleAgentIssueSectionValue(label),
+          agents: [agent],
+        })
+        return accumulator
+      },
+      [] as Array<{ label: string; sectionValue: string; agents: RuleAgentRow[] }>
+    ) ?? []
   const uniqueCoverageIssues =
     activeSheetView && activeSheetView.panel === "coverage"
       ? getUniqueByAgentName(activeSheetView.issues, (issue) =>
@@ -1942,7 +2301,6 @@ function ActivityPanel({
         )
       : []
   const hasCoverageIssues = uniqueCoverageIssues.length > 0
-  const activeRuleSheet = activeSheetView && activeSheetView.panel === "rule" ? activeSheetView : null
   const quotaCoveredAgentsWithResolvedRule =
     activeRuleSheet
       ? activeRuleSheet.quotaMetElsewhere.map((agent) => {
@@ -2004,8 +2362,12 @@ function ActivityPanel({
     }
   }, [isEvaluatorCalibrationMode])
 
+  React.useEffect(() => {
+    setExpandedRunSections(["rules-with-failures"])
+  }, [activeActivityTab, activeActivityModeTab])
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-16 lg:flex-row lg:overflow-hidden">
+    <div className="flex h-full min-h-0 min-w-0 flex-col gap-16 lg:flex-row lg:overflow-hidden">
       <aside className="group flex w-full flex-col rounded-xl bg-surface-subtle p-0 lg:mr-32 lg:h-full lg:w-288 lg:shrink-0 lg:overflow-hidden">
         <Tabs
           value={activeActivityModeTab}
@@ -2024,13 +2386,13 @@ function ActivityPanel({
             </NeutralTabsTrigger>
           </NeutralTabsList>
         </Tabs>
-        <div className="min-h-0 flex-1 overflow-y-auto">
+        <div className="scrollbar-hidden min-h-0 flex-1 overflow-y-auto">
           <Tabs
             value={activeActivityTab}
             onValueChange={(value) => setActiveActivityTab(value as ActivityTab)}
           >
             <NeutralTabsList className="flex w-full flex-col rounded-none bg-transparent p-0">
-              {orderedActivityTabs.map((weekKey) => (
+              {visibleOrderedActivityTabs.map((weekKey) => (
                 <NeutralTabsTrigger
                   key={weekKey}
                   value={weekKey}
@@ -2048,19 +2410,35 @@ function ActivityPanel({
               ))}
             </NeutralTabsList>
           </Tabs>
+          {hasMoreWeeks && !showAllWeeks && (
+            <div>
+              <Button
+                variant="ghost"
+                size="default"
+                className="w-full justify-start whitespace-nowrap px-12 text-left text-14 text-text-primary"
+                onClick={() => setShowAllWeeks(true)}
+              >
+                <span className="inline-flex items-center gap-8">
+                  <span>View more</span>
+                  <ChevronDown size={16} className="text-icon-secondary" />
+                </span>
+              </Button>
+            </div>
+          )}
         </div>
       </aside>
 
-      <div className="mt-24 min-w-0 flex-1 lg:mt-0 lg:h-full lg:overflow-y-auto lg:pr-8">
-        <div className="sticky top-0 z-10 mt-24 bg-surface-subtle px-4 pb-24">
-          <p className="w-full text-18 font-semibold text-text-primary">
-            <span>{activityData.tabLabel}</span>
-          </p>
-        </div>
+      <div className="scrollbar-hidden mt-24 min-h-0 min-w-0 flex-1 overflow-y-auto lg:mt-0 lg:h-full lg:pr-8">
+        <div className="w-full lg:w-768 lg:max-w-768">
+          <div className="sticky top-0 z-10 mt-24 bg-surface-subtle px-4 pb-24">
+            <p className="w-full text-18 font-semibold text-text-primary">
+              <span>{activityData.tabLabel}</span>
+            </p>
+          </div>
 
-        <div className="space-y-16">
+          <div className="w-full space-y-16">
           {isEvaluatorCalibrationMode ? (
-            <Card className="w-full max-w-3xl border-border-subtle">
+            <Card className="w-full border-border-subtle">
               <EmptyState
                 className="min-h-240"
                 icon={<PrivateCalibration size={20} className="text-icon-secondary" />}
@@ -2071,10 +2449,10 @@ function ActivityPanel({
             <>
               {(activeTabIndex === 0 || activeTabIndex === 1) && (
                 <InlineAlert
-                  className="w-full max-w-3xl"
+                  className="w-full items-center gap-8 px-12 py-8 [&>div]:justify-center [&>span>svg]:size-16"
                   variant="info"
                   description={
-                    <span className="text-14 font-medium text-secondary-blue-700">
+                    <span className="text-12 font-medium text-secondary-blue-700">
                       {activeTabIndex === 0
                         ? "Predicted based on current rules and schedules. Changes to rules will update these predictions."
                         : "This week is in progress and not complete yet. Final coverage may change before the cycle ends."}
@@ -2083,121 +2461,230 @@ function ActivityPanel({
                 />
               )}
 
-              <Card className="w-full max-w-3xl border-border-subtle shadow-sm">
-                <div className="p-4">
-                  <div
-                    className={cn(
-                      "flex cursor-pointer items-center justify-between gap-12 rounded-lg px-16 py-16 focus-visible:outline-none",
-                      hasCoverageGap ? "bg-surface-error-subtle" : "bg-surface-success-subtle"
-                    )}
-                    role="button"
-                    tabIndex={0}
-                    onClick={openCoverageRunDetails}
-                    onKeyDown={(event) => handleRowKeyDown(event, openCoverageRunDetails)}
-                  >
-                    <div className="flex min-w-0 items-center gap-12">
-                      <SimpleTooltip
-                        content={hasCoverageGap ? (isUpcomingWeek ? "At risk" : "Not covered") : "Covered"}
-                        side="right"
-                      >
-                        <span className="inline-flex shrink-0">
-                          <Image
-                            src={coverageIconPath}
-                            alt=""
-                            width={16}
-                            height={16}
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </SimpleTooltip>
-                      <p className="text-16 font-semibold text-text-primary">{coverageCopy}</p>
-                    </div>
-                    <ChevronRight size={16} className="shrink-0 text-icon-secondary" />
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="w-full max-w-3xl border-border-subtle">
-                <div className="border-b border-border-subtle px-16 py-12">
-                  <p className="text-12 font-semibold text-text-primary">
-                    {activeTabIndex === 0 ? "Rule-wise predictions" : "Rule-wise assignment"}
-                  </p>
-                </div>
-
-                <div>
-                  {visibleActivityRules.map((rule, index) => (
-                    <div key={rule.id}>
-                      {index > 0 && <div className="border-t border-border-subtle" />}
-
+              <div className="grid w-full grid-cols-1 gap-12 lg:grid-cols-3">
+                {metricCards.map((metricCard) => (
+                  <Card key={metricCard.id} className="h-full border-border-subtle shadow-sm">
+                    <div className="h-full p-4">
                       <div
-                        className="flex cursor-pointer flex-col gap-16 px-16 py-16 hover:bg-surface-subtle focus-visible:outline-none lg:flex-row lg:items-center lg:justify-between"
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => openRuleRunDetails(rule)}
-                        onKeyDown={(event) => handleRowKeyDown(event, () => openRuleRunDetails(rule))}
+                        className={cn(
+                          "flex h-full flex-col items-center justify-start gap-8 rounded-lg px-16 py-24 text-center",
+                          metricCard.isComplete ? "bg-surface-success-subtle" : "bg-surface-error-subtle"
+                        )}
                       >
-                        <div className="flex min-w-0 items-start gap-12">
-                          <SimpleTooltip content={getStatusTooltip(rule.status)} side="right">
-                            <span className="mt-2 inline-flex shrink-0">
-                              <Image
-                                src={getStatusIconPath(rule.status)}
-                                alt=""
-                                width={16}
-                                height={16}
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </SimpleTooltip>
-
-                          <div className="min-w-0 space-y-8">
-                            <p className="text-14 font-semibold text-text-primary">{rule.name}</p>
-
-                            {shouldShowIssueCodeBadges &&
-                            rule.mainPageReasonLines &&
-                            rule.mainPageReasonLines.length > 0 ? (
-                              <div className="flex flex-col gap-4">
-                                {rule.mainPageReasonLines.map((reasonLine, reasonLineIndex) => (
-                                  <Badge
-                                    key={`${rule.id}-${reasonLine}-${reasonLineIndex}`}
-                                    color="gray"
-                                    size="sm"
-                                    className="w-fit"
-                                  >
-                                    {reasonLine}
-                                  </Badge>
-                                ))}
-                              </div>
-                            ) : rule.note ? (
-                              <p className="text-12 font-medium text-text-secondary">{rule.note}</p>
-                            ) : null}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-16 self-end lg:self-auto">
-                          <div className="text-right">
-                            {isUpcomingWeek ? (
-                              <>
-                                <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
-                                <p className="text-12 font-medium text-text-tertiary">
-                                  {`${rule.assignments} expected`}
-                                </p>
-                              </>
-                            ) : (
-                              <>
-                                <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
-                                <p className="text-12 font-medium text-text-tertiary">{rule.assignments}</p>
-                              </>
-                            )}
-                          </div>
-                          <ChevronRight size={16} className="shrink-0 text-icon-secondary" />
-                        </div>
+                        <p className="text-14 font-semibold text-text-primary">{metricCard.title}</p>
+                        <p
+                          className={cn(
+                            "text-24 font-bold",
+                            metricCard.isComplete ? "text-text-success" : "text-text-error"
+                          )}
+                        >
+                          {metricCard.value}
+                        </p>
+                        {metricCard.supportingText ? (
+                          <p className="text-14 font-medium text-text-secondary">
+                            {metricCard.supportingText}
+                          </p>
+                        ) : null}
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </Card>
+                ))}
+              </div>
+
+              {agentsNotInAnyRuleCount > 0 && (
+                <Card className="w-full border-border-subtle shadow-sm">
+                  <div className="p-4">
+                    <div
+                      className="flex cursor-pointer items-center justify-between gap-12 rounded-lg px-16 py-16 focus-visible:outline-none"
+                      role="button"
+                      tabIndex={0}
+                      onClick={openCoverageRunDetails}
+                      onKeyDown={(event) => handleRowKeyDown(event, openCoverageRunDetails)}
+                    >
+                      <div className="flex min-w-0 flex-1 items-center justify-between gap-12">
+                        <p className="truncate text-16 font-semibold text-text-primary">
+                          {getAgentsNotInAnyRuleCardLabel(agentsNotInAnyRuleCount)}
+                        </p>
+                        <AvatarGroup names={agentsNotInAnyRuleAvatarNames} max={3} size="xs" />
+                      </div>
+                      <ChevronRight size={16} className="shrink-0 text-icon-primary" />
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              {rulesWithFailures.length > 0 && (
+                <Card className="w-full border-border-subtle">
+                  <Accordion
+                    type="multiple"
+                    value={expandedRunSections}
+                    onValueChange={(value) => setExpandedRunSections(value as string[])}
+                    className="w-full"
+                  >
+                    <AccordionItem value="rules-with-failures" className="border-none">
+                      <AccordionTrigger className="px-16 py-16 text-16 font-semibold text-text-primary [&>svg]:text-icon-primary">
+                        {getRulesWithFailuresLabel(rulesWithFailures.length)}
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-0">
+                        <div>
+                          {rulesWithFailures.map((rule, index) => (
+                            <div key={rule.id}>
+                              {index > 0 && <div className="border-t border-border-subtle" />}
+
+                              <div
+                                className="flex cursor-pointer flex-col gap-16 px-16 py-16 hover:bg-surface-subtle focus-visible:outline-none lg:flex-row lg:items-center lg:justify-between"
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => openRuleRunDetails(rule)}
+                                onKeyDown={(event) =>
+                                  handleRowKeyDown(event, () => openRuleRunDetails(rule))
+                                }
+                              >
+                                <div className="flex min-w-0 items-start gap-12">
+                                  <SimpleTooltip content={getStatusTooltip(rule.status)} side="right">
+                                    <span className="mt-2 inline-flex shrink-0">
+                                      <Image
+                                        src={getStatusIconPath(rule.status)}
+                                        alt=""
+                                        width={16}
+                                        height={16}
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </SimpleTooltip>
+
+                                  <div className="min-w-0 space-y-8">
+                                    <p className="text-14 font-semibold text-text-primary">{rule.name}</p>
+
+                                    {shouldShowIssueCodeBadges &&
+                                    rule.mainPageReasonLines &&
+                                    rule.mainPageReasonLines.length > 0 ? (
+                                      <div className="flex flex-col gap-4">
+                                        {rule.mainPageReasonLines.map((reasonLine, reasonLineIndex) => (
+                                          <Badge
+                                            key={`${rule.id}-${reasonLine}-${reasonLineIndex}`}
+                                            color="gray"
+                                            size="sm"
+                                            className="w-fit"
+                                          >
+                                            {reasonLine}
+                                          </Badge>
+                                        ))}
+                                      </div>
+                                    ) : rule.note ? (
+                                      <p className="text-12 font-medium text-text-secondary">{rule.note}</p>
+                                    ) : null}
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-16 self-end lg:self-auto">
+                                  <div className="text-right">
+                                    {isUpcomingWeek ? (
+                                      <>
+                                        <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
+                                        <p className="text-12 font-medium text-text-tertiary">
+                                          {`${rule.assignments} expected`}
+                                        </p>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
+                                        <p className="text-12 font-medium text-text-tertiary">
+                                          {rule.assignments}
+                                        </p>
+                                      </>
+                                    )}
+                                  </div>
+                                  <ChevronRight size={16} className="shrink-0 text-icon-primary" />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </Card>
+              )}
+
+              <Card className="w-full border-border-subtle">
+                <Accordion
+                  type="multiple"
+                  value={expandedRunSections}
+                  onValueChange={(value) => setExpandedRunSections(value as string[])}
+                  className="w-full"
+                >
+                  <AccordionItem value="rules-success" className="border-none">
+                    <AccordionTrigger className="px-16 py-16 text-16 font-semibold text-text-primary [&>svg]:text-icon-primary">
+                      {getRulesRanSuccessfullyLabel(successfulRules.length)}
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-0">
+                      {successfulRules.length > 0 ? (
+                        <div>
+                          {successfulRules.map((rule, index) => (
+                            <div key={rule.id}>
+                              {index > 0 && <div className="border-t border-border-subtle" />}
+
+                              <div
+                                className="flex cursor-pointer flex-col gap-16 px-16 py-16 hover:bg-surface-subtle focus-visible:outline-none lg:flex-row lg:items-center lg:justify-between"
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => openRuleRunDetails(rule)}
+                                onKeyDown={(event) =>
+                                  handleRowKeyDown(event, () => openRuleRunDetails(rule))
+                                }
+                              >
+                                <div className="flex min-w-0 items-start gap-12">
+                                  <SimpleTooltip content={getStatusTooltip(rule.status)} side="right">
+                                    <span className="mt-2 inline-flex shrink-0">
+                                      <Image
+                                        src={getStatusIconPath(rule.status)}
+                                        alt=""
+                                        width={16}
+                                        height={16}
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </SimpleTooltip>
+                                  <p className="text-14 font-semibold text-text-primary">{rule.name}</p>
+                                </div>
+
+                                <div className="flex items-center gap-16 self-end lg:self-auto">
+                                  <div className="text-right">
+                                    {isUpcomingWeek ? (
+                                      <>
+                                        <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
+                                        <p className="text-12 font-medium text-text-tertiary">
+                                          {`${rule.assignments} expected`}
+                                        </p>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <p className="text-14 font-medium text-text-primary">{rule.metric}</p>
+                                        <p className="text-12 font-medium text-text-tertiary">
+                                          {rule.assignments}
+                                        </p>
+                                      </>
+                                    )}
+                                  </div>
+                                  <ChevronRight size={16} className="shrink-0 text-icon-primary" />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="px-16 pb-16 text-12 font-medium text-text-tertiary">
+                          No successful runs yet.
+                        </p>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </Card>
             </>
           )}
+        </div>
         </div>
       </div>
 
@@ -2206,19 +2693,26 @@ function ActivityPanel({
         onOpenChange={(open) => {
           if (!open) {
             setSheetStack([])
+            setDismissingCoverageIssueIds([])
+            setCoverageSheetToast(null)
+            if (coverageSheetToastTimeoutRef.current !== null) {
+              window.clearTimeout(coverageSheetToastTimeoutRef.current)
+              coverageSheetToastTimeoutRef.current = null
+            }
           }
         }}
       >
         {activeSheetView && (
           <SheetContent size="md">
             <SheetHeader
-              description={activityData.tabLabel}
+              description={
+                activeSheetView.panel === "coverage" ? activeSheetView.subtitle : activityData.tabLabel
+              }
               actions={
                 activeSheetView.panel === "rule" ? (
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={handleOpenRuleSetup}
                     iconRight={<ExternalLink size={14} className="text-icon-secondary" />}
                   >
                     Rule setup
@@ -2243,51 +2737,31 @@ function ActivityPanel({
               )}
               {activeSheetView.panel === "coverage" ? (
                 hasCoverageIssues ? (
-                  <>
-                    <div className="mb-24 flex flex-col items-center gap-8 py-12 text-center">
-                      <Image
-                        src="/status-icons/alert-circle.svg"
-                        alt=""
-                        width={32}
-                        height={32}
-                        aria-hidden="true"
-                      />
-                      <p className="text-24 font-semibold text-text-primary">
-                        {`${uniqueCoverageIssues.length} ${uniqueCoverageIssues.length === 1 ? "agent" : "agents"} ${isPastWeek ? "were not covered" : "not covered"}`}
-                      </p>
-                    </div>
-
-                    <Card className="border-border-subtle">
-                      <div className="space-y-8 px-16 py-16">
-                        <p className="text-12 font-semibold text-text-tertiary">Impacted agents</p>
-                        <div className="divide-y divide-border-subtle">
-                          {uniqueCoverageIssues.map((issue) => (
-                            <CoverageIssueCard
-                              key={issue.id}
-                              issue={issue}
-                              rules={visibleActivityRules}
-                              onAddToRule={handleAddAgentToRule}
-                              onViewRule={openRuleFromCoverage}
-                              showIssueCodeBadge={shouldShowIssueCodeBadges}
-                              canAddToRule={!isPastWeek}
-                            />
-                          ))}
-                        </div>
+                  <div className="divide-y divide-border-subtle">
+                    {uniqueCoverageIssues.map((issue) => (
+                      <div
+                        key={issue.id}
+                        className={cn(
+                          "transform-gpu overflow-hidden transition-all duration-200 ease-out",
+                          dismissingCoverageIssueIds.includes(issue.id)
+                            ? "max-h-0 -translate-y-4 opacity-0"
+                            : "max-h-256 translate-y-0 opacity-100"
+                        )}
+                      >
+                        <CoverageIssueCard
+                          issue={issue}
+                          rules={visibleActivityRules}
+                          onAddToRule={handleAddAgentToRule}
+                          onViewRule={openRuleFromCoverage}
+                          showIssueCodeBadge={false}
+                          canAddToRule={isUpcomingWeek}
+                        />
                       </div>
-                    </Card>
-                  </>
+                    ))}
+                  </div>
                 ) : (
-                  <div className="flex min-h-full flex-col items-center justify-center py-24 text-center">
-                    <Image
-                      src="/status-icons/check-circle.svg"
-                      alt=""
-                      width={32}
-                      height={32}
-                      aria-hidden="true"
-                    />
-                    <p className="mt-8 text-24 font-semibold text-text-primary">
-                      {isPastWeek ? "All agents were covered" : "All agents covered"}
-                    </p>
+                  <div className="py-24 text-center">
+                    <p className="text-14 font-medium text-text-secondary">No agents to review.</p>
                   </div>
                 )
               ) : (
@@ -2337,42 +2811,51 @@ function ActivityPanel({
                         onValueChange={(value) => setExpandedAgentSections(value as string[])}
                         className="space-y-12"
                       >
-                        <AccordionItem
-                          value="agents-not-covered"
-                          className="rounded-xl border border-border-subtle"
-                        >
-                          <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary">
-                            {`Agents not covered (${activeSheetView.agentsWithoutQa.length})`}
-                          </AccordionTrigger>
-                          <AccordionContent className="space-y-12 px-16 pb-16 text-text-primary">
-                            {activeSheetView.agentsWithoutQa.length > 0 ? (
-                              <>
-                                <SideSheetColumnHeader leftLabel="Name" rightLabel="Assign" />
-                                <SideSheetStatusRail tone="error">
-                                  <div className="divide-y divide-border-subtle">
-                                    {activeSheetView.agentsWithoutQa.map((agent) => (
-                                      <RuleAgentRowCard
-                                        key={agent.id}
-                                        agent={agent}
-                                        showIssueCodeBadge={shouldShowIssueCodeBadges}
-                                      />
-                                    ))}
-                                  </div>
-                                </SideSheetStatusRail>
-                              </>
-                            ) : (
-                              <p className="text-12 font-medium text-text-tertiary">
-                                No agents not covered.
-                              </p>
-                            )}
-                          </AccordionContent>
-                        </AccordionItem>
+                        {groupedAgentsWithoutQa.length > 0 ? (
+                          groupedAgentsWithoutQa.map((group) => (
+                            <AccordionItem
+                              key={group.sectionValue}
+                              value={group.sectionValue}
+                              className="rounded-xl border border-border-subtle"
+                            >
+                          <AccordionTrigger className="px-16 py-16 text-14 font-bold text-text-primary [&>svg]:text-icon-primary">
+                                {`${group.agents.length} ${group.agents.length === 1 ? "agent" : "agents"}: ${group.label}`}
+                              </AccordionTrigger>
+                              <AccordionContent className="space-y-12 px-16 pb-16 text-text-primary">
+                                <div className="divide-y divide-border-subtle">
+                                  {group.agents.map((agent) => (
+                                    <RuleAgentRowCard
+                                      key={agent.id}
+                                      agent={agent}
+                                      showIssueCodeBadge={false}
+                                      showSupportingText={false}
+                                    />
+                                  ))}
+                                </div>
+                                {canResolveRuleAgentIssueGroup(group.label) && isUpcomingWeek ? (
+                                  <Button
+                                    variant="default"
+                                    size="default"
+                                    className="w-full"
+                                    iconRight={<ExternalLink size={14} className="text-text-inverse" />}
+                                  >
+                                    {getRuleAgentIssueCtaLabel(group.label)}
+                                  </Button>
+                                ) : null}
+                              </AccordionContent>
+                            </AccordionItem>
+                          ))
+                        ) : (
+                          <p className="text-12 font-medium text-text-tertiary">
+                            No agents not covered.
+                          </p>
+                        )}
 
                         <AccordionItem
                           value="agents-covered"
                           className="rounded-xl border border-border-subtle"
                         >
-                          <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary">
+                          <AccordionTrigger className="px-16 py-16 text-14 font-semibold text-text-primary [&>svg]:text-icon-primary">
                             {`Agents covered (${coveredAgentsIncludingQuota.length})`}
                           </AccordionTrigger>
                           <AccordionContent className="space-y-12 px-16 pb-16 text-text-primary">
@@ -2465,6 +2948,17 @@ function ActivityPanel({
                 </>
               )}
             </SheetBody>
+            {activeSheetView.panel === "coverage" && coverageSheetToast ? (
+              <div className="pointer-events-none absolute inset-x-0 bottom-24 flex justify-center px-24">
+                <AlertToast
+                  title={coverageSheetToast.title}
+                  description={coverageSheetToast.description}
+                  onClose={() => setCoverageSheetToast(null)}
+                  slideFrom="bottom"
+                  className="pointer-events-auto shadow-lg"
+                />
+              </div>
+            ) : null}
           </SheetContent>
         )}
       </Sheet>
@@ -2589,8 +3083,8 @@ export default function Page() {
                   <AssignmentTable />
                 </TabsContent>
 
-                <TabsContent value="activity" className="mt-0 min-h-0 flex-1">
-                  <ActivityPanel onOpenRuleSetup={() => setActiveTopTab("rules")} />
+                <TabsContent value="activity" className="mt-0 flex min-h-0 flex-1 overflow-hidden">
+                  <ActivityPanel />
                 </TabsContent>
                 </Tabs>
 
@@ -2720,7 +3214,7 @@ export default function Page() {
             </div>
           </main>
         </div>
-        <ToastContainer position="bottom-center" className="bottom-32" />
+        <ToastContainer position="top-right" className="z-[60]" />
       </div>
     </TooltipProvider>
   )

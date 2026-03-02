@@ -32,7 +32,8 @@ export const mockDbActivityByTab = {
     "tabLabel": "Mar 2-8",
     "tabQualifier": "Upcoming week",
     "summary": {
-      "agentsWithoutAssignment": 10,
+      "agentsNotInAnyRuleCount": 10,
+      "agentsWithoutAssignment": 16,
       "evaluatorsWithoutWorkload": 6
     },
     "rules": [
@@ -124,7 +125,8 @@ export const mockDbActivityByTab = {
     "tabLabel": "Feb 23-Mar 1",
     "tabQualifier": "Current week",
     "summary": {
-      "agentsWithoutAssignment": 3,
+      "agentsNotInAnyRuleCount": 7,
+      "agentsWithoutAssignment": 15,
       "evaluatorsWithoutWorkload": 5
     },
     "rules": [
@@ -142,11 +144,11 @@ export const mockDbActivityByTab = {
         "status": "partial",
         "metric": "90%",
         "assignments": "70/78",
-        "note": "1 agent: evaluators' workload limit reached",
+        "note": "2 agents: evaluators' workload limit reached",
         "issueCodeLabel": "Evaluators' workload limit reached",
         "mainPageReasonLines": [
-          "1 agent: evaluators' workload limit reached",
-          "1 agent: insufficient matching conversations"
+          "2 agents: evaluators' workload limit reached",
+          "2 agents: insufficient matching conversations"
         ]
       },
       {
@@ -160,13 +162,13 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-22-4",
         "name": "Savings Product - QA Rotation",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/92",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
+        "status": "partial",
+        "metric": "92%",
+        "assignments": "85/92",
+        "note": "7 agents: evaluators' workload limit reached",
+        "issueCodeLabel": "All evaluators at capacity",
         "mainPageReasonLines": [
-          "Rule execution failed"
+          "7 agents: evaluators' workload limit reached"
         ]
       },
       {
@@ -183,11 +185,11 @@ export const mockDbActivityByTab = {
         "status": "partial",
         "metric": "96%",
         "assignments": "68/71",
-        "note": "1 agent: evaluators' workload limit reached",
+        "note": "2 agents: evaluators' workload limit reached",
         "issueCodeLabel": "Evaluators' workload limit reached",
         "mainPageReasonLines": [
-          "1 agent: evaluators' workload limit reached",
-          "Rule execution failed"
+          "2 agents: evaluators' workload limit reached",
+          "1 agent: insufficient matching conversations"
         ]
       },
       {
@@ -219,8 +221,9 @@ export const mockDbActivityByTab = {
   "week_3": {
     "tabLabel": "Feb 16-22",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 6
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
@@ -242,10 +245,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-21-3",
         "name": "Renewals - TL Review Batch",
-        "status": "partial",
-        "metric": "89%",
-        "assignments": "64/72",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "72/72",
         "mainPageReasonLines": []
       },
       {
@@ -259,14 +261,10 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-21-5",
         "name": "Escalation Sweep - Weekend Priority",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/86",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "86/86",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-21-6",
@@ -279,14 +277,10 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-21-7",
         "name": "Billing QA",
-        "status": "partial",
-        "metric": "95%",
-        "assignments": "62/65",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "65/65",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-21-8",
@@ -309,8 +303,9 @@ export const mockDbActivityByTab = {
   "week_4": {
     "tabLabel": "Feb 9-15",
     "summary": {
-      "agentsWithoutAssignment": 8,
-      "evaluatorsWithoutWorkload": 4
+      "agentsNotInAnyRuleCount": 8,
+      "agentsWithoutAssignment": 60,
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
@@ -361,14 +356,10 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-20-6",
         "name": "Claims Exception Queue",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/80",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "80/80",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-20-7",
@@ -381,14 +372,12 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-20-8",
         "name": "Card Disputes QA",
-        "status": "partial",
-        "metric": "95%",
-        "assignments": "56/59",
-        "note": "2 agents: insufficient matching conversations",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "failed",
+        "metric": "0%",
+        "assignments": "0/59",
+        "note": "Rule execution failed",
+        "issueCodeLabel": "Rule execution failed",
         "mainPageReasonLines": [
-          "2 agents: insufficient matching conversations",
-          "2 agents: evaluators' workload limit reached",
           "Rule execution failed"
         ]
       },
@@ -405,17 +394,17 @@ export const mockDbActivityByTab = {
   "week_5": {
     "tabLabel": "Feb 2-8",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 4
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
         "id": "rule-19-1",
         "name": "Legacy Escalation QA",
-        "status": "partial",
-        "metric": "94%",
-        "assignments": "63/67",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "67/67",
         "mainPageReasonLines": []
       },
       {
@@ -445,10 +434,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-19-5",
         "name": "Escalation Sweep - Weekend Priority",
-        "status": "partial",
-        "metric": "87%",
-        "assignments": "52/60",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "60/60",
         "mainPageReasonLines": []
       },
       {
@@ -462,14 +450,10 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-19-7",
         "name": "Billing QA",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/74",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "74/74",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-19-8",
@@ -482,21 +466,18 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-19-9",
         "name": "Onboarding Calls QA",
-        "status": "partial",
-        "metric": "97%",
-        "assignments": "85/88",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "88/88",
+        "mainPageReasonLines": []
       }
     ]
   },
   "week_6": {
     "tabLabel": "Jan 26-Feb 1",
     "summary": {
-      "agentsWithoutAssignment": 3,
+      "agentsNotInAnyRuleCount": 8,
+      "agentsWithoutAssignment": 71,
       "evaluatorsWithoutWorkload": 5
     },
     "rules": [
@@ -514,10 +495,11 @@ export const mockDbActivityByTab = {
         "status": "partial",
         "metric": "93%",
         "assignments": "57/61",
-        "note": "2 agents: evaluators' workload limit reached",
+        "note": "3 agents: evaluators' workload limit reached",
         "issueCodeLabel": "Evaluators' workload limit reached",
         "mainPageReasonLines": [
-          "2 agents: evaluators' workload limit reached"
+          "3 agents: evaluators' workload limit reached",
+          "1 agent: insufficient matching conversations"
         ]
       },
       {
@@ -550,10 +532,11 @@ export const mockDbActivityByTab = {
         "status": "partial",
         "metric": "91%",
         "assignments": "81/89",
-        "note": "1 agent: evaluators' workload limit reached",
+        "note": "3 agents: evaluators' workload limit reached",
         "issueCodeLabel": "Evaluators' workload limit reached",
         "mainPageReasonLines": [
-          "1 agent: evaluators' workload limit reached"
+          "3 agents: evaluators' workload limit reached",
+          "1 agent: insufficient matching conversations"
         ]
       },
       {
@@ -589,8 +572,9 @@ export const mockDbActivityByTab = {
   "week_7": {
     "tabLabel": "Jan 19-25",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 5
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
@@ -612,10 +596,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-17-3",
         "name": "Renewals - TL Review Batch",
-        "status": "partial",
-        "metric": "96%",
-        "assignments": "86/90",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "90/90",
         "mainPageReasonLines": []
       },
       {
@@ -645,10 +628,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-17-7",
         "name": "Billing QA",
-        "status": "partial",
-        "metric": "90%",
-        "assignments": "75/83",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "83/83",
         "mainPageReasonLines": []
       },
       {
@@ -662,21 +644,18 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-17-9",
         "name": "Onboarding Calls QA",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/62",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "62/62",
+        "mainPageReasonLines": []
       }
     ]
   },
   "week_8": {
     "tabLabel": "Jan 12-18",
     "summary": {
-      "agentsWithoutAssignment": 6,
+      "agentsNotInAnyRuleCount": 6,
+      "agentsWithoutAssignment": 10,
       "evaluatorsWithoutWorkload": 1
     },
     "rules": [
@@ -767,17 +746,17 @@ export const mockDbActivityByTab = {
   "week_9": {
     "tabLabel": "Jan 5-11",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 1
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
         "id": "rule-15-1",
         "name": "Legacy Escalation QA",
-        "status": "partial",
-        "metric": "89%",
-        "assignments": "76/85",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "85/85",
         "mainPageReasonLines": []
       },
       {
@@ -807,10 +786,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-15-5",
         "name": "Escalation Sweep - Weekend Priority",
-        "status": "partial",
-        "metric": "95%",
-        "assignments": "74/78",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "78/78",
         "mainPageReasonLines": []
       },
       {
@@ -840,10 +818,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-15-9",
         "name": "Onboarding Calls QA",
-        "status": "partial",
-        "metric": "89%",
-        "assignments": "63/71",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "71/71",
         "mainPageReasonLines": []
       }
     ]
@@ -851,7 +828,8 @@ export const mockDbActivityByTab = {
   "week_10": {
     "tabLabel": "Dec 29-Jan 4",
     "summary": {
-      "agentsWithoutAssignment": 4,
+      "agentsNotInAnyRuleCount": 4,
+      "agentsWithoutAssignment": 6,
       "evaluatorsWithoutWorkload": 0
     },
     "rules": [
@@ -941,6 +919,7 @@ export const mockDbActivityByTab = {
   "week_11": {
     "tabLabel": "Dec 22-28",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
       "evaluatorsWithoutWorkload": 0
     },
@@ -964,10 +943,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-13-3",
         "name": "Renewals - TL Review Batch",
-        "status": "partial",
-        "metric": "88%",
-        "assignments": "64/73",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "73/73",
         "mainPageReasonLines": []
       },
       {
@@ -997,10 +975,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-13-7",
         "name": "Billing QA",
-        "status": "partial",
-        "metric": "94%",
-        "assignments": "62/66",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "66/66",
         "mainPageReasonLines": []
       },
       {
@@ -1024,7 +1001,8 @@ export const mockDbActivityByTab = {
   "week_12": {
     "tabLabel": "Dec 15-21",
     "summary": {
-      "agentsWithoutAssignment": 3,
+      "agentsNotInAnyRuleCount": 7,
+      "agentsWithoutAssignment": 80,
       "evaluatorsWithoutWorkload": 5
     },
     "rules": [
@@ -1062,11 +1040,11 @@ export const mockDbActivityByTab = {
         "status": "partial",
         "metric": "87%",
         "assignments": "58/67",
-        "note": "1 agent: insufficient matching conversations",
+        "note": "2 agents: insufficient matching conversations",
         "issueCodeLabel": "Insufficient matching conversations",
         "mainPageReasonLines": [
-          "1 agent: insufficient matching conversations",
-          "1 agent: evaluators' workload limit reached"
+          "2 agents: insufficient matching conversations",
+          "2 agents: evaluators' workload limit reached"
         ]
       },
       {
@@ -1099,10 +1077,11 @@ export const mockDbActivityByTab = {
         "status": "partial",
         "metric": "93%",
         "assignments": "56/60",
-        "note": "1 agent: insufficient matching conversations",
+        "note": "2 agents: insufficient matching conversations",
         "issueCodeLabel": "Insufficient matching conversations",
         "mainPageReasonLines": [
-          "1 agent: insufficient matching conversations"
+          "2 agents: insufficient matching conversations",
+          "1 agent: evaluators' workload limit reached"
         ]
       },
       {
@@ -1118,30 +1097,26 @@ export const mockDbActivityByTab = {
   "week_13": {
     "tabLabel": "Dec 8-14",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 6
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
         "id": "rule-11-1",
         "name": "Legacy Escalation QA",
-        "status": "partial",
-        "metric": "93%",
-        "assignments": "63/68",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "68/68",
         "mainPageReasonLines": []
       },
       {
         "id": "rule-11-2",
         "name": "Mortgage Queue",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/75",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "75/75",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-11-3",
@@ -1162,10 +1137,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-11-5",
         "name": "Escalation Sweep - Weekend Priority",
-        "status": "partial",
-        "metric": "85%",
-        "assignments": "52/61",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "61/61",
         "mainPageReasonLines": []
       },
       {
@@ -1195,10 +1169,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-11-9",
         "name": "Onboarding Calls QA",
-        "status": "partial",
-        "metric": "96%",
-        "assignments": "85/89",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "89/89",
         "mainPageReasonLines": []
       }
     ]
@@ -1206,7 +1179,8 @@ export const mockDbActivityByTab = {
   "week_14": {
     "tabLabel": "Dec 1-7",
     "summary": {
-      "agentsWithoutAssignment": 8,
+      "agentsNotInAnyRuleCount": 5,
+      "agentsWithoutAssignment": 67,
       "evaluatorsWithoutWorkload": 5
     },
     "rules": [
@@ -1228,7 +1202,7 @@ export const mockDbActivityByTab = {
         "issueCodeLabel": "Evaluators' workload limit reached",
         "mainPageReasonLines": [
           "2 agents: evaluators' workload limit reached",
-          "2 agents: insufficient matching conversations"
+          "1 agent: insufficient matching conversations"
         ]
       },
       {
@@ -1268,8 +1242,7 @@ export const mockDbActivityByTab = {
         "note": "2 agents: insufficient matching conversations",
         "issueCodeLabel": "Insufficient matching conversations",
         "mainPageReasonLines": [
-          "2 agents: insufficient matching conversations",
-          "2 agents: evaluators' workload limit reached"
+          "2 agents: insufficient matching conversations"
         ]
       },
       {
@@ -1301,8 +1274,9 @@ export const mockDbActivityByTab = {
   "week_15": {
     "tabLabel": "Nov 24-30",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 4
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
@@ -1324,23 +1298,18 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-9-3",
         "name": "Renewals - TL Review Batch",
-        "status": "partial",
-        "metric": "95%",
-        "assignments": "86/91",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "91/91",
         "mainPageReasonLines": []
       },
       {
         "id": "rule-9-4",
         "name": "Savings Product - QA Rotation",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/63",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "63/63",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-9-5",
@@ -1361,10 +1330,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-9-7",
         "name": "Billing QA",
-        "status": "partial",
-        "metric": "89%",
-        "assignments": "75/84",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "84/84",
         "mainPageReasonLines": []
       },
       {
@@ -1388,7 +1356,8 @@ export const mockDbActivityByTab = {
   "week_16": {
     "tabLabel": "Nov 17-23",
     "summary": {
-      "agentsWithoutAssignment": 3,
+      "agentsNotInAnyRuleCount": 8,
+      "agentsWithoutAssignment": 91,
       "evaluatorsWithoutWorkload": 5
     },
     "rules": [
@@ -1422,11 +1391,11 @@ export const mockDbActivityByTab = {
         "status": "partial",
         "metric": "94%",
         "assignments": "80/85",
-        "note": "1 agent: insufficient matching conversations",
+        "note": "2 agents: insufficient matching conversations",
         "issueCodeLabel": "Insufficient matching conversations",
         "mainPageReasonLines": [
-          "1 agent: insufficient matching conversations",
-          "1 agent: evaluators' workload limit reached"
+          "2 agents: insufficient matching conversations",
+          "2 agents: evaluators' workload limit reached"
         ]
       },
       {
@@ -1461,12 +1430,13 @@ export const mockDbActivityByTab = {
         "id": "rule-8-8",
         "name": "Card Disputes QA",
         "status": "partial",
-        "metric": "89%",
+        "metric": "88%",
         "assignments": "69/78",
-        "note": "1 agent: insufficient matching conversations",
+        "note": "3 agents: insufficient matching conversations",
         "issueCodeLabel": "Insufficient matching conversations",
         "mainPageReasonLines": [
-          "1 agent: insufficient matching conversations"
+          "3 agents: insufficient matching conversations",
+          "1 agent: evaluators' workload limit reached"
         ]
       },
       {
@@ -1482,17 +1452,17 @@ export const mockDbActivityByTab = {
   "week_17": {
     "tabLabel": "Nov 10-16",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 5
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
         "id": "rule-7-1",
         "name": "Legacy Escalation QA",
-        "status": "partial",
-        "metric": "88%",
-        "assignments": "76/86",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "86/86",
         "mainPageReasonLines": []
       },
       {
@@ -1522,23 +1492,18 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-7-5",
         "name": "Escalation Sweep - Weekend Priority",
-        "status": "partial",
-        "metric": "94%",
-        "assignments": "74/79",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "79/79",
         "mainPageReasonLines": []
       },
       {
         "id": "rule-7-6",
         "name": "Claims Exception Queue",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/86",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "86/86",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-7-7",
@@ -1559,10 +1524,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-7-9",
         "name": "Onboarding Calls QA",
-        "status": "partial",
-        "metric": "88%",
-        "assignments": "63/72",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "72/72",
         "mainPageReasonLines": []
       }
     ]
@@ -1570,7 +1534,8 @@ export const mockDbActivityByTab = {
   "week_18": {
     "tabLabel": "Nov 3-9",
     "summary": {
-      "agentsWithoutAssignment": 6,
+      "agentsNotInAnyRuleCount": 6,
+      "agentsWithoutAssignment": 78,
       "evaluatorsWithoutWorkload": 5
     },
     "rules": [
@@ -1665,8 +1630,9 @@ export const mockDbActivityByTab = {
   "week_19": {
     "tabLabel": "Oct 27-Nov 2",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 6
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
@@ -1688,10 +1654,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-5-3",
         "name": "Renewals - TL Review Batch",
-        "status": "partial",
-        "metric": "87%",
-        "assignments": "64/74",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "74/74",
         "mainPageReasonLines": []
       },
       {
@@ -1721,23 +1686,18 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-5-7",
         "name": "Billing QA",
-        "status": "partial",
-        "metric": "93%",
-        "assignments": "62/67",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "67/67",
         "mainPageReasonLines": []
       },
       {
         "id": "rule-5-8",
         "name": "Card Disputes QA",
-        "status": "failed",
-        "metric": "0%",
-        "assignments": "0/74",
-        "note": "Rule execution failed",
-        "issueCodeLabel": "Rule execution failed",
-        "mainPageReasonLines": [
-          "Rule execution failed"
-        ]
+        "status": "success",
+        "metric": "100%",
+        "assignments": "74/74",
+        "mainPageReasonLines": []
       },
       {
         "id": "rule-5-9",
@@ -1752,7 +1712,8 @@ export const mockDbActivityByTab = {
   "week_20": {
     "tabLabel": "Oct 20-26",
     "summary": {
-      "agentsWithoutAssignment": 4,
+      "agentsNotInAnyRuleCount": 4,
+      "agentsWithoutAssignment": 64,
       "evaluatorsWithoutWorkload": 5
     },
     "rules": [
@@ -1845,6 +1806,7 @@ export const mockDbActivityByTab = {
   "week_21": {
     "tabLabel": "Oct 13-19",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
       "evaluatorsWithoutWorkload": 0
     },
@@ -1852,10 +1814,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-3-1",
         "name": "Legacy Escalation QA",
-        "status": "partial",
-        "metric": "91%",
-        "assignments": "63/69",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "69/69",
         "mainPageReasonLines": []
       },
       {
@@ -1885,10 +1846,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-3-5",
         "name": "Escalation Sweep - Weekend Priority",
-        "status": "partial",
-        "metric": "84%",
-        "assignments": "52/62",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "62/62",
         "mainPageReasonLines": []
       },
       {
@@ -1918,10 +1878,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-3-9",
         "name": "Onboarding Calls QA",
-        "status": "partial",
-        "metric": "94%",
-        "assignments": "85/90",
-        "issueCodeLabel": "Evaluators' workload limit reached",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "90/90",
         "mainPageReasonLines": []
       }
     ]
@@ -1929,7 +1888,8 @@ export const mockDbActivityByTab = {
   "week_22": {
     "tabLabel": "Oct 6-12",
     "summary": {
-      "agentsWithoutAssignment": 3,
+      "agentsNotInAnyRuleCount": 3,
+      "agentsWithoutAssignment": 5,
       "evaluatorsWithoutWorkload": 0
     },
     "rules": [
@@ -1945,7 +1905,7 @@ export const mockDbActivityByTab = {
         "id": "rule-2-2",
         "name": "Mortgage Queue",
         "status": "partial",
-        "metric": "91%",
+        "metric": "90%",
         "assignments": "57/63",
         "note": "2 agents: insufficient matching conversations",
         "issueCodeLabel": "Insufficient matching conversations",
@@ -2018,8 +1978,9 @@ export const mockDbActivityByTab = {
   "week_23": {
     "tabLabel": "Sep 29-Oct 5",
     "summary": {
+      "agentsNotInAnyRuleCount": 0,
       "agentsWithoutAssignment": 0,
-      "evaluatorsWithoutWorkload": 1
+      "evaluatorsWithoutWorkload": 0
     },
     "rules": [
       {
@@ -2041,10 +2002,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-1-3",
         "name": "Renewals - TL Review Batch",
-        "status": "partial",
-        "metric": "94%",
-        "assignments": "86/92",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "92/92",
         "mainPageReasonLines": []
       },
       {
@@ -2074,10 +2034,9 @@ export const mockDbActivityByTab = {
       {
         "id": "rule-1-7",
         "name": "Billing QA",
-        "status": "partial",
-        "metric": "88%",
-        "assignments": "75/85",
-        "issueCodeLabel": "Insufficient matching conversations",
+        "status": "success",
+        "metric": "100%",
+        "assignments": "85/85",
         "mainPageReasonLines": []
       },
       {
@@ -3668,7 +3627,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "8"
       }
     ],
-    "reasonSummary": "1 agent: evaluators' workload limit reached · 1 agent: insufficient matching conversations",
+    "reasonSummary": "2 agents: evaluators' workload limit reached · 2 agents: insufficient matching conversations",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-195-1",
@@ -3687,6 +3646,24 @@ export const mockDbRuleSheetByRuleRowId = {
         "assignmentText": "0/2 assigned",
         "detailText": "Agent had no conversations in the sampling window.",
         "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-195-3",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "no_matching_conversations",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Conversations existed but did not match rule filters.",
+        "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-195-4",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "evaluator_unavailable",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Evaluator availability blocked assignment in this run.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
       }
     ],
     "coveredAgents": [
@@ -3965,9 +3942,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-22-4": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/92)",
+    "status": "partial",
+    "statusLabel": "Partial",
+    "progressLabel": "92% (85/92)",
     "metadata": [
       {
         "label": "Ran",
@@ -3987,18 +3964,91 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "85"
       },
       {
         "label": "Missed",
-        "value": "92"
+        "value": "7"
       }
     ],
-    "reasonSummary": "Rule execution failed",
-    "agentsWithoutQa": [],
+    "reasonSummary": "7 agents: evaluators' workload limit reached",
+    "agentsWithoutQa": [
+      {
+        "id": "warning-agent-198-1",
+        "name": "Agent 001",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations are still being assigned for this week.",
+        "issueCodeLabel": "All evaluators at capacity"
+      },
+      {
+        "id": "warning-agent-198-2",
+        "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations are still being assigned for this week.",
+        "issueCodeLabel": "All evaluators at capacity"
+      },
+      {
+        "id": "warning-agent-198-3",
+        "name": "Agent 003",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations are still being assigned for this week.",
+        "issueCodeLabel": "All evaluators at capacity"
+      },
+      {
+        "id": "warning-agent-198-4",
+        "name": "Agent 004",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations are still being assigned for this week.",
+        "issueCodeLabel": "All evaluators at capacity"
+      },
+      {
+        "id": "warning-agent-198-5",
+        "name": "Agent 005",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations are still being assigned for this week.",
+        "issueCodeLabel": "All evaluators at capacity"
+      },
+      {
+        "id": "warning-agent-198-6",
+        "name": "Agent 006",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations are still being assigned for this week.",
+        "issueCodeLabel": "All evaluators at capacity"
+      },
+      {
+        "id": "warning-agent-198-7",
+        "name": "Agent 007",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations are still being assigned for this week.",
+        "issueCodeLabel": "All evaluators at capacity"
+      }
+    ],
     "coveredAgents": [],
     "quotaMetElsewhere": [],
-    "evaluatorsWithIssues": [],
+    "evaluatorsWithIssues": [
+      {
+        "id": "warning-evaluator-198-fallback",
+        "name": "Evaluator 13",
+        "status": "warning",
+        "loadText": "0/25",
+        "detailText": "Assignments are still being distributed for this week.",
+        "issueCodeLabel": "Workload limit reached"
+      }
+    ],
     "activeEvaluators": []
   },
   "rule-22-5": {
@@ -4187,7 +4237,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "3"
       }
     ],
-    "reasonSummary": "1 agent: evaluators' workload limit reached · Rule execution failed",
+    "reasonSummary": "2 agents: evaluators' workload limit reached · 1 agent: insufficient matching conversations",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-192-1",
@@ -4197,6 +4247,24 @@ export const mockDbRuleSheetByRuleRowId = {
         "assignmentText": "0/2 assigned",
         "detailText": "Evaluator availability blocked assignment in this run.",
         "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-192-2",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-192-3",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "no_matching_conversations",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Conversations existed but did not match rule filters.",
+        "issueCodeLabel": "Insufficient matching conversations"
       }
     ],
     "coveredAgents": [
@@ -5075,9 +5143,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-21-3": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "89% (64/72)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (72/72)",
     "metadata": [
       {
         "label": "Ran",
@@ -5097,11 +5165,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "64"
+        "value": "72"
       },
       {
         "label": "Missed",
-        "value": "8"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -5144,25 +5212,25 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-188-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-188-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-188-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-188-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -5179,6 +5247,15 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "quota-agent-188-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-188-3",
         "name": "Agent 159",
         "status": "fyi",
         "assignmentText": "2/2 via another rule",
@@ -5193,19 +5270,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-188-1",
         "name": "Evaluator 09",
         "status": "success",
-        "loadText": "17/24"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-188-2",
-        "name": "Evaluator 11",
+        "name": "Evaluator 10",
         "status": "success",
-        "loadText": "18/20"
+        "loadText": "22/25"
       },
       {
         "id": "active-evaluator-188-3",
+        "name": "Evaluator 11",
+        "status": "success",
+        "loadText": "20/20"
+      },
+      {
+        "id": "active-evaluator-188-4",
         "name": "Evaluator 12",
         "status": "success",
-        "loadText": "18/21"
+        "loadText": "20/21"
       }
     ]
   },
@@ -5351,9 +5434,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-21-5": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/86)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (86/86)",
     "metadata": [
       {
         "label": "Ran",
@@ -5373,19 +5456,138 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "86"
       },
       {
         "label": "Missed",
-        "value": "86"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-184-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-184-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-184-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-184-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-184-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-184-1",
+        "name": "Evaluator 17",
+        "status": "success",
+        "loadText": "18/20"
+      },
+      {
+        "id": "active-evaluator-184-2",
+        "name": "Evaluator 18",
+        "status": "success",
+        "loadText": "18/21"
+      },
+      {
+        "id": "active-evaluator-184-3",
+        "name": "Evaluator 19",
+        "status": "success",
+        "loadText": "22/22"
+      },
+      {
+        "id": "active-evaluator-184-4",
+        "name": "Evaluator 20",
+        "status": "success",
+        "loadText": "22/23"
+      },
+      {
+        "id": "active-evaluator-184-5",
+        "name": "Evaluator 38",
+        "status": "success",
+        "loadText": "22/25"
+      }
+    ]
   },
   "rule-21-6": {
     "status": "success",
@@ -5538,9 +5740,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-21-7": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "95% (62/65)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (65/65)",
     "metadata": [
       {
         "label": "Ran",
@@ -5560,14 +5762,13 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "62"
+        "value": "65"
       },
       {
         "label": "Missed",
-        "value": "3"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
     "coveredAgents": [
       {
@@ -5602,31 +5803,31 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-181-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-181-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-181-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-181-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-181-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -5666,25 +5867,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-181-1",
         "name": "Evaluator 25",
         "status": "success",
-        "loadText": "16/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-181-2",
         "name": "Evaluator 26",
         "status": "success",
-        "loadText": "16/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-181-3",
         "name": "Evaluator 27",
         "status": "success",
-        "loadText": "16/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-181-4",
         "name": "Evaluator 28",
         "status": "success",
-        "loadText": "23/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -6777,9 +6978,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-20-6": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/80)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (80/80)",
     "metadata": [
       {
         "label": "Ran",
@@ -6799,19 +7000,132 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "80"
       },
       {
         "label": "Missed",
-        "value": "80"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-174-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-174-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-174-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-174-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-174-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-174-1",
+        "name": "Evaluator 21",
+        "status": "success",
+        "loadText": "20/21"
+      },
+      {
+        "id": "active-evaluator-174-2",
+        "name": "Evaluator 22",
+        "status": "success",
+        "loadText": "20/22"
+      },
+      {
+        "id": "active-evaluator-174-3",
+        "name": "Evaluator 23",
+        "status": "success",
+        "loadText": "20/23"
+      },
+      {
+        "id": "active-evaluator-174-4",
+        "name": "Evaluator 24",
+        "status": "success",
+        "loadText": "24/24"
+      }
+    ]
   },
   "rule-20-7": {
     "status": "success",
@@ -6964,9 +7278,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-20-8": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "95% (56/59)",
+    "status": "failed",
+    "statusLabel": "Failed",
+    "progressLabel": "0% (0/59)",
     "metadata": [
       {
         "label": "Ran",
@@ -6986,185 +7300,19 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "56"
+        "value": "0"
       },
       {
         "label": "Missed",
-        "value": "3"
+        "value": "59"
       }
     ],
-    "reasonSummary": "2 agents: insufficient matching conversations · 2 agents: evaluators' workload limit reached · Rule execution failed",
-    "agentsWithoutQa": [
-      {
-        "id": "warning-agent-173-1",
-        "name": "Agent 008",
-        "status": "warning",
-        "warningReason": "no_matching_conversations",
-        "assignmentText": "0/2 assigned",
-        "detailText": "Conversations existed but did not match rule filters.",
-        "issueCodeLabel": "Insufficient matching conversations"
-      },
-      {
-        "id": "warning-agent-173-2",
-        "name": "Agent 019",
-        "status": "warning",
-        "warningReason": "evaluator_unavailable",
-        "assignmentText": "0/2 assigned",
-        "detailText": "Evaluator availability blocked assignment in this run.",
-        "issueCodeLabel": "Evaluators' workload limit reached"
-      },
-      {
-        "id": "warning-agent-173-3",
-        "name": "Agent 030",
-        "status": "warning",
-        "warningReason": "all_evaluators_capacity",
-        "assignmentText": "0/2 assigned",
-        "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
-        "issueCodeLabel": "Evaluators' workload limit reached"
-      },
-      {
-        "id": "warning-agent-173-4",
-        "name": "Agent 041",
-        "status": "warning",
-        "warningReason": "no_matching_conversations",
-        "assignmentText": "0/2 assigned",
-        "detailText": "Conversations existed but did not match rule filters.",
-        "issueCodeLabel": "Insufficient matching conversations"
-      }
-    ],
-    "coveredAgents": [
-      {
-        "id": "covered-agent-173-1",
-        "name": "Agent 001",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-2",
-        "name": "Agent 002",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-3",
-        "name": "Agent 003",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-4",
-        "name": "Agent 004",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-5",
-        "name": "Agent 005",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-6",
-        "name": "Agent 006",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-7",
-        "name": "Agent 007",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-8",
-        "name": "Agent 009",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-9",
-        "name": "Agent 010",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      },
-      {
-        "id": "covered-agent-173-10",
-        "name": "Agent 011",
-        "status": "success",
-        "assignmentText": "2/2 assigned"
-      }
-    ],
-    "quotaMetElsewhere": [
-      {
-        "id": "quota-agent-173-1",
-        "name": "Agent 053",
-        "status": "fyi",
-        "assignmentText": "2/2 via another rule",
-        "viaRuleName": "Another rule",
-        "detailText": "Coverage requirement already met by another rule in the same period.",
-        "issueCodeLabel": "Quota met by another rule"
-      },
-      {
-        "id": "quota-agent-173-2",
-        "name": "Agent 106",
-        "status": "fyi",
-        "assignmentText": "2/2 via another rule",
-        "viaRuleName": "Another rule",
-        "detailText": "Coverage requirement already met by another rule in the same period.",
-        "issueCodeLabel": "Quota met by another rule"
-      },
-      {
-        "id": "quota-agent-173-3",
-        "name": "Agent 159",
-        "status": "fyi",
-        "assignmentText": "2/2 via another rule",
-        "viaRuleName": "Another rule",
-        "detailText": "Coverage requirement already met by another rule in the same period.",
-        "issueCodeLabel": "Quota met by another rule"
-      }
-    ],
-    "evaluatorsWithIssues": [
-      {
-        "id": "warning-evaluator-173-fallback",
-        "name": "Evaluator 29",
-        "status": "warning",
-        "loadText": "0/23",
-        "detailText": "Workload limit reached for this evaluator in this rule run.",
-        "issueCodeLabel": "Workload limit reached"
-      }
-    ],
-    "activeEvaluators": [
-      {
-        "id": "active-evaluator-173-1",
-        "name": "Evaluator 29",
-        "status": "success",
-        "loadText": "20/23"
-      },
-      {
-        "id": "active-evaluator-173-2",
-        "name": "Evaluator 30",
-        "status": "success",
-        "loadText": "20/24"
-      },
-      {
-        "id": "active-evaluator-173-3",
-        "name": "Evaluator 31",
-        "status": "success",
-        "loadText": "20/25"
-      },
-      {
-        "id": "active-evaluator-173-4",
-        "name": "Evaluator 32",
-        "status": "success",
-        "loadText": "14/20"
-      },
-      {
-        "id": "active-evaluator-173-5",
-        "name": "Evaluator 39",
-        "status": "success",
-        "loadText": "17/23"
-      }
-    ]
+    "reasonSummary": "Rule execution failed",
+    "agentsWithoutQa": [],
+    "coveredAgents": [],
+    "quotaMetElsewhere": [],
+    "evaluatorsWithIssues": [],
+    "activeEvaluators": []
   },
   "rule-20-9": {
     "status": "success",
@@ -7317,9 +7465,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-19-1": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "94% (63/67)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (67/67)",
     "metadata": [
       {
         "label": "Ran",
@@ -7339,72 +7487,72 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "63"
+        "value": "67"
       },
       {
         "label": "Missed",
-        "value": "4"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
     "coveredAgents": [
       {
         "id": "covered-agent-167-1",
-        "name": "Agent 002",
+        "name": "Agent 001",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-2",
-        "name": "Agent 003",
+        "name": "Agent 002",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-3",
-        "name": "Agent 004",
+        "name": "Agent 003",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-167-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -7435,25 +7583,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-167-1",
         "name": "Evaluator 01",
         "status": "success",
-        "loadText": "20/22"
+        "loadText": "22/22"
       },
       {
         "id": "active-evaluator-167-2",
         "name": "Evaluator 02",
         "status": "success",
-        "loadText": "20/23"
+        "loadText": "22/23"
       },
       {
         "id": "active-evaluator-167-3",
         "name": "Evaluator 03",
         "status": "success",
-        "loadText": "20/24"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-167-4",
         "name": "Evaluator 04",
         "status": "success",
-        "loadText": "20/25"
+        "loadText": "22/25"
       }
     ]
   },
@@ -7905,9 +8053,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-19-5": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "87% (52/60)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (60/60)",
     "metadata": [
       {
         "label": "Ran",
@@ -7927,11 +8075,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "52"
+        "value": "60"
       },
       {
         "label": "Missed",
-        "value": "8"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -8032,31 +8180,31 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-166-1",
         "name": "Evaluator 17",
         "status": "success",
-        "loadText": "12/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-166-2",
         "name": "Evaluator 18",
         "status": "success",
-        "loadText": "19/21"
+        "loadText": "20/21"
       },
       {
         "id": "active-evaluator-166-3",
         "name": "Evaluator 19",
         "status": "success",
-        "loadText": "19/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-166-4",
         "name": "Evaluator 20",
         "status": "success",
-        "loadText": "19/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-166-5",
         "name": "Evaluator 38",
         "status": "success",
-        "loadText": "17/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -8211,9 +8359,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-19-7": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/74)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (74/74)",
     "metadata": [
       {
         "label": "Ran",
@@ -8233,19 +8381,132 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "74"
       },
       {
         "label": "Missed",
-        "value": "74"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-163-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-163-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-163-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-163-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-163-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-163-1",
+        "name": "Evaluator 25",
+        "status": "success",
+        "loadText": "22/22"
+      },
+      {
+        "id": "active-evaluator-163-2",
+        "name": "Evaluator 26",
+        "status": "success",
+        "loadText": "22/23"
+      },
+      {
+        "id": "active-evaluator-163-3",
+        "name": "Evaluator 27",
+        "status": "success",
+        "loadText": "22/24"
+      },
+      {
+        "id": "active-evaluator-163-4",
+        "name": "Evaluator 28",
+        "status": "success",
+        "loadText": "22/25"
+      }
+    ]
   },
   "rule-19-8": {
     "status": "success",
@@ -8404,9 +8665,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-19-9": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "97% (85/88)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (88/88)",
     "metadata": [
       {
         "label": "Ran",
@@ -8426,14 +8687,13 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "85"
+        "value": "88"
       },
       {
         "label": "Missed",
-        "value": "3"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
     "coveredAgents": [
       {
@@ -8492,7 +8752,7 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-169-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -8532,13 +8792,13 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-169-1",
         "name": "Evaluator 33",
         "status": "success",
-        "loadText": "17/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-169-2",
         "name": "Evaluator 34",
         "status": "success",
-        "loadText": "17/25"
+        "loadText": "24/25"
       },
       {
         "id": "active-evaluator-169-3",
@@ -8725,7 +8985,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "4"
       }
     ],
-    "reasonSummary": "2 agents: evaluators' workload limit reached",
+    "reasonSummary": "3 agents: evaluators' workload limit reached · 1 agent: insufficient matching conversations",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-159-1",
@@ -8743,6 +9003,24 @@ export const mockDbRuleSheetByRuleRowId = {
         "warningReason": "all_evaluators_capacity",
         "assignmentText": "0/2 assigned",
         "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-159-3",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "no_conversations_in_period",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Agent had no conversations in the sampling window.",
+        "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-159-4",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "evaluator_unavailable",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Evaluator availability blocked assignment in this run.",
         "issueCodeLabel": "Evaluators' workload limit reached"
       }
     ],
@@ -9357,11 +9635,38 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "8"
       }
     ],
-    "reasonSummary": "1 agent: evaluators' workload limit reached",
+    "reasonSummary": "3 agents: evaluators' workload limit reached · 1 agent: insufficient matching conversations",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-156-1",
         "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "evaluator_unavailable",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Evaluator availability blocked assignment in this run.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-156-2",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-156-3",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "no_matching_conversations",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Conversations existed but did not match rule filters.",
+        "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-156-4",
+        "name": "Agent 035",
         "status": "warning",
         "warningReason": "evaluator_unavailable",
         "assignmentText": "0/2 assigned",
@@ -9678,10 +9983,1672 @@ export const mockDbRuleSheetByRuleRowId = {
       }
     ],
     "reasonSummary": "Rule execution failed",
-    "agentsWithoutQa": [],
+    "agentsWithoutQa": [
+      {
+        "id": "warning-agent-155-1",
+        "name": "Agent 001",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-2",
+        "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-3",
+        "name": "Agent 003",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-4",
+        "name": "Agent 004",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-5",
+        "name": "Agent 005",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-6",
+        "name": "Agent 006",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-7",
+        "name": "Agent 007",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-8",
+        "name": "Agent 008",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-9",
+        "name": "Agent 009",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-10",
+        "name": "Agent 010",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-11",
+        "name": "Agent 011",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-12",
+        "name": "Agent 012",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-13",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-14",
+        "name": "Agent 014",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-15",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-16",
+        "name": "Agent 016",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-17",
+        "name": "Agent 017",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-18",
+        "name": "Agent 018",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-19",
+        "name": "Agent 019",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-20",
+        "name": "Agent 020",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-21",
+        "name": "Agent 021",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-22",
+        "name": "Agent 022",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-23",
+        "name": "Agent 023",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-24",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-25",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-26",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-27",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-28",
+        "name": "Agent 028",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-29",
+        "name": "Agent 029",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-30",
+        "name": "Agent 030",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-31",
+        "name": "Agent 031",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-32",
+        "name": "Agent 032",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-33",
+        "name": "Agent 033",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-34",
+        "name": "Agent 034",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-35",
+        "name": "Agent 035",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-36",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-37",
+        "name": "Agent 037",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-38",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-39",
+        "name": "Agent 039",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-40",
+        "name": "Agent 040",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-41",
+        "name": "Agent 041",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-42",
+        "name": "Agent 042",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-43",
+        "name": "Agent 043",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-44",
+        "name": "Agent 044",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-45",
+        "name": "Agent 045",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-46",
+        "name": "Agent 046",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-47",
+        "name": "Agent 047",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-48",
+        "name": "Agent 048",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-49",
+        "name": "Agent 049",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-50",
+        "name": "Agent 050",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-51",
+        "name": "Agent 051",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-52",
+        "name": "Agent 052",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-53",
+        "name": "Agent 053",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-54",
+        "name": "Agent 054",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-55",
+        "name": "Agent 055",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-56",
+        "name": "Agent 056",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-57",
+        "name": "Agent 057",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-58",
+        "name": "Agent 058",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-59",
+        "name": "Agent 059",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-60",
+        "name": "Agent 060",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-61",
+        "name": "Agent 061",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-62",
+        "name": "Agent 062",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-63",
+        "name": "Agent 063",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-64",
+        "name": "Agent 064",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-65",
+        "name": "Agent 065",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-66",
+        "name": "Agent 066",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-67",
+        "name": "Agent 067",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-68",
+        "name": "Agent 068",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-69",
+        "name": "Agent 069",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-70",
+        "name": "Agent 070",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-71",
+        "name": "Agent 071",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-72",
+        "name": "Agent 072",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-73",
+        "name": "Agent 073",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-74",
+        "name": "Agent 074",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-75",
+        "name": "Agent 075",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-76",
+        "name": "Agent 076",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-77",
+        "name": "Agent 077",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-78",
+        "name": "Agent 078",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-79",
+        "name": "Agent 079",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-80",
+        "name": "Agent 080",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-81",
+        "name": "Agent 081",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-82",
+        "name": "Agent 082",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-83",
+        "name": "Agent 083",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-84",
+        "name": "Agent 084",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-85",
+        "name": "Agent 085",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-86",
+        "name": "Agent 086",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-87",
+        "name": "Agent 087",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-88",
+        "name": "Agent 088",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-89",
+        "name": "Agent 089",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-90",
+        "name": "Agent 090",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-91",
+        "name": "Agent 091",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-92",
+        "name": "Agent 092",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-93",
+        "name": "Agent 093",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-94",
+        "name": "Agent 094",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-95",
+        "name": "Agent 095",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-96",
+        "name": "Agent 096",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-97",
+        "name": "Agent 097",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-98",
+        "name": "Agent 098",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-99",
+        "name": "Agent 099",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-100",
+        "name": "Agent 100",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-101",
+        "name": "Agent 101",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-102",
+        "name": "Agent 102",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-103",
+        "name": "Agent 103",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-104",
+        "name": "Agent 104",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-105",
+        "name": "Agent 105",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-106",
+        "name": "Agent 106",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-107",
+        "name": "Agent 107",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-108",
+        "name": "Agent 108",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-109",
+        "name": "Agent 109",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-110",
+        "name": "Agent 110",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-111",
+        "name": "Agent 111",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-112",
+        "name": "Agent 112",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-113",
+        "name": "Agent 113",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-114",
+        "name": "Agent 114",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-115",
+        "name": "Agent 115",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-116",
+        "name": "Agent 116",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-117",
+        "name": "Agent 117",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-118",
+        "name": "Agent 118",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-119",
+        "name": "Agent 119",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-120",
+        "name": "Agent 120",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-121",
+        "name": "Agent 121",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-122",
+        "name": "Agent 122",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-123",
+        "name": "Agent 123",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-124",
+        "name": "Agent 124",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-125",
+        "name": "Agent 125",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-126",
+        "name": "Agent 126",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-127",
+        "name": "Agent 127",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-128",
+        "name": "Agent 128",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-129",
+        "name": "Agent 129",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-130",
+        "name": "Agent 130",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-131",
+        "name": "Agent 131",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-132",
+        "name": "Agent 132",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-133",
+        "name": "Agent 133",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-134",
+        "name": "Agent 134",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-135",
+        "name": "Agent 135",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-136",
+        "name": "Agent 136",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-137",
+        "name": "Agent 137",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-138",
+        "name": "Agent 138",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-139",
+        "name": "Agent 139",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-140",
+        "name": "Agent 140",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-141",
+        "name": "Agent 141",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-142",
+        "name": "Agent 142",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-143",
+        "name": "Agent 143",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-144",
+        "name": "Agent 144",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-145",
+        "name": "Agent 145",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-146",
+        "name": "Agent 146",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-147",
+        "name": "Agent 147",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-148",
+        "name": "Agent 148",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-149",
+        "name": "Agent 149",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-150",
+        "name": "Agent 150",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-151",
+        "name": "Agent 151",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-152",
+        "name": "Agent 152",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-153",
+        "name": "Agent 153",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-154",
+        "name": "Agent 154",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-155",
+        "name": "Agent 155",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-156",
+        "name": "Agent 156",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-157",
+        "name": "Agent 157",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-158",
+        "name": "Agent 158",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-159",
+        "name": "Agent 159",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-160",
+        "name": "Agent 160",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-161",
+        "name": "Agent 161",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-162",
+        "name": "Agent 162",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-163",
+        "name": "Agent 163",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-164",
+        "name": "Agent 164",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-165",
+        "name": "Agent 165",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-166",
+        "name": "Agent 166",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-167",
+        "name": "Agent 167",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-168",
+        "name": "Agent 168",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-169",
+        "name": "Agent 169",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-170",
+        "name": "Agent 170",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-171",
+        "name": "Agent 171",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-172",
+        "name": "Agent 172",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-173",
+        "name": "Agent 173",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-174",
+        "name": "Agent 174",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-175",
+        "name": "Agent 175",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-176",
+        "name": "Agent 176",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-177",
+        "name": "Agent 177",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-178",
+        "name": "Agent 178",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-179",
+        "name": "Agent 179",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-155-180",
+        "name": "Agent 180",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "coveredAgents": [],
     "quotaMetElsewhere": [],
-    "evaluatorsWithIssues": [],
+    "evaluatorsWithIssues": [
+      {
+        "id": "warning-evaluator-155-1",
+        "name": "Evaluator 29",
+        "status": "warning",
+        "loadText": "0/23",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-155-2",
+        "name": "Evaluator 30",
+        "status": "warning",
+        "loadText": "0/24",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-155-3",
+        "name": "Evaluator 31",
+        "status": "warning",
+        "loadText": "0/25",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-155-4",
+        "name": "Evaluator 32",
+        "status": "warning",
+        "loadText": "0/20",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-155-5",
+        "name": "Evaluator 39",
+        "status": "warning",
+        "loadText": "0/23",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "activeEvaluators": []
   },
   "rule-18-9": {
@@ -10132,9 +12099,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-17-3": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "96% (86/90)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (90/90)",
     "metadata": [
       {
         "label": "Ran",
@@ -10154,11 +12121,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "86"
+        "value": "90"
       },
       {
         "label": "Missed",
-        "value": "4"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -10189,37 +12156,37 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-152-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-152-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-152-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-152-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-152-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-152-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -10242,6 +12209,15 @@ export const mockDbRuleSheetByRuleRowId = {
         "viaRuleName": "Another rule",
         "detailText": "Coverage requirement already met by another rule in the same period.",
         "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-152-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
       }
     ],
     "evaluatorsWithIssues": [],
@@ -10250,25 +12226,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-152-1",
         "name": "Evaluator 09",
         "status": "success",
-        "loadText": "21/24"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-152-2",
         "name": "Evaluator 10",
         "status": "success",
-        "loadText": "21/25"
+        "loadText": "22/25"
       },
       {
         "id": "active-evaluator-152-3",
         "name": "Evaluator 11",
         "status": "success",
-        "loadText": "15/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-152-4",
         "name": "Evaluator 12",
         "status": "success",
-        "loadText": "15/21"
+        "loadText": "20/21"
       }
     ]
   },
@@ -10720,9 +12696,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-17-7": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "90% (75/83)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (83/83)",
     "metadata": [
       {
         "label": "Ran",
@@ -10742,11 +12718,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "75"
+        "value": "83"
       },
       {
         "label": "Missed",
-        "value": "8"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -10771,43 +12747,43 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-145-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-145-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-145-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-145-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-145-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-145-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-145-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -10857,9 +12833,15 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "active-evaluator-145-3",
+        "name": "Evaluator 27",
+        "status": "success",
+        "loadText": "24/24"
+      },
+      {
+        "id": "active-evaluator-145-4",
         "name": "Evaluator 28",
         "status": "success",
-        "loadText": "20/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -11020,9 +13002,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-17-9": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/62)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (62/62)",
     "metadata": [
       {
         "label": "Ran",
@@ -11042,19 +13024,132 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "62"
       },
       {
         "label": "Missed",
-        "value": "62"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-151-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-151-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-151-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-151-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-151-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-151-1",
+        "name": "Evaluator 33",
+        "status": "success",
+        "loadText": "22/24"
+      },
+      {
+        "id": "active-evaluator-151-2",
+        "name": "Evaluator 34",
+        "status": "success",
+        "loadText": "22/25"
+      },
+      {
+        "id": "active-evaluator-151-3",
+        "name": "Evaluator 35",
+        "status": "success",
+        "loadText": "20/20"
+      },
+      {
+        "id": "active-evaluator-151-4",
+        "name": "Evaluator 36",
+        "status": "success",
+        "loadText": "20/21"
+      }
+    ]
   },
   "rule-16-1": {
     "status": "success",
@@ -12477,9 +14572,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-15-1": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "89% (76/85)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (85/85)",
     "metadata": [
       {
         "label": "Ran",
@@ -12499,11 +14594,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "76"
+        "value": "85"
       },
       {
         "label": "Missed",
-        "value": "9"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -12564,7 +14659,7 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-131-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -12593,21 +14688,27 @@ export const mockDbRuleSheetByRuleRowId = {
     "activeEvaluators": [
       {
         "id": "active-evaluator-131-1",
-        "name": "Evaluator 02",
+        "name": "Evaluator 01",
         "status": "success",
-        "loadText": "17/23"
+        "loadText": "22/22"
       },
       {
         "id": "active-evaluator-131-2",
-        "name": "Evaluator 03",
+        "name": "Evaluator 02",
         "status": "success",
-        "loadText": "17/24"
+        "loadText": "22/23"
       },
       {
         "id": "active-evaluator-131-3",
+        "name": "Evaluator 03",
+        "status": "success",
+        "loadText": "22/24"
+      },
+      {
+        "id": "active-evaluator-131-4",
         "name": "Evaluator 04",
         "status": "success",
-        "loadText": "17/25"
+        "loadText": "22/25"
       }
     ]
   },
@@ -13059,9 +15160,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-15-5": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "95% (74/78)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (78/78)",
     "metadata": [
       {
         "label": "Ran",
@@ -13081,11 +15182,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "74"
+        "value": "78"
       },
       {
         "label": "Missed",
-        "value": "4"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -13140,13 +15241,13 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-130-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-130-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -13154,7 +15255,7 @@ export const mockDbRuleSheetByRuleRowId = {
     "quotaMetElsewhere": [
       {
         "id": "quota-agent-130-1",
-        "name": "Agent 106",
+        "name": "Agent 053",
         "status": "fyi",
         "assignmentText": "2/2 via another rule",
         "viaRuleName": "Another rule",
@@ -13163,6 +15264,15 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "quota-agent-130-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-130-3",
         "name": "Agent 159",
         "status": "fyi",
         "assignmentText": "2/2 via another rule",
@@ -13177,31 +15287,31 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-130-1",
         "name": "Evaluator 17",
         "status": "success",
-        "loadText": "16/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-130-2",
         "name": "Evaluator 18",
         "status": "success",
-        "loadText": "16/21"
+        "loadText": "20/21"
       },
       {
         "id": "active-evaluator-130-3",
         "name": "Evaluator 19",
         "status": "success",
-        "loadText": "16/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-130-4",
         "name": "Evaluator 20",
         "status": "success",
-        "loadText": "16/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-130-5",
         "name": "Evaluator 38",
         "status": "success",
-        "loadText": "21/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -13662,9 +15772,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-15-9": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "89% (63/71)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (71/71)",
     "metadata": [
       {
         "label": "Ran",
@@ -13684,11 +15794,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "63"
+        "value": "71"
       },
       {
         "label": "Missed",
-        "value": "8"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -13737,19 +15847,19 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-133-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-133-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-133-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -13789,25 +15899,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-133-1",
         "name": "Evaluator 33",
         "status": "success",
-        "loadText": "21/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-133-2",
         "name": "Evaluator 34",
         "status": "success",
-        "loadText": "21/25"
+        "loadText": "24/25"
       },
       {
         "id": "active-evaluator-133-3",
         "name": "Evaluator 35",
         "status": "success",
-        "loadText": "15/20"
+        "loadText": "18/20"
       },
       {
         "id": "active-evaluator-133-4",
         "name": "Evaluator 36",
         "status": "success",
-        "loadText": "15/21"
+        "loadText": "18/21"
       }
     ]
   },
@@ -15517,9 +17627,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-13-3": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "88% (64/73)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (73/73)",
     "metadata": [
       {
         "label": "Ran",
@@ -15539,11 +17649,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "64"
+        "value": "73"
       },
       {
         "label": "Missed",
-        "value": "9"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -15562,49 +17672,49 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-116-3",
-        "name": "Agent 004",
+        "name": "Agent 003",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-116-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-116-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-116-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-116-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-116-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-116-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-116-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -15644,25 +17754,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-116-1",
         "name": "Evaluator 09",
         "status": "success",
-        "loadText": "18/24"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-116-2",
         "name": "Evaluator 10",
         "status": "success",
-        "loadText": "18/25"
+        "loadText": "22/25"
       },
       {
         "id": "active-evaluator-116-3",
         "name": "Evaluator 11",
         "status": "success",
-        "loadText": "12/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-116-4",
         "name": "Evaluator 12",
         "status": "success",
-        "loadText": "19/21"
+        "loadText": "20/21"
       }
     ]
   },
@@ -16114,9 +18224,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-13-7": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "94% (62/66)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (66/66)",
     "metadata": [
       {
         "label": "Ran",
@@ -16136,11 +18246,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "62"
+        "value": "66"
       },
       {
         "label": "Missed",
-        "value": "4"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -16153,55 +18263,55 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-109-2",
-        "name": "Agent 003",
+        "name": "Agent 002",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-3",
-        "name": "Agent 004",
+        "name": "Agent 003",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-109-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -16241,25 +18351,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-109-1",
         "name": "Evaluator 25",
         "status": "success",
-        "loadText": "17/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-109-2",
         "name": "Evaluator 26",
         "status": "success",
-        "loadText": "17/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-109-3",
         "name": "Evaluator 27",
         "status": "success",
-        "loadText": "17/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-109-4",
         "name": "Evaluator 28",
         "status": "success",
-        "loadText": "17/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -16600,10 +18710,1484 @@ export const mockDbRuleSheetByRuleRowId = {
       }
     ],
     "reasonSummary": "Rule execution failed",
-    "agentsWithoutQa": [],
+    "agentsWithoutQa": [
+      {
+        "id": "warning-agent-104-1",
+        "name": "Agent 001",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-2",
+        "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-3",
+        "name": "Agent 003",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-4",
+        "name": "Agent 004",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-5",
+        "name": "Agent 005",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-6",
+        "name": "Agent 006",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-7",
+        "name": "Agent 007",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-8",
+        "name": "Agent 008",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-9",
+        "name": "Agent 009",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-10",
+        "name": "Agent 010",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-11",
+        "name": "Agent 011",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-12",
+        "name": "Agent 012",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-13",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-14",
+        "name": "Agent 014",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-15",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-16",
+        "name": "Agent 016",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-17",
+        "name": "Agent 017",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-18",
+        "name": "Agent 018",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-19",
+        "name": "Agent 019",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-20",
+        "name": "Agent 020",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-21",
+        "name": "Agent 021",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-22",
+        "name": "Agent 022",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-23",
+        "name": "Agent 023",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-24",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-25",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-26",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-27",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-28",
+        "name": "Agent 028",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-29",
+        "name": "Agent 029",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-30",
+        "name": "Agent 030",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-31",
+        "name": "Agent 031",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-32",
+        "name": "Agent 032",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-33",
+        "name": "Agent 033",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-34",
+        "name": "Agent 034",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-35",
+        "name": "Agent 035",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-36",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-37",
+        "name": "Agent 037",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-38",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-39",
+        "name": "Agent 039",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-40",
+        "name": "Agent 040",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-41",
+        "name": "Agent 061",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-42",
+        "name": "Agent 062",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-43",
+        "name": "Agent 063",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-44",
+        "name": "Agent 064",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-45",
+        "name": "Agent 065",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-46",
+        "name": "Agent 066",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-47",
+        "name": "Agent 067",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-48",
+        "name": "Agent 068",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-49",
+        "name": "Agent 069",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-50",
+        "name": "Agent 070",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-51",
+        "name": "Agent 071",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-52",
+        "name": "Agent 072",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-53",
+        "name": "Agent 073",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-54",
+        "name": "Agent 074",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-55",
+        "name": "Agent 075",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-56",
+        "name": "Agent 076",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-57",
+        "name": "Agent 077",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-58",
+        "name": "Agent 078",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-59",
+        "name": "Agent 079",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-60",
+        "name": "Agent 080",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-61",
+        "name": "Agent 081",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-62",
+        "name": "Agent 082",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-63",
+        "name": "Agent 083",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-64",
+        "name": "Agent 084",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-65",
+        "name": "Agent 085",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-66",
+        "name": "Agent 086",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-67",
+        "name": "Agent 087",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-68",
+        "name": "Agent 088",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-69",
+        "name": "Agent 089",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-70",
+        "name": "Agent 090",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-71",
+        "name": "Agent 091",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-72",
+        "name": "Agent 092",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-73",
+        "name": "Agent 093",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-74",
+        "name": "Agent 094",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-75",
+        "name": "Agent 095",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-76",
+        "name": "Agent 096",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-77",
+        "name": "Agent 097",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-78",
+        "name": "Agent 098",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-79",
+        "name": "Agent 099",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-80",
+        "name": "Agent 100",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-81",
+        "name": "Agent 101",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-82",
+        "name": "Agent 102",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-83",
+        "name": "Agent 103",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-84",
+        "name": "Agent 104",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-85",
+        "name": "Agent 105",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-86",
+        "name": "Agent 106",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-87",
+        "name": "Agent 107",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-88",
+        "name": "Agent 108",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-89",
+        "name": "Agent 109",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-90",
+        "name": "Agent 110",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-91",
+        "name": "Agent 111",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-92",
+        "name": "Agent 112",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-93",
+        "name": "Agent 113",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-94",
+        "name": "Agent 114",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-95",
+        "name": "Agent 115",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-96",
+        "name": "Agent 116",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-97",
+        "name": "Agent 117",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-98",
+        "name": "Agent 118",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-99",
+        "name": "Agent 119",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-100",
+        "name": "Agent 120",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-101",
+        "name": "Agent 121",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-102",
+        "name": "Agent 122",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-103",
+        "name": "Agent 123",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-104",
+        "name": "Agent 124",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-105",
+        "name": "Agent 125",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-106",
+        "name": "Agent 126",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-107",
+        "name": "Agent 127",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-108",
+        "name": "Agent 128",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-109",
+        "name": "Agent 129",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-110",
+        "name": "Agent 130",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-111",
+        "name": "Agent 131",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-112",
+        "name": "Agent 132",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-113",
+        "name": "Agent 133",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-114",
+        "name": "Agent 134",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-115",
+        "name": "Agent 135",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-116",
+        "name": "Agent 136",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-117",
+        "name": "Agent 137",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-118",
+        "name": "Agent 138",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-119",
+        "name": "Agent 139",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-120",
+        "name": "Agent 140",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-121",
+        "name": "Agent 141",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-122",
+        "name": "Agent 142",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-123",
+        "name": "Agent 143",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-124",
+        "name": "Agent 144",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-125",
+        "name": "Agent 145",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-126",
+        "name": "Agent 146",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-127",
+        "name": "Agent 147",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-128",
+        "name": "Agent 148",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-129",
+        "name": "Agent 149",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-130",
+        "name": "Agent 150",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-131",
+        "name": "Agent 151",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-132",
+        "name": "Agent 152",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-133",
+        "name": "Agent 153",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-134",
+        "name": "Agent 154",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-135",
+        "name": "Agent 155",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-136",
+        "name": "Agent 156",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-137",
+        "name": "Agent 157",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-138",
+        "name": "Agent 158",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-139",
+        "name": "Agent 159",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-140",
+        "name": "Agent 160",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-141",
+        "name": "Agent 161",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-142",
+        "name": "Agent 162",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-143",
+        "name": "Agent 163",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-144",
+        "name": "Agent 164",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-145",
+        "name": "Agent 165",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-146",
+        "name": "Agent 166",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-147",
+        "name": "Agent 167",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-148",
+        "name": "Agent 168",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-149",
+        "name": "Agent 169",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-150",
+        "name": "Agent 170",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-151",
+        "name": "Agent 171",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-152",
+        "name": "Agent 172",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-153",
+        "name": "Agent 173",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-154",
+        "name": "Agent 174",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-155",
+        "name": "Agent 175",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-156",
+        "name": "Agent 176",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-157",
+        "name": "Agent 177",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-158",
+        "name": "Agent 178",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-159",
+        "name": "Agent 179",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-104-160",
+        "name": "Agent 180",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "coveredAgents": [],
     "quotaMetElsewhere": [],
-    "evaluatorsWithIssues": [],
+    "evaluatorsWithIssues": [
+      {
+        "id": "warning-evaluator-104-1",
+        "name": "Evaluator 01",
+        "status": "warning",
+        "loadText": "0/22",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-104-2",
+        "name": "Evaluator 02",
+        "status": "warning",
+        "loadText": "0/23",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-104-3",
+        "name": "Evaluator 03",
+        "status": "warning",
+        "loadText": "0/24",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-104-4",
+        "name": "Evaluator 04",
+        "status": "warning",
+        "loadText": "0/25",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "activeEvaluators": []
   },
   "rule-12-2": {
@@ -16942,7 +20526,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "9"
       }
     ],
-    "reasonSummary": "1 agent: insufficient matching conversations · 1 agent: evaluators' workload limit reached",
+    "reasonSummary": "2 agents: insufficient matching conversations · 2 agents: evaluators' workload limit reached",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-108-1",
@@ -16961,6 +20545,24 @@ export const mockDbRuleSheetByRuleRowId = {
         "assignmentText": "0/2 assigned",
         "detailText": "Evaluator availability blocked assignment in this run.",
         "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-108-3",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-108-4",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "no_matching_conversations",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Conversations existed but did not match rule filters.",
+        "issueCodeLabel": "Insufficient matching conversations"
       }
     ],
     "coveredAgents": [
@@ -17559,7 +21161,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "4"
       }
     ],
-    "reasonSummary": "1 agent: insufficient matching conversations",
+    "reasonSummary": "2 agents: insufficient matching conversations · 1 agent: evaluators' workload limit reached",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-101-1",
@@ -17569,6 +21171,24 @@ export const mockDbRuleSheetByRuleRowId = {
         "assignmentText": "0/2 assigned",
         "detailText": "Conversations existed but did not match rule filters.",
         "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-101-2",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "no_conversations_in_period",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Agent had no conversations in the sampling window.",
+        "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-101-3",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
       }
     ],
     "coveredAgents": [
@@ -17850,9 +21470,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-11-1": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "93% (63/68)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (68/68)",
     "metadata": [
       {
         "label": "Ran",
@@ -17872,11 +21492,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "63"
+        "value": "68"
       },
       {
         "label": "Missed",
-        "value": "5"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -17925,19 +21545,19 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-95-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-95-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-95-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -17968,32 +21588,32 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-95-1",
         "name": "Evaluator 01",
         "status": "success",
-        "loadText": "14/22"
+        "loadText": "22/22"
       },
       {
         "id": "active-evaluator-95-2",
         "name": "Evaluator 02",
         "status": "success",
-        "loadText": "21/23"
+        "loadText": "22/23"
       },
       {
         "id": "active-evaluator-95-3",
         "name": "Evaluator 03",
         "status": "success",
-        "loadText": "21/24"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-95-4",
         "name": "Evaluator 04",
         "status": "success",
-        "loadText": "21/25"
+        "loadText": "22/25"
       }
     ]
   },
   "rule-11-2": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/75)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (75/75)",
     "metadata": [
       {
         "label": "Ran",
@@ -18013,19 +21633,138 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "75"
       },
       {
         "label": "Missed",
-        "value": "75"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-96-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-96-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-96-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-96-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-96-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-96-1",
+        "name": "Evaluator 05",
+        "status": "success",
+        "loadText": "23/23"
+      },
+      {
+        "id": "active-evaluator-96-2",
+        "name": "Evaluator 06",
+        "status": "success",
+        "loadText": "23/24"
+      },
+      {
+        "id": "active-evaluator-96-3",
+        "name": "Evaluator 07",
+        "status": "success",
+        "loadText": "23/25"
+      },
+      {
+        "id": "active-evaluator-96-4",
+        "name": "Evaluator 08",
+        "status": "success",
+        "loadText": "17/20"
+      },
+      {
+        "id": "active-evaluator-96-5",
+        "name": "Evaluator 37",
+        "status": "success",
+        "loadText": "24/24"
+      }
+    ]
   },
   "rule-11-3": {
     "status": "success",
@@ -18319,9 +22058,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-11-5": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "85% (52/61)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (61/61)",
     "metadata": [
       {
         "label": "Ran",
@@ -18341,11 +22080,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "52"
+        "value": "61"
       },
       {
         "label": "Missed",
-        "value": "9"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -18388,25 +22127,25 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-94-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-94-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-94-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-94-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -18423,6 +22162,15 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "quota-agent-94-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-94-3",
         "name": "Agent 159",
         "status": "fyi",
         "assignmentText": "2/2 via another rule",
@@ -18437,25 +22185,31 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-94-1",
         "name": "Evaluator 17",
         "status": "success",
-        "loadText": "13/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-94-2",
+        "name": "Evaluator 18",
+        "status": "success",
+        "loadText": "20/21"
+      },
+      {
+        "id": "active-evaluator-94-3",
         "name": "Evaluator 19",
         "status": "success",
         "loadText": "20/22"
       },
       {
-        "id": "active-evaluator-94-3",
+        "id": "active-evaluator-94-4",
         "name": "Evaluator 20",
         "status": "success",
         "loadText": "20/23"
       },
       {
-        "id": "active-evaluator-94-4",
+        "id": "active-evaluator-94-5",
         "name": "Evaluator 38",
         "status": "success",
-        "loadText": "18/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -18916,9 +22670,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-11-9": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "96% (85/89)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (89/89)",
     "metadata": [
       {
         "label": "Ran",
@@ -18938,11 +22692,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "85"
+        "value": "89"
       },
       {
         "label": "Missed",
-        "value": "4"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -18979,31 +22733,31 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-97-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-97-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-97-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-97-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-97-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -19043,25 +22797,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-97-1",
         "name": "Evaluator 33",
         "status": "success",
-        "loadText": "18/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-97-2",
         "name": "Evaluator 34",
         "status": "success",
-        "loadText": "18/25"
+        "loadText": "24/25"
       },
       {
         "id": "active-evaluator-97-3",
         "name": "Evaluator 35",
         "status": "success",
-        "loadText": "12/20"
+        "loadText": "18/20"
       },
       {
         "id": "active-evaluator-97-4",
         "name": "Evaluator 36",
         "status": "success",
-        "loadText": "19/21"
+        "loadText": "18/21"
       }
     ]
   },
@@ -19236,7 +22990,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "5"
       }
     ],
-    "reasonSummary": "2 agents: evaluators' workload limit reached · 2 agents: insufficient matching conversations",
+    "reasonSummary": "2 agents: evaluators' workload limit reached · 1 agent: insufficient matching conversations",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-87-1",
@@ -19264,15 +23018,6 @@ export const mockDbRuleSheetByRuleRowId = {
         "assignmentText": "0/2 assigned",
         "detailText": "Evaluator availability blocked assignment in this run.",
         "issueCodeLabel": "Evaluators' workload limit reached"
-      },
-      {
-        "id": "warning-agent-87-4",
-        "name": "Agent 043",
-        "status": "warning",
-        "warningReason": "no_conversations_in_period",
-        "assignmentText": "0/2 assigned",
-        "detailText": "Agent had no conversations in the sampling window.",
-        "issueCodeLabel": "Insufficient matching conversations"
       }
     ],
     "coveredAgents": [
@@ -19434,10 +23179,1664 @@ export const mockDbRuleSheetByRuleRowId = {
       }
     ],
     "reasonSummary": "Rule execution failed",
-    "agentsWithoutQa": [],
+    "agentsWithoutQa": [
+      {
+        "id": "warning-agent-89-1",
+        "name": "Agent 001",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-2",
+        "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-3",
+        "name": "Agent 003",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-4",
+        "name": "Agent 004",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-5",
+        "name": "Agent 005",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-6",
+        "name": "Agent 006",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-7",
+        "name": "Agent 007",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-8",
+        "name": "Agent 008",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-9",
+        "name": "Agent 009",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-10",
+        "name": "Agent 010",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-11",
+        "name": "Agent 011",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-12",
+        "name": "Agent 012",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-13",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-14",
+        "name": "Agent 014",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-15",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-16",
+        "name": "Agent 016",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-17",
+        "name": "Agent 017",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-18",
+        "name": "Agent 018",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-19",
+        "name": "Agent 019",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-20",
+        "name": "Agent 020",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-21",
+        "name": "Agent 021",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-22",
+        "name": "Agent 022",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-23",
+        "name": "Agent 023",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-24",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-25",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-26",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-27",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-28",
+        "name": "Agent 028",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-29",
+        "name": "Agent 029",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-30",
+        "name": "Agent 030",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-31",
+        "name": "Agent 031",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-32",
+        "name": "Agent 032",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-33",
+        "name": "Agent 033",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-34",
+        "name": "Agent 034",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-35",
+        "name": "Agent 035",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-36",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-37",
+        "name": "Agent 037",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-38",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-39",
+        "name": "Agent 039",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-40",
+        "name": "Agent 040",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-41",
+        "name": "Agent 041",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-42",
+        "name": "Agent 042",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-43",
+        "name": "Agent 043",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-44",
+        "name": "Agent 044",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-45",
+        "name": "Agent 045",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-46",
+        "name": "Agent 046",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-47",
+        "name": "Agent 047",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-48",
+        "name": "Agent 048",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-49",
+        "name": "Agent 049",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-50",
+        "name": "Agent 050",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-51",
+        "name": "Agent 051",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-52",
+        "name": "Agent 052",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-53",
+        "name": "Agent 053",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-54",
+        "name": "Agent 054",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-55",
+        "name": "Agent 055",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-56",
+        "name": "Agent 056",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-57",
+        "name": "Agent 057",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-58",
+        "name": "Agent 058",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-59",
+        "name": "Agent 059",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-60",
+        "name": "Agent 060",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-61",
+        "name": "Agent 061",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-62",
+        "name": "Agent 062",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-63",
+        "name": "Agent 063",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-64",
+        "name": "Agent 064",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-65",
+        "name": "Agent 065",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-66",
+        "name": "Agent 066",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-67",
+        "name": "Agent 067",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-68",
+        "name": "Agent 068",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-69",
+        "name": "Agent 069",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-70",
+        "name": "Agent 070",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-71",
+        "name": "Agent 071",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-72",
+        "name": "Agent 072",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-73",
+        "name": "Agent 073",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-74",
+        "name": "Agent 074",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-75",
+        "name": "Agent 075",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-76",
+        "name": "Agent 076",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-77",
+        "name": "Agent 077",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-78",
+        "name": "Agent 078",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-79",
+        "name": "Agent 079",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-80",
+        "name": "Agent 080",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-81",
+        "name": "Agent 081",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-82",
+        "name": "Agent 082",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-83",
+        "name": "Agent 083",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-84",
+        "name": "Agent 084",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-85",
+        "name": "Agent 085",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-86",
+        "name": "Agent 086",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-87",
+        "name": "Agent 087",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-88",
+        "name": "Agent 088",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-89",
+        "name": "Agent 089",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-90",
+        "name": "Agent 090",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-91",
+        "name": "Agent 091",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-92",
+        "name": "Agent 092",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-93",
+        "name": "Agent 093",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-94",
+        "name": "Agent 094",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-95",
+        "name": "Agent 095",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-96",
+        "name": "Agent 096",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-97",
+        "name": "Agent 097",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-98",
+        "name": "Agent 098",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-99",
+        "name": "Agent 099",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-100",
+        "name": "Agent 100",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-101",
+        "name": "Agent 101",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-102",
+        "name": "Agent 102",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-103",
+        "name": "Agent 103",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-104",
+        "name": "Agent 104",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-105",
+        "name": "Agent 105",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-106",
+        "name": "Agent 106",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-107",
+        "name": "Agent 107",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-108",
+        "name": "Agent 108",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-109",
+        "name": "Agent 109",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-110",
+        "name": "Agent 110",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-111",
+        "name": "Agent 111",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-112",
+        "name": "Agent 112",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-113",
+        "name": "Agent 113",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-114",
+        "name": "Agent 114",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-115",
+        "name": "Agent 115",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-116",
+        "name": "Agent 116",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-117",
+        "name": "Agent 117",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-118",
+        "name": "Agent 118",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-119",
+        "name": "Agent 119",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-120",
+        "name": "Agent 120",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-121",
+        "name": "Agent 121",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-122",
+        "name": "Agent 122",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-123",
+        "name": "Agent 123",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-124",
+        "name": "Agent 124",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-125",
+        "name": "Agent 125",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-126",
+        "name": "Agent 126",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-127",
+        "name": "Agent 127",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-128",
+        "name": "Agent 128",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-129",
+        "name": "Agent 129",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-130",
+        "name": "Agent 130",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-131",
+        "name": "Agent 131",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-132",
+        "name": "Agent 132",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-133",
+        "name": "Agent 133",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-134",
+        "name": "Agent 134",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-135",
+        "name": "Agent 135",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-136",
+        "name": "Agent 136",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-137",
+        "name": "Agent 137",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-138",
+        "name": "Agent 138",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-139",
+        "name": "Agent 139",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-140",
+        "name": "Agent 140",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-141",
+        "name": "Agent 141",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-142",
+        "name": "Agent 142",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-143",
+        "name": "Agent 143",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-144",
+        "name": "Agent 144",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-145",
+        "name": "Agent 145",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-146",
+        "name": "Agent 146",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-147",
+        "name": "Agent 147",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-148",
+        "name": "Agent 148",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-149",
+        "name": "Agent 149",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-150",
+        "name": "Agent 150",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-151",
+        "name": "Agent 151",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-152",
+        "name": "Agent 152",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-153",
+        "name": "Agent 153",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-154",
+        "name": "Agent 154",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-155",
+        "name": "Agent 155",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-156",
+        "name": "Agent 156",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-157",
+        "name": "Agent 157",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-158",
+        "name": "Agent 158",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-159",
+        "name": "Agent 159",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-160",
+        "name": "Agent 160",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-161",
+        "name": "Agent 161",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-162",
+        "name": "Agent 162",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-163",
+        "name": "Agent 163",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-164",
+        "name": "Agent 164",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-165",
+        "name": "Agent 165",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-166",
+        "name": "Agent 166",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-167",
+        "name": "Agent 167",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-168",
+        "name": "Agent 168",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-169",
+        "name": "Agent 169",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-170",
+        "name": "Agent 170",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-171",
+        "name": "Agent 171",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-172",
+        "name": "Agent 172",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-173",
+        "name": "Agent 173",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-174",
+        "name": "Agent 174",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-175",
+        "name": "Agent 175",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-176",
+        "name": "Agent 176",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-177",
+        "name": "Agent 177",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-178",
+        "name": "Agent 178",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-179",
+        "name": "Agent 179",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-89-180",
+        "name": "Agent 180",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "coveredAgents": [],
     "quotaMetElsewhere": [],
-    "evaluatorsWithIssues": [],
+    "evaluatorsWithIssues": [
+      {
+        "id": "warning-evaluator-89-1",
+        "name": "Evaluator 09",
+        "status": "warning",
+        "loadText": "0/24",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-89-2",
+        "name": "Evaluator 10",
+        "status": "warning",
+        "loadText": "0/25",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-89-3",
+        "name": "Evaluator 11",
+        "status": "warning",
+        "loadText": "0/20",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-89-4",
+        "name": "Evaluator 12",
+        "status": "warning",
+        "loadText": "0/21",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "activeEvaluators": []
   },
   "rule-10-4": {
@@ -19767,7 +25166,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "9"
       }
     ],
-    "reasonSummary": "2 agents: insufficient matching conversations · 2 agents: evaluators' workload limit reached",
+    "reasonSummary": "2 agents: insufficient matching conversations",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-84-1",
@@ -19786,24 +25185,6 @@ export const mockDbRuleSheetByRuleRowId = {
         "assignmentText": "0/2 assigned",
         "detailText": "Conversations existed but did not match rule filters.",
         "issueCodeLabel": "Insufficient matching conversations"
-      },
-      {
-        "id": "warning-agent-84-3",
-        "name": "Agent 031",
-        "status": "warning",
-        "warningReason": "evaluator_unavailable",
-        "assignmentText": "0/2 assigned",
-        "detailText": "Evaluator availability blocked assignment in this run.",
-        "issueCodeLabel": "Evaluators' workload limit reached"
-      },
-      {
-        "id": "warning-agent-84-4",
-        "name": "Agent 042",
-        "status": "warning",
-        "warningReason": "all_evaluators_capacity",
-        "assignmentText": "0/2 assigned",
-        "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
-        "issueCodeLabel": "Evaluators' workload limit reached"
       }
     ],
     "coveredAgents": [
@@ -20679,9 +26060,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-9-3": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "95% (86/91)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (91/91)",
     "metadata": [
       {
         "label": "Ran",
@@ -20701,72 +26082,72 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "86"
+        "value": "91"
       },
       {
         "label": "Missed",
-        "value": "5"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
     "coveredAgents": [
       {
         "id": "covered-agent-80-1",
-        "name": "Agent 002",
+        "name": "Agent 001",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-2",
-        "name": "Agent 003",
+        "name": "Agent 002",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-3",
-        "name": "Agent 004",
+        "name": "Agent 003",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-80-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -20818,20 +26199,20 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-80-3",
         "name": "Evaluator 11",
         "status": "success",
-        "loadText": "16/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-80-4",
         "name": "Evaluator 12",
         "status": "success",
-        "loadText": "16/21"
+        "loadText": "20/21"
       }
     ]
   },
   "rule-9-4": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/63)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (63/63)",
     "metadata": [
       {
         "label": "Ran",
@@ -20851,19 +26232,123 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "63"
       },
       {
         "label": "Missed",
-        "value": "63"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-81-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-81-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-81-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-81-2",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-81-1",
+        "name": "Evaluator 13",
+        "status": "success",
+        "loadText": "23/25"
+      },
+      {
+        "id": "active-evaluator-81-2",
+        "name": "Evaluator 14",
+        "status": "success",
+        "loadText": "17/20"
+      },
+      {
+        "id": "active-evaluator-81-3",
+        "name": "Evaluator 15",
+        "status": "success",
+        "loadText": "21/21"
+      },
+      {
+        "id": "active-evaluator-81-4",
+        "name": "Evaluator 16",
+        "status": "success",
+        "loadText": "21/22"
+      }
+    ]
   },
   "rule-9-5": {
     "status": "success",
@@ -21172,9 +26657,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-9-7": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "89% (75/84)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (84/84)",
     "metadata": [
       {
         "label": "Ran",
@@ -21194,11 +26679,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "75"
+        "value": "84"
       },
       {
         "label": "Missed",
-        "value": "9"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -21299,25 +26784,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-73-1",
         "name": "Evaluator 25",
         "status": "success",
-        "loadText": "14/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-73-2",
         "name": "Evaluator 26",
         "status": "success",
-        "loadText": "21/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-73-3",
         "name": "Evaluator 27",
         "status": "success",
-        "loadText": "21/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-73-4",
         "name": "Evaluator 28",
         "status": "success",
-        "loadText": "21/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -22104,7 +27589,7 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "5"
       }
     ],
-    "reasonSummary": "1 agent: insufficient matching conversations · 1 agent: evaluators' workload limit reached",
+    "reasonSummary": "2 agents: insufficient matching conversations · 2 agents: evaluators' workload limit reached",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-72-1",
@@ -22123,6 +27608,24 @@ export const mockDbRuleSheetByRuleRowId = {
         "assignmentText": "0/2 assigned",
         "detailText": "Evaluator availability blocked assignment in this run.",
         "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-72-3",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "all_evaluators_capacity",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Eligible conversations could not be assigned due to evaluator workload limits.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-72-4",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "no_matching_conversations",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Conversations existed but did not match rule filters.",
+        "issueCodeLabel": "Insufficient matching conversations"
       }
     ],
     "coveredAgents": [
@@ -22275,10 +27778,1672 @@ export const mockDbRuleSheetByRuleRowId = {
       }
     ],
     "reasonSummary": "Rule execution failed",
-    "agentsWithoutQa": [],
+    "agentsWithoutQa": [
+      {
+        "id": "warning-agent-67-1",
+        "name": "Agent 001",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-2",
+        "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-3",
+        "name": "Agent 003",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-4",
+        "name": "Agent 004",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-5",
+        "name": "Agent 005",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-6",
+        "name": "Agent 006",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-7",
+        "name": "Agent 007",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-8",
+        "name": "Agent 008",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-9",
+        "name": "Agent 009",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-10",
+        "name": "Agent 010",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-11",
+        "name": "Agent 011",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-12",
+        "name": "Agent 012",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-13",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-14",
+        "name": "Agent 014",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-15",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-16",
+        "name": "Agent 016",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-17",
+        "name": "Agent 017",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-18",
+        "name": "Agent 018",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-19",
+        "name": "Agent 019",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-20",
+        "name": "Agent 020",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-21",
+        "name": "Agent 021",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-22",
+        "name": "Agent 022",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-23",
+        "name": "Agent 023",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-24",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-25",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-26",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-27",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-28",
+        "name": "Agent 028",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-29",
+        "name": "Agent 029",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-30",
+        "name": "Agent 030",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-31",
+        "name": "Agent 031",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-32",
+        "name": "Agent 032",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-33",
+        "name": "Agent 033",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-34",
+        "name": "Agent 034",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-35",
+        "name": "Agent 035",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-36",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-37",
+        "name": "Agent 037",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-38",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-39",
+        "name": "Agent 039",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-40",
+        "name": "Agent 040",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-41",
+        "name": "Agent 041",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-42",
+        "name": "Agent 042",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-43",
+        "name": "Agent 043",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-44",
+        "name": "Agent 044",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-45",
+        "name": "Agent 045",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-46",
+        "name": "Agent 046",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-47",
+        "name": "Agent 047",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-48",
+        "name": "Agent 048",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-49",
+        "name": "Agent 049",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-50",
+        "name": "Agent 050",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-51",
+        "name": "Agent 051",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-52",
+        "name": "Agent 052",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-53",
+        "name": "Agent 053",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-54",
+        "name": "Agent 054",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-55",
+        "name": "Agent 055",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-56",
+        "name": "Agent 056",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-57",
+        "name": "Agent 057",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-58",
+        "name": "Agent 058",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-59",
+        "name": "Agent 059",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-60",
+        "name": "Agent 060",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-61",
+        "name": "Agent 061",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-62",
+        "name": "Agent 062",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-63",
+        "name": "Agent 063",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-64",
+        "name": "Agent 064",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-65",
+        "name": "Agent 065",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-66",
+        "name": "Agent 066",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-67",
+        "name": "Agent 067",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-68",
+        "name": "Agent 068",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-69",
+        "name": "Agent 069",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-70",
+        "name": "Agent 070",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-71",
+        "name": "Agent 071",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-72",
+        "name": "Agent 072",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-73",
+        "name": "Agent 073",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-74",
+        "name": "Agent 074",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-75",
+        "name": "Agent 075",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-76",
+        "name": "Agent 076",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-77",
+        "name": "Agent 077",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-78",
+        "name": "Agent 078",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-79",
+        "name": "Agent 079",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-80",
+        "name": "Agent 080",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-81",
+        "name": "Agent 081",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-82",
+        "name": "Agent 082",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-83",
+        "name": "Agent 083",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-84",
+        "name": "Agent 084",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-85",
+        "name": "Agent 085",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-86",
+        "name": "Agent 086",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-87",
+        "name": "Agent 087",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-88",
+        "name": "Agent 088",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-89",
+        "name": "Agent 089",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-90",
+        "name": "Agent 090",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-91",
+        "name": "Agent 091",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-92",
+        "name": "Agent 092",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-93",
+        "name": "Agent 093",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-94",
+        "name": "Agent 094",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-95",
+        "name": "Agent 095",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-96",
+        "name": "Agent 096",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-97",
+        "name": "Agent 097",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-98",
+        "name": "Agent 098",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-99",
+        "name": "Agent 099",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-100",
+        "name": "Agent 100",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-101",
+        "name": "Agent 101",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-102",
+        "name": "Agent 102",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-103",
+        "name": "Agent 103",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-104",
+        "name": "Agent 104",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-105",
+        "name": "Agent 105",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-106",
+        "name": "Agent 106",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-107",
+        "name": "Agent 107",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-108",
+        "name": "Agent 108",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-109",
+        "name": "Agent 109",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-110",
+        "name": "Agent 110",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-111",
+        "name": "Agent 111",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-112",
+        "name": "Agent 112",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-113",
+        "name": "Agent 113",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-114",
+        "name": "Agent 114",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-115",
+        "name": "Agent 115",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-116",
+        "name": "Agent 116",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-117",
+        "name": "Agent 117",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-118",
+        "name": "Agent 118",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-119",
+        "name": "Agent 119",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-120",
+        "name": "Agent 120",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-121",
+        "name": "Agent 121",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-122",
+        "name": "Agent 122",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-123",
+        "name": "Agent 123",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-124",
+        "name": "Agent 124",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-125",
+        "name": "Agent 125",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-126",
+        "name": "Agent 126",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-127",
+        "name": "Agent 127",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-128",
+        "name": "Agent 128",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-129",
+        "name": "Agent 129",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-130",
+        "name": "Agent 130",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-131",
+        "name": "Agent 131",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-132",
+        "name": "Agent 132",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-133",
+        "name": "Agent 133",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-134",
+        "name": "Agent 134",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-135",
+        "name": "Agent 135",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-136",
+        "name": "Agent 136",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-137",
+        "name": "Agent 137",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-138",
+        "name": "Agent 138",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-139",
+        "name": "Agent 139",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-140",
+        "name": "Agent 140",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-141",
+        "name": "Agent 141",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-142",
+        "name": "Agent 142",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-143",
+        "name": "Agent 143",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-144",
+        "name": "Agent 144",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-145",
+        "name": "Agent 145",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-146",
+        "name": "Agent 146",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-147",
+        "name": "Agent 147",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-148",
+        "name": "Agent 148",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-149",
+        "name": "Agent 149",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-150",
+        "name": "Agent 150",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-151",
+        "name": "Agent 151",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-152",
+        "name": "Agent 152",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-153",
+        "name": "Agent 153",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-154",
+        "name": "Agent 154",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-155",
+        "name": "Agent 155",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-156",
+        "name": "Agent 156",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-157",
+        "name": "Agent 157",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-158",
+        "name": "Agent 158",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-159",
+        "name": "Agent 159",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-160",
+        "name": "Agent 160",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-161",
+        "name": "Agent 161",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-162",
+        "name": "Agent 162",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-163",
+        "name": "Agent 163",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-164",
+        "name": "Agent 164",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-165",
+        "name": "Agent 165",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-166",
+        "name": "Agent 166",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-167",
+        "name": "Agent 167",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-168",
+        "name": "Agent 168",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-169",
+        "name": "Agent 169",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-170",
+        "name": "Agent 170",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-171",
+        "name": "Agent 171",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-172",
+        "name": "Agent 172",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-173",
+        "name": "Agent 173",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-174",
+        "name": "Agent 174",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-175",
+        "name": "Agent 175",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-176",
+        "name": "Agent 176",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-177",
+        "name": "Agent 177",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-178",
+        "name": "Agent 178",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-179",
+        "name": "Agent 179",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-67-180",
+        "name": "Agent 180",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "coveredAgents": [],
     "quotaMetElsewhere": [],
-    "evaluatorsWithIssues": [],
+    "evaluatorsWithIssues": [
+      {
+        "id": "warning-evaluator-67-1",
+        "name": "Evaluator 17",
+        "status": "warning",
+        "loadText": "0/20",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-67-2",
+        "name": "Evaluator 18",
+        "status": "warning",
+        "loadText": "0/21",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-67-3",
+        "name": "Evaluator 19",
+        "status": "warning",
+        "loadText": "0/22",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-67-4",
+        "name": "Evaluator 20",
+        "status": "warning",
+        "loadText": "0/23",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-67-5",
+        "name": "Evaluator 38",
+        "status": "warning",
+        "loadText": "0/25",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "activeEvaluators": []
   },
   "rule-8-6": {
@@ -22584,7 +29749,7 @@ export const mockDbRuleSheetByRuleRowId = {
   "rule-8-8": {
     "status": "partial",
     "statusLabel": "Partial",
-    "progressLabel": "89% (69/78)",
+    "progressLabel": "88% (69/78)",
     "metadata": [
       {
         "label": "Ran",
@@ -22611,11 +29776,38 @@ export const mockDbRuleSheetByRuleRowId = {
         "value": "9"
       }
     ],
-    "reasonSummary": "1 agent: insufficient matching conversations",
+    "reasonSummary": "3 agents: insufficient matching conversations · 1 agent: evaluators' workload limit reached",
     "agentsWithoutQa": [
       {
         "id": "warning-agent-65-1",
         "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "no_matching_conversations",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Conversations existed but did not match rule filters.",
+        "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-65-2",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "evaluator_unavailable",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Evaluator availability blocked assignment in this run.",
+        "issueCodeLabel": "Evaluators' workload limit reached"
+      },
+      {
+        "id": "warning-agent-65-3",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "no_conversations_in_period",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Agent had no conversations in the sampling window.",
+        "issueCodeLabel": "Insufficient matching conversations"
+      },
+      {
+        "id": "warning-agent-65-4",
+        "name": "Agent 035",
         "status": "warning",
         "warningReason": "no_matching_conversations",
         "assignmentText": "0/2 assigned",
@@ -22908,9 +30100,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-7-1": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "88% (76/86)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (86/86)",
     "metadata": [
       {
         "label": "Ran",
@@ -22930,11 +30122,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "76"
+        "value": "86"
       },
       {
         "label": "Missed",
-        "value": "10"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -22971,31 +30163,31 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-59-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-59-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-59-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-59-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-59-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -23026,25 +30218,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-59-1",
         "name": "Evaluator 01",
         "status": "success",
-        "loadText": "18/22"
+        "loadText": "22/22"
       },
       {
         "id": "active-evaluator-59-2",
         "name": "Evaluator 02",
         "status": "success",
-        "loadText": "18/23"
+        "loadText": "22/23"
       },
       {
         "id": "active-evaluator-59-3",
         "name": "Evaluator 03",
         "status": "success",
-        "loadText": "18/24"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-59-4",
         "name": "Evaluator 04",
         "status": "success",
-        "loadText": "18/25"
+        "loadText": "22/25"
       }
     ]
   },
@@ -23496,9 +30688,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-7-5": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "94% (74/79)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (79/79)",
     "metadata": [
       {
         "label": "Ran",
@@ -23518,11 +30710,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "74"
+        "value": "79"
       },
       {
         "label": "Missed",
-        "value": "5"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -23553,37 +30745,37 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-58-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-58-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-58-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-58-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-58-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-58-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -23606,6 +30798,15 @@ export const mockDbRuleSheetByRuleRowId = {
         "viaRuleName": "Another rule",
         "detailText": "Coverage requirement already met by another rule in the same period.",
         "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-58-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
       }
     ],
     "evaluatorsWithIssues": [],
@@ -23614,38 +30815,38 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-58-1",
         "name": "Evaluator 17",
         "status": "success",
-        "loadText": "17/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-58-2",
         "name": "Evaluator 18",
         "status": "success",
-        "loadText": "17/21"
+        "loadText": "20/21"
       },
       {
         "id": "active-evaluator-58-3",
         "name": "Evaluator 19",
         "status": "success",
-        "loadText": "17/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-58-4",
         "name": "Evaluator 20",
         "status": "success",
-        "loadText": "17/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-58-5",
         "name": "Evaluator 38",
         "status": "success",
-        "loadText": "22/25"
+        "loadText": "24/25"
       }
     ]
   },
   "rule-7-6": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/86)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (86/86)",
     "metadata": [
       {
         "label": "Ran",
@@ -23665,19 +30866,132 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "86"
       },
       {
         "label": "Missed",
-        "value": "86"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-57-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-57-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-57-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-57-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-57-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-57-1",
+        "name": "Evaluator 21",
+        "status": "success",
+        "loadText": "21/21"
+      },
+      {
+        "id": "active-evaluator-57-2",
+        "name": "Evaluator 22",
+        "status": "success",
+        "loadText": "21/22"
+      },
+      {
+        "id": "active-evaluator-57-3",
+        "name": "Evaluator 23",
+        "status": "success",
+        "loadText": "21/23"
+      },
+      {
+        "id": "active-evaluator-57-4",
+        "name": "Evaluator 24",
+        "status": "success",
+        "loadText": "21/24"
+      }
+    ]
   },
   "rule-7-7": {
     "status": "success",
@@ -23986,9 +31300,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-7-9": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "88% (63/72)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (72/72)",
     "metadata": [
       {
         "label": "Ran",
@@ -24008,11 +31322,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "63"
+        "value": "72"
       },
       {
         "label": "Missed",
-        "value": "9"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -24037,43 +31351,43 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-61-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-61-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-61-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-61-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-61-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-61-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-61-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -24113,19 +31427,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-61-1",
         "name": "Evaluator 33",
         "status": "success",
-        "loadText": "22/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-61-2",
         "name": "Evaluator 34",
         "status": "success",
-        "loadText": "22/25"
+        "loadText": "24/25"
       },
       {
         "id": "active-evaluator-61-3",
+        "name": "Evaluator 35",
+        "status": "success",
+        "loadText": "18/20"
+      },
+      {
+        "id": "active-evaluator-61-4",
         "name": "Evaluator 36",
         "status": "success",
-        "loadText": "16/21"
+        "loadText": "18/21"
       }
     ]
   },
@@ -25115,10 +32435,1484 @@ export const mockDbRuleSheetByRuleRowId = {
       }
     ],
     "reasonSummary": "Rule execution failed",
-    "agentsWithoutQa": [],
+    "agentsWithoutQa": [
+      {
+        "id": "warning-agent-46-1",
+        "name": "Agent 001",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-2",
+        "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-3",
+        "name": "Agent 003",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-4",
+        "name": "Agent 004",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-5",
+        "name": "Agent 005",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-6",
+        "name": "Agent 006",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-7",
+        "name": "Agent 007",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-8",
+        "name": "Agent 008",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-9",
+        "name": "Agent 009",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-10",
+        "name": "Agent 010",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-11",
+        "name": "Agent 011",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-12",
+        "name": "Agent 012",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-13",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-14",
+        "name": "Agent 014",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-15",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-16",
+        "name": "Agent 016",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-17",
+        "name": "Agent 017",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-18",
+        "name": "Agent 018",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-19",
+        "name": "Agent 019",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-20",
+        "name": "Agent 020",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-21",
+        "name": "Agent 021",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-22",
+        "name": "Agent 022",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-23",
+        "name": "Agent 023",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-24",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-25",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-26",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-27",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-28",
+        "name": "Agent 028",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-29",
+        "name": "Agent 029",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-30",
+        "name": "Agent 030",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-31",
+        "name": "Agent 031",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-32",
+        "name": "Agent 032",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-33",
+        "name": "Agent 033",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-34",
+        "name": "Agent 034",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-35",
+        "name": "Agent 035",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-36",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-37",
+        "name": "Agent 037",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-38",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-39",
+        "name": "Agent 039",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-40",
+        "name": "Agent 040",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-41",
+        "name": "Agent 041",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-42",
+        "name": "Agent 042",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-43",
+        "name": "Agent 043",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-44",
+        "name": "Agent 044",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-45",
+        "name": "Agent 045",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-46",
+        "name": "Agent 046",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-47",
+        "name": "Agent 047",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-48",
+        "name": "Agent 048",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-49",
+        "name": "Agent 049",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-50",
+        "name": "Agent 050",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-51",
+        "name": "Agent 051",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-52",
+        "name": "Agent 052",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-53",
+        "name": "Agent 053",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-54",
+        "name": "Agent 054",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-55",
+        "name": "Agent 055",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-56",
+        "name": "Agent 056",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-57",
+        "name": "Agent 057",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-58",
+        "name": "Agent 058",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-59",
+        "name": "Agent 059",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-60",
+        "name": "Agent 060",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-61",
+        "name": "Agent 061",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-62",
+        "name": "Agent 062",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-63",
+        "name": "Agent 063",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-64",
+        "name": "Agent 064",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-65",
+        "name": "Agent 065",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-66",
+        "name": "Agent 066",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-67",
+        "name": "Agent 067",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-68",
+        "name": "Agent 068",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-69",
+        "name": "Agent 069",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-70",
+        "name": "Agent 070",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-71",
+        "name": "Agent 071",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-72",
+        "name": "Agent 072",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-73",
+        "name": "Agent 073",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-74",
+        "name": "Agent 074",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-75",
+        "name": "Agent 075",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-76",
+        "name": "Agent 076",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-77",
+        "name": "Agent 077",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-78",
+        "name": "Agent 078",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-79",
+        "name": "Agent 079",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-80",
+        "name": "Agent 080",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-81",
+        "name": "Agent 081",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-82",
+        "name": "Agent 082",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-83",
+        "name": "Agent 083",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-84",
+        "name": "Agent 084",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-85",
+        "name": "Agent 085",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-86",
+        "name": "Agent 086",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-87",
+        "name": "Agent 087",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-88",
+        "name": "Agent 088",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-89",
+        "name": "Agent 089",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-90",
+        "name": "Agent 090",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-91",
+        "name": "Agent 091",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-92",
+        "name": "Agent 092",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-93",
+        "name": "Agent 093",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-94",
+        "name": "Agent 094",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-95",
+        "name": "Agent 095",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-96",
+        "name": "Agent 096",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-97",
+        "name": "Agent 097",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-98",
+        "name": "Agent 098",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-99",
+        "name": "Agent 099",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-100",
+        "name": "Agent 100",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-101",
+        "name": "Agent 101",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-102",
+        "name": "Agent 102",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-103",
+        "name": "Agent 103",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-104",
+        "name": "Agent 104",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-105",
+        "name": "Agent 105",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-106",
+        "name": "Agent 106",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-107",
+        "name": "Agent 107",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-108",
+        "name": "Agent 108",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-109",
+        "name": "Agent 109",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-110",
+        "name": "Agent 110",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-111",
+        "name": "Agent 111",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-112",
+        "name": "Agent 112",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-113",
+        "name": "Agent 113",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-114",
+        "name": "Agent 114",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-115",
+        "name": "Agent 115",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-116",
+        "name": "Agent 116",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-117",
+        "name": "Agent 117",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-118",
+        "name": "Agent 118",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-119",
+        "name": "Agent 119",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-120",
+        "name": "Agent 120",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-121",
+        "name": "Agent 121",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-122",
+        "name": "Agent 122",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-123",
+        "name": "Agent 123",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-124",
+        "name": "Agent 124",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-125",
+        "name": "Agent 125",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-126",
+        "name": "Agent 126",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-127",
+        "name": "Agent 127",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-128",
+        "name": "Agent 128",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-129",
+        "name": "Agent 129",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-130",
+        "name": "Agent 130",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-131",
+        "name": "Agent 131",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-132",
+        "name": "Agent 132",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-133",
+        "name": "Agent 133",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-134",
+        "name": "Agent 134",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-135",
+        "name": "Agent 135",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-136",
+        "name": "Agent 136",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-137",
+        "name": "Agent 137",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-138",
+        "name": "Agent 138",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-139",
+        "name": "Agent 139",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-140",
+        "name": "Agent 140",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-141",
+        "name": "Agent 141",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-142",
+        "name": "Agent 142",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-143",
+        "name": "Agent 143",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-144",
+        "name": "Agent 144",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-145",
+        "name": "Agent 145",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-146",
+        "name": "Agent 146",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-147",
+        "name": "Agent 147",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-148",
+        "name": "Agent 148",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-149",
+        "name": "Agent 149",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-150",
+        "name": "Agent 150",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-151",
+        "name": "Agent 151",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-152",
+        "name": "Agent 152",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-153",
+        "name": "Agent 153",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-154",
+        "name": "Agent 154",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-155",
+        "name": "Agent 155",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-156",
+        "name": "Agent 156",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-157",
+        "name": "Agent 157",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-158",
+        "name": "Agent 158",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-159",
+        "name": "Agent 159",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-46-160",
+        "name": "Agent 160",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "coveredAgents": [],
     "quotaMetElsewhere": [],
-    "evaluatorsWithIssues": [],
+    "evaluatorsWithIssues": [
+      {
+        "id": "warning-evaluator-46-1",
+        "name": "Evaluator 25",
+        "status": "warning",
+        "loadText": "0/22",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-46-2",
+        "name": "Evaluator 26",
+        "status": "warning",
+        "loadText": "0/23",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-46-3",
+        "name": "Evaluator 27",
+        "status": "warning",
+        "loadText": "0/24",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-46-4",
+        "name": "Evaluator 28",
+        "status": "warning",
+        "loadText": "0/25",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "activeEvaluators": []
   },
   "rule-6-8": {
@@ -25725,9 +34519,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-5-3": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "87% (64/74)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (74/74)",
     "metadata": [
       {
         "label": "Ran",
@@ -25747,11 +34541,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "64"
+        "value": "74"
       },
       {
         "label": "Missed",
-        "value": "10"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -25812,7 +34606,7 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-44-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -25850,21 +34644,27 @@ export const mockDbRuleSheetByRuleRowId = {
     "activeEvaluators": [
       {
         "id": "active-evaluator-44-1",
-        "name": "Evaluator 10",
+        "name": "Evaluator 09",
         "status": "success",
-        "loadText": "19/25"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-44-2",
-        "name": "Evaluator 11",
+        "name": "Evaluator 10",
         "status": "success",
-        "loadText": "13/20"
+        "loadText": "22/25"
       },
       {
         "id": "active-evaluator-44-3",
+        "name": "Evaluator 11",
+        "status": "success",
+        "loadText": "20/20"
+      },
+      {
+        "id": "active-evaluator-44-4",
         "name": "Evaluator 12",
         "status": "success",
-        "loadText": "13/21"
+        "loadText": "20/21"
       }
     ]
   },
@@ -26316,9 +35116,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-5-7": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "93% (62/67)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (67/67)",
     "metadata": [
       {
         "label": "Ran",
@@ -26338,11 +35138,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "62"
+        "value": "67"
       },
       {
         "label": "Missed",
-        "value": "5"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -26397,13 +35197,13 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-37-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-37-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -26411,7 +35211,7 @@ export const mockDbRuleSheetByRuleRowId = {
     "quotaMetElsewhere": [
       {
         "id": "quota-agent-37-1",
-        "name": "Agent 106",
+        "name": "Agent 053",
         "status": "fyi",
         "assignmentText": "2/2 via another rule",
         "viaRuleName": "Another rule",
@@ -26420,6 +35220,15 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "quota-agent-37-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-37-3",
         "name": "Agent 159",
         "status": "fyi",
         "assignmentText": "2/2 via another rule",
@@ -26434,32 +35243,32 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-37-1",
         "name": "Evaluator 25",
         "status": "success",
-        "loadText": "18/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-37-2",
         "name": "Evaluator 26",
         "status": "success",
-        "loadText": "18/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-37-3",
         "name": "Evaluator 27",
         "status": "success",
-        "loadText": "18/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-37-4",
         "name": "Evaluator 28",
         "status": "success",
-        "loadText": "18/25"
+        "loadText": "24/25"
       }
     ]
   },
   "rule-5-8": {
-    "status": "failed",
-    "statusLabel": "Failed",
-    "progressLabel": "0% (0/74)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (74/74)",
     "metadata": [
       {
         "label": "Ran",
@@ -26479,19 +35288,138 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "0"
+        "value": "74"
       },
       {
         "label": "Missed",
-        "value": "74"
+        "value": "0"
       }
     ],
-    "reasonSummary": "Rule execution failed",
     "agentsWithoutQa": [],
-    "coveredAgents": [],
-    "quotaMetElsewhere": [],
+    "coveredAgents": [
+      {
+        "id": "covered-agent-38-1",
+        "name": "Agent 001",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-2",
+        "name": "Agent 002",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-3",
+        "name": "Agent 003",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-4",
+        "name": "Agent 004",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-5",
+        "name": "Agent 005",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-6",
+        "name": "Agent 006",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-7",
+        "name": "Agent 007",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-8",
+        "name": "Agent 008",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-9",
+        "name": "Agent 009",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      },
+      {
+        "id": "covered-agent-38-10",
+        "name": "Agent 010",
+        "status": "success",
+        "assignmentText": "2/2 assigned"
+      }
+    ],
+    "quotaMetElsewhere": [
+      {
+        "id": "quota-agent-38-1",
+        "name": "Agent 053",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-38-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-38-3",
+        "name": "Agent 159",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      }
+    ],
     "evaluatorsWithIssues": [],
-    "activeEvaluators": []
+    "activeEvaluators": [
+      {
+        "id": "active-evaluator-38-1",
+        "name": "Evaluator 29",
+        "status": "success",
+        "loadText": "21/23"
+      },
+      {
+        "id": "active-evaluator-38-2",
+        "name": "Evaluator 30",
+        "status": "success",
+        "loadText": "21/24"
+      },
+      {
+        "id": "active-evaluator-38-3",
+        "name": "Evaluator 31",
+        "status": "success",
+        "loadText": "25/25"
+      },
+      {
+        "id": "active-evaluator-38-4",
+        "name": "Evaluator 32",
+        "status": "success",
+        "loadText": "19/20"
+      },
+      {
+        "id": "active-evaluator-38-5",
+        "name": "Evaluator 39",
+        "status": "success",
+        "loadText": "23/23"
+      }
+    ]
   },
   "rule-5-9": {
     "status": "success",
@@ -27926,16 +36854,1670 @@ export const mockDbRuleSheetByRuleRowId = {
       }
     ],
     "reasonSummary": "Rule execution failed",
-    "agentsWithoutQa": [],
+    "agentsWithoutQa": [
+      {
+        "id": "warning-agent-34-1",
+        "name": "Agent 001",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-2",
+        "name": "Agent 002",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-3",
+        "name": "Agent 003",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-4",
+        "name": "Agent 004",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-5",
+        "name": "Agent 005",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-6",
+        "name": "Agent 006",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-7",
+        "name": "Agent 007",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-8",
+        "name": "Agent 008",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-9",
+        "name": "Agent 009",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-10",
+        "name": "Agent 010",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-11",
+        "name": "Agent 011",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-12",
+        "name": "Agent 012",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-13",
+        "name": "Agent 013",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-14",
+        "name": "Agent 014",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-15",
+        "name": "Agent 015",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-16",
+        "name": "Agent 016",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-17",
+        "name": "Agent 017",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-18",
+        "name": "Agent 018",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-19",
+        "name": "Agent 019",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-20",
+        "name": "Agent 020",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-21",
+        "name": "Agent 021",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-22",
+        "name": "Agent 022",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-23",
+        "name": "Agent 023",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-24",
+        "name": "Agent 024",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-25",
+        "name": "Agent 025",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-26",
+        "name": "Agent 026",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-27",
+        "name": "Agent 027",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-28",
+        "name": "Agent 028",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-29",
+        "name": "Agent 029",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-30",
+        "name": "Agent 030",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-31",
+        "name": "Agent 031",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-32",
+        "name": "Agent 032",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-33",
+        "name": "Agent 033",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-34",
+        "name": "Agent 034",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-35",
+        "name": "Agent 035",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-36",
+        "name": "Agent 036",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-37",
+        "name": "Agent 037",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-38",
+        "name": "Agent 038",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-39",
+        "name": "Agent 039",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-40",
+        "name": "Agent 040",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-41",
+        "name": "Agent 041",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-42",
+        "name": "Agent 042",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-43",
+        "name": "Agent 043",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-44",
+        "name": "Agent 044",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-45",
+        "name": "Agent 045",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-46",
+        "name": "Agent 046",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-47",
+        "name": "Agent 047",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-48",
+        "name": "Agent 048",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-49",
+        "name": "Agent 049",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-50",
+        "name": "Agent 050",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-51",
+        "name": "Agent 051",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-52",
+        "name": "Agent 052",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-53",
+        "name": "Agent 053",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-54",
+        "name": "Agent 054",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-55",
+        "name": "Agent 055",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-56",
+        "name": "Agent 056",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-57",
+        "name": "Agent 057",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-58",
+        "name": "Agent 058",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-59",
+        "name": "Agent 059",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-60",
+        "name": "Agent 060",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-61",
+        "name": "Agent 061",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-62",
+        "name": "Agent 062",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-63",
+        "name": "Agent 063",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-64",
+        "name": "Agent 064",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-65",
+        "name": "Agent 065",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-66",
+        "name": "Agent 066",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-67",
+        "name": "Agent 067",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-68",
+        "name": "Agent 068",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-69",
+        "name": "Agent 069",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-70",
+        "name": "Agent 070",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-71",
+        "name": "Agent 071",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-72",
+        "name": "Agent 072",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-73",
+        "name": "Agent 073",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-74",
+        "name": "Agent 074",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-75",
+        "name": "Agent 075",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-76",
+        "name": "Agent 076",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-77",
+        "name": "Agent 077",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-78",
+        "name": "Agent 078",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-79",
+        "name": "Agent 079",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-80",
+        "name": "Agent 080",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-81",
+        "name": "Agent 081",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-82",
+        "name": "Agent 082",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-83",
+        "name": "Agent 083",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-84",
+        "name": "Agent 084",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-85",
+        "name": "Agent 085",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-86",
+        "name": "Agent 086",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-87",
+        "name": "Agent 087",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-88",
+        "name": "Agent 088",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-89",
+        "name": "Agent 089",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-90",
+        "name": "Agent 090",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-91",
+        "name": "Agent 091",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-92",
+        "name": "Agent 092",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-93",
+        "name": "Agent 093",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-94",
+        "name": "Agent 094",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-95",
+        "name": "Agent 095",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-96",
+        "name": "Agent 096",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-97",
+        "name": "Agent 097",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-98",
+        "name": "Agent 098",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-99",
+        "name": "Agent 099",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-100",
+        "name": "Agent 100",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-101",
+        "name": "Agent 101",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-102",
+        "name": "Agent 102",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-103",
+        "name": "Agent 103",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-104",
+        "name": "Agent 104",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-105",
+        "name": "Agent 105",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-106",
+        "name": "Agent 106",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-107",
+        "name": "Agent 107",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-108",
+        "name": "Agent 108",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-109",
+        "name": "Agent 109",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-110",
+        "name": "Agent 110",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-111",
+        "name": "Agent 111",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-112",
+        "name": "Agent 112",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-113",
+        "name": "Agent 113",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-114",
+        "name": "Agent 114",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-115",
+        "name": "Agent 115",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-116",
+        "name": "Agent 116",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-117",
+        "name": "Agent 117",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-118",
+        "name": "Agent 118",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-119",
+        "name": "Agent 119",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-120",
+        "name": "Agent 120",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-121",
+        "name": "Agent 121",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-122",
+        "name": "Agent 122",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-123",
+        "name": "Agent 123",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-124",
+        "name": "Agent 124",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-125",
+        "name": "Agent 125",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-126",
+        "name": "Agent 126",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-127",
+        "name": "Agent 127",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-128",
+        "name": "Agent 128",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-129",
+        "name": "Agent 129",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-130",
+        "name": "Agent 130",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-131",
+        "name": "Agent 131",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-132",
+        "name": "Agent 132",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-133",
+        "name": "Agent 133",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-134",
+        "name": "Agent 134",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-135",
+        "name": "Agent 135",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-136",
+        "name": "Agent 136",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-137",
+        "name": "Agent 137",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-138",
+        "name": "Agent 138",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-139",
+        "name": "Agent 139",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-140",
+        "name": "Agent 140",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-141",
+        "name": "Agent 141",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-142",
+        "name": "Agent 142",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-143",
+        "name": "Agent 143",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-144",
+        "name": "Agent 144",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-145",
+        "name": "Agent 145",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-146",
+        "name": "Agent 146",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-147",
+        "name": "Agent 147",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-148",
+        "name": "Agent 148",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-149",
+        "name": "Agent 149",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-150",
+        "name": "Agent 150",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-151",
+        "name": "Agent 151",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-152",
+        "name": "Agent 152",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-153",
+        "name": "Agent 153",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-154",
+        "name": "Agent 154",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-155",
+        "name": "Agent 155",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-156",
+        "name": "Agent 156",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-157",
+        "name": "Agent 157",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-158",
+        "name": "Agent 158",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-159",
+        "name": "Agent 159",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-160",
+        "name": "Agent 160",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-161",
+        "name": "Agent 161",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-162",
+        "name": "Agent 162",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-163",
+        "name": "Agent 163",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-164",
+        "name": "Agent 164",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-165",
+        "name": "Agent 165",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-166",
+        "name": "Agent 166",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-167",
+        "name": "Agent 167",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-168",
+        "name": "Agent 168",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-169",
+        "name": "Agent 169",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-170",
+        "name": "Agent 170",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-171",
+        "name": "Agent 171",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-172",
+        "name": "Agent 172",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-173",
+        "name": "Agent 173",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-174",
+        "name": "Agent 174",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-175",
+        "name": "Agent 175",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-176",
+        "name": "Agent 176",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-177",
+        "name": "Agent 177",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-178",
+        "name": "Agent 178",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-179",
+        "name": "Agent 179",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-agent-34-180",
+        "name": "Agent 180",
+        "status": "warning",
+        "warningReason": "rule_interrupted",
+        "assignmentText": "0/2 assigned",
+        "detailText": "Rule did not execute due to a system error.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "coveredAgents": [],
     "quotaMetElsewhere": [],
-    "evaluatorsWithIssues": [],
+    "evaluatorsWithIssues": [
+      {
+        "id": "warning-evaluator-34-1",
+        "name": "Evaluator 33",
+        "status": "warning",
+        "loadText": "0/24",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-34-2",
+        "name": "Evaluator 34",
+        "status": "warning",
+        "loadText": "0/25",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-34-3",
+        "name": "Evaluator 35",
+        "status": "warning",
+        "loadText": "0/20",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      },
+      {
+        "id": "warning-evaluator-34-4",
+        "name": "Evaluator 36",
+        "status": "warning",
+        "loadText": "0/21",
+        "detailText": "Rule did not execute; evaluator assignments were not processed.",
+        "issueCodeLabel": "Rule did not execute"
+      }
+    ],
     "activeEvaluators": []
   },
   "rule-3-1": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "91% (63/69)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (69/69)",
     "metadata": [
       {
         "label": "Ran",
@@ -27955,11 +38537,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "63"
+        "value": "69"
       },
       {
         "label": "Missed",
-        "value": "6"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -27984,43 +38566,43 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-23-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-23-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-23-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-23-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-23-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-23-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-23-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -28051,13 +38633,13 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-23-1",
         "name": "Evaluator 01",
         "status": "success",
-        "loadText": "15/22"
+        "loadText": "22/22"
       },
       {
         "id": "active-evaluator-23-2",
         "name": "Evaluator 02",
         "status": "success",
-        "loadText": "15/23"
+        "loadText": "22/23"
       },
       {
         "id": "active-evaluator-23-3",
@@ -28521,9 +39103,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-3-5": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "84% (52/62)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (62/62)",
     "metadata": [
       {
         "label": "Ran",
@@ -28543,11 +39125,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "52"
+        "value": "62"
       },
       {
         "label": "Missed",
-        "value": "10"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -28566,49 +39148,49 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-22-3",
-        "name": "Agent 004",
+        "name": "Agent 003",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-22-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-22-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-22-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-22-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-22-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-22-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-22-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -28648,31 +39230,31 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-22-1",
         "name": "Evaluator 17",
         "status": "success",
-        "loadText": "14/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-22-2",
         "name": "Evaluator 18",
         "status": "success",
-        "loadText": "14/21"
+        "loadText": "20/21"
       },
       {
         "id": "active-evaluator-22-3",
         "name": "Evaluator 19",
         "status": "success",
-        "loadText": "14/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-22-4",
         "name": "Evaluator 20",
         "status": "success",
-        "loadText": "21/23"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-22-5",
         "name": "Evaluator 38",
         "status": "success",
-        "loadText": "19/25"
+        "loadText": "24/25"
       }
     ]
   },
@@ -29133,9 +39715,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-3-9": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "94% (85/90)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (90/90)",
     "metadata": [
       {
         "label": "Ran",
@@ -29155,11 +39737,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "85"
+        "value": "90"
       },
       {
         "label": "Missed",
-        "value": "5"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -29172,55 +39754,55 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-25-2",
-        "name": "Agent 003",
+        "name": "Agent 002",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-3",
-        "name": "Agent 004",
+        "name": "Agent 003",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-4",
-        "name": "Agent 005",
+        "name": "Agent 004",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-5",
-        "name": "Agent 006",
+        "name": "Agent 005",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-6",
-        "name": "Agent 007",
+        "name": "Agent 006",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-25-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -29260,25 +39842,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-25-1",
         "name": "Evaluator 33",
         "status": "success",
-        "loadText": "19/24"
+        "loadText": "24/24"
       },
       {
         "id": "active-evaluator-25-2",
         "name": "Evaluator 34",
         "status": "success",
-        "loadText": "19/25"
+        "loadText": "24/25"
       },
       {
         "id": "active-evaluator-25-3",
         "name": "Evaluator 35",
         "status": "success",
-        "loadText": "13/20"
+        "loadText": "18/20"
       },
       {
         "id": "active-evaluator-25-4",
         "name": "Evaluator 36",
         "status": "success",
-        "loadText": "13/21"
+        "loadText": "18/21"
       }
     ]
   },
@@ -29426,7 +40008,7 @@ export const mockDbRuleSheetByRuleRowId = {
   "rule-2-2": {
     "status": "partial",
     "statusLabel": "Partial",
-    "progressLabel": "91% (57/63)",
+    "progressLabel": "90% (57/63)",
     "metadata": [
       {
         "label": "Ran",
@@ -30970,9 +41552,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-1-3": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "94% (86/92)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (92/92)",
     "metadata": [
       {
         "label": "Ran",
@@ -30992,11 +41574,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "86"
+        "value": "92"
       },
       {
         "label": "Missed",
-        "value": "6"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -31045,19 +41627,19 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-8-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-8-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-8-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -31097,25 +41679,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-8-1",
         "name": "Evaluator 09",
         "status": "success",
-        "loadText": "16/24"
+        "loadText": "22/24"
       },
       {
         "id": "active-evaluator-8-2",
         "name": "Evaluator 10",
         "status": "success",
-        "loadText": "23/25"
+        "loadText": "22/25"
       },
       {
         "id": "active-evaluator-8-3",
         "name": "Evaluator 11",
         "status": "success",
-        "loadText": "17/20"
+        "loadText": "20/20"
       },
       {
         "id": "active-evaluator-8-4",
         "name": "Evaluator 12",
         "status": "success",
-        "loadText": "17/21"
+        "loadText": "20/21"
       }
     ]
   },
@@ -31567,9 +42149,9 @@ export const mockDbRuleSheetByRuleRowId = {
     ]
   },
   "rule-1-7": {
-    "status": "partial",
-    "statusLabel": "Partial",
-    "progressLabel": "88% (75/85)",
+    "status": "success",
+    "statusLabel": "Success",
+    "progressLabel": "100% (85/85)",
     "metadata": [
       {
         "label": "Ran",
@@ -31589,11 +42171,11 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "label": "Made",
-        "value": "75"
+        "value": "85"
       },
       {
         "label": "Missed",
-        "value": "10"
+        "value": "0"
       }
     ],
     "agentsWithoutQa": [],
@@ -31636,25 +42218,25 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "covered-agent-1-7",
-        "name": "Agent 008",
+        "name": "Agent 007",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-1-8",
-        "name": "Agent 009",
+        "name": "Agent 008",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-1-9",
-        "name": "Agent 010",
+        "name": "Agent 009",
         "status": "success",
         "assignmentText": "2/2 assigned"
       },
       {
         "id": "covered-agent-1-10",
-        "name": "Agent 011",
+        "name": "Agent 010",
         "status": "success",
         "assignmentText": "2/2 assigned"
       }
@@ -31671,6 +42253,15 @@ export const mockDbRuleSheetByRuleRowId = {
       },
       {
         "id": "quota-agent-1-2",
+        "name": "Agent 106",
+        "status": "fyi",
+        "assignmentText": "2/2 via another rule",
+        "viaRuleName": "Another rule",
+        "detailText": "Coverage requirement already met by another rule in the same period.",
+        "issueCodeLabel": "Quota met by another rule"
+      },
+      {
+        "id": "quota-agent-1-3",
         "name": "Agent 159",
         "status": "fyi",
         "assignmentText": "2/2 via another rule",
@@ -31685,19 +42276,25 @@ export const mockDbRuleSheetByRuleRowId = {
         "id": "active-evaluator-1-1",
         "name": "Evaluator 25",
         "status": "success",
-        "loadText": "15/22"
+        "loadText": "20/22"
       },
       {
         "id": "active-evaluator-1-2",
-        "name": "Evaluator 27",
+        "name": "Evaluator 26",
         "status": "success",
-        "loadText": "22/24"
+        "loadText": "20/23"
       },
       {
         "id": "active-evaluator-1-3",
+        "name": "Evaluator 27",
+        "status": "success",
+        "loadText": "24/24"
+      },
+      {
+        "id": "active-evaluator-1-4",
         "name": "Evaluator 28",
         "status": "success",
-        "loadText": "22/25"
+        "loadText": "24/25"
       }
     ]
   },

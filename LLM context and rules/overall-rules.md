@@ -77,3 +77,11 @@ The first content container inside `<main>` must be edge-to-edge relative to the
 - Do not add an outer border on this first container.
 - Do not add page-level inset padding that creates a framed card look around the full page content.
 - Apply borders/radius only to inner components (tables, cards, panels), not to the full-page wrapper.
+
+## Rule 6: Use Sentence Case for UI Copy
+
+All product UI copy should use sentence case by default.
+
+- Use sentence case for button labels, tabs, inline alerts, helper text, empty states, card headings, and other interface copy.
+- Do not use Title Case for UI copy unless the text is a proper noun, brand name, feature name, acronym, or another intentional exception.
+- Preserve exact capitalization for names like "QA", "AI", organization names, and any user-provided proper nouns.

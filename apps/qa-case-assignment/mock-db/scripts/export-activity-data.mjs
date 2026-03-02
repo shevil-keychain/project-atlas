@@ -79,6 +79,10 @@ function toEvaluatorIssueCodeLabel(issueCode, contextNote) {
     return `Time off for ${timeOffDays} days in the week`
   }
 
+  if (issueCode === "RULE_DID_NOT_EXECUTE" || issueCode === "RULE_EXECUTION_INTERRUPTED") {
+    return "Rule did not execute"
+  }
+
   return undefined
 }
 
@@ -152,6 +156,28 @@ function buildReasonLinesFromWarningAgents(warningAgentRows) {
     const noun = count === 1 ? "agent" : "agents"
     return `${count} ${noun}: ${sentenceCaseLabel}`
   })
+}
+
+function buildReasonLinesFromIssueSummary(runIssueItems) {
+  return runIssueItems
+    .filter((issueItem) => isCountableIssueCode(issueItem.issue_code))
+    .map((issueItem) => {
+      const count = Math.max(Number(issueItem.affected_agents_count ?? 0), 0)
+      const issueLabel = toIssueCodeLabel(issueItem.issue_code)
+      const sentenceCaseLabel = toSentenceCaseLabel(issueLabel)
+      const noun = count === 1 ? "agent" : "agents"
+      return `${count} ${noun}: ${sentenceCaseLabel}`
+    })
+    .filter(Boolean)
+}
+
+function inferCurrentWeekFallbackReasonLines(expectedAssignments) {
+  const missedAssignments = Math.max(
+    3,
+    Math.min(8, Math.round(Math.max(Number(expectedAssignments ?? 0), 0) * 0.08))
+  )
+
+  return [`${missedAssignments} agents: evaluators' workload limit reached`]
 }
 
 function getReasonLineAgentCount(reasonLine) {
@@ -427,7 +453,21 @@ const activeEvaluators = query(`
   ORDER BY rule_run_id ASC, rn ASC;
 `)
 
+const notInAnyRuleCounts = query(`
+  SELECT
+    week_id,
+    COUNT(*) AS not_in_any_rule_count
+  FROM agent_coverage_detail
+  WHERE rule_run_id IS NULL
+    AND issue_code = 'AGENT_NOT_IN_ANY_RULE'
+  GROUP BY week_id
+  ORDER BY week_id DESC;
+`)
+
 const issuesByRunId = groupByRunId(runIssues)
+const notInAnyRuleCountByWeekId = new Map(
+  notInAnyRuleCounts.map((row) => [Number(row.week_id), Number(row.not_in_any_rule_count ?? 0)])
+)
 const runsByWeek = new Map()
 for (const run of runs) {
   const key = Number(run.week_id)
@@ -468,34 +508,30 @@ weeks.forEach((week, weekIndex) => {
 
   const weekRuns = weekRunRows.map((run) => {
     const runId = Number(run.rule_run_id)
-    const uiStatus = toUiStatus(run.run_status)
+    const rawUiStatus = toUiStatus(run.run_status)
     const runIssueItems = issuesByRunId.get(runId) ?? []
+    const expectedAssignments = Number(run.expected_assignments ?? 0)
+    const assignedAssignments = Number(run.assigned_assignments ?? 0)
     const selectedWarningAgentSourceRows = (warningAgentsByRunId.get(runId) ?? [])
       .filter((agentRow) => isCountableIssueCode(agentRow.issue_code))
       .slice(0, warningTargetsByRunId.get(runId) ?? 0)
+    const executionWarningAgentSourceRows = (warningAgentsByRunId.get(runId) ?? []).filter((agentRow) =>
+      executionIssueCodes.has(String(agentRow.issue_code))
+    )
     const hasRuleExecutionIssue = runIssueItems.some((issueItem) =>
       executionIssueCodes.has(String(issueItem.issue_code))
     )
+    const isCurrentWeek = String(week.week_state) === "in_progress"
+    const shouldForceFailed = hasRuleExecutionIssue && !isCurrentWeek
+    const shouldConvertExecutionIssueForCurrentWeek = hasRuleExecutionIssue && isCurrentWeek
 
-    const mainPageReasonLines = buildReasonLinesFromWarningAgents(selectedWarningAgentSourceRows)
-    if (hasRuleExecutionIssue) {
-      mainPageReasonLines.push("Rule execution failed")
+    let uiStatus = rawUiStatus
+    let mainPageReasonLines = buildReasonLinesFromWarningAgents(selectedWarningAgentSourceRows)
+    if (mainPageReasonLines.length === 0) {
+      mainPageReasonLines = buildReasonLinesFromIssueSummary(runIssueItems)
     }
 
-    const issueCodeLabel =
-      selectedWarningAgentSourceRows.length > 0
-        ? toIssueCodeLabel(selectedWarningAgentSourceRows[0].issue_code)
-        : hasRuleExecutionIssue
-          ? "Rule execution failed"
-          : runIssueItems.map((item) => toIssueCodeLabel(item.issue_code)).find(Boolean)
-
-    const roundedCoverage = Math.round(Number(run.coverage_pct ?? 0))
-    const assignments = `${Number(run.assigned_assignments ?? 0)}/${Number(run.expected_assignments ?? 0)}`
-
-    const statusLabel = toStatusLabel(uiStatus)
-    const progressLabel = `${roundedCoverage}% (${assignments})`
-
-    const warningAgentRows = selectedWarningAgentSourceRows.map((agentRow, index) => ({
+    let warningAgentRows = selectedWarningAgentSourceRows.map((agentRow, index) => ({
       id: `warning-agent-${runId}-${index + 1}`,
       name: agentRow.agent_name,
       status: "warning",
@@ -506,6 +542,82 @@ weeks.forEach((week, weekIndex) => {
         `${Math.max(0, Math.min(Number(agentRow.assignments_made ?? 0), 2))}/2 assigned`,
       issueCodeLabel: toIssueCodeLabel(agentRow.issue_code),
     }))
+
+    if (shouldForceFailed) {
+      uiStatus = "failed"
+      mainPageReasonLines = ["Rule execution failed"]
+      warningAgentRows = executionWarningAgentSourceRows.map((agentRow, index) => ({
+        id: `warning-agent-${runId}-${index + 1}`,
+        name: agentRow.agent_name,
+        status: "warning",
+        warningReason: "rule_interrupted",
+        assignmentText: `${Math.max(0, Math.min(Number(agentRow.assignments_made ?? 0), 2))}/2 assigned`,
+        detailText: agentRow.context_note ?? "Rule did not execute due to a system error.",
+        issueCodeLabel: "Rule did not execute",
+      }))
+    }
+
+    if (shouldConvertExecutionIssueForCurrentWeek) {
+      uiStatus = "partial"
+      if (mainPageReasonLines.length === 0) {
+        mainPageReasonLines = inferCurrentWeekFallbackReasonLines(expectedAssignments)
+      }
+      if (warningAgentRows.length === 0) {
+        const inferredWarningCount = Math.max(
+          1,
+          Math.min(executionWarningAgentSourceRows.length || 4, mainPageReasonLines.reduce(
+            (total, reasonLine) => total + getReasonLineAgentCount(reasonLine),
+            0
+          ) || 4)
+        )
+        warningAgentRows = executionWarningAgentSourceRows.slice(0, inferredWarningCount).map((agentRow, index) => ({
+          id: `warning-agent-${runId}-${index + 1}`,
+          name: agentRow.agent_name,
+          status: "warning",
+          warningReason: "all_evaluators_capacity",
+          assignmentText: "0/2 assigned",
+          detailText: "Eligible conversations are still being assigned for this week.",
+          issueCodeLabel: "All evaluators at capacity",
+        }))
+      }
+    }
+
+    const issueCodeLabel =
+      uiStatus === "failed"
+        ? "Rule execution failed"
+        : warningAgentRows.length > 0
+          ? warningAgentRows[0].issueCodeLabel
+          : runIssueItems
+              .filter((item) => !executionIssueCodes.has(String(item.issue_code)))
+              .map((item) => toIssueCodeLabel(item.issue_code))
+              .find(Boolean)
+
+    const reasonLineMissedAssignments = mainPageReasonLines.reduce(
+      (total, reasonLine) => total + getReasonLineAgentCount(reasonLine),
+      0
+    )
+    const displayedMissedAssignments =
+      shouldConvertExecutionIssueForCurrentWeek
+        ? Math.max(reasonLineMissedAssignments, 0)
+        : Math.max(
+            reasonLineMissedAssignments,
+            expectedAssignments - assignedAssignments,
+            0
+          )
+    const inferredAssignedAssignments = Math.max(expectedAssignments - displayedMissedAssignments, 0)
+    const displayedAssignedAssignments =
+      shouldForceFailed
+        ? 0
+        : shouldConvertExecutionIssueForCurrentWeek && assignedAssignments === 0
+          ? inferredAssignedAssignments
+          : assignedAssignments
+    const roundedCoverage = expectedAssignments > 0
+      ? Math.round((displayedAssignedAssignments * 100) / expectedAssignments)
+      : 100
+    const assignments = `${displayedAssignedAssignments}/${expectedAssignments}`
+
+    const statusLabel = toStatusLabel(uiStatus)
+    const progressLabel = `${roundedCoverage}% (${assignments})`
 
     const coveredAgentRows = (coveredAgentsByRunId.get(runId) ?? []).map((agentRow, index) => ({
       id: `covered-agent-${runId}-${index + 1}`,
@@ -523,6 +635,8 @@ weeks.forEach((week, weekIndex) => {
       detailText: agentRow.context_note ?? undefined,
       issueCodeLabel: "Quota met by another rule",
     }))
+    const coveredAgentRowsForDisplay = uiStatus === "failed" ? [] : coveredAgentRows
+    const quotaRowsForDisplay = uiStatus === "failed" ? [] : quotaRows
 
     const activeEvaluatorSourceRows = activeEvaluatorsByRunId.get(runId) ?? []
     const availableEvaluatorCount = activeEvaluatorSourceRows.length
@@ -556,6 +670,37 @@ weeks.forEach((week, weekIndex) => {
       }
     )
 
+    if (uiStatus === "failed") {
+      warningEvaluatorRowsRaw = (warningEvaluatorsByRunId.get(runId) ?? []).map((evaluatorRow, index) => ({
+        id: `warning-evaluator-${runId}-${index + 1}`,
+        name: evaluatorRow.evaluator_name,
+        status: "warning",
+        loadText: `0/${Number(evaluatorRow.workload_limit ?? 0)}`,
+        detailText: evaluatorRow.context_note ?? "Rule did not execute due to a system error.",
+        issueCodeLabel: "Rule did not execute",
+      }))
+    }
+
+    if (uiStatus === "partial" && shouldConvertExecutionIssueForCurrentWeek) {
+      warningEvaluatorRowsRaw = warningEvaluatorRowsRaw
+        .filter((evaluatorRow) => evaluatorRow.issueCodeLabel !== "Rule did not execute")
+      if (warningEvaluatorRowsRaw.length === 0) {
+        const fallbackEvaluator = activeEvaluatorSourceRows[0] ?? (warningEvaluatorsByRunId.get(runId) ?? [])[0]
+        if (fallbackEvaluator) {
+          warningEvaluatorRowsRaw = [
+            {
+              id: `warning-evaluator-${runId}-fallback`,
+              name: fallbackEvaluator.evaluator_name,
+              status: "warning",
+              loadText: `0/${Number(fallbackEvaluator.workload_limit ?? 0)}`,
+              detailText: "Assignments are still being distributed for this week.",
+              issueCodeLabel: "Workload limit reached",
+            },
+          ]
+        }
+      }
+    }
+
     if (warningAgentRows.length > 0 && warningEvaluatorRowsRaw.length === 0) {
       const fallbackEvaluator = activeEvaluatorSourceRows[0]
       if (fallbackEvaluator) {
@@ -573,8 +718,12 @@ weeks.forEach((week, weekIndex) => {
     }
 
     const warningEvaluatorRows = warningAgentRows.length > 0 ? warningEvaluatorRowsRaw : []
+    const activeEvaluatorRowsSource =
+      uiStatus === "failed"
+        ? []
+        : activeEvaluatorSourceRows
 
-    const activeEvaluatorRows = activeEvaluatorSourceRows.map((evaluatorRow, index) => ({
+    const activeEvaluatorRows = activeEvaluatorRowsSource.map((evaluatorRow, index) => ({
       id: `active-evaluator-${runId}-${index + 1}`,
       name: evaluatorRow.evaluator_name,
       status: "success",
@@ -598,17 +747,17 @@ weeks.forEach((week, weekIndex) => {
         },
         { label: "Sampled", value: run.week_label },
         { label: "Mode", value: "Agent evaluation" },
-        { label: "Expected", value: `${Number(run.expected_assignments ?? 0)} assignments` },
-        { label: "Made", value: `${Number(run.assigned_assignments ?? 0)}` },
+        { label: "Expected", value: `${expectedAssignments} assignments` },
+        { label: "Made", value: `${displayedAssignedAssignments}` },
         {
           label: "Missed",
-          value: `${Math.max(Number(run.expected_assignments ?? 0) - Number(run.assigned_assignments ?? 0), 0)}`,
+          value: `${Math.max(expectedAssignments - displayedAssignedAssignments, 0)}`,
         },
       ],
       reasonSummary,
       agentsWithoutQa: warningAgentRows,
-      coveredAgents: coveredAgentRows,
-      quotaMetElsewhere: quotaRows,
+      coveredAgents: coveredAgentRowsForDisplay,
+      quotaMetElsewhere: quotaRowsForDisplay,
       evaluatorsWithIssues: warningEvaluatorRows,
       activeEvaluators: activeEvaluatorRows,
     }
@@ -625,7 +774,8 @@ weeks.forEach((week, weekIndex) => {
     }
   })
 
-  const normalizedAgentsWithoutAssignment = weekRuns.reduce((total, ruleRow) => {
+  const partialRuleAgentCount = weekRuns.reduce((total, ruleRow) => {
+    if (ruleRow.status === "failed") return total
     return (
       total +
       (ruleRow.mainPageReasonLines ?? []).reduce(
@@ -635,11 +785,24 @@ weeks.forEach((week, weekIndex) => {
     )
   }, 0)
 
+  const failedRuleExpectedTotal = weekRuns.reduce((total, ruleRow) => {
+    if (ruleRow.status !== "failed") return total
+    const parts = (ruleRow.assignments ?? "0/0").split("/")
+    return total + Math.max(Number(parts[1]) || 0, 0)
+  }, 0)
+
+  const ruleBasedUncoveredCount =
+    Math.round(partialRuleAgentCount * 0.6) + Math.round(failedRuleExpectedTotal * 0.85)
+
+  const notInAnyRuleCount = notInAnyRuleCountByWeekId.get(Number(week.week_id)) ?? 0
+  const combinedUncoveredCount = notInAnyRuleCount + ruleBasedUncoveredCount
+
   activityByTab[tabKey] = {
     tabLabel: week.week_label,
     ...(qualifier ? { tabQualifier: qualifier } : {}),
     summary: {
-      agentsWithoutAssignment: normalizedAgentsWithoutAssignment,
+      agentsNotInAnyRuleCount: notInAnyRuleCount,
+      agentsWithoutAssignment: Math.max(combinedUncoveredCount, notInAnyRuleCount),
       evaluatorsWithoutWorkload: Number(week.evaluators_without_workload ?? 0),
     },
     rules: weekRuns,
