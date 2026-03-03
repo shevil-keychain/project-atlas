@@ -9,7 +9,8 @@
     "lint": "turbo lint",
     "dev:docs": "turbo dev --filter=@level/docs",
     "dev:ai-workers-codex-crazy": "turbo dev --filter=@level/ai-workers-codex-crazy",
-    "dev:qa-case-assignment": "turbo dev --filter=@level/qa-case-assignment"
+    "dev:qa-case-assignment": "turbo dev --filter=@level/qa-case-assignment",
+    "dev:multiple-instascore-evaluations": "turbo dev --filter=@level/multiple-instascore-evaluations"
   },
   "devDependencies": {
     "puppeteer": "^24.37.5",
