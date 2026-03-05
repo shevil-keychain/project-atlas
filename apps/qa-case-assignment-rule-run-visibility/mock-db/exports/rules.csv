@@ -1,0 +1,10 @@
+rule_id,rule_name,rule_type,is_active
+1,"Legacy Escalation QA",agent_evaluation,1
+2,"Mortgage Queue",agent_evaluation,1
+3,"Renewals - TL Review Batch",agent_evaluation,1
+4,"Savings Product - QA Rotation",agent_evaluation,1
+5,"Escalation Sweep - Weekend Priority",agent_evaluation,1
+6,"Claims Exception Queue",agent_evaluation,1
+7,"Billing QA",agent_evaluation,1
+8,"Card Disputes QA",agent_evaluation,1
+9,"Onboarding Calls QA",agent_evaluation,1
