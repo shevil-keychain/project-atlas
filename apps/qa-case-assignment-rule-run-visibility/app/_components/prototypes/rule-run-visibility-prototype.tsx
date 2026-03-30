@@ -2605,6 +2605,8 @@ function ActivityPanel({ onOpenSettings, onOpenNotifications }: ActivityPanelPro
       .map((part) => part.trim())
       .filter(Boolean)[1] ||
     ""
+  const isUpcomingRuleSheet = Boolean(activeRuleSheet) && isSelectedSheetUpcomingWeek
+  const upcomingRuleSheetLabel = selectedSheetActivityData?.tabLabel ?? ""
 
   React.useEffect(() => {
     if (isEvaluatorCalibrationMode) {
@@ -3102,15 +3104,30 @@ function ActivityPanel({ onOpenSettings, onOpenNotifications }: ActivityPanelPro
               ) : (
                 <>
                   <div className="flex flex-col items-center gap-8 py-12 text-center">
-                    <Image
-                      src={getStatusIconPath(activeSheetView.status)}
-                      alt=""
-                      width={32}
-                      height={32}
-                      aria-hidden="true"
-                    />
-                    <p className="text-24 font-semibold text-text-primary">{statusDisplayLabel}</p>
-                    <p className="text-14 font-medium text-text-secondary">{progressDisplayLabel}</p>
+                    {isUpcomingRuleSheet ? (
+                      <>
+                        <p className="text-24 font-semibold text-text-primary">
+                          {upcomingRuleSheetLabel}
+                        </p>
+                        <p className="text-14 font-medium text-text-secondary">Not generated yet</p>
+                      </>
+                    ) : (
+                      <>
+                        <Image
+                          src={getStatusIconPath(activeSheetView.status)}
+                          alt=""
+                          width={32}
+                          height={32}
+                          aria-hidden="true"
+                        />
+                        <p className="text-24 font-semibold text-text-primary">
+                          {statusDisplayLabel}
+                        </p>
+                        <p className="text-14 font-medium text-text-secondary">
+                          {progressDisplayLabel}
+                        </p>
+                      </>
+                    )}
                   </div>
 
                   <Tabs

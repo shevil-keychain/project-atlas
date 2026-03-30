@@ -1,4 +1,4 @@
-# QA Case Assignment Mock DB
+# QA case assignment mock DB
 
 Use these commands from the repo root:
 

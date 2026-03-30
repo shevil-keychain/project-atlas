@@ -9,7 +9,6 @@ import {
   PageHeaderTitle,
 } from "@level/ui/components/patterns/page-header"
 import { Avatar } from "@level/ui/components/ui/avatar"
-import { AvatarGroup } from "@level/ui/components/ui/avatar-group"
 import { Badge } from "@level/ui/components/ui/badge"
 import { Button } from "@level/ui/components/ui/button"
 import { Card } from "@level/ui/components/ui/card"
@@ -38,12 +37,6 @@ import {
 import { EmptyState } from "@level/ui/components/ui/empty-state"
 import { Input } from "@level/ui/components/ui/input"
 import {
-  Sheet,
-  SheetBody,
-  SheetContent,
-  SheetHeader,
-} from "@level/ui/components/ui/sheet"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -64,6 +57,7 @@ import {
   Tabs,
   TabsContent,
 } from "@level/ui/components/ui/tabs"
+import { Spinner } from "@level/ui/components/ui/spinner"
 import { ToastContainer } from "@level/ui/components/ui/toast-container"
 import { SimpleTooltip, TooltipProvider } from "@level/ui/components/ui/tooltip"
 import { toast } from "@level/ui/hooks/use-toast"
@@ -72,9 +66,11 @@ import {
   Bell01,
   DotsVertical,
   Edit03,
+  InfoCircle,
+  RefreshCw01,
   SearchMd,
 } from "@level/ui/components/icons"
-import { ChevronRight, ExternalLink, X } from "lucide-react"
+import { ExternalLink, X } from "lucide-react"
 
 type SettingsSection = {
   heading?: string
@@ -85,7 +81,6 @@ type SettingsSection = {
 }
 
 type Frequency = "daily" | "weekly" | "monthly"
-type NotificationWeekday = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday"
 type RuleStatus = "Active" | "Inactive"
 type RunStatus = "success" | "partial" | "failed" | "scheduled"
 type DetailTab = "agents" | "evaluators" | "run_details"
@@ -162,6 +157,7 @@ type RunCycleDetail = {
 
 type RuleHistoryCycle = {
   id: string
+  sourceId: string
   listLabel: string
   sampleWindow: string
   status: RunStatus
@@ -169,14 +165,22 @@ type RuleHistoryCycle = {
   completed: number
   expected: number
   isUpcoming: boolean
+  hasPrediction: boolean
   detail: RunCycleDetail
 }
 
-type CoverageIssue = {
-  id: string
-  agentName: string
-  teamName?: string
-  teamNames?: string[]
+type PredictionFreshnessState = {
+  label: string
+  isRefreshing: boolean
+  errorMessage: string | null
+  isRefreshDisabled: boolean
+}
+
+type NotificationLeadUnit = "hours" | "days"
+
+type NotificationLeadTime = {
+  value: string
+  unit: NotificationLeadUnit
 }
 
 type VersionThreeRule = {
@@ -224,6 +228,7 @@ type CycleConfig = {
   completed: number
   expected: number
   isUpcoming?: boolean
+  hasPrediction?: boolean
 }
 
 type RuleConfig = {
@@ -278,66 +283,27 @@ const cycleNotificationRecipients: MultiselectOption[] = [
   { value: "rahul-verma", label: "Rahul Verma" },
 ]
 
-const notificationFrequencyOptions: Array<{ value: Frequency; label: string }> = [
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" },
-]
+const notificationLeadTimeLabels: Record<Frequency, string> = {
+  daily: "Daily rules",
+  weekly: "Weekly rules",
+  monthly: "Monthly rules",
+}
 
-const notificationWeekdayOptions: Array<{ value: NotificationWeekday; label: string }> = [
-  { value: "monday", label: "Monday" },
-  { value: "tuesday", label: "Tuesday" },
-  { value: "wednesday", label: "Wednesday" },
-  { value: "thursday", label: "Thursday" },
-  { value: "friday", label: "Friday" },
-  { value: "saturday", label: "Saturday" },
-  { value: "sunday", label: "Sunday" },
-]
+const notificationLeadTimeUnitShortLabels: Record<NotificationLeadUnit, string> = {
+  hours: "hrs",
+  days: "days",
+}
 
-const notificationMonthlyDayOptions: Array<{ value: string; label: string }> = Array.from(
-  { length: 31 },
-  (_, index) => {
-    const day = index + 1
-    return {
-      value: `${day}`,
-      label: formatOrdinalDay(day),
-    }
-  }
-)
+const notificationLeadTimeOptionsByFrequency: Record<Frequency, NotificationLeadUnit[]> = {
+  daily: ["hours"],
+  weekly: ["hours", "days"],
+  monthly: ["hours", "days"],
+}
 
-const notificationTimeOptions: Array<{ value: string; label: string }> = Array.from(
-  { length: 24 },
-  (_, hour) => {
-    const normalizedHour = hour % 12 === 0 ? 12 : hour % 12
-    const period = hour >= 12 ? "PM" : "AM"
-    const hourLabel = normalizedHour.toString().padStart(2, "0")
-    return {
-      value: `${hour.toString().padStart(2, "0")}:00`,
-      label: `${hourLabel}:00 ${period}`,
-    }
-  }
-)
-
-function formatOrdinalDay(day: number) {
-  const mod100 = day % 100
-  if (mod100 >= 11 && mod100 <= 13) {
-    return `${day}th`
-  }
-
-  const mod10 = day % 10
-  if (mod10 === 1) {
-    return `${day}st`
-  }
-
-  if (mod10 === 2) {
-    return `${day}nd`
-  }
-
-  if (mod10 === 3) {
-    return `${day}rd`
-  }
-
-  return `${day}th`
+const initialNotificationLeadTimes: Record<Frequency, NotificationLeadTime> = {
+  daily: { value: "6", unit: "hours" },
+  weekly: { value: "24", unit: "hours" },
+  monthly: { value: "2", unit: "days" },
 }
 
 const agentFirstNames = [
@@ -427,72 +393,6 @@ const evaluatorLastNames = [
   "Nguyen",
   "Clark",
 ]
-
-const coverageAgentFirstNames = [
-  "Tom",
-  "Priya",
-  "Dan",
-  "Avery",
-  "Jordan",
-  "Mia",
-  "Ethan",
-  "Lina",
-  "Noah",
-  "Sara",
-  "Leo",
-  "Nina",
-]
-
-const coverageAgentLastNames = [
-  "Rivera",
-  "Nair",
-  "Wu",
-  "Cole",
-  "Morris",
-  "Patel",
-  "Johnson",
-  "Chen",
-  "Brooks",
-  "Khan",
-  "Diaz",
-  "Singh",
-]
-
-const coverageAgentTeams = [
-  "Sales team",
-  "Support team",
-  "Billing team",
-  "Retention team",
-  "Operations team",
-]
-
-function getCoverageAgentName(index: number) {
-  const firstName = coverageAgentFirstNames[index % coverageAgentFirstNames.length]
-  const lastName = coverageAgentLastNames[index % coverageAgentLastNames.length]
-  return `${firstName} ${lastName}`
-}
-
-function getCoverageAgentTeams(index: number) {
-  const teamCount = 1 + (index % 4)
-  const startIndex = (index * 2) % coverageAgentTeams.length
-  return Array.from({ length: teamCount }, (_, offset) => {
-    const teamIndex = (startIndex + offset) % coverageAgentTeams.length
-    return coverageAgentTeams[teamIndex]
-  })
-}
-
-function buildInitialCoverageIssues() {
-  return Array.from({ length: 10 }, (_, index) => {
-    const teamNames = getCoverageAgentTeams(index)
-
-    return {
-      id: `coverage-not-in-rule-${index + 1}`,
-      agentName: getCoverageAgentName(index),
-      teamName: teamNames[0],
-      teamNames,
-    } satisfies CoverageIssue
-  }).sort((leftIssue, rightIssue) => leftIssue.agentName.localeCompare(rightIssue.agentName))
-}
 
 type VersionThreeAgentIssueScenario = {
   count: number
@@ -1295,6 +1195,7 @@ const ruleConfigs: RuleConfig[] = [
         completed: 32,
         expected: 32,
         isUpcoming: true,
+        hasPrediction: false,
       },
       {
         id: "policy-feb",
@@ -1621,8 +1522,8 @@ function formatCycleRangeLabel(sampleWindow: string) {
   return sampleWindow.replace(/-/g, " - ")
 }
 
-function getAgentsNotInAnyRuleTitle(issueCount: number) {
-  return `${issueCount} ${issueCount === 1 ? "agent" : "agents"} not added to any rule`
+function isNotGeneratedUpcomingCycle(cycle: RuleHistoryCycle) {
+  return cycle.isUpcoming && !cycle.hasPrediction
 }
 
 function getSourceAgentWarningReason(agent: SourceAgentRow): RuleAgentWarningReason {
@@ -2542,24 +2443,100 @@ function buildCycleDetail(ruleId: string, config: CycleConfig): RunCycleDetail {
   }
 }
 
+function buildRuleHistoryCycle(ruleId: string, config: CycleConfig): RuleHistoryCycle {
+  return {
+    id: config.id,
+    sourceId: config.sourceId,
+    listLabel: config.listLabel,
+    sampleWindow: config.sampleWindow,
+    status: config.status,
+    percent: config.percent,
+    completed: config.completed,
+    expected: config.expected,
+    isUpcoming: config.isUpcoming ?? false,
+    hasPrediction: config.hasPrediction ?? true,
+    detail: buildCycleDetail(ruleId, config),
+  }
+}
+
 const versionThreeRules: VersionThreeRule[] = ruleConfigs.map((ruleConfig) => ({
   id: ruleConfig.id,
   name: ruleConfig.name,
   assignmentType: ruleConfig.assignmentType,
   frequency: ruleConfig.frequency,
   status: ruleConfig.status,
-  cycles: ruleConfig.cycles.map((cycleConfig) => ({
-    id: cycleConfig.id,
-    listLabel: cycleConfig.listLabel,
-    sampleWindow: cycleConfig.sampleWindow,
-    status: cycleConfig.status,
-    percent: cycleConfig.percent,
-    completed: cycleConfig.completed,
-    expected: cycleConfig.expected,
-    isUpcoming: cycleConfig.isUpcoming ?? false,
-    detail: buildCycleDetail(ruleConfig.id, cycleConfig),
-  })),
+  cycles: ruleConfig.cycles.map((cycleConfig) => buildRuleHistoryCycle(ruleConfig.id, cycleConfig)),
 }))
+
+const initialPredictionFreshnessByCycleId: Record<string, PredictionFreshnessState> = {
+  "billing-upcoming": {
+    label: "Predicted 3h ago",
+    isRefreshing: false,
+    errorMessage: null,
+    isRefreshDisabled: false,
+  },
+  "legacy-upcoming": {
+    label: "Predicted 2h ago",
+    isRefreshing: false,
+    errorMessage: null,
+    isRefreshDisabled: false,
+  },
+  "mortgage-upcoming": {
+    label: "Predicted 5h ago",
+    isRefreshing: false,
+    errorMessage: null,
+    isRefreshDisabled: false,
+  },
+  "policy-upcoming": {
+    label: "Predicted 5h ago",
+    isRefreshing: false,
+    errorMessage: null,
+    isRefreshDisabled: false,
+  },
+  "retention-upcoming": {
+    label: "Predicted 4h ago",
+    isRefreshing: false,
+    errorMessage: null,
+    isRefreshDisabled: false,
+  },
+}
+
+const refreshedUpcomingPredictionConfigByCycleId: Partial<
+  Record<string, Pick<CycleConfig, "status" | "percent" | "completed" | "expected">>
+> = {
+  "billing-upcoming": {
+    status: "scheduled",
+    percent: 100,
+    completed: 91,
+    expected: 91,
+  },
+  "legacy-upcoming": {
+    status: "scheduled",
+    percent: 100,
+    completed: 84,
+    expected: 84,
+  },
+  "mortgage-upcoming": {
+    status: "scheduled",
+    percent: 94,
+    completed: 86,
+    expected: 91,
+  },
+  "policy-upcoming": {
+    status: "scheduled",
+    percent: 100,
+    completed: 32,
+    expected: 32,
+  },
+  "retention-upcoming": {
+    status: "scheduled",
+    percent: 100,
+    completed: 24,
+    expected: 24,
+  },
+}
+
+const refreshFailureCycleIds = new Set<string>(["mortgage-upcoming"])
 
 function SettingsSidebar() {
   return (
@@ -2598,27 +2575,52 @@ function CycleSummaryCell({
   cycle,
   actionLabel,
   onAction,
+  isGenerating,
+  onGenerate,
 }: {
   cycle: RuleHistoryCycle
   actionLabel?: string
   onAction?: () => void
+  isGenerating?: boolean
+  onGenerate?: () => void
 }) {
+  const showNotGeneratedState = isNotGeneratedUpcomingCycle(cycle)
+
   return (
-    <div className="flex min-w-0 items-center gap-28">
-      <div className="flex min-w-0 items-start gap-10">
-        <CycleStatusIcon cycle={cycle} size="sm" className="mt-2" />
+    <div className="flex min-w-0 items-center justify-between gap-28">
+      <div className="flex min-w-0 flex-1 items-start gap-10">
+        {!showNotGeneratedState ? (
+          <CycleStatusIcon cycle={cycle} size="sm" className="mt-2" />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="mt-2 size-16 shrink-0 rounded-full border border-border-strong bg-surface-card"
+          />
+        )}
         <div className="min-w-0">
           <p className="truncate text-14 font-semibold text-text-primary">
             {formatCycleRangeLabel(cycle.sampleWindow)}
           </p>
-          <p className="mt-4 text-12 font-medium text-text-secondary">
-            {`${cycle.percent}% | ${cycle.completed}/${cycle.expected}`}
+          <p
+            className="mt-4 whitespace-nowrap text-12 font-medium text-text-secondary"
+          >
+            {showNotGeneratedState
+              ? "No predictions yet"
+              : `${cycle.isUpcoming ? "Predicted " : ""}${cycle.percent}% | ${cycle.completed}/${cycle.expected}`}
           </p>
         </div>
       </div>
 
+      {showNotGeneratedState && onGenerate ? (
+        <GeneratePredictionLink
+          isGenerating={isGenerating ?? false}
+          onClick={onGenerate}
+          className="shrink-0 self-center"
+        />
+      ) : null}
+
       {actionLabel && onAction ? (
-        <Button variant="default" size="sm" className="shrink-0" onClick={onAction}>
+        <Button variant="default" size="sm" className="shrink-0 self-center" onClick={onAction}>
           {actionLabel}
         </Button>
       ) : null}
@@ -2668,86 +2670,6 @@ function CycleStatusIcon({
       aria-hidden="true"
       className={cn(size === "lg" ? "size-24" : "size-16", className)}
     />
-  )
-}
-
-function CoverageIssueCard({
-  issue,
-  rules,
-  onAddToRule,
-}: {
-  issue: CoverageIssue
-  rules: VersionThreeRule[]
-  onAddToRule: (issueId: string, ruleName: string) => void
-}) {
-  const allTeamNames = issue.teamNames?.filter(Boolean) ?? (issue.teamName ? [issue.teamName] : [])
-  const visibleTeamNames = allTeamNames.slice(0, 2)
-  const hiddenTeamNames = allTeamNames.slice(2)
-
-  return (
-    <div className="flex items-start justify-between gap-12 py-16">
-      <div className="min-w-0 space-y-8">
-        <div className="flex items-start gap-12">
-          <Avatar name={issue.agentName} size="xs" />
-          <div className="min-w-0">
-            <p className="text-14 font-semibold text-text-primary">{issue.agentName}</p>
-            {allTeamNames.length > 0 ? (
-              <p className="text-12 font-medium text-text-secondary">
-                {visibleTeamNames.join(", ")}
-                {hiddenTeamNames.length > 0 ? (
-                  <>
-                    {visibleTeamNames.length > 0 ? ", " : ""}
-                    <SimpleTooltip
-                      side="bottom"
-                      content={
-                        <span className="block max-w-200 whitespace-normal">
-                          {hiddenTeamNames.join(", ")}
-                        </span>
-                      }
-                    >
-                      <span className="cursor-default text-text-secondary hover:text-text-secondary">
-                        +{hiddenTeamNames.length}
-                      </span>
-                    </SimpleTooltip>
-                  </>
-                ) : null}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="sm">
-            Add to rule
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          {rules.map((rule) => (
-            <DropdownMenuItem
-              key={`${issue.id}-${rule.id}`}
-              onClick={() => onAddToRule(issue.id, rule.name)}
-            >
-              {rule.name}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  )
-}
-
-function RunMetadataSection({ rows }: { rows: ExecutionMetadataRow[] }) {
-  return (
-    <div className="space-y-16 px-20 py-20">
-      {rows.map((row) => (
-        <div key={`metadata-${row.label}`} className="space-y-6">
-          <p className="text-12 font-medium text-text-secondary">{row.label}</p>
-          <p className="text-14 font-medium text-text-primary">{row.value}</p>
-        </div>
-      ))}
-    </div>
   )
 }
 
@@ -2905,6 +2827,8 @@ function RunHistoryModal({
   onSelectCycle,
   onSelectTab,
   onOpenRuleSetup,
+  predictionFreshnessByCycleId,
+  onRefreshUpcomingPrediction,
 }: {
   rule: VersionThreeRule | null
   selectedCycleId: string | null
@@ -2913,11 +2837,22 @@ function RunHistoryModal({
   onSelectCycle: (cycleId: string) => void
   onSelectTab: (tab: DetailTab) => void
   onOpenRuleSetup: (ruleName: string) => void
+  predictionFreshnessByCycleId: Record<string, PredictionFreshnessState>
+  onRefreshUpcomingPrediction: (ruleId: string, cycleId: string) => void
 }) {
   const selectedCycle =
-    rule?.cycles.find((cycle) => cycle.id === selectedCycleId) ?? rule?.cycles[0] ?? null
+  rule?.cycles.find((cycle) => cycle.id === selectedCycleId) ?? rule?.cycles[0] ?? null
 
   const isUpcoming = selectedCycle?.isUpcoming ?? false
+  const showSelectedCycleNotGeneratedState =
+    selectedCycle ? isNotGeneratedUpcomingCycle(selectedCycle) : false
+  const showPredictionFreshness = isUpcoming && !showSelectedCycleNotGeneratedState
+  const selectedCyclePredictionFreshness =
+    selectedCycle && showPredictionFreshness
+      ? predictionFreshnessByCycleId[selectedCycle.id] ?? null
+      : null
+  const selectedCycleFreshness =
+    selectedCycle ? predictionFreshnessByCycleId[selectedCycle.id] ?? null : null
   const groupedAgentsWithoutQa = React.useMemo(
     () => (selectedCycle ? groupRuleAgentIssues(selectedCycle.detail.agentsWithoutQa) : []),
     [selectedCycle]
@@ -3003,6 +2938,7 @@ function RunHistoryModal({
                 <div className="flex flex-col gap-8">
                   {rule.cycles.map((cycle) => {
                     const isSelected = cycle.id === selectedCycle.id
+                    const showCycleNotGeneratedState = isNotGeneratedUpcomingCycle(cycle)
 
                     return (
                       <Button
@@ -3018,14 +2954,23 @@ function RunHistoryModal({
                       >
                         <div className="flex w-full items-start justify-between gap-12">
                           <div className="flex min-w-0 items-start gap-8">
-                            <CycleStatusIcon cycle={cycle} size="sm" className="mt-2" />
+                            {!showCycleNotGeneratedState ? (
+                              <CycleStatusIcon cycle={cycle} size="sm" className="mt-2" />
+                            ) : (
+                              <span
+                                aria-hidden="true"
+                                className="mt-2 size-16 shrink-0 rounded-full border border-border-strong bg-surface-card"
+                              />
+                            )}
                             <div className="min-w-0">
                               <p className="truncate text-14 font-semibold text-text-primary">
                                 {formatCycleRangeLabel(cycle.sampleWindow)}
                               </p>
                               <div className="mt-4 flex flex-wrap items-center gap-8">
                                 <p className="text-12 font-medium text-text-secondary">
-                                  {`${cycle.percent}% · ${cycle.completed}/${cycle.expected}`}
+                                  {showCycleNotGeneratedState
+                                    ? "No predictions yet"
+                                    : `${cycle.percent}% · ${cycle.completed}/${cycle.expected}`}
                                 </p>
                                 {cycle.isUpcoming ? (
                                   <Badge color="blue" size="sm">
@@ -3047,28 +2992,51 @@ function RunHistoryModal({
               <div className="mx-auto flex min-h-full w-full flex-col">
                 <div className="border-b border-border-subtle px-24 py-24">
                   <div className="flex flex-col items-center gap-8 text-center">
-                    <CycleStatusIcon cycle={selectedCycle} size="lg" />
-                    <div className="flex flex-wrap items-center justify-center gap-8">
-                      <span
-                        className={cn(
-                          "text-16 font-semibold",
-                          getPercentTextClassName(selectedCycle.status, selectedCycle.percent)
-                        )}
-                      >
-                        {selectedCycle.detail.statusLabel}
-                      </span>
-                    </div>
+                    {showSelectedCycleNotGeneratedState ? (
+                      <>
+                        <p className="text-30 font-semibold text-text-primary">
+                          {formatCycleRangeLabel(selectedCycle.sampleWindow)}
+                        </p>
+                        {selectedCycleFreshness ? (
+                          <GeneratePredictionLink
+                            isGenerating={selectedCycleFreshness.isRefreshing}
+                            onClick={() => onRefreshUpcomingPrediction(rule.id, selectedCycle.id)}
+                            className="text-14"
+                          />
+                        ) : null}
+                      </>
+                    ) : (
+                      <>
+                        <CycleStatusIcon cycle={selectedCycle} size="lg" />
+                        <div className="flex flex-wrap items-center justify-center gap-8">
+                          <span
+                            className={cn(
+                              "text-16 font-semibold",
+                              getPercentTextClassName(selectedCycle.status, selectedCycle.percent)
+                            )}
+                          >
+                            {selectedCycle.detail.statusLabel}
+                          </span>
+                        </div>
 
-                    <div className="flex flex-col items-center gap-8">
-                      <p className="text-30 font-semibold text-text-primary">
-                        {selectedCycle.detail.countLabel}
-                      </p>
-                      <p className="text-14 font-medium text-text-secondary">
-                        {isUpcoming
-                          ? `${selectedCycle.percent}% predicted success`
-                          : `${selectedCycle.percent}% of expected assignments`}
-                      </p>
-                    </div>
+                        <div className="flex flex-col items-center gap-8">
+                          <p className="text-30 font-semibold text-text-primary">
+                            {selectedCycle.detail.countLabel}
+                          </p>
+                          <p className="text-14 font-medium text-text-secondary">
+                            {isUpcoming
+                              ? `${selectedCycle.percent}% predicted success`
+                              : `${selectedCycle.percent}% of expected assignments`}
+                          </p>
+                          {selectedCyclePredictionFreshness ? (
+                            <PredictionFreshnessLine
+                              freshness={selectedCyclePredictionFreshness}
+                              onRefresh={() => onRefreshUpcomingPrediction(rule.id, selectedCycle.id)}
+                            />
+                          ) : null}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -3236,7 +3204,9 @@ function RunHistoryModal({
                     </TabsContent>
 
                     <TabsContent value="run_details" className="mt-16">
-                      <RunMetadataSection rows={selectedCycle.detail.metadata} />
+                      <div className="px-20 py-20">
+                        <p className="text-14 font-medium text-text-primary">TBD</p>
+                      </div>
                     </TabsContent>
                   </Tabs>
                 </div>
@@ -3249,7 +3219,151 @@ function RunHistoryModal({
   )
 }
 
+function UpcomingCycleTableHeader() {
+  return (
+    <div className="flex items-center gap-6">
+      <span className="text-12 font-semibold text-text-primary">Upcoming cycle</span>
+      <SimpleTooltip
+        side="bottom"
+        align="start"
+        content={
+          <span className="block max-w-240 whitespace-normal text-12 font-medium">
+            Predictions are generated automatically 24 hours before each rule&apos;s scheduled run.
+            Click into any cell for details or to refresh with the latest data.
+          </span>
+        }
+      >
+        <span className="inline-flex items-center text-icon-secondary">
+          <InfoCircle size={16} className="text-icon-secondary" />
+        </span>
+      </SimpleTooltip>
+    </div>
+  )
+}
+
+function PredictionFreshnessLine({
+  freshness,
+  onRefresh,
+}: {
+  freshness: PredictionFreshnessState
+  onRefresh: () => void
+}) {
+  return (
+    <div className="flex flex-col items-center gap-12">
+      <div className="flex flex-wrap items-center justify-center gap-6">
+        <div className="flex items-center gap-6 text-12 font-medium text-text-secondary">
+          {freshness.isRefreshing ? <Spinner size="sm" className="text-icon-secondary" /> : null}
+          <span>{freshness.isRefreshing ? "Refreshing..." : freshness.label}</span>
+        </div>
+
+        {!freshness.isRefreshing ? (
+          <>
+            <span className="text-12 font-medium text-text-tertiary">·</span>
+            <Button
+              type="button"
+              variant="linkSecondary"
+              className="h-auto p-0 text-12 font-medium text-text-secondary disabled:text-text-disabled disabled:no-underline"
+              onClick={onRefresh}
+              disabled={freshness.isRefreshDisabled}
+              iconLeft={
+                <RefreshCw01
+                  size={14}
+                  className={freshness.isRefreshDisabled ? "text-icon-tertiary" : "text-icon-secondary"}
+                />
+              }
+            >
+              Refresh
+            </Button>
+          </>
+        ) : null}
+      </div>
+
+      {freshness.errorMessage ? (
+        <InlineAlert
+          variant="error"
+          description={freshness.errorMessage}
+          className="w-full max-w-256 text-left"
+        />
+      ) : null}
+    </div>
+  )
+}
+
+function GeneratePredictionLink({
+  isGenerating,
+  onClick,
+  className,
+}: {
+  isGenerating: boolean
+  onClick: () => void
+  className?: string
+}) {
+  return (
+    <Button
+      type="button"
+      variant="secondary"
+      size="sm"
+      className={cn("justify-start", className)}
+      disabled={isGenerating}
+      onClick={onClick}
+      iconLeft={isGenerating ? <Spinner size="sm" className="text-icon-secondary" /> : undefined}
+    >
+      {isGenerating ? "Generating..." : "Generate"}
+    </Button>
+  )
+}
+
+function NotificationLeadTimeField({
+  frequency,
+  leadTime,
+  onValueChange,
+  onUnitChange,
+}: {
+  frequency: Frequency
+  leadTime: NotificationLeadTime
+  onValueChange: (frequency: Frequency, value: string) => void
+  onUnitChange: (frequency: Frequency, unit: NotificationLeadUnit) => void
+}) {
+  const unitOptions = notificationLeadTimeOptionsByFrequency[frequency]
+
+  return (
+    <div className="space-y-8">
+      <p className="text-14 font-medium text-text-secondary">
+        {notificationLeadTimeLabels[frequency]}
+      </p>
+      <div className="flex items-center gap-8">
+        <Input
+          inputMode="numeric"
+          value={leadTime.value}
+          onChange={(event) => onValueChange(frequency, event.target.value)}
+          aria-label={`${notificationLeadTimeLabels[frequency]} lead time value`}
+          className="w-80"
+        />
+        <Select
+          value={leadTime.unit}
+          onValueChange={(value) => onUnitChange(frequency, value as NotificationLeadUnit)}
+        >
+          <SelectTrigger
+            aria-label={`${notificationLeadTimeLabels[frequency]} lead time unit`}
+            className="w-96"
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {unitOptions.map((unit) => (
+              <SelectItem key={unit} value={unit}>
+                {notificationLeadTimeUnitShortLabels[unit]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  )
+}
+
 export default function VersionThreePrototype() {
+  const [rules, setRules] = React.useState<VersionThreeRule[]>(() => versionThreeRules)
   const [searchQuery, setSearchQuery] = React.useState("")
   const [statusFilter, setStatusFilter] = React.useState<"all" | "active" | "inactive">("all")
   const [isNotificationModalOpen, setNotificationModalOpen] = React.useState(false)
@@ -3257,20 +3371,20 @@ export default function VersionThreePrototype() {
     "jordan",
     "sarah-k",
   ])
-  const [notificationFrequency, setNotificationFrequency] = React.useState<Frequency>("weekly")
-  const [notificationWeekday, setNotificationWeekday] = React.useState<NotificationWeekday>("saturday")
-  const [notificationMonthDay, setNotificationMonthDay] = React.useState("1")
-  const [notificationTime, setNotificationTime] = React.useState("18:00")
-  const [coverageIssues, setCoverageIssues] = React.useState<CoverageIssue[]>(() =>
-    buildInitialCoverageIssues()
-  )
-  const [isCoverageSheetOpen, setCoverageSheetOpen] = React.useState(false)
+  const [notificationLeadTimes, setNotificationLeadTimes] = React.useState<
+    Record<Frequency, NotificationLeadTime>
+  >(() => initialNotificationLeadTimes)
   const [activeRuleId, setActiveRuleId] = React.useState<string | null>(null)
   const [selectedCycleId, setSelectedCycleId] = React.useState<string | null>(null)
   const [activeDetailTab, setActiveDetailTab] = React.useState<DetailTab>("agents")
+  const [predictionFreshnessByCycleId, setPredictionFreshnessByCycleId] = React.useState<
+    Record<string, PredictionFreshnessState>
+  >(() => initialPredictionFreshnessByCycleId)
   const deferredSearchQuery = React.useDeferredValue(searchQuery.trim().toLowerCase())
+  const refreshRequestTimeoutsRef = React.useRef<Record<string, number>>({})
+  const refreshCooldownTimeoutsRef = React.useRef<Record<string, number>>({})
 
-  const filteredRules = versionThreeRules.filter((rule) => {
+  const filteredRules = rules.filter((rule) => {
     const matchesSearch =
       deferredSearchQuery.length === 0 ||
       rule.name.toLowerCase().includes(deferredSearchQuery) ||
@@ -3282,25 +3396,8 @@ export default function VersionThreePrototype() {
     return matchesSearch && matchesStatus
   })
 
-  const coverageAvatarNames = coverageIssues.map((issue) => issue.agentName)
-  const ruleOptions = versionThreeRules.filter((rule) => rule.status === "Active")
-  const notificationWeekdayLabel =
-    notificationWeekdayOptions.find((option) => option.value === notificationWeekday)?.label ??
-    "Saturday"
-  const notificationMonthDayLabel =
-    notificationMonthlyDayOptions.find((option) => option.value === notificationMonthDay)?.label ??
-    "1st"
-  const notificationTimeLabel =
-    notificationTimeOptions.find((option) => option.value === notificationTime)?.label ?? "06:00 PM"
-  const notificationScheduleSummary =
-    notificationFrequency === "daily"
-      ? `Recipients will receive an email daily at ${notificationTimeLabel} with a summary of predicted coverage gaps.`
-      : notificationFrequency === "weekly"
-        ? `Recipients will receive an email every ${notificationWeekdayLabel} at ${notificationTimeLabel} with a summary of predicted coverage gaps.`
-        : `Recipients will receive an email on the ${notificationMonthDayLabel} of each month at ${notificationTimeLabel} with a summary of predicted coverage gaps.`
-
   const activeRule =
-    versionThreeRules.find((rule) => rule.id === activeRuleId) ?? null
+    rules.find((rule) => rule.id === activeRuleId) ?? null
 
   const openRunHistory = (rule: VersionThreeRule, forceUpcoming = false) => {
     const upcomingCycle = rule.cycles.find((cycle) => cycle.isUpcoming) ?? null
@@ -3327,15 +3424,170 @@ export default function VersionThreePrototype() {
     setNotificationModalOpen(false)
     toast({
       title: "Notifications saved",
-      description: "Recipients and schedule have been updated.",
+      description: "Recipients and lead times have been updated.",
     })
   }, [])
 
-  const handleOpenRuleSetup = (_ruleName: string) => {}
+  const handleNotificationLeadTimeValueChange = React.useCallback(
+    (frequency: Frequency, nextValue: string) => {
+      const sanitizedValue = nextValue.replace(/\D/g, "")
+      setNotificationLeadTimes((currentLeadTimes) => ({
+        ...currentLeadTimes,
+        [frequency]: {
+          ...currentLeadTimes[frequency],
+          value: sanitizedValue,
+        },
+      }))
+    },
+    []
+  )
 
-  const handleAddCoverageAgentToRule = (issueId: string, _ruleName: string) => {
-    setCoverageIssues((currentIssues) => currentIssues.filter((issue) => issue.id !== issueId))
-  }
+  const handleNotificationLeadTimeUnitChange = React.useCallback(
+    (frequency: Frequency, nextUnit: NotificationLeadUnit) => {
+      setNotificationLeadTimes((currentLeadTimes) => ({
+        ...currentLeadTimes,
+        [frequency]: {
+          ...currentLeadTimes[frequency],
+          unit: nextUnit,
+        },
+      }))
+    },
+    []
+  )
+
+  const handleRefreshUpcomingPrediction = React.useCallback((ruleId: string, cycleId: string) => {
+    const cycleRefreshConfig = refreshedUpcomingPredictionConfigByCycleId[cycleId]
+    if (!cycleRefreshConfig) {
+      return
+    }
+
+    if (refreshRequestTimeoutsRef.current[cycleId] || refreshCooldownTimeoutsRef.current[cycleId]) {
+      return
+    }
+
+    setPredictionFreshnessByCycleId((currentState) => {
+      const existingState = currentState[cycleId]
+      if (!existingState) {
+        return currentState
+      }
+
+      return {
+        ...currentState,
+        [cycleId]: {
+          ...existingState,
+          isRefreshing: true,
+          errorMessage: null,
+        },
+      }
+    })
+
+    refreshRequestTimeoutsRef.current[cycleId] = window.setTimeout(() => {
+      delete refreshRequestTimeoutsRef.current[cycleId]
+
+      if (refreshFailureCycleIds.has(cycleId)) {
+        setPredictionFreshnessByCycleId((currentState) => {
+          const existingState = currentState[cycleId]
+          if (!existingState) {
+            return currentState
+          }
+
+          return {
+            ...currentState,
+            [cycleId]: {
+              ...existingState,
+              isRefreshing: false,
+              errorMessage: "Couldn't refresh. Try again later.",
+            },
+          }
+        })
+        return
+      }
+
+      setRules((currentRules) =>
+        currentRules.map((rule) => {
+          if (rule.id !== ruleId) {
+            return rule
+          }
+
+          return {
+            ...rule,
+            cycles: rule.cycles.map((cycle) => {
+              if (cycle.id !== cycleId) {
+                return cycle
+              }
+
+              return buildRuleHistoryCycle(rule.id, {
+                id: cycle.id,
+                sourceId: cycle.sourceId,
+                listLabel: cycle.listLabel,
+                sampleWindow: cycle.sampleWindow,
+                status: cycleRefreshConfig.status,
+                percent: cycleRefreshConfig.percent,
+                completed: cycleRefreshConfig.completed,
+                expected: cycleRefreshConfig.expected,
+                isUpcoming: cycle.isUpcoming,
+                hasPrediction: true,
+              })
+            }),
+          }
+        })
+      )
+
+      setPredictionFreshnessByCycleId((currentState) => {
+        const existingState = currentState[cycleId]
+        if (!existingState) {
+          return currentState
+        }
+
+        return {
+          ...currentState,
+          [cycleId]: {
+            ...existingState,
+            label: "Predicted just now",
+            isRefreshing: false,
+            errorMessage: null,
+            isRefreshDisabled: true,
+          },
+        }
+      })
+
+      refreshCooldownTimeoutsRef.current[cycleId] = window.setTimeout(() => {
+        delete refreshCooldownTimeoutsRef.current[cycleId]
+
+        setPredictionFreshnessByCycleId((currentState) => {
+          const existingState = currentState[cycleId]
+          if (!existingState) {
+            return currentState
+          }
+
+          return {
+            ...currentState,
+            [cycleId]: {
+              ...existingState,
+              label: "Predicted 5m ago",
+              isRefreshDisabled: false,
+            },
+          }
+        })
+      }, 300000)
+    }, 1200)
+  }, [])
+
+  React.useEffect(() => {
+    const requestTimeouts = refreshRequestTimeoutsRef.current
+    const cooldownTimeouts = refreshCooldownTimeoutsRef.current
+
+    return () => {
+      Object.values(requestTimeouts).forEach((timeoutId) => {
+        window.clearTimeout(timeoutId)
+      })
+      Object.values(cooldownTimeouts).forEach((timeoutId) => {
+        window.clearTimeout(timeoutId)
+      })
+    }
+  }, [])
+
+  const handleOpenRuleSetup = (_ruleName: string) => {}
 
   return (
     <TooltipProvider>
@@ -3401,27 +3653,6 @@ export default function VersionThreePrototype() {
                     </div>
                   </div>
 
-                  <Button
-                    variant="ghost"
-                    className="mt-16 h-auto w-full justify-between rounded-xl border border-border-subtle bg-surface-card px-24 py-20 hover:bg-surface-card"
-                    onClick={() => setCoverageSheetOpen(true)}
-                  >
-                    <span className="flex min-w-0 items-center gap-8">
-                      <span className="shrink-0 text-18" aria-hidden="true">
-                        ⚠️
-                      </span>
-                      <span className="truncate text-14 font-semibold text-text-primary">
-                        {getAgentsNotInAnyRuleTitle(coverageIssues.length)}
-                      </span>
-                    </span>
-                    <span className="flex items-center gap-12">
-                      {coverageAvatarNames.length > 0 ? (
-                        <AvatarGroup names={coverageAvatarNames} max={3} size="xs" />
-                      ) : null}
-                      <ChevronRight size={16} className="text-icon-secondary" />
-                    </span>
-                  </Button>
-
                   <Card className="mt-16 overflow-hidden rounded-xl border-border-subtle">
                     <div className="overflow-x-auto">
                       <Table className="min-w-max">
@@ -3429,7 +3660,9 @@ export default function VersionThreePrototype() {
                           <TableRow className="hover:bg-surface-card">
                             <TableHead className="w-256 text-text-primary">Rules</TableHead>
                             <TableHead className="w-128 text-text-primary">Status</TableHead>
-                            <TableHead className="w-240 text-text-primary">Upcoming cycle</TableHead>
+                            <TableHead className="w-288 min-w-288 text-text-primary">
+                              <UpcomingCycleTableHeader />
+                            </TableHead>
                             <TableHead className="w-240 text-text-primary">Last cycle</TableHead>
                             <TableHead className="w-240 text-right text-text-primary">Actions</TableHead>
                           </TableRow>
@@ -3466,7 +3699,7 @@ export default function VersionThreePrototype() {
                                     </Badge>
                                   </TableCell>
 
-                                  <TableCell>
+                                  <TableCell className="w-288 min-w-288">
                                     <CycleSummaryCell
                                       cycle={upcomingCycle}
                                       actionLabel={upcomingCycle.percent < 100 ? "Resolve" : undefined}
@@ -3474,6 +3707,12 @@ export default function VersionThreePrototype() {
                                         upcomingCycle.percent < 100
                                           ? () => openRunHistory(rule, true)
                                           : undefined
+                                      }
+                                      isGenerating={
+                                        predictionFreshnessByCycleId[upcomingCycle.id]?.isRefreshing ?? false
+                                      }
+                                      onGenerate={() =>
+                                        handleRefreshUpcomingPrediction(rule.id, upcomingCycle.id)
                                       }
                                     />
                                   </TableCell>
@@ -3549,18 +3788,20 @@ export default function VersionThreePrototype() {
                   onSelectCycle={setSelectedCycleId}
                   onSelectTab={setActiveDetailTab}
                   onOpenRuleSetup={handleOpenRuleSetup}
+                  predictionFreshnessByCycleId={predictionFreshnessByCycleId}
+                  onRefreshUpcomingPrediction={handleRefreshUpcomingPrediction}
                 />
 
                 <Dialog open={isNotificationModalOpen} onOpenChange={setNotificationModalOpen}>
                   <DialogContent size="lg">
                     <DialogHeader className="border-none">Notifications</DialogHeader>
-                    <DialogBody className="space-y-24 py-24">
+                    <DialogBody className="space-y-28 py-24">
                       <p className="text-16 text-text-primary">
-                        Get notified before each assignment cycle runs, so you can resolve coverage
-                        gaps in advance.
+                        Get notified when upcoming cycles have predicted coverage gaps, so you can
+                        resolve issues before rules run.
                       </p>
 
-                      <div className="space-y-24">
+                      <div className="space-y-16">
                         <p className="text-14 font-semibold text-text-primary">Notify</p>
                         <Multiselect
                           options={cycleNotificationRecipients}
@@ -3569,99 +3810,28 @@ export default function VersionThreePrototype() {
                           placeholder="Search by name or role..."
                           searchPlaceholder="Search by name or role..."
                         />
-                        <div className="space-y-12">
-                          <p className="text-14 font-semibold text-text-primary">Send at</p>
-                          <div
-                            className={cn(
-                              "grid gap-12",
-                              notificationFrequency === "daily"
-                                ? "sm:grid-cols-2"
-                                : "sm:grid-cols-3"
-                            )}
-                          >
-                            <div className="space-y-8">
-                              <p className="text-12 font-medium text-text-secondary">Frequency</p>
-                              <Select
-                                value={notificationFrequency}
-                                onValueChange={(value) => setNotificationFrequency(value as Frequency)}
-                              >
-                                <SelectTrigger aria-label="Notification frequency" className="w-full">
-                                  <SelectValue placeholder="Select frequency" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {notificationFrequencyOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                      {option.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
+                      </div>
 
-                            {notificationFrequency === "weekly" ? (
-                              <div className="space-y-8">
-                                <p className="text-12 font-medium text-text-secondary">Day</p>
-                                <Select
-                                  value={notificationWeekday}
-                                  onValueChange={(value) =>
-                                    setNotificationWeekday(value as NotificationWeekday)
-                                  }
-                                >
-                                  <SelectTrigger aria-label="Notification day" className="w-full">
-                                    <SelectValue placeholder="Select day" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {notificationWeekdayOptions.map((option) => (
-                                      <SelectItem key={option.value} value={option.value}>
-                                        {option.label}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            ) : null}
-
-                            {notificationFrequency === "monthly" ? (
-                              <div className="space-y-8">
-                                <p className="text-12 font-medium text-text-secondary">Day</p>
-                                <Select
-                                  value={notificationMonthDay}
-                                  onValueChange={setNotificationMonthDay}
-                                >
-                                  <SelectTrigger aria-label="Notification day of month" className="w-full">
-                                    <SelectValue placeholder="Select day" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {notificationMonthlyDayOptions.map((option) => (
-                                      <SelectItem key={option.value} value={option.value}>
-                                        {option.label}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            ) : null}
-
-                            <div className="space-y-8">
-                              <p className="text-12 font-medium text-text-secondary">Time</p>
-                              <Select value={notificationTime} onValueChange={setNotificationTime}>
-                                <SelectTrigger aria-label="Notification time" className="w-full">
-                                  <SelectValue placeholder="Select time" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {notificationTimeOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                      {option.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
+                      <div className="space-y-16">
+                        <p className="text-14 font-semibold text-text-primary">
+                          Predict and notify before
+                        </p>
+                        <div className="grid gap-16 lg:grid-cols-3">
+                          {(["daily", "weekly", "monthly"] as Frequency[]).map((frequency) => (
+                            <NotificationLeadTimeField
+                              key={frequency}
+                              frequency={frequency}
+                              leadTime={notificationLeadTimes[frequency]}
+                              onValueChange={handleNotificationLeadTimeValueChange}
+                              onUnitChange={handleNotificationLeadTimeUnitChange}
+                            />
+                          ))}
                         </div>
+
                         <InlineAlert
                           variant="info"
-                          description={notificationScheduleSummary}
+                          title="Email notifications are sent when coverage gaps are predicted."
+                          description="Each rule with issues triggers its own email at the configured time before its run."
                         />
                       </div>
                     </DialogBody>
@@ -3673,34 +3843,6 @@ export default function VersionThreePrototype() {
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-
-                <Sheet open={isCoverageSheetOpen} onOpenChange={setCoverageSheetOpen}>
-                  <SheetContent size="md">
-                    <SheetHeader description="Agents currently outside all assignment rules.">
-                      {getAgentsNotInAnyRuleTitle(coverageIssues.length)}
-                    </SheetHeader>
-                    <SheetBody>
-                      {coverageIssues.length > 0 ? (
-                        <div className="divide-y divide-border-subtle">
-                          {coverageIssues.map((issue) => (
-                            <CoverageIssueCard
-                              key={issue.id}
-                              issue={issue}
-                              rules={ruleOptions}
-                              onAddToRule={handleAddCoverageAgentToRule}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <EmptyState
-                          className="min-h-240"
-                          icon={<SearchMd size={20} className="text-icon-secondary" />}
-                          title="No agents to review."
-                        />
-                      )}
-                    </SheetBody>
-                  </SheetContent>
-                </Sheet>
               </section>
             </div>
           </main>

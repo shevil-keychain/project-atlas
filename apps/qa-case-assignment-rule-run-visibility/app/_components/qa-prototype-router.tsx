@@ -6,6 +6,8 @@ import { PrototypeSwitcherOverlay } from "./prototype-switcher-overlay"
 import QaCaseAssignmentPrototype from "./prototypes/qa-case-assignment-prototype"
 import RuleRunVisibilityPrototype from "./prototypes/rule-run-visibility-prototype"
 import VersionThreePrototype from "./prototypes/version-three-prototype"
+import VersionFourPrototype from "./prototypes/version-four-prototype"
+import EmailPreviewPrototype from "./prototypes/email-preview-prototype"
 
 const prototypeOptions = [
   {
@@ -19,6 +21,14 @@ const prototypeOptions = [
   {
     value: "prototype-3",
     label: "Version 3",
+  },
+  {
+    value: "prototype-4",
+    label: "Dev handoff",
+  },
+  {
+    value: "email-preview",
+    label: "Email",
   },
 ] as const
 
@@ -84,6 +94,8 @@ export function QaPrototypeRouter({
       {activePrototype === "qa-case-assignment" && <QaCaseAssignmentPrototype />}
       {activePrototype === "rule-run-visibility" && <RuleRunVisibilityPrototype />}
       {activePrototype === "prototype-3" && <VersionThreePrototype />}
+      {activePrototype === "prototype-4" && <VersionFourPrototype />}
+      {activePrototype === "email-preview" && <EmailPreviewPrototype />}
     </>
   )
 }

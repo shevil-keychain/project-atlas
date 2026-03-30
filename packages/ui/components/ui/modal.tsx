@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
 const DialogClose = DialogPrimitive.Close
+const DialogTitle = DialogPrimitive.Title
 
 type ModalScrollContextValue = {
   isScrollable: boolean
@@ -159,6 +160,7 @@ export {
   Dialog,
   DialogTrigger,
   DialogClose,
+  DialogTitle,
   DialogContent,
   DialogHeader,
   DialogBody,
