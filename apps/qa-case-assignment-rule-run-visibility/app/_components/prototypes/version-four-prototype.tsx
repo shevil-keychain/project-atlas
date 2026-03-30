@@ -4767,7 +4767,7 @@ function RuleSetupHeader({
           <h2 className="text-20 font-bold tracking-tight text-text-primary">
             {ruleName || "New rule"}
           </h2>
-          <Badge color="orange" size="sm">Unsaved changes</Badge>
+          <Badge color="warning" size="sm">Unsaved changes</Badge>
         </div>
       </div>
       <div className="flex items-center gap-8">
