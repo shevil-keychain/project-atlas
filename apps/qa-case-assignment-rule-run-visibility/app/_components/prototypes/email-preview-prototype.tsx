@@ -50,8 +50,8 @@ export default function EmailPreviewPrototype() {
           {/* Content */}
           <div className="px-48 pb-56 pt-32">
             {/* Goal summary card — matches GoalHeroCard */}
-            <div className="rounded-lg border border-[#f5d0c0] bg-[#fff0ee] p-8">
-              <div className="flex flex-col items-center gap-12 rounded-lg p-16">
+            <div className="flex flex-col gap-4 rounded-lg border border-border-subtle p-8">
+              <div className="flex flex-col items-center gap-12 rounded-lg bg-[#fff0ee] p-16">
                 <p className="text-16 font-bold text-text-primary">
                   {emailGoal.dateRange}
                 </p>
@@ -61,6 +61,10 @@ export default function EmailPreviewPrototype() {
                 <p className="text-14 font-medium text-text-secondary">
                   ~{emailGoal.completed} of {emailGoal.expected} predicted
                 </p>
+              </div>
+              <div className="flex items-center justify-center gap-8 rounded-lg bg-[#fff0ee] px-16 py-8 text-12 text-text-primary">
+                <span className="font-bold">Fixed goal</span>
+                <span className="font-medium">2 conversations per agent per week</span>
               </div>
             </div>
 

@@ -184,6 +184,8 @@ type VersionThreeRule = {
   frequency: Frequency
   goalType: GoalType
   status: RuleStatus
+  createdBy: string
+  createdOn: string
   goals: RuleHistoryGoal[]
 }
 
@@ -239,6 +241,8 @@ type RuleConfig = {
   frequency: Frequency
   goalType: GoalType
   status: RuleStatus
+  createdBy: string
+  createdOn: string
   goals: GoalConfig[]
 }
 
@@ -666,6 +670,8 @@ const ruleConfigs: RuleConfig[] = [
     name: "Billing QA",
     assignmentType: "Agent evaluation",
     frequency: "weekly",
+    createdBy: "Erik Katzen",
+    createdOn: "Apr 28, 2025",
     goalType: "weekly",
     status: "Active",
     goals: [
@@ -791,6 +797,8 @@ const ruleConfigs: RuleConfig[] = [
     name: "Legacy Escalation QA",
     assignmentType: "Agent evaluation",
     frequency: "weekly",
+    createdBy: "Angas Reid",
+    createdOn: "Jun 23, 2022",
     goalType: "weekly",
     status: "Active",
     goals: [
@@ -912,6 +920,8 @@ const ruleConfigs: RuleConfig[] = [
     name: "Mortgage Queue",
     assignmentType: "Agent evaluation",
     frequency: "weekly",
+    createdBy: "Azemina Lucevic",
+    createdOn: "Sep 11, 2025",
     goalType: "weekly",
     status: "Active",
     goals: [
@@ -1037,6 +1047,8 @@ const ruleConfigs: RuleConfig[] = [
     name: "Customer Retention Watchlist",
     assignmentType: "Agent evaluation",
     frequency: "daily",
+    createdBy: "Christian Lunoe",
+    createdOn: "Nov 29, 2023",
     goalType: "daily",
     status: "Active",
     goals: [
@@ -1179,6 +1191,8 @@ const ruleConfigs: RuleConfig[] = [
     name: "Policy Renewal Audit",
     assignmentType: "Agent evaluation",
     frequency: "monthly",
+    createdBy: "Erik Katzen",
+    createdOn: "Jan 30, 2025",
     goalType: "monthly",
     status: "Active",
     goals: [
@@ -2512,6 +2526,8 @@ const versionThreeRules: VersionThreeRule[] = ruleConfigs.map((ruleConfig) => ({
   frequency: ruleConfig.frequency,
   goalType: ruleConfig.goalType,
   status: ruleConfig.status,
+  createdBy: ruleConfig.createdBy,
+  createdOn: ruleConfig.createdOn,
   goals: ruleConfig.goals.map((goalConfig) => buildRuleHistoryGoal(ruleConfig.id, goalConfig)),
 }))
 
@@ -2986,12 +3002,14 @@ function GoalHeroCard({
   showNotGenerated,
   freshness,
   onRefreshPrediction,
+  goalInfo,
 }: {
   goal: RuleHistoryGoal
   isUpcoming: boolean
   showNotGenerated: boolean
   freshness: PredictionFreshnessState | null
   onRefreshPrediction: () => void
+  goalInfo?: { label: string; description: string }
 }) {
   if (showNotGenerated) {
     return (
@@ -3037,7 +3055,7 @@ function GoalHeroCard({
 
   return (
     <Card className="border-border-subtle shadow-none">
-      <div className="p-8">
+      <div className="flex flex-col gap-4 p-8">
         <div
           className={cn(
             "flex flex-col items-center gap-16 overflow-hidden rounded-lg p-16",
@@ -3066,6 +3084,12 @@ function GoalHeroCard({
             ) : null}
           </div>
         </div>
+        {goalInfo && (
+          <div className={cn("flex items-center justify-center gap-8 rounded-lg px-16 py-8 text-12 text-text-primary", bannerBg)}>
+            <span className="font-bold">{goalInfo.label}</span>
+            <span className="font-medium">{goalInfo.description}</span>
+          </div>
+        )}
       </div>
     </Card>
   )
@@ -3258,7 +3282,7 @@ function generateRunDetailRows(goal: RuleHistoryGoal): RunDetailRow[] {
   if (parts.length < 2) {
     if (goal.isUpcoming) {
       if (!goal.hasPrediction) {
-        return [{
+    return [{
           id: "run-1",
           dateLabel: goal.listLabel,
           status: "not-run-yet",
@@ -3376,7 +3400,7 @@ function generateRunDetailRows(goal: RuleHistoryGoal): RunDetailRow[] {
           ? goal.completed - cumAssigned
           : Math.round((pct / 100) * goal.expected)
         cumAssigned += assigned
-        rows.push({
+      rows.push({
           id: `run-${i + 1}`,
           dateLabel: runDates[i]!,
           status: "predicted",
@@ -3411,8 +3435,8 @@ function generateRunDetailRows(goal: RuleHistoryGoal): RunDetailRow[] {
         goalTarget: goal.expected,
       })
     }
-    return rows
-  }
+  return rows
+}
 
   if (isAchieved && hasIssues) {
     const issueRunCount = Math.min(completedRuns - 1, 2)
@@ -3785,6 +3809,7 @@ function RunHistoryModal({
                   showNotGenerated={showSelectedGoalNotGeneratedState}
                   freshness={selectedGoalFreshness}
                   onRefreshPrediction={() => onRefreshUpcomingPrediction(rule.id, selectedGoal.id)}
+                  goalInfo={{ label: "Fixed goal", description: `2 conversations per agent per ${rule.goalType === "daily" ? "day" : rule.goalType === "weekly" ? "week" : "month"}` }}
                 />
               </div>
 
@@ -3796,7 +3821,7 @@ function RunHistoryModal({
                 ) : (
                   <RunDetailsPanel goal={selectedGoal} ruleId={rule.id} />
                 )}
-              </div>
+                                  </div>
             </div>
           </div>
         </DialogBody>
@@ -4173,7 +4198,7 @@ function NameAndTypeSection({
 }) {
   return (
     <FormSection title="Name and type">
-      <div className="space-y-8">
+    <div className="space-y-8">
         <FieldLabel>Rule name</FieldLabel>
         <Input
           placeholder="Enter rule name"
@@ -4677,13 +4702,13 @@ function PredictionsAndAlertsSection({
           />
           <Select value={form.predictionLeadUnit} onValueChange={(v) => onChange({ predictionLeadUnit: v })}>
             <SelectTrigger className="w-100">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
               <SelectItem value="hrs">hrs</SelectItem>
               <SelectItem value="days">days</SelectItem>
-            </SelectContent>
-          </Select>
+          </SelectContent>
+        </Select>
           <span className="text-14 text-text-secondary">before each goal</span>
         </div>
       </div>
@@ -5159,12 +5184,12 @@ export default function VersionFourPrototype() {
 
                   <Card className="mt-16 overflow-hidden rounded-xl border-border-subtle">
                     <div className="overflow-x-auto">
-                      <Table className="min-w-max">
+                      <Table className="w-full table-fixed" style={{ minWidth: 1400 }}>
                         <TableHeader className="bg-surface-card">
                           <TableRow className="hover:bg-surface-card">
                             <TableHead className="w-256 text-text-primary">Rules</TableHead>
                             <TableHead className="w-128 text-text-primary">Status</TableHead>
-                            <TableHead className="w-248 min-w-248 text-text-primary">
+                            <TableHead className="w-320 min-w-280 text-text-primary">
                               <div className="flex items-center gap-6">
                                 <span className="text-12 font-bold text-text-primary">Upcoming goal prediction</span>
                                 <SimpleTooltip
@@ -5182,7 +5207,7 @@ export default function VersionFourPrototype() {
                                 </SimpleTooltip>
                               </div>
                             </TableHead>
-                            <TableHead className="w-248 min-w-248 text-text-primary">
+                            <TableHead className="w-320 min-w-280 text-text-primary">
                               <div className="flex items-center gap-6">
                                 <span className="text-12 font-bold text-text-primary">Current goal</span>
                                 <SimpleTooltip
@@ -5200,7 +5225,9 @@ export default function VersionFourPrototype() {
                                 </SimpleTooltip>
                               </div>
                             </TableHead>
-                            <TableHead className="w-240 text-right text-text-primary">Actions</TableHead>
+                            <TableHead className="w-200 text-text-primary">Created by</TableHead>
+                            <TableHead className="w-160 text-text-primary">Created on</TableHead>
+                            <TableHead className="sticky right-0 w-240 border-l border-border-subtle bg-surface-card text-right text-text-primary">Actions</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -5239,14 +5266,14 @@ export default function VersionFourPrototype() {
                                     </Badge>
                                   </TableCell>
 
-                                  <TableCell className="w-248 min-w-248 p-0">
+                                  <TableCell className="w-320 min-w-280 p-0">
                                     <FigmaGoalCell
                                       goal={upcomingGoal}
                                       onClick={() => openRunHistory(rule, { goalId: upcomingGoal.id })}
                                     />
                                   </TableCell>
 
-                                  <TableCell className="w-248 min-w-248 p-0">
+                                  <TableCell className="w-320 min-w-280 p-0">
                                     <FigmaGoalCell
                                       goal={latestCompletedGoal}
                                       onClick={() => openRunHistory(rule, { goalId: latestCompletedGoal.id })}
@@ -5254,6 +5281,27 @@ export default function VersionFourPrototype() {
                                   </TableCell>
 
                                   <TableCell>
+                                    <div className="flex items-center gap-8">
+                                      <div
+                                        className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full text-10 font-semibold text-white"
+                                        style={{
+                                          backgroundColor:
+                                            rule.createdBy.startsWith("E") ? "#42a5f5"
+                                              : rule.createdBy.startsWith("C") ? "#66bb6a"
+                                              : "#ef5350",
+                                        }}
+                                      >
+                                        {rule.createdBy.split(" ").map((n) => n[0]).join("")}
+                                      </div>
+                                      <span className="text-14 text-text-primary">{rule.createdBy}</span>
+                                    </div>
+                                  </TableCell>
+
+                                  <TableCell>
+                                    <span className="text-14 text-text-primary">{rule.createdOn}</span>
+                                  </TableCell>
+
+                                  <TableCell className="sticky right-0 border-l border-border-subtle bg-white">
                                     <div className="flex items-center justify-end gap-4">
                                       <Button
                                         variant="secondary"
@@ -5297,7 +5345,7 @@ export default function VersionFourPrototype() {
                             })
                           ) : (
                             <TableRow>
-                              <TableCell colSpan={5} className="px-0 py-0">
+                              <TableCell colSpan={7} className="px-0 py-0">
                                 <EmptyState
                                   className="min-h-240"
                                   icon={<SearchMd size={20} className="text-icon-secondary" />}

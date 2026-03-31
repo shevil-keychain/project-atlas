@@ -8,6 +8,7 @@ import RuleRunVisibilityPrototype from "./prototypes/rule-run-visibility-prototy
 import VersionThreePrototype from "./prototypes/version-three-prototype"
 import VersionFourPrototype from "./prototypes/version-four-prototype"
 import EmailPreviewPrototype from "./prototypes/email-preview-prototype"
+import StatesPrototype from "./prototypes/states-prototype"
 
 const prototypeOptions = [
   {
@@ -29,6 +30,10 @@ const prototypeOptions = [
   {
     value: "email-preview",
     label: "Email",
+  },
+  {
+    value: "states",
+    label: "States",
   },
 ] as const
 
@@ -96,6 +101,7 @@ export function QaPrototypeRouter({
       {activePrototype === "prototype-3" && <VersionThreePrototype />}
       {activePrototype === "prototype-4" && <VersionFourPrototype />}
       {activePrototype === "email-preview" && <EmailPreviewPrototype />}
+      {activePrototype === "states" && <StatesPrototype />}
     </>
   )
 }

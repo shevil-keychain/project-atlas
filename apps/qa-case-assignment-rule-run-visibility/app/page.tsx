@@ -7,7 +7,9 @@ function getPrototypeFromValue(value: string | null) {
     value === "qa-case-assignment" ||
     value === "rule-run-visibility" ||
     value === "prototype-3" ||
-    value === "prototype-4"
+    value === "prototype-4" ||
+    value === "email-preview" ||
+    value === "states"
   ) {
     return value
   }
