@@ -2026,6 +2026,7 @@ export default function VersionTwo() {
   }
 
   const handleInsightsAction = (action: string) => {
+    if (!activeWorker) return
     const config = insightsWorkerConfig[activeWorker]
     if (!config) return
     createChatFromPrompt(`${action} for ${config.goalSubject}`)
@@ -2614,7 +2615,7 @@ export default function VersionTwo() {
                           </span>
                         ) : (
                           <img
-                            src={workerIconByLabel[activeWorker] ?? "/ai-worker-avatar.svg"}
+                            src={workerIconByLabel[activeWorker!] ?? "/ai-worker-avatar.svg"}
                             alt={`${activeWorker} icon`}
                             className={cn("h-48 w-48 object-contain", getWorkerWelcomeRevealClass("delay-0"))}
                           />
@@ -2622,7 +2623,7 @@ export default function VersionTwo() {
                         <div className={cn("flex flex-col items-center", getWorkerWelcomeRevealClass("delay-100"))}>
                           <p className="text-24 font-bold text-text-primary">{activeWorker}</p>
                           <p className="mx-auto mt-8 w-full max-w-360 break-words text-14 text-text-secondary">
-                            {workerSubtextByLabel[activeWorker]}
+                            {workerSubtextByLabel[activeWorker!]}
                           </p>
                         </div>
 
@@ -2655,7 +2656,7 @@ export default function VersionTwo() {
                             disabled={isAssistantResponding}
                           />
                         </div>
-                      ) : activeInputMode === "buttons" && insightsWorkerConfig[activeWorker] ? (
+                      ) : activeInputMode === "buttons" && activeWorker && insightsWorkerConfig[activeWorker] ? (
                         <div className="mx-auto w-full max-w-720">
                           <InsightsWorkerLanding
                             config={insightsWorkerConfig[activeWorker]}
