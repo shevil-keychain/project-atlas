@@ -32,7 +32,7 @@ packages/
     globals.css           # All design tokens (@theme)
 
 apps/
-  docs/                   # @level/docs — component browser & demo pages
+  level-ds-docs/          # @level/level-ds-docs — component browser & demo pages
   <prototype>/            # Each prototype is an independent Next.js app
 ```
 
@@ -42,7 +42,7 @@ apps/
 
 1. Copy the boilerplate:
 ```bash
-cp -r apps/docs apps/<prototype-name>
+cp -r apps/level-ds-docs apps/<prototype-name>
 ```
 
 2. Update `apps/<prototype-name>/package.json`:
@@ -87,7 +87,7 @@ pnpm install
 3. **Use `cn()` for conditional classes** — import from `@level/ui/lib/utils`.
 4. **Follow import conventions** — always import from `@level/ui/`.
 5. **Build incrementally** — layout shell first, then page header, then individual sections. Never scaffold an entire page in one pass.
-6. **Check demo pages** — each component has a demo at `apps/docs/app/[component-name]/page.tsx` with full examples.
+6. **Check demo pages** — each component has a demo at `apps/level-ds-docs/app/[component-name]/page.tsx` with full examples.
 
 ---
 
@@ -105,7 +105,7 @@ Only create new components when no existing one can be composed or extended. New
 
 ```bash
 pnpm dev          # Start all apps in parallel
-pnpm dev:docs     # Start docs app only
+pnpm dev:level-ds-docs  # Start the design system app only
 pnpm build        # Build all apps
 pnpm install      # Install all workspace dependencies
 ```

@@ -595,7 +595,7 @@ const settingsSections: SettingsSection[] = [
       { label: "Roles and Permissions" },
       { label: "Report Sharing" },
       { label: "Custom fields" },
-      { label: "QA Case Assignment", active: true },
+      { label: "QA case assignment", active: true },
       { label: "Notifications" },
       { label: "Audit Logs" },
       { label: "Business Week" },
@@ -3010,7 +3010,7 @@ export default function Page() {
 
               <section className="flex min-w-0 min-h-0 flex-1 flex-col overflow-hidden bg-surface-subtle p-16 lg:p-24">
                 <div className="space-y-8">
-                  <PageHeaderTitle size="2xl">QA Case Assignment</PageHeaderTitle>
+                  <PageHeaderTitle size="2xl">QA case assignment</PageHeaderTitle>
                   <PageHeaderDescription>
                     Manage interaction sampling and assignment automation rules for QA
                   </PageHeaderDescription>

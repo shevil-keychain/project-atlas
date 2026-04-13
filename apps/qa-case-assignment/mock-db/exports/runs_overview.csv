@@ -1,0 +1,208 @@
+week_id,week_label,week_state,mode,start_date,end_date,rule_run_id,rule_id,rule_name,rule_type,run_kind,status,expected_assignments,assigned_assignments,coverage_pct,ran_at,next_run_at,sampling_start_date,sampling_end_date
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,199,7,"Billing QA",agent_evaluation,predicted,at_risk,91,86,94.5,,"2026-03-04 15:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,200,8,"Card Disputes QA",agent_evaluation,predicted,on_track,63,63,100.0,,"2026-03-05 08:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,201,6,"Claims Exception Queue",agent_evaluation,predicted,on_track,84,84,100.0,,"2026-03-03 14:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,202,5,"Escalation Sweep - Weekend Priority",agent_evaluation,predicted,on_track,77,77,100.0,,"2026-03-02 13:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,203,1,"Legacy Escalation QA",agent_evaluation,predicted,on_track,84,84,100.0,,"2026-03-04 09:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,204,2,"Mortgage Queue",agent_evaluation,predicted,at_risk,91,84,92.3,,"2026-03-05 10:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,205,9,"Onboarding Calls QA",agent_evaluation,predicted,on_track,70,70,100.0,,"2026-03-06 09:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,206,3,"Renewals - TL Review Batch",agent_evaluation,predicted,on_track,63,63,100.0,,"2026-03-06 11:00:00",2026-02-23,2026-03-01
+23,"Mar 2-8",upcoming,predicted,2026-03-02,2026-03-08,207,4,"Savings Product - QA Rotation",agent_evaluation,predicted,on_track,70,70,100.0,,"2026-03-07 12:00:00",2026-02-23,2026-03-01
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,190,7,"Billing QA",agent_evaluation,actual,success,78,78,100.0,"2026-02-27 15:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,191,8,"Card Disputes QA",agent_evaluation,actual,success,85,85,100.0,"2026-02-23 16:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,192,6,"Claims Exception Queue",agent_evaluation,actual,partial,71,68,95.8,"2026-02-26 14:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,193,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,64,64,100.0,"2026-02-25 13:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,194,1,"Legacy Escalation QA",agent_evaluation,actual,success,71,71,100.0,"2026-02-26 09:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,195,2,"Mortgage Queue",agent_evaluation,actual,partial,78,70,89.7,"2026-02-27 10:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,196,9,"Onboarding Calls QA",agent_evaluation,actual,success,92,92,100.0,"2026-02-24 08:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,197,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,85,85,100.0,"2026-02-23 11:00:00",,2026-02-16,2026-02-22
+22,"Feb 23-Mar 1",in_progress,actual,2026-02-23,2026-03-01,198,4,"Savings Product - QA Rotation",agent_evaluation,actual,failed,92,0,0.0,"2026-02-24 12:00:00",,2026-02-16,2026-02-22
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,181,7,"Billing QA",agent_evaluation,actual,success,65,65,100.0,"2026-02-19 15:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,182,8,"Card Disputes QA",agent_evaluation,actual,success,72,72,100.0,"2026-02-20 16:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,183,6,"Claims Exception Queue",agent_evaluation,actual,success,58,58,100.0,"2026-02-18 14:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,184,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,86,86,100.0,"2026-02-17 13:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,185,1,"Legacy Escalation QA",agent_evaluation,actual,success,58,58,100.0,"2026-02-18 09:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,186,2,"Mortgage Queue",agent_evaluation,actual,success,65,65,100.0,"2026-02-19 10:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,187,9,"Onboarding Calls QA",agent_evaluation,actual,success,79,79,100.0,"2026-02-16 08:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,188,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,72,72,100.0,"2026-02-20 11:00:00",,2026-02-09,2026-02-15
+21,"Feb 16-22",past,actual,2026-02-16,2026-02-22,189,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,79,79,100.0,"2026-02-16 12:00:00",,2026-02-09,2026-02-15
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,172,7,"Billing QA",agent_evaluation,actual,success,87,87,100.0,"2026-02-11 15:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,173,8,"Card Disputes QA",agent_evaluation,actual,partial,59,56,94.9,"2026-02-12 16:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,174,6,"Claims Exception Queue",agent_evaluation,actual,failed,80,0,0.0,"2026-02-10 14:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,175,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,73,73,100.0,"2026-02-09 13:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,176,1,"Legacy Escalation QA",agent_evaluation,actual,success,80,80,100.0,"2026-02-10 09:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,177,2,"Mortgage Queue",agent_evaluation,actual,success,87,87,100.0,"2026-02-11 10:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,178,9,"Onboarding Calls QA",agent_evaluation,actual,success,66,66,100.0,"2026-02-13 08:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,179,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,59,59,100.0,"2026-02-12 11:00:00",,2026-02-02,2026-02-08
+20,"Feb 9-15",past,actual,2026-02-09,2026-02-15,180,4,"Savings Product - QA Rotation",agent_evaluation,actual,partial,66,58,87.9,"2026-02-13 12:00:00",,2026-02-02,2026-02-08
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,163,7,"Billing QA",agent_evaluation,actual,success,74,74,100.0,"2026-02-03 15:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,164,8,"Card Disputes QA",agent_evaluation,actual,success,81,81,100.0,"2026-02-04 16:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,165,6,"Claims Exception Queue",agent_evaluation,actual,success,67,67,100.0,"2026-02-02 14:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,166,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,60,60,100.0,"2026-02-06 13:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,167,1,"Legacy Escalation QA",agent_evaluation,actual,success,67,67,100.0,"2026-02-02 09:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,168,2,"Mortgage Queue",agent_evaluation,actual,success,74,74,100.0,"2026-02-03 10:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,169,9,"Onboarding Calls QA",agent_evaluation,actual,success,88,88,100.0,"2026-02-05 08:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,170,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,81,81,100.0,"2026-02-04 11:00:00",,2026-01-26,2026-02-01
+19,"Feb 2-8",past,actual,2026-02-02,2026-02-08,171,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,88,88,100.0,"2026-02-05 12:00:00",,2026-01-26,2026-02-01
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,154,7,"Billing QA",agent_evaluation,actual,success,61,61,100.0,"2026-01-26 15:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,155,8,"Card Disputes QA",agent_evaluation,actual,failed,68,0,0.0,"2026-01-27 16:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,156,6,"Claims Exception Queue",agent_evaluation,actual,partial,89,81,91.0,"2026-01-30 14:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,157,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,82,82,100.0,"2026-01-29 13:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,158,1,"Legacy Escalation QA",agent_evaluation,actual,success,89,89,100.0,"2026-01-30 09:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,159,2,"Mortgage Queue",agent_evaluation,actual,partial,61,57,93.4,"2026-01-26 10:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,160,9,"Onboarding Calls QA",agent_evaluation,actual,success,75,75,100.0,"2026-01-28 08:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,161,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,68,68,100.0,"2026-01-27 11:00:00",,2026-01-19,2026-01-25
+18,"Jan 26-Feb 1",past,actual,2026-01-26,2026-02-01,162,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,75,75,100.0,"2026-01-28 12:00:00",,2026-01-19,2026-01-25
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,145,7,"Billing QA",agent_evaluation,actual,success,83,83,100.0,"2026-01-23 15:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,146,8,"Card Disputes QA",agent_evaluation,actual,success,90,90,100.0,"2026-01-19 16:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,147,6,"Claims Exception Queue",agent_evaluation,actual,success,76,76,100.0,"2026-01-22 14:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,148,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,69,69,100.0,"2026-01-21 13:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,149,1,"Legacy Escalation QA",agent_evaluation,actual,success,76,76,100.0,"2026-01-22 09:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,150,2,"Mortgage Queue",agent_evaluation,actual,success,83,83,100.0,"2026-01-23 10:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,151,9,"Onboarding Calls QA",agent_evaluation,actual,success,62,62,100.0,"2026-01-20 08:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,152,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,90,90,100.0,"2026-01-19 11:00:00",,2026-01-12,2026-01-18
+17,"Jan 19-25",past,actual,2026-01-19,2026-01-25,153,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,62,62,100.0,"2026-01-20 12:00:00",,2026-01-12,2026-01-18
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,136,7,"Billing QA",agent_evaluation,actual,success,70,70,100.0,"2026-01-15 15:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,137,8,"Card Disputes QA",agent_evaluation,actual,partial,77,69,89.6,"2026-01-16 16:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,138,6,"Claims Exception Queue",agent_evaluation,actual,success,63,63,100.0,"2026-01-14 14:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,139,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,91,91,100.0,"2026-01-13 13:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,140,1,"Legacy Escalation QA",agent_evaluation,actual,success,63,63,100.0,"2026-01-14 09:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,141,2,"Mortgage Queue",agent_evaluation,actual,success,70,70,100.0,"2026-01-15 10:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,142,9,"Onboarding Calls QA",agent_evaluation,actual,success,84,84,100.0,"2026-01-12 08:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,143,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,77,77,100.0,"2026-01-16 11:00:00",,2026-01-05,2026-01-11
+16,"Jan 12-18",past,actual,2026-01-12,2026-01-18,144,4,"Savings Product - QA Rotation",agent_evaluation,actual,partial,84,80,95.2,"2026-01-12 12:00:00",,2026-01-05,2026-01-11
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,127,7,"Billing QA",agent_evaluation,actual,success,92,92,100.0,"2026-01-07 15:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,128,8,"Card Disputes QA",agent_evaluation,actual,success,64,64,100.0,"2026-01-08 16:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,129,6,"Claims Exception Queue",agent_evaluation,actual,success,85,85,100.0,"2026-01-06 14:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,130,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,78,78,100.0,"2026-01-05 13:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,131,1,"Legacy Escalation QA",agent_evaluation,actual,success,85,85,100.0,"2026-01-06 09:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,132,2,"Mortgage Queue",agent_evaluation,actual,success,92,92,100.0,"2026-01-07 10:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,133,9,"Onboarding Calls QA",agent_evaluation,actual,success,71,71,100.0,"2026-01-09 08:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,134,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,64,64,100.0,"2026-01-08 11:00:00",,2025-12-29,2026-01-04
+15,"Jan 5-11",past,actual,2026-01-05,2026-01-11,135,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,71,71,100.0,"2026-01-09 12:00:00",,2025-12-29,2026-01-04
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,118,7,"Billing QA",agent_evaluation,actual,success,79,79,100.0,"2025-12-30 15:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,119,8,"Card Disputes QA",agent_evaluation,actual,success,86,86,100.0,"2025-12-31 16:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,120,6,"Claims Exception Queue",agent_evaluation,actual,partial,72,68,94.4,"2025-12-29 14:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,121,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,65,65,100.0,"2026-01-02 13:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,122,1,"Legacy Escalation QA",agent_evaluation,actual,success,72,72,100.0,"2025-12-29 09:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,123,2,"Mortgage Queue",agent_evaluation,actual,partial,79,70,88.6,"2025-12-30 10:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,124,9,"Onboarding Calls QA",agent_evaluation,actual,success,58,58,100.0,"2026-01-01 08:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,125,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,86,86,100.0,"2025-12-31 11:00:00",,2025-12-22,2025-12-28
+14,"Dec 29-Jan 4",past,actual,2025-12-29,2026-01-04,126,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,58,58,100.0,"2026-01-01 12:00:00",,2025-12-22,2025-12-28
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,109,7,"Billing QA",agent_evaluation,actual,success,66,66,100.0,"2025-12-22 15:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,110,8,"Card Disputes QA",agent_evaluation,actual,success,73,73,100.0,"2025-12-23 16:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,111,6,"Claims Exception Queue",agent_evaluation,actual,success,59,59,100.0,"2025-12-26 14:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,112,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,87,87,100.0,"2025-12-25 13:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,113,1,"Legacy Escalation QA",agent_evaluation,actual,success,59,59,100.0,"2025-12-26 09:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,114,2,"Mortgage Queue",agent_evaluation,actual,success,66,66,100.0,"2025-12-22 10:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,115,9,"Onboarding Calls QA",agent_evaluation,actual,success,80,80,100.0,"2025-12-24 08:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,116,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,73,73,100.0,"2025-12-23 11:00:00",,2025-12-15,2025-12-21
+13,"Dec 22-28",past,actual,2025-12-22,2025-12-28,117,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,80,80,100.0,"2025-12-24 12:00:00",,2025-12-15,2025-12-21
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,100,7,"Billing QA",agent_evaluation,actual,success,88,88,100.0,"2025-12-19 15:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,101,8,"Card Disputes QA",agent_evaluation,actual,partial,60,56,93.3,"2025-12-15 16:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,102,6,"Claims Exception Queue",agent_evaluation,actual,success,81,81,100.0,"2025-12-18 14:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,103,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,74,74,100.0,"2025-12-17 13:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,104,1,"Legacy Escalation QA",agent_evaluation,actual,failed,81,0,0.0,"2025-12-18 09:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,105,2,"Mortgage Queue",agent_evaluation,actual,success,88,88,100.0,"2025-12-19 10:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,106,9,"Onboarding Calls QA",agent_evaluation,actual,success,67,67,100.0,"2025-12-16 08:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,107,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,60,60,100.0,"2025-12-15 11:00:00",,2025-12-08,2025-12-14
+12,"Dec 15-21",past,actual,2025-12-15,2025-12-21,108,4,"Savings Product - QA Rotation",agent_evaluation,actual,partial,67,58,86.6,"2025-12-16 12:00:00",,2025-12-08,2025-12-14
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,91,7,"Billing QA",agent_evaluation,actual,success,75,75,100.0,"2025-12-11 15:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,92,8,"Card Disputes QA",agent_evaluation,actual,success,82,82,100.0,"2025-12-12 16:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,93,6,"Claims Exception Queue",agent_evaluation,actual,success,68,68,100.0,"2025-12-10 14:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,94,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,61,61,100.0,"2025-12-09 13:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,95,1,"Legacy Escalation QA",agent_evaluation,actual,success,68,68,100.0,"2025-12-10 09:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,96,2,"Mortgage Queue",agent_evaluation,actual,success,75,75,100.0,"2025-12-11 10:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,97,9,"Onboarding Calls QA",agent_evaluation,actual,success,89,89,100.0,"2025-12-08 08:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,98,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,82,82,100.0,"2025-12-12 11:00:00",,2025-12-01,2025-12-07
+11,"Dec 8-14",past,actual,2025-12-08,2025-12-14,99,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,89,89,100.0,"2025-12-08 12:00:00",,2025-12-01,2025-12-07
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,82,7,"Billing QA",agent_evaluation,actual,success,62,62,100.0,"2025-12-03 15:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,83,8,"Card Disputes QA",agent_evaluation,actual,success,69,69,100.0,"2025-12-04 16:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,84,6,"Claims Exception Queue",agent_evaluation,actual,partial,90,81,90.0,"2025-12-02 14:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,85,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,83,83,100.0,"2025-12-01 13:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,86,1,"Legacy Escalation QA",agent_evaluation,actual,success,90,90,100.0,"2025-12-02 09:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,87,2,"Mortgage Queue",agent_evaluation,actual,partial,62,57,91.9,"2025-12-03 10:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,88,9,"Onboarding Calls QA",agent_evaluation,actual,success,76,76,100.0,"2025-12-05 08:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,89,3,"Renewals - TL Review Batch",agent_evaluation,actual,failed,69,0,0.0,"2025-12-04 11:00:00",,2025-11-24,2025-11-30
+10,"Dec 1-7",past,actual,2025-12-01,2025-12-07,90,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,76,76,100.0,"2025-12-05 12:00:00",,2025-11-24,2025-11-30
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,73,7,"Billing QA",agent_evaluation,actual,success,84,84,100.0,"2025-11-25 15:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,74,8,"Card Disputes QA",agent_evaluation,actual,success,91,91,100.0,"2025-11-26 16:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,75,6,"Claims Exception Queue",agent_evaluation,actual,success,77,77,100.0,"2025-11-24 14:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,76,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,70,70,100.0,"2025-11-28 13:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,77,1,"Legacy Escalation QA",agent_evaluation,actual,success,77,77,100.0,"2025-11-24 09:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,78,2,"Mortgage Queue",agent_evaluation,actual,success,84,84,100.0,"2025-11-25 10:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,79,9,"Onboarding Calls QA",agent_evaluation,actual,success,63,63,100.0,"2025-11-27 08:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,80,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,91,91,100.0,"2025-11-26 11:00:00",,2025-11-17,2025-11-23
+9,"Nov 24-30",past,actual,2025-11-24,2025-11-30,81,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,63,63,100.0,"2025-11-27 12:00:00",,2025-11-17,2025-11-23
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,64,7,"Billing QA",agent_evaluation,actual,success,71,71,100.0,"2025-11-17 15:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,65,8,"Card Disputes QA",agent_evaluation,actual,partial,78,69,88.5,"2025-11-18 16:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,66,6,"Claims Exception Queue",agent_evaluation,actual,success,64,64,100.0,"2025-11-21 14:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,67,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,failed,92,0,0.0,"2025-11-20 13:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,68,1,"Legacy Escalation QA",agent_evaluation,actual,success,64,64,100.0,"2025-11-21 09:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,69,2,"Mortgage Queue",agent_evaluation,actual,success,71,71,100.0,"2025-11-17 10:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,70,9,"Onboarding Calls QA",agent_evaluation,actual,success,85,85,100.0,"2025-11-19 08:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,71,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,78,78,100.0,"2025-11-18 11:00:00",,2025-11-10,2025-11-16
+8,"Nov 17-23",past,actual,2025-11-17,2025-11-23,72,4,"Savings Product - QA Rotation",agent_evaluation,actual,partial,85,80,94.1,"2025-11-19 12:00:00",,2025-11-10,2025-11-16
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,55,7,"Billing QA",agent_evaluation,actual,success,58,58,100.0,"2025-11-14 15:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,56,8,"Card Disputes QA",agent_evaluation,actual,success,65,65,100.0,"2025-11-10 16:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,57,6,"Claims Exception Queue",agent_evaluation,actual,success,86,86,100.0,"2025-11-13 14:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,58,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,79,79,100.0,"2025-11-12 13:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,59,1,"Legacy Escalation QA",agent_evaluation,actual,success,86,86,100.0,"2025-11-13 09:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,60,2,"Mortgage Queue",agent_evaluation,actual,success,58,58,100.0,"2025-11-14 10:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,61,9,"Onboarding Calls QA",agent_evaluation,actual,success,72,72,100.0,"2025-11-11 08:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,62,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,65,65,100.0,"2025-11-10 11:00:00",,2025-11-03,2025-11-09
+7,"Nov 10-16",past,actual,2025-11-10,2025-11-16,63,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,72,72,100.0,"2025-11-11 12:00:00",,2025-11-03,2025-11-09
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,46,7,"Billing QA",agent_evaluation,actual,failed,80,0,0.0,"2025-11-06 15:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,47,8,"Card Disputes QA",agent_evaluation,actual,success,87,87,100.0,"2025-11-07 16:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,48,6,"Claims Exception Queue",agent_evaluation,actual,partial,73,68,93.2,"2025-11-05 14:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,49,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,66,66,100.0,"2025-11-04 13:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,50,1,"Legacy Escalation QA",agent_evaluation,actual,success,73,73,100.0,"2025-11-05 09:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,51,2,"Mortgage Queue",agent_evaluation,actual,partial,80,70,87.5,"2025-11-06 10:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,52,9,"Onboarding Calls QA",agent_evaluation,actual,success,59,59,100.0,"2025-11-03 08:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,53,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,87,87,100.0,"2025-11-07 11:00:00",,2025-10-27,2025-11-02
+6,"Nov 3-9",past,actual,2025-11-03,2025-11-09,54,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,59,59,100.0,"2025-11-03 12:00:00",,2025-10-27,2025-11-02
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,37,7,"Billing QA",agent_evaluation,actual,success,67,67,100.0,"2025-10-29 15:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,38,8,"Card Disputes QA",agent_evaluation,actual,success,74,74,100.0,"2025-10-30 16:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,39,6,"Claims Exception Queue",agent_evaluation,actual,success,60,60,100.0,"2025-10-28 14:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,40,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,88,88,100.0,"2025-10-27 13:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,41,1,"Legacy Escalation QA",agent_evaluation,actual,success,60,60,100.0,"2025-10-28 09:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,42,2,"Mortgage Queue",agent_evaluation,actual,success,67,67,100.0,"2025-10-29 10:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,43,9,"Onboarding Calls QA",agent_evaluation,actual,success,81,81,100.0,"2025-10-31 08:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,44,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,74,74,100.0,"2025-10-30 11:00:00",,2025-10-20,2025-10-26
+5,"Oct 27-Nov 2",past,actual,2025-10-27,2025-11-02,45,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,81,81,100.0,"2025-10-31 12:00:00",,2025-10-20,2025-10-26
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,28,7,"Billing QA",agent_evaluation,actual,success,89,89,100.0,"2025-10-21 15:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,29,8,"Card Disputes QA",agent_evaluation,actual,partial,61,56,91.8,"2025-10-22 16:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,30,6,"Claims Exception Queue",agent_evaluation,actual,success,82,82,100.0,"2025-10-20 14:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,31,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,75,75,100.0,"2025-10-24 13:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,32,1,"Legacy Escalation QA",agent_evaluation,actual,success,82,82,100.0,"2025-10-20 09:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,33,2,"Mortgage Queue",agent_evaluation,actual,success,89,89,100.0,"2025-10-21 10:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,34,9,"Onboarding Calls QA",agent_evaluation,actual,failed,68,0,0.0,"2025-10-23 08:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,35,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,61,61,100.0,"2025-10-22 11:00:00",,2025-10-13,2025-10-19
+4,"Oct 20-26",past,actual,2025-10-20,2025-10-26,36,4,"Savings Product - QA Rotation",agent_evaluation,actual,partial,68,58,85.3,"2025-10-23 12:00:00",,2025-10-13,2025-10-19
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,19,7,"Billing QA",agent_evaluation,actual,success,76,76,100.0,"2025-10-13 15:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,20,8,"Card Disputes QA",agent_evaluation,actual,success,83,83,100.0,"2025-10-14 16:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,21,6,"Claims Exception Queue",agent_evaluation,actual,success,69,69,100.0,"2025-10-17 14:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,22,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,62,62,100.0,"2025-10-16 13:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,23,1,"Legacy Escalation QA",agent_evaluation,actual,success,69,69,100.0,"2025-10-17 09:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,24,2,"Mortgage Queue",agent_evaluation,actual,success,76,76,100.0,"2025-10-13 10:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,25,9,"Onboarding Calls QA",agent_evaluation,actual,success,90,90,100.0,"2025-10-15 08:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,26,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,83,83,100.0,"2025-10-14 11:00:00",,2025-10-06,2025-10-12
+3,"Oct 13-19",past,actual,2025-10-13,2025-10-19,27,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,90,90,100.0,"2025-10-15 12:00:00",,2025-10-06,2025-10-12
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,10,7,"Billing QA",agent_evaluation,actual,success,63,63,100.0,"2025-10-10 15:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,11,8,"Card Disputes QA",agent_evaluation,actual,success,70,70,100.0,"2025-10-06 16:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,12,6,"Claims Exception Queue",agent_evaluation,actual,partial,91,81,89.0,"2025-10-09 14:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,13,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,84,84,100.0,"2025-10-08 13:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,14,1,"Legacy Escalation QA",agent_evaluation,actual,success,91,91,100.0,"2025-10-09 09:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,15,2,"Mortgage Queue",agent_evaluation,actual,partial,63,57,90.5,"2025-10-10 10:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,16,9,"Onboarding Calls QA",agent_evaluation,actual,success,77,77,100.0,"2025-10-07 08:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,17,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,70,70,100.0,"2025-10-06 11:00:00",,2025-09-29,2025-10-05
+2,"Oct 6-12",past,actual,2025-10-06,2025-10-12,18,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,77,77,100.0,"2025-10-07 12:00:00",,2025-09-29,2025-10-05
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,1,7,"Billing QA",agent_evaluation,actual,success,85,85,100.0,"2025-10-02 15:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,2,8,"Card Disputes QA",agent_evaluation,actual,success,92,92,100.0,"2025-10-03 16:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,3,6,"Claims Exception Queue",agent_evaluation,actual,success,78,78,100.0,"2025-10-01 14:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,4,5,"Escalation Sweep - Weekend Priority",agent_evaluation,actual,success,71,71,100.0,"2025-09-30 13:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,5,1,"Legacy Escalation QA",agent_evaluation,actual,success,78,78,100.0,"2025-10-01 09:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,6,2,"Mortgage Queue",agent_evaluation,actual,success,85,85,100.0,"2025-10-02 10:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,7,9,"Onboarding Calls QA",agent_evaluation,actual,success,64,64,100.0,"2025-09-29 08:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,8,3,"Renewals - TL Review Batch",agent_evaluation,actual,success,92,92,100.0,"2025-10-03 11:00:00",,2025-09-22,2025-09-28
+1,"Sep 29-Oct 5",past,actual,2025-09-29,2025-10-05,9,4,"Savings Product - QA Rotation",agent_evaluation,actual,success,64,64,100.0,"2025-09-29 12:00:00",,2025-09-22,2025-09-28

@@ -1,0 +1,36 @@
+---
+description: Consistency rules for QA case assignment mock data generation and UI exports.
+globs:
+alwaysApply: false
+---
+
+# QA case assignment mock data consistency rules
+
+Use these rules whenever updating `apps/qa-case-assignment/mock-db/seed.sql` or `apps/qa-case-assignment/mock-db/scripts/export-activity-data.mjs`.
+
+## Two distinct counts
+
+The data layer exports two separate agent-coverage numbers per week:
+
+- **`agentsNotInAnyRuleCount`** — agents with `AGENT_NOT_IN_ANY_RULE` in the DB. Shown on the "agents not added to any rule" card and its sidesheet.
+- **`agentsWithoutAssignment`** — total uncovered agents = `agentsNotInAnyRuleCount` + deduped rule-level failures. Dedup uses differentiated factors: 60% for partial-rule failures (agents may not be covered elsewhere) and 85% for failed-rule expected assignments (a small fraction may be covered by other overlapping rules). Used for the coverage metric card.
+
+The "agents not added to any rule" card and sidesheet must ONLY reflect `agentsNotInAnyRuleCount`, never the full `agentsWithoutAssignment`.
+
+## Rules
+
+1. Upcoming week must show **10 agents** not on track for coverage.
+2. The top-level agent coverage metric must use `agentsWithoutAssignment` (the combined total).
+3. The "agents not added to any rule" card must use `agentsNotInAnyRuleCount` (the subset).
+4. For each rule row, numeric counts in rule-row tags must match the number of "Agents not covered" rows in that rule side sheet.
+5. Agent and evaluator tabs in a rule side sheet must stay consistent:
+   - no agent issues => no evaluator issues
+   - agent issues present => evaluator issues present
+6. Agent assignment denominators must be **2** (not 1) in side-sheet rows.
+7. Evaluator issue rows (time off / workload limit reached) must not display assigned workload above available evaluator capacity.
+8. If a week-level alert says all agents are covered (`agentsWithoutAssignment = 0`), every rule row in that week must be green (`success` / 100%).
+9. `AGENT_NOT_IN_ANY_RULE` counts in the seed SQL must stay moderate (4-8) for weeks with failed rules, not inflated to match the total uncovered count.
+10. The "agents not added to any rule" sidesheet must show ONLY `not_in_rule` issue types — no other issue types (evaluator capacity, matching conversations, rule execution failed).
+11. Claims Exception Queue (rule_id=6) must never have a full execution failure (`status = failed`). It can be partial or success only. This prevents weeks from having too many failed rules.
+
+When these constraints conflict with previous mock formulas, prioritize these consistency rules.

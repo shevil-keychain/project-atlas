@@ -1,21 +1,21 @@
-import type { Metadata } from "next"
-import { Manrope } from "next/font/google"
-import "@level/ui/globals.css"
+import type { Metadata } from "next";
+import { Manrope } from "next/font/google";
+import "@level/ui/globals.css";
 
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
-})
+});
 
 export const metadata: Metadata = {
-  title: "QA case assignment",
-  description: "QA case assignment prototype",
-}
+  title: "Test Accuracy Improvement",
+  description: "AutoQA accuracy improvement prototype",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -23,5 +23,5 @@ export default function RootLayout({
         {children}
       </body>
     </html>
-  )
+  );
 }

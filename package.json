@@ -7,8 +7,8 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
-    "dev:docs": "turbo dev --filter=@level/docs",
-    "dev:ai-workers-codex-crazy": "turbo dev --filter=@level/ai-workers-codex-crazy",
+    "dev:level-ds-docs": "turbo dev --filter=@level/level-ds-docs",
+    "dev:ai-worker": "turbo dev --filter=@level/ai-worker",
     "dev:qa-case-assignment": "turbo dev --filter=@level/qa-case-assignment",
     "dev:qa-case-assignment-rule-run-visibility": "turbo dev --filter=@level/qa-case-assignment-rule-run-visibility",
     "dev:multiple-instascore-evaluations": "turbo dev --filter=@level/multiple-instascore-evaluations"

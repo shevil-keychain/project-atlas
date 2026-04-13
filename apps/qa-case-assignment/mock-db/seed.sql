@@ -31,13 +31,16 @@ INSERT INTO teams (team_id, team_name) VALUES
 WITH RECURSIVE nums(n) AS (
   SELECT 1
   UNION ALL
-  SELECT n + 1 FROM nums WHERE n < 200
+  SELECT n + 1 FROM nums WHERE n < 240
 )
 INSERT INTO agents (agent_id, agent_name, team_id, is_active)
 SELECT
   n,
   printf('Agent %03d', n),
-  ((n - 1) / 20) + 1,
+  CASE
+    WHEN n <= 180 THEN ((n - 1) / 20) + 1
+    ELSE 10
+  END,
   1
 FROM nums;
 
@@ -282,7 +285,29 @@ INSERT INTO issue_catalog (
     1
   );
 
-WITH run_base AS (
+WITH weekly_base_uncovered_targets AS (
+  SELECT
+    ws.week_id,
+    ws.week_state,
+    CASE
+      WHEN ws.week_state = 'upcoming' THEN 10
+      ELSE
+        CASE ((ws.week_id - 1) % 10)
+          WHEN 0 THEN 0
+          WHEN 1 THEN 3
+          WHEN 2 THEN 0
+          WHEN 3 THEN 4
+          WHEN 4 THEN 0
+          WHEN 5 THEN 6
+          WHEN 6 THEN 0
+          WHEN 7 THEN 3
+          WHEN 8 THEN 0
+          ELSE 8
+        END
+    END AS base_uncovered_agents_target
+  FROM week_snapshots ws
+),
+run_base AS (
   SELECT
     w.week_id,
     r.rule_id,
@@ -296,15 +321,17 @@ WITH run_base AS (
           WHEN ((w.week_id + r.rule_id) % 5) = 0 THEN (3 + ((w.week_id + r.rule_id) % 7))
           ELSE 0
         END
+      WHEN wut.base_uncovered_agents_target = 0 THEN 0
       ELSE
         CASE
-          WHEN ((w.week_id + r.rule_id) % 13) = 0 THEN (58 + ((w.week_id * 13 + r.rule_id * 7) % 35))
+          WHEN ((w.week_id + r.rule_id) % 13) = 0 AND r.rule_id <> 6 THEN (58 + ((w.week_id * 13 + r.rule_id * 7) % 35))
           WHEN ((w.week_id + r.rule_id) % 4) = 0 THEN (2 + ((w.week_id + r.rule_id) % 9))
           ELSE 0
         END
     END AS missed_assignments
   FROM week_snapshots w
   CROSS JOIN rules r
+  JOIN weekly_base_uncovered_targets wut ON wut.week_id = w.week_id
 )
 INSERT INTO rule_runs (
   week_id,
@@ -552,7 +579,14 @@ WITH team_10_agents AS (
   FROM agents a
   WHERE a.team_id = 10
 ),
-weekly_uncovered_targets AS (
+weekly_failed_rules AS (
+  SELECT
+    rr.week_id,
+    SUM(CASE WHEN rr.status = 'failed' THEN 1 ELSE 0 END) AS failed_rule_count
+  FROM rule_runs rr
+  GROUP BY rr.week_id
+),
+weekly_base_uncovered_targets AS (
   SELECT
     ws.week_id,
     ws.week_state,
@@ -573,6 +607,18 @@ weekly_uncovered_targets AS (
         END
     END AS uncovered_agents_target
   FROM week_snapshots ws
+),
+weekly_uncovered_targets AS (
+  SELECT
+    wbut.week_id,
+    wbut.week_state,
+    CASE
+      WHEN wbut.week_state = 'upcoming' THEN wbut.uncovered_agents_target
+      WHEN COALESCE(wfr.failed_rule_count, 0) > 0 THEN (4 + ((wbut.week_id + wfr.failed_rule_count) % 5))
+      ELSE wbut.uncovered_agents_target
+    END AS uncovered_agents_target
+  FROM weekly_base_uncovered_targets wbut
+  LEFT JOIN weekly_failed_rules wfr ON wfr.week_id = wbut.week_id
 )
 INSERT INTO agent_coverage_detail (
   week_id,

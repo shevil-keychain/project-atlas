@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { Manrope } from "next/font/google"
 import "@level/ui/globals.css"
+import "streamdown/styles.css"
+import "katex/dist/katex.min.css"
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -8,8 +10,8 @@ const manrope = Manrope({
 })
 
 export const metadata: Metadata = {
-  title: "QA case assignment",
-  description: "QA case assignment prototype",
+  title: "AI worker",
+  description: "Prototype workspace for orchestrating AI workers",
 }
 
 export default function RootLayout({

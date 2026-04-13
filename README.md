@@ -14,7 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) to browse the component demo
 ### Creating a new prototype
 
 ```bash
-cp -r apps/docs apps/my-prototype
+cp -r apps/level-ds-docs apps/my-prototype
 ```
 
 Then update `apps/my-prototype/package.json` (change the name and port), run `pnpm install`, and start building. Your prototype automatically uses every component and token from `@level/ui`.
@@ -35,7 +35,7 @@ packages/
     globals.css           # All design tokens defined here via @theme
 
 apps/
-  docs/                   # Component browser & demo pages
+  level-ds-docs/          # Component browser & demo pages
   <prototype>/            # Each prototype is an independent Next.js app
 ```
 
@@ -51,3 +51,12 @@ apps/
 - [class-variance-authority](https://cva.style/) — Type-safe component variants
 - [Lucide React](https://lucide.dev/) — Icon library
 - [Manrope](https://fonts.google.com/specimen/Manrope) — Primary typeface
+
+## Vercel deployments
+
+Each app in `apps/*` should be connected to its own Vercel project.
+
+- Set the Vercel project `Root Directory` to the app folder, for example `apps/level-ds-docs` or `apps/multiple-instascore-evaluations`.
+- Leave the framework preset as `Next.js`.
+- Do not keep a repo-level `vercel.json` that hardcodes one app's `buildCommand` or `outputDirectory`, because that causes unrelated projects to deploy the same app.
+- If an app imports workspace packages outside its root, keep `Include source files outside the Root Directory` enabled in the Vercel project settings.

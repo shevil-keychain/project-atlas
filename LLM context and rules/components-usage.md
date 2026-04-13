@@ -136,6 +136,11 @@ MainNav takes highest precedence — it sits at the left edge of the viewport. T
 | **Sheet** | Slide-over panel from any edge. | `import { Sheet } from "@level/ui/components/ui/sheet"` | See demo at `/sheet`. | Detail panels, settings panels, secondary content. | Not for simple confirmations — use Modal. |
 | **DropdownMenu** | Context/action menu with items, separators, sub-menus. | `import { DropdownMenu } from "@level/ui/components/ui/dropdown-menu"` | See demo at `/dropdown-menu`. | Action menus, context menus. | Not for form selection — use Select. |
 
+InlineAlert usage note:
+- Use the component's built-in icon sizing and variant color treatment for standard info, success, warning, and error alerts.
+- Do not pass a custom icon or wrap `title` / `description` in custom text-color classes unless the user explicitly asks for a non-standard treatment.
+- Prefer plain `title` and `description` strings so the alert keeps the design system's default typography and emphasis.
+
 ---
 
 ## Content Containers

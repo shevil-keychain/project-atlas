@@ -142,6 +142,7 @@ All spacing uses pixel-based tokens. In TSX use Tailwind: `p-24`, `gap-16`, `m-8
 | `128` | 128px | Large layout gaps |
 | `240` | 240px | Large fixed widths |
 | `256` | 256px | Large fixed widths |
+| `1020` | 1020px | Extra-wide modal widths |
 
 ### Semantic Spacing Aliases (CSS only)
 
