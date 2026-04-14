@@ -952,6 +952,7 @@ type WorkerCall = {
   status: "pending" | "running" | "done"
   reasoning: string
   response: string
+  durationSeconds?: number
 }
 
 type OrchestrationState = {
@@ -972,7 +973,7 @@ type StreamEvent =
   | { type: "orchestration_plan"; workers: Array<{ name: string; question: string }> }
   | { type: "worker_start"; workerId: number; worker: string; question: string }
   | { type: "worker_reasoning"; workerId: number; content: string }
-  | { type: "worker_done"; workerId: number; response: string }
+  | { type: "worker_done"; workerId: number; response: string; durationSeconds?: number }
 
 const parseSSEEvents = (chunk: string): Array<StreamEvent | null> => {
   const events: Array<StreamEvent | null> = []
@@ -1547,7 +1548,9 @@ export default function VersionTwo() {
             updateThreadMessage(threadId, assistantMessageId, (msg) => {
               if (!msg.orchestration) return msg
               const updatedWorkers = msg.orchestration.workers.map((w) =>
-                w.workerId === event.workerId ? { ...w, status: "done" as const, response: event.response } : w
+                w.workerId === event.workerId
+                  ? { ...w, status: "done" as const, response: event.response, durationSeconds: event.durationSeconds }
+                  : w
               )
               return { ...msg, orchestration: { ...msg.orchestration, workers: updatedWorkers } }
             })

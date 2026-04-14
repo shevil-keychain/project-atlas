@@ -58,6 +58,7 @@ type WorkerCallCardProps = {
   status: "pending" | "running" | "done"
   reasoning: string
   response: string
+  durationSeconds?: number
 }
 
 export function WorkerCallCard({
@@ -66,12 +67,16 @@ export function WorkerCallCard({
   status,
   reasoning,
   response,
+  durationSeconds,
 }: WorkerCallCardProps) {
   const [expanded, setExpanded] = useState(false)
 
   const isPending = status === "pending"
   const isRunning = status === "running"
   const isDone = status === "done"
+  const hasReasoning = !!reasoning
+  const hasDuration = durationSeconds != null && durationSeconds > 0
+  const canExpand = isDone && (hasReasoning || hasDuration)
 
   return (
     <div
@@ -79,9 +84,10 @@ export function WorkerCallCard({
         "rounded-xl border transition-all duration-200",
         isPending && "border-border-subtle bg-surface-page opacity-60",
         isRunning && "border-border-subtle bg-surface-card",
-        isDone && "cursor-pointer border-border-subtle bg-surface-card hover:border-border-moderate"
+        isDone && "border-border-subtle bg-surface-card",
+        canExpand && "cursor-pointer hover:border-border-moderate"
       )}
-      onClick={isDone ? () => setExpanded((e) => !e) : undefined}
+      onClick={canExpand ? () => setExpanded((e) => !e) : undefined}
     >
       <div className="flex items-start gap-12 px-16 py-12">
         <WorkerIcon worker={worker} size={24} />
@@ -94,7 +100,7 @@ export function WorkerCallCard({
             ) : (
               <span className="text-13 font-semibold text-text-primary">{worker}</span>
             )}
-            {isDone && (
+            {canExpand && (
               <ChevronRight
                 size={12}
                 className={cn(
@@ -106,7 +112,7 @@ export function WorkerCallCard({
           </div>
           <p className="mt-2 line-clamp-2 text-12 text-text-secondary">{question}</p>
 
-          {isRunning && reasoning && (
+          {isRunning && (
             <div className="mt-8 text-12 leading-[1.6] text-text-tertiary">
               <ReasoningBlock
                 isStreaming={true}
@@ -117,11 +123,12 @@ export function WorkerCallCard({
         </div>
       </div>
 
-      {expanded && isDone && reasoning && (
+      {expanded && isDone && (hasReasoning || hasDuration) && (
         <div className="border-t border-border-subtle px-16 py-12">
           <ReasoningBlock
             isStreaming={false}
             reasoning={reasoning}
+            durationSeconds={durationSeconds}
           />
         </div>
       )}

@@ -1108,12 +1108,14 @@ const requestOpenAIStream = async ({
   messages,
   systemPrompt,
   signal,
+  reasoningEffort = "medium",
 }: {
   apiKey: string
   model: string
   messages: ModelMessage[]
   systemPrompt: string
   signal: AbortSignal
+  reasoningEffort?: "low" | "medium" | "high"
 }) => {
   const endpoint = "https://api.openai.com/v1/responses"
   const body: Record<string, unknown> = {
@@ -1126,7 +1128,7 @@ const requestOpenAIStream = async ({
     stream: true,
   }
   if (isReasoningModel(model)) {
-    body.reasoning = { effort: "medium", summary: "detailed" }
+    body.reasoning = { effort: reasoningEffort, summary: "detailed" }
   }
 
   const response = await fetch(endpoint, {
@@ -1202,7 +1204,11 @@ const createStreamingResponse = (
               continue
             }
 
-            if (parsed.type === "response.reasoning_summary_text.delta" && parsed.delta) {
+            if (
+              (parsed.type === "response.reasoning_summary_text.delta" ||
+               parsed.type === "response.reasoning.delta") &&
+              parsed.delta
+            ) {
               if (!reasoningStartedAt) reasoningStartedAt = Date.now()
               emit({ type: "reasoning", content: parsed.delta })
             } else if (parsed.type === "response.output_text.delta" && parsed.delta) {
@@ -1327,7 +1333,11 @@ const readOpenAIStream = async (
         continue
       }
 
-      if (parsed.type === "response.reasoning_summary_text.delta" && parsed.delta) {
+      if (
+        (parsed.type === "response.reasoning_summary_text.delta" ||
+         parsed.type === "response.reasoning.delta") &&
+        parsed.delta
+      ) {
         onReasoning(parsed.delta)
       } else if (parsed.type === "response.output_text.delta" && parsed.delta) {
         onOutputDelta(parsed.delta)
@@ -1447,6 +1457,7 @@ const createOrchestrationStreamingResponse = async ({
             messages: planMessages,
             systemPrompt: planPrompt,
             signal,
+            reasoningEffort: "high",
           })
 
           let planOutputText = ""
@@ -1509,6 +1520,7 @@ const createOrchestrationStreamingResponse = async ({
 
           const workerSystemPrompt = getSystemPrompt(worker.name, libraryEntries, false)
           const workerMessages: ModelMessage[] = [{ role: "user", content: worker.question }]
+          const workerStartTime = Date.now()
 
           try {
             const workerResponse = await requestOpenAIStream({
@@ -1517,6 +1529,7 @@ const createOrchestrationStreamingResponse = async ({
               messages: workerMessages,
               systemPrompt: workerSystemPrompt,
               signal,
+              reasoningEffort: "high",
             })
 
             let workerOutputText = ""
@@ -1527,13 +1540,15 @@ const createOrchestrationStreamingResponse = async ({
               (delta) => { workerOutputText += delta }
             )
 
+            const durationSeconds = Math.max(1, Math.ceil((Date.now() - workerStartTime) / 1000))
             const assistantTurn = parseAssistantTurn(workerOutputText.trim(), workerMessages, libraryEntries)
             workerResults.push({ name: worker.name, question: worker.question, response: assistantTurn.message })
-            emit({ type: "worker_done", workerId: i, response: assistantTurn.message })
+            emit({ type: "worker_done", workerId: i, response: assistantTurn.message, durationSeconds })
           } catch (workerError) {
+            const durationSeconds = Math.max(1, Math.ceil((Date.now() - workerStartTime) / 1000))
             const errMsg = workerError instanceof Error ? workerError.message : "Worker call failed."
             workerResults.push({ name: worker.name, question: worker.question, response: `Error: ${errMsg}` })
-            emit({ type: "worker_done", workerId: i, response: `Error: ${errMsg}` })
+            emit({ type: "worker_done", workerId: i, response: `Error: ${errMsg}`, durationSeconds })
           }
         }
 

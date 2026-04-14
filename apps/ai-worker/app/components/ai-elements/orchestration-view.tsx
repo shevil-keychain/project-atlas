@@ -11,6 +11,7 @@ type WorkerCall = {
   status: "pending" | "running" | "done"
   reasoning: string
   response: string
+  durationSeconds?: number
 }
 
 type OrchestrationState = {
@@ -67,6 +68,7 @@ export function OrchestrationView({
               status={worker.status}
               reasoning={worker.reasoning}
               response={worker.response}
+              durationSeconds={worker.durationSeconds}
             />
           ))}
         </div>
