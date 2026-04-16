@@ -38,11 +38,13 @@ export async function GET(request: Request) {
     const data = (await tokenResponse.json()) as {
       ok: boolean
       access_token?: string
+      authed_user?: { access_token?: string; id?: string }
       team?: { name?: string }
       error?: string
     }
 
-    if (!data.ok || !data.access_token) {
+    const userToken = data.authed_user?.access_token
+    if (!data.ok || !userToken) {
       return new NextResponse(
         buildHTML(null, data.error || "Failed to exchange code for token"),
         { headers: { "Content-Type": "text/html" } }
@@ -50,7 +52,7 @@ export async function GET(request: Request) {
     }
 
     return new NextResponse(
-      buildHTML(data.access_token, null, data.team?.name),
+      buildHTML(userToken, null, data.team?.name),
       { headers: { "Content-Type": "text/html" } }
     )
   } catch (err) {
