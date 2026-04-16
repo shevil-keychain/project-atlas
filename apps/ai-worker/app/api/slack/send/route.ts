@@ -16,13 +16,63 @@ type SlackUser = {
   id: string
   name: string
   real_name?: string
+  profile?: {
+    display_name?: string
+    real_name?: string
+    first_name?: string
+    last_name?: string
+  }
+  deleted?: boolean
+  is_bot?: boolean
+}
+
+function normalizeForMatch(s: string): string {
+  return s.replace(/^[#@]/, "").trim().toLowerCase()
+}
+
+function scoreUserMatch(user: SlackUser, query: string): number {
+  const names = [
+    user.name,
+    user.real_name,
+    user.profile?.display_name,
+    user.profile?.real_name,
+  ]
+    .filter(Boolean)
+    .map((n) => n!.toLowerCase())
+
+  for (const name of names) {
+    if (name === query) return 100
+  }
+
+  for (const name of names) {
+    if (name.includes(query) || query.includes(name)) return 80
+  }
+
+  const queryParts = query.split(/[\s._-]+/)
+  for (const name of names) {
+    const nameParts = name.split(/[\s._-]+/)
+    const allPartsMatch = queryParts.every((qp) =>
+      nameParts.some((np) => np.startsWith(qp) || qp.startsWith(np))
+    )
+    if (allPartsMatch && queryParts.length > 0) return 60
+  }
+
+  const firstName = user.profile?.first_name?.toLowerCase()
+  const lastName = user.profile?.last_name?.toLowerCase()
+  if (firstName && lastName) {
+    const full = `${firstName} ${lastName}`
+    if (full === query) return 100
+    if (full.includes(query) || query.includes(full)) return 70
+  }
+
+  return 0
 }
 
 async function resolveChannelId(
   token: string,
   recipient: string
 ): Promise<{ channelId: string | null; error: string | null }> {
-  const cleanName = recipient.replace(/^[#@]/, "").trim().toLowerCase()
+  const cleanName = normalizeForMatch(recipient)
 
   const channelsRes = await fetch(
     "https://slack.com/api/conversations.list?types=public_channel,private_channel&limit=200",
@@ -40,7 +90,7 @@ async function resolveChannelId(
     if (match) return { channelId: match.id, error: null }
   }
 
-  const usersRes = await fetch("https://slack.com/api/users.list?limit=200", {
+  const usersRes = await fetch("https://slack.com/api/users.list?limit=500", {
     headers: { Authorization: `Bearer ${token}` },
   })
   const usersData = (await usersRes.json()) as {
@@ -49,19 +99,29 @@ async function resolveChannelId(
   }
 
   if (usersData.ok && usersData.members) {
-    const match = usersData.members.find(
-      (u) =>
-        u.name.toLowerCase() === cleanName ||
-        u.real_name?.toLowerCase() === cleanName
+    const activeUsers = usersData.members.filter(
+      (u) => !u.deleted && !u.is_bot
     )
-    if (match) {
+
+    let bestUser: SlackUser | null = null
+    let bestScore = 0
+
+    for (const u of activeUsers) {
+      const score = scoreUserMatch(u, cleanName)
+      if (score > bestScore) {
+        bestScore = score
+        bestUser = u
+      }
+    }
+
+    if (bestUser && bestScore >= 60) {
       const dmRes = await fetch("https://slack.com/api/conversations.open", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ users: match.id }),
+        body: JSON.stringify({ users: bestUser.id }),
       })
       const dmData = (await dmRes.json()) as {
         ok: boolean

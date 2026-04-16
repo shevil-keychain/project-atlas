@@ -1515,6 +1515,16 @@ const createOrchestrationStreamingResponse = async ({
             "",
             "RULE 3 — EXACT NAMES: Worker names must exactly match the available workers list above.",
             "",
+            ...(tools && tools.length > 0
+              ? [
+                  "",
+                  "RULE 4 — DIRECT ACTIONS (HIGHEST PRIORITY): If the user is asking to PERFORM AN ACTION like sending a Slack message, emailing, creating a ticket, etc. — do NOT route to any worker.",
+                  'Instead return: {"direct_action":true,"workers":[],"order":"sequential"}',
+                  "You handle actions yourself using plugin tools. Only route to workers for questions that need domain expertise.",
+                  "Examples of direct actions: 'send this to John on Slack', 'message the team', 'share this on #general'.",
+                  "",
+                ]
+              : []),
             "Respond with valid JSON only:",
             '{"workers":[{"name":"ExactWorkerName","question":"Specific sub-question tailored for this worker"}],"order":"sequential"}',
           ].join("\n")
@@ -1569,6 +1579,88 @@ const createOrchestrationStreamingResponse = async ({
             planJson = JSON.parse(textToParse) as OrchestrationPlan
           } catch {
             throw new Error(`Master planner returned invalid JSON: ${rawPlanText.slice(0, 200)}`)
+          }
+
+          const isDirectAction = (planJson as Record<string, unknown>).direct_action === true
+
+          if (isDirectAction) {
+            emit({ type: "orchestration_plan", workers: [] })
+
+            const directPrompt = [
+              "You are an AI assistant with access to plugin tools.",
+              "The user asked you to perform an action. Use the appropriate tool to fulfill the request.",
+              "Also provide a brief text confirmation of what you are doing.",
+              "",
+              "Respond with valid JSON only:",
+              '{"mode":"answer","message":"Your brief confirmation here","saveSuggestion":null}',
+            ].join("\n")
+
+            const directResponse = await requestOpenAIStream({
+              apiKey,
+              model,
+              messages: messages.map((m) => ({ role: m.role, content: stripMentionMarkers(m.content) })),
+              systemPrompt: directPrompt,
+              signal,
+              tools,
+            })
+
+            let directOutputText = ""
+            let directToolCallName = ""
+            let directToolCallArgs = ""
+            const directReader = directResponse.body!.getReader()
+            const directDecoder = new TextDecoder()
+            let directDone = false
+
+            while (!directDone) {
+              const { value: chunk, done } = await directReader.read()
+              directDone = done
+              if (!chunk) continue
+              const text = directDecoder.decode(chunk, { stream: true })
+              for (const line of text.split("\n")) {
+                if (!line.startsWith("data: ") || line === "data: [DONE]") continue
+                let parsed: Record<string, unknown>
+                try { parsed = JSON.parse(line.slice(6)) as Record<string, unknown> } catch { continue }
+                const pType = parsed.type as string
+
+                if (pType === "response.output_text.delta" && parsed.delta) {
+                  directOutputText += parsed.delta as string
+                } else if (pType === "response.function_call_arguments.delta" && parsed.delta) {
+                  directToolCallArgs += parsed.delta as string
+                } else if (pType === "response.output_item.added") {
+                  const item = parsed.item as Record<string, unknown> | undefined
+                  if (item?.type === "function_call" && typeof item.name === "string") {
+                    directToolCallName = item.name
+                    directToolCallArgs = ""
+                  }
+                } else if (pType === "response.output_item.done") {
+                  const item = parsed.item as Record<string, unknown> | undefined
+                  if (item?.type === "function_call" && directToolCallName) {
+                    let args: Record<string, string> = {}
+                    try { args = JSON.parse(directToolCallArgs) as Record<string, string> } catch {}
+                    emit({
+                      type: "tool_call_request",
+                      toolCallId: (item.call_id as string) ?? `tc_${Date.now()}`,
+                      toolName: directToolCallName,
+                      args,
+                    })
+                    directToolCallName = ""
+                    directToolCallArgs = ""
+                  }
+                } else if (pType === "response.completed") {
+                  directDone = true
+                  break
+                }
+              }
+            }
+
+            if (directOutputText.trim()) {
+              const turn = parseAssistantTurn(directOutputText.trim(), messages, libraryEntries)
+              emit({ type: "text", content: turn.message })
+            }
+
+            emit({ type: "finish", mode: "answer", saveSuggestion: null })
+            controller.close()
+            return
           }
 
           if (!Array.isArray(planJson.workers) || planJson.workers.length === 0) {
