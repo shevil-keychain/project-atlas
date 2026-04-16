@@ -1428,6 +1428,7 @@ const createOrchestrationStreamingResponse = async ({
   previousWorkers,
   activeWorker,
   signal,
+  tools,
 }: {
   apiKey: string
   model: string
@@ -1437,6 +1438,7 @@ const createOrchestrationStreamingResponse = async ({
   previousWorkers: string[]
   activeWorker: string
   signal: AbortSignal
+  tools?: ConnectorToolDef[]
 }) => {
   const encoder = new TextEncoder()
   const lastUserMessage = [...messages].reverse().find((m) => m.role === "user")
@@ -1623,67 +1625,132 @@ const createOrchestrationStreamingResponse = async ({
           }
         }
 
-        // ── Phase 3: Synthesis ──
+        // ── Phase 3: Synthesis (with tool support for plugins) ──
 
-        if (workerResults.length === 1) {
-          emit({ type: "text", content: workerResults[0].response })
-          emit({ type: "finish", mode: "answer", saveSuggestion: null })
-        } else {
-          const synthesisContext = workerResults
-            .map((r) => `### ${r.name}\nQuestion: ${r.question}\nResponse: ${r.response}`)
-            .join("\n\n")
+        const synthesisContext = workerResults
+          .map((r) => `### ${r.name}\nQuestion: ${r.question}\nResponse: ${r.response}`)
+          .join("\n\n")
 
-          const synthesisPrompt = [
-            "You are a master AI orchestrator synthesizing results from specialized AI workers.",
-            "Below are the responses from each worker. Synthesize them into a cohesive, comprehensive answer.",
-            "Use markdown formatting. Do not mention individual workers by name unless it adds clarity.",
-            "",
-            "Worker results:",
-            synthesisContext,
-            "",
-            "Respond with valid JSON only:",
-            '{"mode":"answer","message":"Your synthesized markdown response here","saveSuggestion":null}',
-          ].join("\n")
+        const pluginInstructions = tools && tools.length > 0
+          ? [
+              "",
+              "PLUGINS: You have access to installed plugin tools. When the user asks you to take an action that matches a plugin tool (e.g., 'send this to John on Slack', 'message the team'), use the appropriate tool function call.",
+              "When using a plugin tool, ALSO provide a text response confirming what you are doing.",
+            ]
+          : []
 
-          const synthResponse = await requestOpenAIStream({
-            apiKey,
-            model,
-            messages: [{ role: "user", content: cleanQuery }],
-            systemPrompt: synthesisPrompt,
-            signal,
-          })
+        const synthesisPrompt = workerResults.length === 1
+          ? [
+              "You are a master AI orchestrator presenting a result from a specialized AI worker.",
+              "Present the worker's response as your own. Use markdown formatting.",
+              "",
+              "Worker result:",
+              synthesisContext,
+              "",
+              ...pluginInstructions,
+              "",
+              "Respond with valid JSON only:",
+              '{"mode":"answer","message":"Your markdown response here","saveSuggestion":null}',
+            ].join("\n")
+          : [
+              "You are a master AI orchestrator synthesizing results from specialized AI workers.",
+              "Below are the responses from each worker. Synthesize them into a cohesive, comprehensive answer.",
+              "Use markdown formatting. Do not mention individual workers by name unless it adds clarity.",
+              "",
+              "Worker results:",
+              synthesisContext,
+              "",
+              ...pluginInstructions,
+              "",
+              "Respond with valid JSON only:",
+              '{"mode":"answer","message":"Your synthesized markdown response here","saveSuggestion":null}',
+            ].join("\n")
 
-          let synthOutputText = ""
-          let synthReasoningStart: number | null = null
-          let synthOutputStart: number | null = null
+        const synthResponse = await requestOpenAIStream({
+          apiKey,
+          model,
+          messages: [{ role: "user", content: cleanQuery }],
+          systemPrompt: synthesisPrompt,
+          signal,
+          tools,
+        })
 
-          await readOpenAIStream(
-            synthResponse,
-            (delta) => {
+        let synthOutputText = ""
+        let synthReasoningStart: number | null = null
+        let synthOutputStart: number | null = null
+        let currentToolCallName = ""
+        let currentToolCallArgs = ""
+
+        const synthReader = synthResponse.body!.getReader()
+        const synthDecoder = new TextDecoder()
+        let synthDone = false
+        while (!synthDone) {
+          const { value: chunk, done } = await synthReader.read()
+          synthDone = done
+          if (!chunk) continue
+          const text = synthDecoder.decode(chunk, { stream: true })
+          for (const line of text.split("\n")) {
+            if (!line.startsWith("data: ") || line === "data: [DONE]") continue
+            let parsed: Record<string, unknown>
+            try { parsed = JSON.parse(line.slice(6)) as Record<string, unknown> } catch { continue }
+
+            const pType = parsed.type as string
+
+            if (
+              (pType === "response.reasoning_summary_text.delta" ||
+               pType === "response.reasoning.delta") &&
+              parsed.delta
+            ) {
               if (!synthReasoningStart) synthReasoningStart = Date.now()
-              emit({ type: "reasoning", content: delta })
-            },
-            (delta) => {
+              emit({ type: "reasoning", content: parsed.delta as string })
+            } else if (pType === "response.output_text.delta" && parsed.delta) {
               if (!synthOutputStart) synthOutputStart = Date.now()
-              synthOutputText += delta
+              synthOutputText += parsed.delta as string
+            } else if (pType === "response.function_call_arguments.delta" && parsed.delta) {
+              currentToolCallArgs += parsed.delta as string
+            } else if (pType === "response.output_item.added") {
+              const item = parsed.item as Record<string, unknown> | undefined
+              if (item?.type === "function_call" && typeof item.name === "string") {
+                currentToolCallName = item.name
+                currentToolCallArgs = ""
+              }
+            } else if (pType === "response.output_item.done") {
+              const item = parsed.item as Record<string, unknown> | undefined
+              if (item?.type === "function_call" && currentToolCallName) {
+                let args: Record<string, string> = {}
+                try { args = JSON.parse(currentToolCallArgs) as Record<string, string> } catch {}
+                emit({
+                  type: "tool_call_request",
+                  toolCallId: (item.call_id as string) ?? `tc_${Date.now()}`,
+                  toolName: currentToolCallName,
+                  args,
+                })
+                currentToolCallName = ""
+                currentToolCallArgs = ""
+              }
+            } else if (pType === "response.completed") {
+              synthDone = true
+              break
             }
-          )
+          }
+        }
 
+        if (synthOutputText.trim()) {
           const synthTurn = parseAssistantTurn(synthOutputText.trim(), messages, libraryEntries)
           emit({ type: "text", content: synthTurn.message })
-
-          const reasoningDurationSeconds =
-            synthReasoningStart && synthOutputStart
-              ? Math.round((synthOutputStart - synthReasoningStart) / 1000)
-              : undefined
-
-          emit({
-            type: "finish",
-            mode: "answer",
-            saveSuggestion: null,
-            reasoningDurationSeconds,
-          })
         }
+
+        const reasoningDurationSeconds =
+          synthReasoningStart && synthOutputStart
+            ? Math.round((synthOutputStart - synthReasoningStart) / 1000)
+            : undefined
+
+        emit({
+          type: "finish",
+          mode: "answer",
+          saveSuggestion: null,
+          reasoningDurationSeconds,
+        })
       } catch (error) {
         emit({
           type: "error",
@@ -1772,6 +1839,7 @@ export async function POST(request: Request) {
         previousWorkers,
         activeWorker: worker || "",
         signal: request.signal,
+        tools: connectorTools.length > 0 ? connectorTools : undefined,
       })
     }
 
