@@ -6,7 +6,9 @@
     "dev": "next dev --port 3010",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "deploy": "next build && vercel deploy --prebuilt --prod"
   },
   "dependencies": {
     "@level/ui": "workspace:*",

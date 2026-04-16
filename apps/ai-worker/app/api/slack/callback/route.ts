@@ -12,8 +12,8 @@ export async function GET(request: Request) {
     )
   }
 
-  const clientId = process.env.SLACK_CLIENT_ID
-  const clientSecret = process.env.SLACK_CLIENT_SECRET
+  const clientId = process.env.SLACK_CLIENT_ID?.trim()
+  const clientSecret = process.env.SLACK_CLIENT_SECRET?.trim()
   if (!clientId || !clientSecret) {
     return new NextResponse(
       buildHTML(null, "Slack credentials are not configured on the server"),

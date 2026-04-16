@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
-  const clientId = process.env.SLACK_CLIENT_ID
+  const clientId = process.env.SLACK_CLIENT_ID?.trim()
   if (!clientId) {
     return NextResponse.json(
       { error: "SLACK_CLIENT_ID is not configured" },
