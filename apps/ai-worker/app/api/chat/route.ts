@@ -698,17 +698,10 @@ const buildFallbackSaveSuggestion = (
 
 const withFallbackSaveSuggestion = (
   response: AssistantTurnResponse,
-  messages: ModelMessage[],
-  libraryEntries: LibraryEntry[]
+  _messages: ModelMessage[],
+  _libraryEntries: LibraryEntry[]
 ) => {
-  if (response.mode !== "answer" || response.saveSuggestion) {
-    return response
-  }
-
-  return {
-    ...response,
-    saveSuggestion: buildFallbackSaveSuggestion(messages, libraryEntries),
-  }
+  return { ...response, saveSuggestion: null }
 }
 
 const parseAssistantTurn = (
@@ -757,22 +750,11 @@ const parseAssistantTurn = (
       ? [parsed.message.trim(), trailingText].filter(Boolean).join("\n\n")
       : trailingText || cleanedText || fallbackAssistantMessage
 
-  return withFallbackSaveSuggestion(
-    {
-      message,
-      mode,
-      saveSuggestion:
-        mode === "answer"
-          ? normalizeSaveSuggestion(
-              parsed.saveSuggestion ?? parsed.librarySuggestion,
-              messages,
-              libraryEntries
-            )
-          : null,
-    },
-    messages,
-    libraryEntries
-  )
+  return {
+    message,
+    mode,
+    saveSuggestion: null,
+  }
 }
 
 const toAssistantErrorTurn = (message: string): AssistantTurnResponse => ({
@@ -902,13 +884,6 @@ const getSystemPrompt = (
   allowClarifyingAssumptions: boolean,
   connectorIds: string[] = []
 ) => {
-  const savedEntriesText =
-    libraryEntries.length > 0
-      ? libraryEntries
-          .map((entry, index) => `${index + 1}. ${entry.term}: ${entry.instruction}`)
-          .join("\n")
-      : "No saved dictionary entries."
-
   return [
     `You are ${worker}, an AI worker inside Level AI, a contact center intelligence platform.`,
     "Give practical answers focused on analyzing customer conversations for support operations.",
@@ -961,14 +936,9 @@ const getSystemPrompt = (
       ? 'Rules: branching answers like "Specific category", "Specific team", "Custom metrics", "Custom range", and "Other" should normally trigger another guided_flow when the next clarification can still be expressed as bounded options.'
       : "Do not ask branching guided-flow follow-ups.",
     "Do not generate a response with assumptions when the user has explicitly indicated they want to specify something more precisely. Collect the exact detail first.",
-    "Use saved dictionary entries as defaults when relevant so the user is not asked for repeated clarifications.",
-    "Dictionary entries are semantic vocabulary mappings (acronym/jargon -> meaning), not transactional preferences.",
-    "Never create dictionary entries for date ranges, time windows, report period, cadence, or other one-off parameters.",
-    "If the latest user message clarifies an acronym/jargon meaning, include saveSuggestion.",
     'FORMATTING: the message field must use rich markdown. Use ## headings for sections, **bold** for emphasis, bullet lists (- item) and numbered lists (1. item), > blockquotes, `inline code`, and --- for separators. Structure long answers with clear headings and bullet points for readability.',
     "Respond with valid JSON only (no markdown fences) using this exact schema:",
-    '{"mode":"clarify"|"answer","message":"string (markdown formatted)","saveSuggestion":{"term":"string","instruction":"string","reason":"string"}|null}',
-    'Rules: mode="clarify" must set saveSuggestion to null.',
+    '{"mode":"clarify"|"answer","message":"string (markdown formatted)","saveSuggestion":null}',
     'Rules: the entire response must still be a single valid JSON object. Do not place guided_flow outside the JSON object.',
     'Rules: for bounded clarification, put the guided flow inside the message string using escaped newlines, for example: {"mode":"clarify","message":"Choose the details below.\\n\\n```guided_flow\\n{\\"questions\\":[{\\"id\\":\\"unique-id\\",\\"question\\":\\"Question text\\",\\"header\\":\\"Short label\\",\\"options\\":[{\\"id\\":\\"option-id\\",\\"label\\":\\"Option text\\",\\"description\\":\\"One sentence\\"}],\\"multiSelect\\":false}]}\\n```","saveSuggestion":null}.',
     "Rules: guided_flow blocks must contain 1 to 5 questions and each question must contain 2 to 5 options.",
@@ -976,13 +946,11 @@ const getSystemPrompt = (
     "Rules: when several bounded clarifications are genuinely needed, prefer 2 to 4 questions in one guided_flow instead of defaulting to a single question.",
     "Rules: do not force multiple questions when only one missing detail materially affects the answer.",
     'Rules: do not ask the user to type codes like "1A" or "2B".',
-    "Rules: use plain conversational clarification instead of guided_flow only when the answer must be fully open-ended, such as defining a new acronym or term in the user's own words.",
+    "Rules: use plain conversational clarification instead of guided_flow only when the answer must be fully open-ended.",
     'Rules: if the user replies with "Here are my selections:", treat the listed answers as resolved clarification context and continue the task normally.',
     'Rules: if any listed answer is "Skipped", treat that question as intentionally skipped and do not ask it again later in the same request.',
     'Rules: mode="answer" must provide the report and must not ask another clarification question.',
-    'Rules: saveSuggestion must use semantic mapping wording like Interpret "TERM" as "MEANING".',
-    "Saved dictionary entries:",
-    savedEntriesText,
+    'Rules: saveSuggestion must always be null.',
     ...(connectorIds.length > 0
       ? [
           "",
@@ -1899,13 +1867,6 @@ export async function POST(request: Request) {
       { error: "at least one message is required." },
       { status: 400 }
     )
-  }
-
-  const deterministicClarification = allowClarifyingAssumptions
-    ? buildDeterministicTermClarification(messages, libraryEntries)
-    : null
-  if (deterministicClarification) {
-    return NextResponse.json(deterministicClarification)
   }
 
   const apiKey = process.env.OPENAI_API_KEY?.trim()
