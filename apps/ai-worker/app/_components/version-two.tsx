@@ -2347,7 +2347,7 @@ export default function VersionTwo() {
                         : item.label === "All workers"
                           ? () => setIsBrowseWorkersOpen(true)
                           : item.label === "Context & Rules"
-                            ? () => setIsDictionaryOpen(true)
+                            ? () => {}
                             : item.label === "Plugins"
                               ? () => { setIsPluginsPageOpen(true); setSelectedThreadId(null) }
                               : item.label === "Preferences"
