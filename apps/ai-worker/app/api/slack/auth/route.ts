@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
   const slackAuthUrl = new URL("https://slack.com/oauth/v2/authorize")
   slackAuthUrl.searchParams.set("client_id", clientId)
-  slackAuthUrl.searchParams.set("scope", "chat:write,channels:read,users:read")
+  slackAuthUrl.searchParams.set("scope", "chat:write,channels:read,users:read,im:write")
   slackAuthUrl.searchParams.set("redirect_uri", redirectUri)
 
   return NextResponse.redirect(slackAuthUrl.toString())

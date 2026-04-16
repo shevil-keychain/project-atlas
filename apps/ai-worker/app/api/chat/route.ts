@@ -1683,7 +1683,8 @@ const createOrchestrationStreamingResponse = async ({
           const worker = plan.workers[i]
           emit({ type: "worker_start", workerId: i, worker: worker.name, question: worker.question })
 
-          const workerSystemPrompt = getSystemPrompt(worker.name, libraryEntries, false)
+          const isFirstUserMessage = messages.filter((m) => m.role === "user").length <= 1
+          const workerSystemPrompt = getSystemPrompt(worker.name, libraryEntries, isFirstUserMessage)
           const workerMessages: ModelMessage[] = [{ role: "user", content: worker.question }]
           const workerStartTime = Date.now()
 
