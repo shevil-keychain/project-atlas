@@ -1859,7 +1859,7 @@ const createOrchestrationStreamingResponse = async ({
           message: getAssistantErrorMessage({ error, model }),
         })
       } finally {
-        controller.close()
+        try { controller.close() } catch {}
       }
     },
   })
