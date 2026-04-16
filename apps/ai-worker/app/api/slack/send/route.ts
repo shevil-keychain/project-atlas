@@ -3,6 +3,8 @@ import { NextResponse } from "next/server"
 type SlackAPIResponse = {
   ok: boolean
   error?: string
+  needed?: string
+  provided?: string
   channel?: string
   ts?: string
 }
@@ -81,6 +83,15 @@ async function resolveChannelId(
   const channelsData = (await channelsRes.json()) as {
     ok: boolean
     channels?: SlackChannel[]
+    error?: string
+    needed?: string
+  }
+
+  if (!channelsData.ok && channelsData.error === "missing_scope") {
+    return {
+      channelId: null,
+      error: `missing_scope: need "${channelsData.needed}" — please re-install the Slack plugin`,
+    }
   }
 
   if (channelsData.ok && channelsData.channels) {
@@ -96,6 +107,15 @@ async function resolveChannelId(
   const usersData = (await usersRes.json()) as {
     ok: boolean
     members?: SlackUser[]
+    error?: string
+    needed?: string
+  }
+
+  if (!usersData.ok && usersData.error === "missing_scope") {
+    return {
+      channelId: null,
+      error: `missing_scope: need "${usersData.needed}" — please re-install the Slack plugin`,
+    }
   }
 
   if (usersData.ok && usersData.members) {
@@ -184,10 +204,10 @@ export async function POST(request: Request) {
     const slackData = (await slackRes.json()) as SlackAPIResponse
 
     if (!slackData.ok) {
-      return NextResponse.json(
-        { error: slackData.error || "Slack API error" },
-        { status: 502 }
-      )
+      const detail = slackData.needed
+        ? `${slackData.error}: need "${slackData.needed}" — please re-install the Slack plugin`
+        : slackData.error || "Slack API error"
+      return NextResponse.json({ error: detail }, { status: 502 })
     }
 
     return NextResponse.json({
