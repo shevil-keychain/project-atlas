@@ -1708,6 +1708,15 @@ const createOrchestrationStreamingResponse = async ({
 
             const durationSeconds = Math.max(1, Math.ceil((Date.now() - workerStartTime) / 1000))
             const assistantTurn = parseAssistantTurn(workerOutputText.trim(), workerMessages, libraryEntries)
+
+            if (assistantTurn.mode === "clarify") {
+              emit({ type: "worker_done", workerId: i, response: "", durationSeconds })
+              emit({ type: "text", content: assistantTurn.message })
+              emit({ type: "finish", mode: "clarify", saveSuggestion: null })
+              controller.close()
+              return
+            }
+
             workerResults.push({ name: worker.name, question: worker.question, response: assistantTurn.message })
             emit({ type: "worker_done", workerId: i, response: assistantTurn.message, durationSeconds })
           } catch (workerError) {
