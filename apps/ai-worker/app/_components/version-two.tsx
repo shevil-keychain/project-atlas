@@ -42,6 +42,7 @@ import {
   PlayCircle,
   Plus,
   SearchMd,
+  PuzzlePiece01,
   Sliders04,
   Star04,
   Trash02,
@@ -50,6 +51,8 @@ import {
   Zap,
 } from "@level/ui/components/icons"
 import { GuidedFlowCard } from "../components/guided-flow-card"
+import { PluginsPage } from "../components/plugins-page"
+import { ConnectorActionCard, type ToolCallData } from "../components/ai-elements/connector-action-card"
 import {
   Conversation,
   ConversationContent,
@@ -82,6 +85,14 @@ import {
   parseGuidedFlowMessage,
 } from "../lib/guided-flow"
 
+type ToolCallEntry = {
+  id: string
+  toolName: string
+  args: Record<string, string>
+  status: "pending" | "sending" | "approved" | "rejected" | "error"
+  errorMessage?: string
+}
+
 type ChatMessage = {
   id: string
   role: "assistant" | "user"
@@ -92,6 +103,7 @@ type ChatMessage = {
   reasoningDurationSeconds?: number
   orchestration?: OrchestrationState
   hidden?: boolean
+  toolCalls?: ToolCallEntry[]
   guidedFlowState?:
     | {
         status: "cancelled"
@@ -172,6 +184,10 @@ const quickActions: QuickAction[] = [
   {
     label: "Context & Rules",
     icon: <LayersThree02 size={16} className="text-icon-secondary" />,
+  },
+  {
+    label: "Plugins",
+    icon: <PuzzlePiece01 size={16} className="text-icon-secondary" />,
   },
   {
     label: "Preferences",
@@ -974,6 +990,7 @@ type StreamEvent =
   | { type: "worker_start"; workerId: number; worker: string; question: string }
   | { type: "worker_reasoning"; workerId: number; content: string }
   | { type: "worker_done"; workerId: number; response: string; durationSeconds?: number }
+  | { type: "tool_call_request"; toolCallId: string; toolName: string; args: Record<string, string> }
 
 const parseSSEEvents = (chunk: string): Array<StreamEvent | null> => {
   const events: Array<StreamEvent | null> = []
@@ -1027,6 +1044,13 @@ export default function VersionTwo() {
   const [dictionaryEntries, setDictionaryEntries] = useState<LibraryEntry[]>([])
   const [isDictionaryOpen, setIsDictionaryOpen] = useState(false)
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
+  const [isPluginsPageOpen, setIsPluginsPageOpen] = useState(false)
+  const [installedConnectors, setInstalledConnectors] = useState<string[]>(() => {
+    if (typeof window !== "undefined" && localStorage.getItem("slack_token")) {
+      return ["slack"]
+    }
+    return []
+  })
   const [workerWelcomeMode, setWorkerWelcomeMode] = useState(false)
   const [workerWelcomeVisible, setWorkerWelcomeVisible] = useState(false)
   const [welcomeGridVisible, setWelcomeGridVisible] = useState(false)
@@ -1554,6 +1578,19 @@ export default function VersionTwo() {
               )
               return { ...msg, orchestration: { ...msg.orchestration, workers: updatedWorkers } }
             })
+          } else if (event.type === "tool_call_request") {
+            updateThreadMessage(threadId, assistantMessageId, (msg) => ({
+              ...msg,
+              toolCalls: [
+                ...(msg.toolCalls ?? []),
+                {
+                  id: event.toolCallId,
+                  toolName: event.toolName,
+                  args: event.args,
+                  status: "pending" as const,
+                },
+              ],
+            }))
           } else if (event.type === "reasoning") {
             accumulatedReasoning.value += event.content
             const currentReasoning = accumulatedReasoning.value
@@ -1717,6 +1754,7 @@ export default function VersionTwo() {
           messages,
           previousWorkers,
           worker,
+          installedConnectors,
         }),
         headers: { "Content-Type": "application/json" },
         method: "POST",
@@ -1987,6 +2025,7 @@ export default function VersionTwo() {
     setActiveWorker(null)
     setChatPromptValue("")
     setWorkerWelcomeMode(false)
+    setIsPluginsPageOpen(false)
   }
 
   const handleBrowseWorkerSelect = (worker: string) => {
@@ -2051,6 +2090,7 @@ export default function VersionTwo() {
     setSelectedThreadId(threadId)
     setChatPromptValue("")
     setWorkerWelcomeMode(false)
+    setIsPluginsPageOpen(false)
 
     const selected = recentThreads.find((thread) => thread.id === threadId)
     setActiveWorker(selected?.worker ?? null)
@@ -2308,9 +2348,11 @@ export default function VersionTwo() {
                           ? () => setIsBrowseWorkersOpen(true)
                           : item.label === "Context & Rules"
                             ? () => setIsDictionaryOpen(true)
-                            : item.label === "Preferences"
-                              ? () => setIsPreferencesOpen(true)
-                              : undefined
+                            : item.label === "Plugins"
+                              ? () => { setIsPluginsPageOpen(true); setSelectedThreadId(null) }
+                              : item.label === "Preferences"
+                                ? () => setIsPreferencesOpen(true)
+                                : undefined
                     }
                   />
                 ))}
@@ -2411,7 +2453,20 @@ export default function VersionTwo() {
               onMouseEnter={isChatView ? undefined : () => setIsCursorInCanvas(true)}
               onMouseLeave={isChatView ? undefined : () => setIsCursorInCanvas(false)}
             >
-              {isChatView && selectedThread ? (
+              {isPluginsPageOpen ? (
+                <PluginsPage
+                  installedConnectors={installedConnectors}
+                  onInstall={(id) => {
+                    setInstalledConnectors((prev) =>
+                      prev.includes(id) ? prev : [...prev, id]
+                    )
+                  }}
+                  onUninstall={(id) => {
+                    setInstalledConnectors((prev) => prev.filter((c) => c !== id))
+                    if (id === "slack") localStorage.removeItem("slack_token")
+                  }}
+                />
+              ) : isChatView && selectedThread ? (
                 <div className="relative z-10 flex min-h-0 flex-1 flex-col">
                   <div className="bg-surface-card px-24 py-16">
                     <div className="mx-auto flex w-full max-w-720 items-center gap-12">
@@ -2459,6 +2514,95 @@ export default function VersionTwo() {
                                     durationSeconds={message.reasoningDurationSeconds}
                                   />
                                 ) : null}
+                                {message.toolCalls && message.toolCalls.length > 0 && (
+                                  <div className="mt-8 space-y-8">
+                                    {message.toolCalls.map((tc) => (
+                                      <ConnectorActionCard
+                                        key={tc.id}
+                                        toolCall={tc}
+                                        onApprove={async (id) => {
+                                          const threadId = selectedThread!.id
+                                          const msgId = message.id
+                                          const call = message.toolCalls?.find((t) => t.id === id)
+                                          if (!call) return
+
+                                          updateThreadMessage(threadId, msgId, (msg) => ({
+                                            ...msg,
+                                            toolCalls: msg.toolCalls?.map((t) =>
+                                              t.id === id ? { ...t, status: "sending" as const } : t
+                                            ),
+                                          }))
+
+                                          if (call.toolName === "slack_send_message") {
+                                            const token = localStorage.getItem("slack_token")
+                                            if (!token) {
+                                              updateThreadMessage(threadId, msgId, (msg) => ({
+                                                ...msg,
+                                                toolCalls: msg.toolCalls?.map((t) =>
+                                                  t.id === id ? { ...t, status: "error" as const, errorMessage: "Slack is not connected. Install the Slack plugin first." } : t
+                                                ),
+                                              }))
+                                              return
+                                            }
+                                            try {
+                                              const res = await fetch("/api/slack/send", {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({
+                                                  token,
+                                                  recipient: call.args.recipient,
+                                                  message: call.args.message,
+                                                }),
+                                              })
+                                              const data = await res.json()
+                                              if (res.ok && data.ok) {
+                                                updateThreadMessage(threadId, msgId, (msg) => ({
+                                                  ...msg,
+                                                  toolCalls: msg.toolCalls?.map((t) =>
+                                                    t.id === id ? { ...t, status: "approved" as const } : t
+                                                  ),
+                                                }))
+                                              } else {
+                                                updateThreadMessage(threadId, msgId, (msg) => ({
+                                                  ...msg,
+                                                  toolCalls: msg.toolCalls?.map((t) =>
+                                                    t.id === id ? { ...t, status: "error" as const, errorMessage: data.error || "Failed to send message" } : t
+                                                  ),
+                                                }))
+                                              }
+                                            } catch {
+                                              updateThreadMessage(threadId, msgId, (msg) => ({
+                                                ...msg,
+                                                toolCalls: msg.toolCalls?.map((t) =>
+                                                  t.id === id ? { ...t, status: "error" as const, errorMessage: "Network error" } : t
+                                                ),
+                                              }))
+                                            }
+                                          } else {
+                                            updateThreadMessage(threadId, msgId, (msg) => ({
+                                              ...msg,
+                                              toolCalls: msg.toolCalls?.map((t) =>
+                                                t.id === id ? { ...t, status: "approved" as const } : t
+                                              ),
+                                            }))
+                                          }
+                                        }}
+                                        onReject={(id) => {
+                                          updateThreadMessage(
+                                            selectedThread!.id,
+                                            message.id,
+                                            (msg) => ({
+                                              ...msg,
+                                              toolCalls: msg.toolCalls?.map((t) =>
+                                                t.id === id ? { ...t, status: "rejected" as const } : t
+                                              ),
+                                            })
+                                          )
+                                        }}
+                                      />
+                                    ))}
+                                  </div>
+                                )}
                                 {!message.isStreaming && messageText ? (
                                   <MessageResponse
                                     className={message.role === "user" ? "w-auto" : "w-full"}
@@ -2897,7 +3041,7 @@ export default function VersionTwo() {
                                       className="h-40 w-40 shrink-0 object-contain"
                                     />
                                   )}
-                                  <div className="min-w-0">
+                                  <div className="min-w-0 space-y-2">
                                     <p className="truncate text-14 font-semibold leading-snug text-text-primary">{tile.label}</p>
                                     <p className="text-12 text-text-tertiary">{tile.author}</p>
                                   </div>

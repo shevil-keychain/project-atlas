@@ -23,7 +23,40 @@ type ChatRequest = {
   libraryEntries?: LibraryEntry[]
   allowClarifyingAssumptions?: boolean
   previousWorkers?: string[]
+  installedConnectors?: string[]
 }
+
+type ConnectorToolDef = {
+  type: "function"
+  name: string
+  description: string
+  parameters: {
+    type: "object"
+    properties: Record<string, { type: string; description: string }>
+    required: string[]
+  }
+}
+
+const connectorToolDefinitions: Record<string, ConnectorToolDef[]> = {
+  slack: [
+    {
+      type: "function",
+      name: "slack_send_message",
+      description: "Send a message to a Slack channel or user",
+      parameters: {
+        type: "object",
+        properties: {
+          recipient: { type: "string", description: "Channel name or username to send to" },
+          message: { type: "string", description: "The message content to send" },
+        },
+        required: ["recipient", "message"],
+      },
+    },
+  ],
+}
+
+const getToolsForConnectors = (connectorIds: string[]): ConnectorToolDef[] =>
+  connectorIds.flatMap((id) => connectorToolDefinitions[id] ?? [])
 
 type SaveSuggestion = {
   term: string
@@ -866,7 +899,8 @@ const buildDeterministicTermClarification = (
 const getSystemPrompt = (
   worker: string,
   libraryEntries: LibraryEntry[],
-  allowClarifyingAssumptions: boolean
+  allowClarifyingAssumptions: boolean,
+  connectorIds: string[] = []
 ) => {
   const savedEntriesText =
     libraryEntries.length > 0
@@ -949,6 +983,14 @@ const getSystemPrompt = (
     'Rules: saveSuggestion must use semantic mapping wording like Interpret "TERM" as "MEANING".',
     "Saved dictionary entries:",
     savedEntriesText,
+    ...(connectorIds.length > 0
+      ? [
+          "",
+          "PLUGINS: You have access to installed plugin tools. When the user asks you to take an action that matches a plugin tool (e.g., 'send this to John on Slack', 'message the team'), use the appropriate tool function call.",
+          "When using a plugin tool, ALSO return a JSON response with mode='answer' and a message confirming what you did.",
+          `Installed plugins: ${connectorIds.join(", ")}.`,
+        ]
+      : []),
   ].join("\n")
 }
 
@@ -1109,6 +1151,7 @@ const requestOpenAIStream = async ({
   systemPrompt,
   signal,
   reasoningEffort = "medium",
+  tools,
 }: {
   apiKey: string
   model: string
@@ -1116,6 +1159,7 @@ const requestOpenAIStream = async ({
   systemPrompt: string
   signal: AbortSignal
   reasoningEffort?: "low" | "medium" | "high"
+  tools?: ConnectorToolDef[]
 }) => {
   const endpoint = "https://api.openai.com/v1/responses"
   const body: Record<string, unknown> = {
@@ -1129,6 +1173,9 @@ const requestOpenAIStream = async ({
   }
   if (isReasoningModel(model)) {
     body.reasoning = { effort: reasoningEffort, summary: "detailed" }
+  }
+  if (tools && tools.length > 0) {
+    body.tools = tools
   }
 
   const response = await fetch(endpoint, {
@@ -1169,6 +1216,8 @@ const createStreamingResponse = (
       let fullOutputText = ""
       let reasoningStartedAt: number | null = null
       let outputStartedAt: number | null = null
+      let currentToolCallName = ""
+      let currentToolCallArgs = ""
 
       const emit = (event: Record<string, unknown>) => {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`))
@@ -1217,6 +1266,28 @@ const createStreamingResponse = (
                 emit({ type: "reasoning_done" })
               }
               fullOutputText += parsed.delta
+            } else if (parsed.type === "response.function_call_arguments.delta" && parsed.delta) {
+              currentToolCallArgs += parsed.delta
+            } else if (parsed.type === "response.output_item.added") {
+              const item = (parsed as Record<string, unknown>).item as Record<string, unknown> | undefined
+              if (item?.type === "function_call" && typeof item.name === "string") {
+                currentToolCallName = item.name
+                currentToolCallArgs = ""
+              }
+            } else if (parsed.type === "response.output_item.done") {
+              const item = (parsed as Record<string, unknown>).item as Record<string, unknown> | undefined
+              if (item?.type === "function_call" && currentToolCallName) {
+                let args: Record<string, string> = {}
+                try { args = JSON.parse(currentToolCallArgs) as Record<string, string> } catch {}
+                emit({
+                  type: "tool_call_request",
+                  toolCallId: item.call_id ?? `tc_${Date.now()}`,
+                  toolName: currentToolCallName,
+                  args,
+                })
+                currentToolCallName = ""
+                currentToolCallArgs = ""
+              }
             } else if (parsed.type === "response.completed") {
               break
             } else if (parsed.type === "error") {
@@ -1651,6 +1722,8 @@ export async function POST(request: Request) {
   const libraryEntries = normalizeLibraryEntries(body.libraryEntries)
   const allowClarifyingAssumptions = body.allowClarifyingAssumptions !== false
   const previousWorkers = body.previousWorkers ?? []
+  const installedConnectors = body.installedConnectors ?? []
+  const connectorTools = getToolsForConnectors(installedConnectors)
 
   if (messages.length === 0) {
     return NextResponse.json(
@@ -1677,7 +1750,7 @@ export async function POST(request: Request) {
       : defaultOpenAIFallbackModels
   const models = dedupeOpenAIModels([primaryModel, ...fallbackModels])
   const model = models[0] ?? defaultOpenAIModel
-  const systemPrompt = getSystemPrompt(worker || defaultWorker, libraryEntries, allowClarifyingAssumptions)
+  const systemPrompt = getSystemPrompt(worker || defaultWorker, libraryEntries, allowClarifyingAssumptions, installedConnectors)
 
   if (!apiKey) {
     return NextResponse.json(
@@ -1728,6 +1801,7 @@ export async function POST(request: Request) {
         messages,
         systemPrompt: streamingPrompt,
         signal: request.signal,
+        tools: connectorTools.length > 0 ? connectorTools : undefined,
       })
       return createStreamingResponse(openAIResponse, messages, libraryEntries, model)
     } catch (streamError) {
