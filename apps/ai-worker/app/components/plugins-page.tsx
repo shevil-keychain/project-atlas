@@ -66,7 +66,7 @@ function PluginRow({
       <div className="shrink-0">
         {isCustom ? (
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             iconLeft={<Plus size={14} />}
             disabled
@@ -79,7 +79,7 @@ function PluginRow({
           <Badge color="primary" size="sm" icon={<Check size={12} />}>Installed</Badge>
         ) : (
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             iconLeft={<Plus size={14} />}
             onClick={onInstallClick}
