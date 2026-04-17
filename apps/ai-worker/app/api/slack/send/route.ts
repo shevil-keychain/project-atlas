@@ -33,38 +33,38 @@ function normalizeForMatch(s: string): string {
 }
 
 function scoreUserMatch(user: SlackUser, query: string): number {
-  const names = [
-    user.name,
-    user.real_name,
-    user.profile?.display_name,
-    user.profile?.real_name,
-  ]
-    .filter(Boolean)
-    .map((n) => n!.toLowerCase())
+  const firstName = user.profile?.first_name?.toLowerCase() ?? ""
+  const lastName = user.profile?.last_name?.toLowerCase() ?? ""
+  const fullName = firstName && lastName ? `${firstName} ${lastName}` : ""
+  const displayName = user.profile?.display_name?.toLowerCase() ?? ""
+  const realName = (user.real_name ?? user.profile?.real_name ?? "").toLowerCase()
+  const username = user.name?.toLowerCase() ?? ""
 
-  for (const name of names) {
-    if (name === query) return 100
-  }
+  if (fullName && fullName === query) return 100
+  if (realName && realName === query) return 100
+  if (displayName && displayName === query) return 99
+  if (username && username === query) return 98
 
-  for (const name of names) {
-    if (name.includes(query) || query.includes(name)) return 80
-  }
-
-  const queryParts = query.split(/[\s._-]+/)
-  for (const name of names) {
-    const nameParts = name.split(/[\s._-]+/)
-    const allPartsMatch = queryParts.every((qp) =>
-      nameParts.some((np) => np.startsWith(qp) || qp.startsWith(np))
-    )
-    if (allPartsMatch && queryParts.length > 0) return 60
-  }
-
-  const firstName = user.profile?.first_name?.toLowerCase()
-  const lastName = user.profile?.last_name?.toLowerCase()
   if (firstName && lastName) {
-    const full = `${firstName} ${lastName}`
-    if (full === query) return 100
-    if (full.includes(query) || query.includes(full)) return 70
+    const lastFirst = `${lastName} ${firstName}`
+    if (lastFirst === query) return 97
+    const firstDotLast = `${firstName}.${lastName}`
+    if (firstDotLast === query) return 96
+  }
+
+  const queryParts = query.split(/[\s._-]+/).filter(Boolean)
+
+  if (queryParts.length >= 2 && firstName && lastName) {
+    const matchesFirst = queryParts[0] === firstName || firstName.startsWith(queryParts[0])
+    const matchesLast = queryParts[1] === lastName || lastName.startsWith(queryParts[1])
+    if (matchesFirst && matchesLast) return 90
+  }
+
+  if (queryParts.length === 1) {
+    const q = queryParts[0]
+    if (firstName === q) return 85
+    if (lastName === q) return 80
+    if (displayName === q) return 80
   }
 
   return 0
@@ -123,38 +123,79 @@ async function resolveChannelId(
       (u) => !u.deleted && !u.is_bot
     )
 
-    let bestUser: SlackUser | null = null
-    let bestScore = 0
+    const scored = activeUsers
+      .map((u) => ({ user: u, score: scoreUserMatch(u, cleanName) }))
+      .filter((s) => s.score >= 80)
+      .sort((a, b) => b.score - a.score)
 
-    for (const u of activeUsers) {
-      const score = scoreUserMatch(u, cleanName)
-      if (score > bestScore) {
-        bestScore = score
-        bestUser = u
+    if (scored.length === 0) {
+      const partialMatches = activeUsers
+        .map((u) => ({ user: u, score: scoreUserMatch(u, cleanName) }))
+        .filter((s) => s.score >= 50)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5)
+
+      if (partialMatches.length > 0) {
+        const suggestions = partialMatches
+          .map((m) => {
+            const name = m.user.profile?.real_name || m.user.real_name || m.user.name
+            return `"${name}"`
+          })
+          .join(", ")
+        return {
+          channelId: null,
+          error: `No strong match for "${recipient}". Did you mean: ${suggestions}?`,
+        }
+      }
+
+      return {
+        channelId: null,
+        error: `Could not find a user named "${recipient}"`,
       }
     }
 
-    if (bestUser && bestScore >= 60) {
-      const dmRes = await fetch("https://slack.com/api/conversations.open", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ users: bestUser.id }),
-      })
-      const dmData = (await dmRes.json()) as {
-        ok: boolean
-        channel?: { id: string }
-        error?: string
-      }
-      if (dmData.ok && dmData.channel) {
-        return { channelId: dmData.channel.id, error: null }
-      }
+    if (scored.length > 1 && scored[0].score === scored[1].score && scored[0].score < 95) {
+      const ambiguous = scored
+        .filter((s) => s.score === scored[0].score)
+        .slice(0, 5)
+        .map((m) => {
+          const name = m.user.profile?.real_name || m.user.real_name || m.user.name
+          return `"${name}"`
+        })
+        .join(", ")
       return {
         channelId: null,
-        error: dmData.error || "Could not open DM with user",
+        error: `Multiple users match "${recipient}": ${ambiguous}. Please use their full name.`,
       }
+    }
+
+    const bestUser = scored[0].user
+    const dmRes = await fetch("https://slack.com/api/conversations.open", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ users: bestUser.id }),
+    })
+    const dmData = (await dmRes.json()) as {
+      ok: boolean
+      channel?: { id: string }
+      error?: string
+      needed?: string
+    }
+    if (dmData.ok && dmData.channel) {
+      return { channelId: dmData.channel.id, error: null }
+    }
+    if (dmData.error === "missing_scope") {
+      return {
+        channelId: null,
+        error: `missing_scope: need "${dmData.needed}" — please re-install the Slack plugin`,
+      }
+    }
+    return {
+      channelId: null,
+      error: dmData.error || "Could not open DM with user",
     }
   }
 
