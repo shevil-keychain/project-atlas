@@ -46,10 +46,12 @@ function PluginRow({
   plugin,
   isInstalled,
   onInstallClick,
+  onUninstallClick,
 }: {
   plugin: ConnectorDefinition
   isInstalled: boolean
   onInstallClick: () => void
+  onUninstallClick: () => void
 }) {
   const isComingSoon = plugin.status === "coming_soon"
   const isCustom = plugin.status === "custom"
@@ -76,7 +78,16 @@ function PluginRow({
         ) : isComingSoon ? (
           <Badge color="gray" size="sm">Coming soon</Badge>
         ) : isInstalled ? (
-          <Badge color="primary" size="sm" icon={<Check size={12} />}>Installed</Badge>
+          <div className="flex items-center gap-10">
+            <Badge color="primary" size="sm" icon={<Check size={12} />}>Installed</Badge>
+            <button
+              type="button"
+              onClick={onUninstallClick}
+              className="text-12 text-text-tertiary transition-colors hover:text-error-600"
+            >
+              Uninstall
+            </button>
+          </div>
         ) : (
           <Button
             variant="secondary"
@@ -164,6 +175,7 @@ export function PluginsPage({
               plugin={plugin}
               isInstalled={installedConnectors.includes(plugin.id)}
               onInstallClick={() => handleInstallClick(plugin)}
+              onUninstallClick={() => onUninstall(plugin.id)}
             />
           ))}
 
