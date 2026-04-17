@@ -56,14 +56,12 @@ function scoreUserMatch(user: SlackUser, query: string): number {
   const queryParts = query.split(/[\s._-]+/).filter(Boolean)
 
   if (queryParts.length >= 2 && firstName && lastName) {
-    const matchesFirst = queryParts[0] === firstName || firstName.startsWith(queryParts[0]) || queryParts[0].startsWith(firstName)
-    const matchesLast = queryParts[1] === lastName || lastName.startsWith(queryParts[1]) || queryParts[1].startsWith(lastName)
-    if (matchesFirst && matchesLast) return 90
-    if (matchesFirst) return 78
-  }
-
-  for (const name of allNames) {
-    if (name.includes(query) || query.includes(name)) return 82
+    const firstExact = queryParts[0] === firstName
+    const lastExact = queryParts[1] === lastName
+    if (firstExact && lastExact) return 95
+    if (firstExact && lastName.startsWith(queryParts[1])) return 90
+    if (firstExact && queryParts[1].startsWith(lastName)) return 90
+    if (firstExact) return 78
   }
 
   if (queryParts.length === 1) {
@@ -71,12 +69,8 @@ function scoreUserMatch(user: SlackUser, query: string): number {
     if (firstName === q) return 85
     if (lastName === q) return 80
     if (displayName === q) return 80
-    if (firstName && (firstName.startsWith(q) || q.startsWith(firstName))) return 75
-    if (displayName && (displayName.startsWith(q) || q.startsWith(displayName))) return 72
-  }
-
-  if (queryParts.length >= 2 && firstName) {
-    if (queryParts[0] === firstName) return 75
+    if (firstName && firstName.startsWith(q) && q.length >= 3) return 75
+    if (displayName && displayName.startsWith(q) && q.length >= 3) return 72
   }
 
   return 0
