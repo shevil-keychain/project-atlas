@@ -57,33 +57,12 @@ function scoreUserMatch(user: SlackUser, query: string): number {
     if (firstName === q) return 85
     if (lastName === q) return 80
     if (displayName === q) return 80
-    if (firstName && firstName.startsWith(q) && q.length >= 2) return 70
-    if (lastName && lastName.startsWith(q) && q.length >= 2) return 68
-    if (displayName && displayName.startsWith(q) && q.length >= 2) return 65
-  }
-
-  // Very relaxed: any query part appears as a startsWith on first or last name
-  for (const part of queryParts) {
-    if (part.length < 2) continue
-    if (firstName.startsWith(part) || lastName.startsWith(part)) return 55
-    if (displayName.startsWith(part) || username.startsWith(part)) return 50
-  }
-
-  // Even more relaxed: firstName or lastName contains query part (min 3 chars to avoid noise)
-  for (const part of queryParts) {
-    if (part.length < 3) continue
-    if (firstName.includes(part) || lastName.includes(part)) return 40
-    if (realName.includes(part) || displayName.includes(part)) return 35
+    if (firstName && firstName.startsWith(q) && q.length >= 3) return 70
+    if (lastName && lastName.startsWith(q) && q.length >= 3) return 68
+    if (displayName && displayName.startsWith(q) && q.length >= 3) return 65
   }
 
   return 0
-}
-
-export type ResolveUserCandidate = {
-  userId: string
-  name: string
-  avatar: string | null
-  score: number
 }
 
 async function fetchAllSlackUsers(
@@ -157,40 +136,25 @@ export async function POST(request: Request) {
 
     const scored = activeUsers
       .map((u) => ({ user: u, score: scoreUserMatch(u, cleanName) }))
-      .filter((s) => s.score > 0)
+      .filter((s) => s.score >= 65)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 8)
 
     if (scored.length === 0) {
       return NextResponse.json({
         found: false,
-        candidates: [],
         totalUsers: activeUsers.length,
       })
     }
 
-    const toCandidate = (s: { user: SlackUser; score: number }): ResolveUserCandidate => ({
-      userId: s.user.id,
-      name: s.user.profile?.real_name || s.user.real_name || s.user.name,
-      avatar: s.user.profile?.image_72 || null,
-      score: s.score,
-    })
-
-    // Clear winner: top score >= 95 and well ahead of runner-up
-    if (scored[0].score >= 95 && (scored.length === 1 || scored[0].score - scored[1].score >= 5)) {
-      return NextResponse.json({
-        found: true,
-        user: toCandidate(scored[0]),
-        candidates: scored.slice(0, 5).map(toCandidate),
-        totalUsers: activeUsers.length,
-      })
-    }
-
-    // Multiple viable candidates — let the user pick
+    const best = scored[0]
     return NextResponse.json({
-      found: false,
-      ambiguous: true,
-      candidates: scored.slice(0, 5).map(toCandidate),
+      found: true,
+      user: {
+        userId: best.user.id,
+        name: best.user.profile?.real_name || best.user.real_name || best.user.name,
+        avatar: best.user.profile?.image_72 || null,
+        score: best.score,
+      },
       totalUsers: activeUsers.length,
     })
   } catch {

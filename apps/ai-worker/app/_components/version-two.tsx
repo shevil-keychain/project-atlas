@@ -92,8 +92,6 @@ type ToolCallEntry = {
   status: "pending" | "sending" | "approved" | "rejected" | "error"
   errorMessage?: string
   resolvedRecipient?: ResolvedRecipient
-  selectedUserId?: string
-  selectedUserName?: string
 }
 
 type ChatMessage = {
@@ -1607,15 +1605,13 @@ export default function VersionTwo() {
                   .then((res) => res.json())
                   .then((data: {
                     found: boolean
-                    user?: { userId: string; name: string; avatar: string | null; score: number }
-                    ambiguous?: boolean
-                    candidates?: Array<{ userId: string; name: string; avatar: string | null; score: number }>
+                    user?: { userId: string; name: string; avatar: string | null }
                     error?: string
                     totalUsers?: number
                   }) => {
                     const resolved: ResolvedRecipient = data.found && data.user
-                      ? { found: true, name: data.user.name, avatar: data.user.avatar, userId: data.user.userId, candidates: data.candidates }
-                      : { found: false, ambiguous: data.ambiguous, candidates: data.candidates, error: data.error, totalUsers: data.totalUsers }
+                      ? { found: true, name: data.user.name, avatar: data.user.avatar, userId: data.user.userId }
+                      : { found: false, error: data.error, totalUsers: data.totalUsers }
                     updateThreadMessage(threadId, assistantMessageId, (msg) => ({
                       ...msg,
                       toolCalls: msg.toolCalls?.map((tc) =>
@@ -2566,26 +2562,19 @@ export default function VersionTwo() {
                                       <ConnectorActionCard
                                         key={tc.id}
                                         toolCall={tc}
-                                        onApprove={async (id, selectedUserId) => {
+                                        onApprove={async (id, passedUserId) => {
                                           const threadId = selectedThread!.id
                                           const msgId = message.id
                                           const call = message.toolCalls?.find((t) => t.id === id)
                                           if (!call) return
 
-                                          const resolvedUserId = selectedUserId
-                                            ?? call.selectedUserId
+                                          const resolvedUserId = passedUserId
                                             ?? (call.resolvedRecipient?.found ? call.resolvedRecipient.userId : undefined)
-
-                                          const resolvedName = selectedUserId && call.resolvedRecipient?.candidates
-                                            ? call.resolvedRecipient.candidates.find((c) => c.userId === selectedUserId)?.name
-                                            : undefined
 
                                           updateThreadMessage(threadId, msgId, (msg) => ({
                                             ...msg,
                                             toolCalls: msg.toolCalls?.map((t) =>
-                                              t.id === id
-                                                ? { ...t, status: "sending" as const, selectedUserId: resolvedUserId, selectedUserName: resolvedName }
-                                                : t
+                                              t.id === id ? { ...t, status: "sending" as const } : t
                                             ),
                                           }))
 
