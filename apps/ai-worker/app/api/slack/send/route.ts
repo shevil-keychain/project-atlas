@@ -293,7 +293,10 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ channel: channelId, text: message }),
+      body: JSON.stringify({
+        channel: channelId,
+        text: `${message}\n\n_Sent using Level AI_`,
+      }),
     })
 
     const slackData = (await slackRes.json()) as SlackAPIResponse
