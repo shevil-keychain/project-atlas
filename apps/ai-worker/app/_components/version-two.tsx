@@ -1603,12 +1603,15 @@ export default function VersionTwo() {
                   body: JSON.stringify({ token: slackToken, recipient: event.args.recipient }),
                 })
                   .then((res) => res.json())
-                  .then((data) => {
+                  .then((data: { found: boolean; user?: { name: string; avatar: string | null }; suggestions?: Array<{ name: string; avatar: string | null; score: number }> }) => {
+                    const resolved: ResolvedRecipient = data.found && data.user
+                      ? { found: true, name: data.user.name, avatar: data.user.avatar }
+                      : { found: false, suggestions: data.suggestions }
                     updateThreadMessage(threadId, assistantMessageId, (msg) => ({
                       ...msg,
                       toolCalls: msg.toolCalls?.map((tc) =>
                         tc.id === toolCallId
-                          ? { ...tc, resolvedRecipient: data }
+                          ? { ...tc, resolvedRecipient: resolved }
                           : tc
                       ),
                     }))
