@@ -52,7 +52,7 @@ import {
 } from "@level/ui/components/icons"
 import { GuidedFlowCard } from "../components/guided-flow-card"
 import { PluginsPage } from "../components/plugins-page"
-import { ConnectorActionCard, type ToolCallData } from "../components/ai-elements/connector-action-card"
+import { ConnectorActionCard, type ToolCallData, type ResolvedRecipient } from "../components/ai-elements/connector-action-card"
 import {
   Conversation,
   ConversationContent,
@@ -91,6 +91,7 @@ type ToolCallEntry = {
   args: Record<string, string>
   status: "pending" | "sending" | "approved" | "rejected" | "error"
   errorMessage?: string
+  resolvedRecipient?: ResolvedRecipient
 }
 
 type ChatMessage = {
@@ -1579,18 +1580,42 @@ export default function VersionTwo() {
               return { ...msg, orchestration: { ...msg.orchestration, workers: updatedWorkers } }
             })
           } else if (event.type === "tool_call_request") {
+            const toolCallId = event.toolCallId
             updateThreadMessage(threadId, assistantMessageId, (msg) => ({
               ...msg,
               toolCalls: [
                 ...(msg.toolCalls ?? []),
                 {
-                  id: event.toolCallId,
+                  id: toolCallId,
                   toolName: event.toolName,
                   args: event.args,
                   status: "pending" as const,
                 },
               ],
             }))
+
+            if (event.toolName === "slack_send_message" && event.args.recipient) {
+              const slackToken = localStorage.getItem("slack_token")
+              if (slackToken) {
+                fetch("/api/slack/resolve-user", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ token: slackToken, recipient: event.args.recipient }),
+                })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    updateThreadMessage(threadId, assistantMessageId, (msg) => ({
+                      ...msg,
+                      toolCalls: msg.toolCalls?.map((tc) =>
+                        tc.id === toolCallId
+                          ? { ...tc, resolvedRecipient: data }
+                          : tc
+                      ),
+                    }))
+                  })
+                  .catch(() => {})
+              }
+            }
           } else if (event.type === "reasoning") {
             accumulatedReasoning.value += event.content
             const currentReasoning = accumulatedReasoning.value

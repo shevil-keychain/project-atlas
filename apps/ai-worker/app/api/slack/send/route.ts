@@ -23,6 +23,7 @@ type SlackUser = {
     real_name?: string
     first_name?: string
     last_name?: string
+    image_72?: string
   }
   deleted?: boolean
   is_bot?: boolean
