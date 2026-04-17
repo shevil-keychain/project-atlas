@@ -172,7 +172,7 @@
 }
 .slack-preview strong {
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-text-tertiary);
 }
 .slack-preview code {
   font-size: 11px;

@@ -172,10 +172,10 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
           )}
 
           {messageText && (
-            <div className="mt-6">
+            <div className="mt-16">
               <div
                 className={cn(
-                  "slack-preview text-12 leading-relaxed text-text-secondary",
+                  "slack-preview text-12 leading-relaxed text-text-tertiary",
                   !expanded && isLong && "line-clamp-5"
                 )}
                 dangerouslySetInnerHTML={{ __html: renderedMessage }}
@@ -184,7 +184,7 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
                 <button
                   type="button"
                   onClick={() => setExpanded(!expanded)}
-                  className="mt-4 text-12 font-medium text-brand-600 hover:text-brand-700"
+                  className="mt-12 mb-4 text-12 font-medium text-brand-600 hover:text-brand-700"
                 >
                   {expanded ? "Show less" : "Show more"}
                 </button>
