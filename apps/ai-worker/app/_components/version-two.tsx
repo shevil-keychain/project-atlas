@@ -1610,10 +1610,12 @@ export default function VersionTwo() {
                     user?: { userId: string; name: string; avatar: string | null; score: number }
                     ambiguous?: boolean
                     candidates?: Array<{ userId: string; name: string; avatar: string | null; score: number }>
+                    error?: string
+                    totalUsers?: number
                   }) => {
                     const resolved: ResolvedRecipient = data.found && data.user
                       ? { found: true, name: data.user.name, avatar: data.user.avatar, userId: data.user.userId, candidates: data.candidates }
-                      : { found: false, ambiguous: data.ambiguous, candidates: data.candidates }
+                      : { found: false, ambiguous: data.ambiguous, candidates: data.candidates, error: data.error, totalUsers: data.totalUsers }
                     updateThreadMessage(threadId, assistantMessageId, (msg) => ({
                       ...msg,
                       toolCalls: msg.toolCalls?.map((tc) =>
@@ -1623,7 +1625,16 @@ export default function VersionTwo() {
                       ),
                     }))
                   })
-                  .catch(() => {})
+                  .catch((err) => {
+                    updateThreadMessage(threadId, assistantMessageId, (msg) => ({
+                      ...msg,
+                      toolCalls: msg.toolCalls?.map((tc) =>
+                        tc.id === toolCallId
+                          ? { ...tc, resolvedRecipient: { found: false, error: `Network error: ${err instanceof Error ? err.message : "failed to resolve user"}` } }
+                          : tc
+                      ),
+                    }))
+                  })
               }
             }
           } else if (event.type === "reasoning") {

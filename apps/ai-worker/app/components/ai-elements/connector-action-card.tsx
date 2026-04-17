@@ -22,6 +22,8 @@ export type ResolvedRecipient = {
   userId?: string
   ambiguous?: boolean
   candidates?: ResolvedCandidate[]
+  error?: string
+  totalUsers?: number
 }
 
 export type ToolCallData = {
@@ -77,9 +79,11 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
   const resolved = toolCall.resolvedRecipient
   const isSlackSend = toolCall.toolName === "slack_send_message"
   const hasCandidates = resolved?.candidates && resolved.candidates.length > 0
-  const isAmbiguous = resolved && !resolved.found && hasCandidates
+  const isAmbiguous = resolved && !resolved.found && !resolved.error && hasCandidates
   const isSingleMatch = resolved?.found === true
-  const noMatch = resolved && !resolved.found && !hasCandidates
+  const hasApiError = resolved && !resolved.found && !!resolved.error
+  const isAuthError = hasApiError && (resolved.error!.includes("invalid_auth") || resolved.error!.includes("token_revoked") || resolved.error!.includes("not_authed"))
+  const noMatch = resolved && !resolved.found && !hasCandidates && !hasApiError
 
   const displayRecipient = toolCall.selectedUserName
     ?? (isSingleMatch ? resolved.name : null)
@@ -95,9 +99,9 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
     <div
       className={cn(
         "my-8 rounded-xl border transition-all duration-200",
-        noMatch && isPending && "border-warning-300 bg-warning-50",
+        (noMatch || hasApiError) && isPending && "border-warning-300 bg-warning-50",
         isAmbiguous && isPending && "border-brand-200 bg-brand-50",
-        !noMatch && !isAmbiguous && isPending && "border-brand-200 bg-brand-50",
+        !noMatch && !isAmbiguous && !hasApiError && isPending && "border-brand-200 bg-brand-50",
         isSending && "border-brand-200 bg-brand-50",
         isApproved && "border-success-200 bg-success-50",
         isRejected && "border-border-subtle bg-surface-muted opacity-60",
@@ -155,10 +159,25 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
             <p className="mt-6 text-12 text-error-600">{toolCall.errorMessage}</p>
           )}
 
+          {hasApiError && isPending && (
+            <div className="mt-8 rounded-lg bg-warning-100 px-10 py-6">
+              {isAuthError ? (
+                <p className="text-12 font-medium text-warning-800">
+                  Slack connection expired or invalid. Please re-install the Slack plugin from the Plugins tab.
+                </p>
+              ) : (
+                <p className="text-12 font-medium text-warning-800">
+                  Slack API error: {resolved.error}
+                </p>
+              )}
+            </div>
+          )}
+
           {noMatch && isPending && (
             <div className="mt-8 rounded-lg bg-warning-100 px-10 py-6">
               <p className="text-12 font-medium text-warning-800">
-                Could not find &quot;{toolCall.args.recipient}&quot; in Slack.
+                Could not find &quot;{toolCall.args.recipient}&quot; in Slack
+                {resolved.totalUsers != null && ` (searched ${resolved.totalUsers} users)`}.
               </p>
             </div>
           )}
@@ -211,7 +230,7 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
                 variant="default"
                 size="sm"
                 onClick={() => onApprove(toolCall.id, effectiveUserId ?? undefined)}
-                disabled={!!noMatch || (!!isAmbiguous && !pickedUserId && !toolCall.selectedUserId)}
+                disabled={!!noMatch || !!hasApiError || (!!isAmbiguous && !pickedUserId && !toolCall.selectedUserId)}
               >
                 Send
               </Button>

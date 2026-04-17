@@ -117,6 +117,7 @@ export async function POST(request: Request) {
         found: false,
         candidates: [],
         error: usersData.error || "Could not fetch users",
+        totalUsers: 0,
       })
     }
 
@@ -135,6 +136,7 @@ export async function POST(request: Request) {
       return NextResponse.json({
         found: false,
         candidates: [],
+        totalUsers: activeUsers.length,
       })
     }
 
@@ -151,6 +153,7 @@ export async function POST(request: Request) {
         found: true,
         user: toCandidate(scored[0]),
         candidates: scored.slice(0, 5).map(toCandidate),
+        totalUsers: activeUsers.length,
       })
     }
 
@@ -159,6 +162,7 @@ export async function POST(request: Request) {
       found: false,
       ambiguous: true,
       candidates: scored.slice(0, 5).map(toCandidate),
+      totalUsers: activeUsers.length,
     })
   } catch {
     return NextResponse.json(
