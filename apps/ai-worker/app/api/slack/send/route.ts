@@ -108,25 +108,45 @@ async function resolveChannelId(
     if (match) return { channelId: match.id, error: null }
   }
 
-  const usersRes = await fetch("https://slack.com/api/users.list?limit=500", {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-  const usersData = (await usersRes.json()) as {
-    ok: boolean
-    members?: SlackUser[]
-    error?: string
-    needed?: string
-  }
+  const allMembers: SlackUser[] = []
+  let usersCursor: string | undefined
+  for (let page = 0; page < 20; page++) {
+    const url = new URL("https://slack.com/api/users.list")
+    url.searchParams.set("limit", "500")
+    if (usersCursor) url.searchParams.set("cursor", usersCursor)
 
-  if (!usersData.ok && usersData.error === "missing_scope") {
-    return {
-      channelId: null,
-      error: `missing_scope: need "${usersData.needed}" — please re-install the Slack plugin`,
+    const usersRes = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    const usersData = (await usersRes.json()) as {
+      ok: boolean
+      members?: SlackUser[]
+      error?: string
+      needed?: string
+      response_metadata?: { next_cursor?: string }
     }
+
+    if (!usersData.ok) {
+      if (usersData.error === "missing_scope") {
+        return {
+          channelId: null,
+          error: `missing_scope: need "${usersData.needed}" — please re-install the Slack plugin`,
+        }
+      }
+      return {
+        channelId: null,
+        error: usersData.error || "Could not fetch users",
+      }
+    }
+
+    if (usersData.members) allMembers.push(...usersData.members)
+    const nextCursor = usersData.response_metadata?.next_cursor
+    if (!nextCursor) break
+    usersCursor = nextCursor
   }
 
-  if (usersData.ok && usersData.members) {
-    const activeUsers = usersData.members.filter(
+  if (allMembers.length > 0) {
+    const activeUsers = allMembers.filter(
       (u) => !u.deleted && !u.is_bot
     )
 

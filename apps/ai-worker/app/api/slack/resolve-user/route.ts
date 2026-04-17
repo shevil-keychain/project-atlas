@@ -86,6 +86,43 @@ export type ResolveUserCandidate = {
   score: number
 }
 
+async function fetchAllSlackUsers(
+  token: string
+): Promise<{ users: SlackUser[]; error: string | null }> {
+  const allMembers: SlackUser[] = []
+  let cursor: string | undefined
+
+  for (let page = 0; page < 20; page++) {
+    const url = new URL("https://slack.com/api/users.list")
+    url.searchParams.set("limit", "500")
+    if (cursor) url.searchParams.set("cursor", cursor)
+
+    const res = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    const data = (await res.json()) as {
+      ok: boolean
+      members?: SlackUser[]
+      error?: string
+      response_metadata?: { next_cursor?: string }
+    }
+
+    if (!data.ok) {
+      return { users: [], error: data.error || "Could not fetch users" }
+    }
+
+    if (data.members) {
+      allMembers.push(...data.members)
+    }
+
+    const nextCursor = data.response_metadata?.next_cursor
+    if (!nextCursor) break
+    cursor = nextCursor
+  }
+
+  return { users: allMembers, error: null }
+}
+
 export async function POST(request: Request) {
   let body: { token?: string; recipient?: string }
   try {
@@ -103,25 +140,17 @@ export async function POST(request: Request) {
   }
 
   try {
-    const usersRes = await fetch("https://slack.com/api/users.list?limit=500", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    const usersData = (await usersRes.json()) as {
-      ok: boolean
-      members?: SlackUser[]
-      error?: string
-    }
-
-    if (!usersData.ok || !usersData.members) {
+    const { users: allMembers, error: fetchError } = await fetchAllSlackUsers(token)
+    if (fetchError) {
       return NextResponse.json({
         found: false,
         candidates: [],
-        error: usersData.error || "Could not fetch users",
+        error: fetchError,
         totalUsers: 0,
       })
     }
 
-    const activeUsers = usersData.members.filter(
+    const activeUsers = allMembers.filter(
       (u) => !u.deleted && !u.is_bot
     )
     const cleanName = normalizeForMatch(recipient)
