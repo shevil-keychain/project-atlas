@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@level/ui/components/ui/modal"
-import { SearchMd, Plus, Check, PuzzlePiece01, Trash01 } from "@level/ui/components/icons"
+import { SearchMd, Plus, Check, PuzzlePiece01, X } from "@level/ui/components/icons"
 import { connectors, type ConnectorDefinition } from "../lib/connectors"
 
 type PluginsPageProps = {
@@ -83,9 +83,9 @@ function PluginRow({
             <button
               type="button"
               onClick={onUninstallClick}
-              className="flex h-24 w-24 items-center justify-center rounded-md text-icon-tertiary transition-colors hover:bg-error-50 hover:text-error-600"
+              className="flex h-24 w-24 items-center justify-center rounded-md text-icon-primary transition-colors hover:bg-error-50 hover:text-error-600"
             >
-              <Trash01 size={14} />
+              <X size={14} />
             </button>
           </div>
         ) : (
