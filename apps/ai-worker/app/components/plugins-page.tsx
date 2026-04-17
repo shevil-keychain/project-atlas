@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@level/ui/components/ui/modal"
-import { SearchMd, Plus, Check, PuzzlePiece01 } from "@level/ui/components/icons"
+import { SearchMd, Plus, Check, PuzzlePiece01, Trash01 } from "@level/ui/components/icons"
 import { connectors, type ConnectorDefinition } from "../lib/connectors"
 
 type PluginsPageProps = {
@@ -78,14 +78,14 @@ function PluginRow({
         ) : isComingSoon ? (
           <Badge color="gray" size="sm">Coming soon</Badge>
         ) : isInstalled ? (
-          <div className="flex items-center gap-10">
+          <div className="flex items-center gap-8">
             <Badge color="primary" size="sm" icon={<Check size={12} />}>Installed</Badge>
             <button
               type="button"
               onClick={onUninstallClick}
-              className="text-12 text-text-tertiary transition-colors hover:text-error-600"
+              className="flex h-24 w-24 items-center justify-center rounded-md text-icon-tertiary transition-colors hover:bg-error-50 hover:text-error-600"
             >
-              Uninstall
+              <Trash01 size={14} />
             </button>
           </div>
         ) : (
