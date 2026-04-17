@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useMemo } from "react"
 import { cn } from "@level/ui/lib/utils"
 import { Button } from "@level/ui/components/ui/button"
 import { Check, Loading02 } from "@level/ui/components/icons"
@@ -31,6 +32,58 @@ const toolDisplayInfo: Record<string, { action: string; pluginId: string }> = {
   slack_search: { action: "Search Slack", pluginId: "slack" },
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+}
+
+function renderSlackMrkdwn(text: string): string {
+  const lines = text.split("\n")
+  const htmlParts: string[] = []
+  let inList = false
+
+  for (const raw of lines) {
+    const line = escapeHtml(raw)
+
+    if (/^[-•]\s/.test(raw)) {
+      if (!inList) { htmlParts.push("<ul>"); inList = true }
+      const content = formatInline(line.replace(/^[-•]\s*/, ""))
+      htmlParts.push(`<li>${content}</li>`)
+      continue
+    }
+    if (/^\d+\.\s/.test(raw)) {
+      if (!inList) { htmlParts.push("<ol>"); inList = true }
+      const content = formatInline(line.replace(/^\d+\.\s*/, ""))
+      htmlParts.push(`<li>${content}</li>`)
+      continue
+    }
+
+    if (inList) {
+      htmlParts.push(inList ? "</ul>" : "</ol>")
+      inList = false
+    }
+
+    if (!line.trim()) {
+      htmlParts.push("<br/>")
+    } else {
+      htmlParts.push(`<p>${formatInline(line)}</p>`)
+    }
+  }
+
+  if (inList) htmlParts.push("</ul>")
+  return htmlParts.join("")
+}
+
+function formatInline(text: string): string {
+  return text
+    .replace(/\*([^*]+)\*/g, "<strong>$1</strong>")
+    .replace(/_([^_]+)_/g, "<em>$1</em>")
+    .replace(/~([^~]+)~/g, "<s>$1</s>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+}
+
 type ConnectorActionCardProps = {
   toolCall: ToolCallData
   onApprove: (id: string, selectedUserId?: string) => void
@@ -58,9 +111,14 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
   const displayAvatar = isSingleMatch ? resolved.avatar : null
   const resolvedUserId = isSingleMatch ? resolved.userId : undefined
 
-  const messageLines = isSlackSend && toolCall.args.message
-    ? [toolCall.args.message]
-    : Object.entries(toolCall.args).map(([k, v]) => `${k}: ${v}`)
+  const [expanded, setExpanded] = useState(false)
+
+  const messageText = isSlackSend
+    ? toolCall.args.message ?? ""
+    : Object.entries(toolCall.args).map(([k, v]) => `${k}: ${v}`).join("\n")
+
+  const renderedMessage = useMemo(() => renderSlackMrkdwn(messageText), [messageText])
+  const isLong = messageText.split("\n").length > 5 || messageText.length > 400
 
   return (
     <div
@@ -113,11 +171,24 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
             <p className="mt-4 text-12 text-text-secondary">To: {displayRecipient}</p>
           )}
 
-          {messageLines.length > 0 && (
-            <div className="mt-4 space-y-2">
-              {messageLines.map((line, i) => (
-                <p key={i} className="text-12 text-text-secondary">{line}</p>
-              ))}
+          {messageText && (
+            <div className="mt-6">
+              <div
+                className={cn(
+                  "slack-preview text-12 leading-relaxed text-text-secondary",
+                  !expanded && isLong && "line-clamp-5"
+                )}
+                dangerouslySetInnerHTML={{ __html: renderedMessage }}
+              />
+              {isLong && (
+                <button
+                  type="button"
+                  onClick={() => setExpanded(!expanded)}
+                  className="mt-4 text-12 font-medium text-brand-600 hover:text-brand-700"
+                >
+                  {expanded ? "Show less" : "Show more"}
+                </button>
+              )}
             </div>
           )}
 

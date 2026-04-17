@@ -154,3 +154,29 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* Slack message preview in action cards */
+.slack-preview p {
+  margin-bottom: 4px;
+}
+.slack-preview p:last-child {
+  margin-bottom: 0;
+}
+.slack-preview ul,
+.slack-preview ol {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+.slack-preview li {
+  margin-bottom: 2px;
+}
+.slack-preview strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.slack-preview code {
+  font-size: 11px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--color-surface-muted);
+}
