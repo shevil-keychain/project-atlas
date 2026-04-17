@@ -155,28 +155,36 @@
   text-underline-offset: 2px;
 }
 
-/* Slack message preview in action cards */
-.slack-preview p {
+/* Action card rich text body */
+.action-card-body p {
   margin-bottom: 4px;
 }
-.slack-preview p:last-child {
+.action-card-body p:last-child {
   margin-bottom: 0;
 }
-.slack-preview ul,
-.slack-preview ol {
+.action-card-body ul,
+.action-card-body ol {
   margin: 4px 0;
   padding-left: 18px;
 }
-.slack-preview li {
+.action-card-body ul {
+  list-style-type: disc;
+}
+.action-card-body ol {
+  list-style-type: decimal;
+}
+.action-card-body li {
   margin-bottom: 2px;
 }
-.slack-preview strong {
+.action-card-body strong {
   font-weight: 600;
-  color: var(--color-text-tertiary);
 }
-.slack-preview code {
+.action-card-body em {
+  font-style: italic;
+}
+.action-card-body code {
   font-size: 11px;
   padding: 1px 4px;
   border-radius: 3px;
-  background: var(--color-surface-muted);
+  background: rgba(0, 0, 0, 0.06);
 }
