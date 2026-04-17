@@ -1598,7 +1598,7 @@ const createOrchestrationStreamingResponse = async ({
                    pType === "response.reasoning.delta") &&
                   parsed.delta
                 ) {
-                  emit({ type: "reasoning", content: parsed.delta as string })
+                  emit({ type: "planning_reasoning", content: parsed.delta as string })
                 } else if (pType === "response.output_text.delta" && parsed.delta) {
                   directOutputText += parsed.delta as string
                 } else if (pType === "response.function_call_arguments.delta" && parsed.delta) {
@@ -1630,7 +1630,7 @@ const createOrchestrationStreamingResponse = async ({
               }
             }
 
-            emit({ type: "reasoning_done" })
+            emit({ type: "planning_done" })
 
             if (directOutputText.trim()) {
               const turn = parseAssistantTurn(directOutputText.trim(), messages, libraryEntries)
