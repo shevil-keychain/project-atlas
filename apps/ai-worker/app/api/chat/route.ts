@@ -1508,7 +1508,7 @@ const createOrchestrationStreamingResponse = async ({
             messages: planMessages,
             systemPrompt: planPrompt,
             signal,
-            reasoningEffort: "high",
+            reasoningEffort: "low",
           })
 
           let planOutputText = ""
@@ -1559,6 +1559,8 @@ const createOrchestrationStreamingResponse = async ({
               "The user asked you to perform an action. Use the appropriate tool to fulfill the request.",
               "Also provide a brief text confirmation of what you are doing.",
               "",
+              "IMPORTANT: When using tools that take a recipient/person name, always use the FULL NAME exactly as the user wrote it. If the user says 'send to Devashish', pass 'Devashish' as the recipient. If they say 'send to Devashish Shrivastava', pass 'Devashish Shrivastava'. Never abbreviate or modify names.",
+              "",
               "Respond with valid JSON only:",
               '{"mode":"answer","message":"Your brief confirmation here","saveSuggestion":null}',
             ].join("\n")
@@ -1570,6 +1572,7 @@ const createOrchestrationStreamingResponse = async ({
               systemPrompt: directPrompt,
               signal,
               tools,
+              reasoningEffort: "low",
             })
 
             let directOutputText = ""
@@ -1590,7 +1593,13 @@ const createOrchestrationStreamingResponse = async ({
                 try { parsed = JSON.parse(line.slice(6)) as Record<string, unknown> } catch { continue }
                 const pType = parsed.type as string
 
-                if (pType === "response.output_text.delta" && parsed.delta) {
+                if (
+                  (pType === "response.reasoning_summary_text.delta" ||
+                   pType === "response.reasoning.delta") &&
+                  parsed.delta
+                ) {
+                  emit({ type: "reasoning", content: parsed.delta as string })
+                } else if (pType === "response.output_text.delta" && parsed.delta) {
                   directOutputText += parsed.delta as string
                 } else if (pType === "response.function_call_arguments.delta" && parsed.delta) {
                   directToolCallArgs += parsed.delta as string

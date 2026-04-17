@@ -65,6 +65,8 @@ function scoreUserMatch(user: SlackUser, query: string): number {
     if (firstName === q) return 85
     if (lastName === q) return 80
     if (displayName === q) return 80
+    if (firstName && (firstName.startsWith(q) || q.startsWith(firstName))) return 75
+    if (displayName && (displayName.startsWith(q) || q.startsWith(displayName))) return 72
   }
 
   return 0
@@ -125,7 +127,7 @@ async function resolveChannelId(
 
     const scored = activeUsers
       .map((u) => ({ user: u, score: scoreUserMatch(u, cleanName) }))
-      .filter((s) => s.score >= 80)
+      .filter((s) => s.score >= 70)
       .sort((a, b) => b.score - a.score)
 
     if (scored.length === 0) {
