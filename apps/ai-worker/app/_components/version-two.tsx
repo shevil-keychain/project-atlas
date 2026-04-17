@@ -2562,7 +2562,7 @@ export default function VersionTwo() {
                                       <ConnectorActionCard
                                         key={tc.id}
                                         toolCall={tc}
-                                        onApprove={async (id, passedUserId) => {
+                                        onApprove={async (id, passedUserId, editedMessage) => {
                                           const threadId = selectedThread!.id
                                           const msgId = message.id
                                           const call = message.toolCalls?.find((t) => t.id === id)
@@ -2592,7 +2592,7 @@ export default function VersionTwo() {
                                             try {
                                               const sendBody: Record<string, string> = {
                                                 token,
-                                                message: call.args.message,
+                                                message: editedMessage ?? call.args.message,
                                               }
                                               if (resolvedUserId) {
                                                 sendBody.userId = resolvedUserId

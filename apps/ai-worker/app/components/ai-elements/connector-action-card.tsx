@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { cn } from "@level/ui/lib/utils"
 import { Button } from "@level/ui/components/ui/button"
 import { Check, Loading02 } from "@level/ui/components/icons"
@@ -32,61 +32,9 @@ const toolDisplayInfo: Record<string, { action: string; pluginId: string }> = {
   slack_search: { action: "Search Slack", pluginId: "slack" },
 }
 
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-}
-
-function renderSlackMrkdwn(text: string): string {
-  const lines = text.split("\n")
-  const htmlParts: string[] = []
-  let inList = false
-
-  for (const raw of lines) {
-    const line = escapeHtml(raw)
-
-    if (/^[-•]\s/.test(raw)) {
-      if (!inList) { htmlParts.push("<ul>"); inList = true }
-      const content = formatInline(line.replace(/^[-•]\s*/, ""))
-      htmlParts.push(`<li>${content}</li>`)
-      continue
-    }
-    if (/^\d+\.\s/.test(raw)) {
-      if (!inList) { htmlParts.push("<ol>"); inList = true }
-      const content = formatInline(line.replace(/^\d+\.\s*/, ""))
-      htmlParts.push(`<li>${content}</li>`)
-      continue
-    }
-
-    if (inList) {
-      htmlParts.push(inList ? "</ul>" : "</ol>")
-      inList = false
-    }
-
-    if (!line.trim()) {
-      htmlParts.push("<br/>")
-    } else {
-      htmlParts.push(`<p>${formatInline(line)}</p>`)
-    }
-  }
-
-  if (inList) htmlParts.push("</ul>")
-  return htmlParts.join("")
-}
-
-function formatInline(text: string): string {
-  return text
-    .replace(/\*([^*]+)\*/g, "<strong>$1</strong>")
-    .replace(/_([^_]+)_/g, "<em>$1</em>")
-    .replace(/~([^~]+)~/g, "<s>$1</s>")
-    .replace(/`([^`]+)`/g, "<code>$1</code>")
-}
-
 type ConnectorActionCardProps = {
   toolCall: ToolCallData
-  onApprove: (id: string, selectedUserId?: string) => void
+  onApprove: (id: string, selectedUserId?: string, editedMessage?: string) => void
   onReject: (id: string) => void
 }
 
@@ -111,14 +59,11 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
   const displayAvatar = isSingleMatch ? resolved.avatar : null
   const resolvedUserId = isSingleMatch ? resolved.userId : undefined
 
-  const [expanded, setExpanded] = useState(false)
-
-  const messageText = isSlackSend
+  const originalMessage = isSlackSend
     ? toolCall.args.message ?? ""
     : Object.entries(toolCall.args).map(([k, v]) => `${k}: ${v}`).join("\n")
 
-  const renderedMessage = useMemo(() => renderSlackMrkdwn(messageText), [messageText])
-  const isLong = messageText.split("\n").length > 5 || messageText.length > 400
+  const [editedMessage, setEditedMessage] = useState(originalMessage)
 
   return (
     <div
@@ -171,23 +116,20 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
             <p className="mt-4 text-12 text-text-secondary">To: {displayRecipient}</p>
           )}
 
-          {messageText && (
-            <div className="mt-16">
-              <div
-                className={cn(
-                  "slack-preview text-12 leading-relaxed text-text-tertiary",
-                  !expanded && isLong && "line-clamp-5"
-                )}
-                dangerouslySetInnerHTML={{ __html: renderedMessage }}
-              />
-              {isLong && (
-                <button
-                  type="button"
-                  onClick={() => setExpanded(!expanded)}
-                  className="mt-12 mb-4 text-12 font-medium text-brand-600 hover:text-brand-700"
-                >
-                  {expanded ? "Show less" : "Show more"}
-                </button>
+          {originalMessage && (
+            <div className="mt-12">
+              {isPending ? (
+                <textarea
+                  value={editedMessage}
+                  onChange={(e) => setEditedMessage(e.target.value)}
+                  className="w-full resize-none rounded-lg border border-border-subtle bg-white/60 px-12 py-10 text-12 leading-relaxed text-text-tertiary outline-none transition-colors focus:border-brand-300 focus:ring-1 focus:ring-brand-200"
+                  style={{ maxHeight: 160, overflowY: "auto" }}
+                  rows={Math.min(editedMessage.split("\n").length, 6)}
+                />
+              ) : (
+                <p className="whitespace-pre-wrap text-12 leading-relaxed text-text-tertiary" style={{ maxHeight: 120, overflowY: "auto" }}>
+                  {editedMessage}
+                </p>
               )}
             </div>
           )}
@@ -224,7 +166,7 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
               <Button
                 variant="default"
                 size="sm"
-                onClick={() => onApprove(toolCall.id, resolvedUserId)}
+                onClick={() => onApprove(toolCall.id, resolvedUserId, editedMessage)}
                 disabled={!!noMatch || !!hasApiError}
               >
                 Send
