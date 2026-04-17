@@ -40,10 +40,11 @@ function scoreUserMatch(user: SlackUser, query: string): number {
   const realName = (user.real_name ?? user.profile?.real_name ?? "").toLowerCase()
   const username = user.name?.toLowerCase() ?? ""
 
-  if (fullName && fullName === query) return 100
-  if (realName && realName === query) return 100
-  if (displayName && displayName === query) return 99
-  if (username && username === query) return 98
+  const allNames = [fullName, realName, displayName, username].filter(Boolean)
+
+  for (const name of allNames) {
+    if (name === query) return 100
+  }
 
   if (firstName && lastName) {
     const lastFirst = `${lastName} ${firstName}`
@@ -55,9 +56,14 @@ function scoreUserMatch(user: SlackUser, query: string): number {
   const queryParts = query.split(/[\s._-]+/).filter(Boolean)
 
   if (queryParts.length >= 2 && firstName && lastName) {
-    const matchesFirst = queryParts[0] === firstName || firstName.startsWith(queryParts[0])
-    const matchesLast = queryParts[1] === lastName || lastName.startsWith(queryParts[1])
+    const matchesFirst = queryParts[0] === firstName || firstName.startsWith(queryParts[0]) || queryParts[0].startsWith(firstName)
+    const matchesLast = queryParts[1] === lastName || lastName.startsWith(queryParts[1]) || queryParts[1].startsWith(lastName)
     if (matchesFirst && matchesLast) return 90
+    if (matchesFirst) return 78
+  }
+
+  for (const name of allNames) {
+    if (name.includes(query) || query.includes(name)) return 82
   }
 
   if (queryParts.length === 1) {
@@ -67,6 +73,10 @@ function scoreUserMatch(user: SlackUser, query: string): number {
     if (displayName === q) return 80
     if (firstName && (firstName.startsWith(q) || q.startsWith(firstName))) return 75
     if (displayName && (displayName.startsWith(q) || q.startsWith(displayName))) return 72
+  }
+
+  if (queryParts.length >= 2 && firstName) {
+    if (queryParts[0] === firstName) return 75
   }
 
   return 0
@@ -131,14 +141,14 @@ async function resolveChannelId(
       .sort((a, b) => b.score - a.score)
 
     if (scored.length === 0) {
-      const partialMatches = activeUsers
+      const closestMatches = activeUsers
         .map((u) => ({ user: u, score: scoreUserMatch(u, cleanName) }))
-        .filter((s) => s.score >= 50)
+        .filter((s) => s.score > 0)
         .sort((a, b) => b.score - a.score)
         .slice(0, 5)
 
-      if (partialMatches.length > 0) {
-        const suggestions = partialMatches
+      if (closestMatches.length > 0) {
+        const suggestions = closestMatches
           .map((m) => {
             const name = m.user.profile?.real_name || m.user.real_name || m.user.name
             return `"${name}"`
@@ -146,13 +156,13 @@ async function resolveChannelId(
           .join(", ")
         return {
           channelId: null,
-          error: `No strong match for "${recipient}". Did you mean: ${suggestions}?`,
+          error: `No strong match for "${recipient}". Closest matches: ${suggestions}`,
         }
       }
 
       return {
         channelId: null,
-        error: `Could not find a user named "${recipient}"`,
+        error: `Could not find a user named "${recipient}" (searched ${activeUsers.length} users)`,
       }
     }
 
