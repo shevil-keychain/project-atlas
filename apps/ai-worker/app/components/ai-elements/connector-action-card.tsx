@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { cn } from "@level/ui/lib/utils"
 import { Button } from "@level/ui/components/ui/button"
 import { Check, Loading02 } from "@level/ui/components/icons"
@@ -7,11 +8,20 @@ import { getConnectorById } from "../../lib/connectors"
 
 export type ToolCallStatus = "pending" | "sending" | "approved" | "rejected" | "error"
 
+export type ResolvedCandidate = {
+  userId: string
+  name: string
+  avatar: string | null
+  score: number
+}
+
 export type ResolvedRecipient = {
   found: boolean
   name?: string
   avatar?: string | null
-  suggestions?: Array<{ name: string; avatar: string | null; score: number }>
+  userId?: string
+  ambiguous?: boolean
+  candidates?: ResolvedCandidate[]
 }
 
 export type ToolCallData = {
@@ -21,6 +31,8 @@ export type ToolCallData = {
   status: ToolCallStatus
   errorMessage?: string
   resolvedRecipient?: ResolvedRecipient
+  selectedUserId?: string
+  selectedUserName?: string
 }
 
 const toolDisplayInfo: Record<string, { action: string; pluginId: string }> = {
@@ -29,16 +41,15 @@ const toolDisplayInfo: Record<string, { action: string; pluginId: string }> = {
   slack_search: { action: "Search Slack", pluginId: "slack" },
 }
 
-function formatArgs(toolName: string, args: Record<string, string>, resolvedRecipient?: ResolvedRecipient): string[] {
+function formatArgs(
+  toolName: string,
+  args: Record<string, string>,
+  resolvedRecipient?: ResolvedRecipient,
+  selectedUserName?: string,
+): string[] {
   if (toolName === "slack_send_message") {
     const lines: string[] = []
-    if (args.recipient) {
-      const displayName = resolvedRecipient?.found && resolvedRecipient.name
-        ? resolvedRecipient.name
-        : args.recipient
-      lines.push(`To: ${displayName}`)
-    }
-    if (args.message) lines.push(`Message: ${args.message}`)
+    if (args.message) lines.push(args.message)
     return lines
   }
   return Object.entries(args).map(([k, v]) => `${k}: ${v}`)
@@ -46,15 +57,17 @@ function formatArgs(toolName: string, args: Record<string, string>, resolvedReci
 
 type ConnectorActionCardProps = {
   toolCall: ToolCallData
-  onApprove: (id: string) => void
+  onApprove: (id: string, selectedUserId?: string) => void
   onReject: (id: string) => void
 }
 
 export function ConnectorActionCard({ toolCall, onApprove, onReject }: ConnectorActionCardProps) {
+  const [pickedUserId, setPickedUserId] = useState<string | null>(null)
+
   const info = toolDisplayInfo[toolCall.toolName]
   const connector = info ? getConnectorById(info.pluginId) : null
   const actionLabel = info?.action ?? toolCall.toolName
-  const argLines = formatArgs(toolCall.toolName, toolCall.args, toolCall.resolvedRecipient)
+  const argLines = formatArgs(toolCall.toolName, toolCall.args, toolCall.resolvedRecipient, toolCall.selectedUserName)
   const isPending = toolCall.status === "pending"
   const isSending = toolCall.status === "sending"
   const isApproved = toolCall.status === "approved"
@@ -62,15 +75,29 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
   const isError = toolCall.status === "error"
 
   const resolved = toolCall.resolvedRecipient
-  const recipientNotFound = resolved && !resolved.found
-  const recipientAvatar = resolved?.found ? resolved.avatar : null
+  const isSlackSend = toolCall.toolName === "slack_send_message"
+  const hasCandidates = resolved?.candidates && resolved.candidates.length > 0
+  const isAmbiguous = resolved && !resolved.found && hasCandidates
+  const isSingleMatch = resolved?.found === true
+  const noMatch = resolved && !resolved.found && !hasCandidates
+
+  const displayRecipient = toolCall.selectedUserName
+    ?? (isSingleMatch ? resolved.name : null)
+    ?? toolCall.args.recipient
+
+  const displayAvatar = isSingleMatch ? resolved.avatar : null
+
+  const effectiveUserId = pickedUserId
+    ?? toolCall.selectedUserId
+    ?? (isSingleMatch ? resolved.userId : null)
 
   return (
     <div
       className={cn(
         "my-8 rounded-xl border transition-all duration-200",
-        recipientNotFound && isPending && "border-warning-300 bg-warning-50",
-        !recipientNotFound && isPending && "border-brand-200 bg-brand-50",
+        noMatch && isPending && "border-warning-300 bg-warning-50",
+        isAmbiguous && isPending && "border-brand-200 bg-brand-50",
+        !noMatch && !isAmbiguous && isPending && "border-brand-200 bg-brand-50",
         isSending && "border-brand-200 bg-brand-50",
         isApproved && "border-success-200 bg-success-50",
         isRejected && "border-border-subtle bg-surface-muted opacity-60",
@@ -78,9 +105,9 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
       )}
     >
       <div className="flex items-start gap-12 px-16 py-12">
-        {recipientAvatar ? (
+        {displayAvatar ? (
           <img
-            src={recipientAvatar}
+            src={displayAvatar}
             alt="Recipient"
             className="mt-2 h-28 w-28 shrink-0 rounded-full object-cover"
           />
@@ -112,8 +139,12 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
             )}
           </div>
 
+          {isSlackSend && displayRecipient && (
+            <p className="mt-4 text-12 text-text-secondary">To: {displayRecipient}</p>
+          )}
+
           {argLines.length > 0 && (
-            <div className="mt-6 space-y-2">
+            <div className="mt-4 space-y-2">
               {argLines.map((line, i) => (
                 <p key={i} className="text-12 text-text-secondary">{line}</p>
               ))}
@@ -124,14 +155,53 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
             <p className="mt-6 text-12 text-error-600">{toolCall.errorMessage}</p>
           )}
 
-          {recipientNotFound && isPending && (
+          {noMatch && isPending && (
             <div className="mt-8 rounded-lg bg-warning-100 px-10 py-6">
               <p className="text-12 font-medium text-warning-800">
                 Could not find &quot;{toolCall.args.recipient}&quot; in Slack.
-                {resolved.suggestions && resolved.suggestions.length > 0 && (
-                  <span> Closest matches: {resolved.suggestions.map((s) => s.name).join(", ")}</span>
-                )}
               </p>
+            </div>
+          )}
+
+          {isAmbiguous && isPending && resolved.candidates && (
+            <div className="mt-10">
+              <p className="mb-8 text-12 font-medium text-text-secondary">
+                Multiple people found — who should this go to?
+              </p>
+              <div className="flex flex-col gap-4">
+                {resolved.candidates.map((c) => {
+                  const isSelected = (pickedUserId ?? toolCall.selectedUserId) === c.userId
+                  return (
+                    <button
+                      key={c.userId}
+                      type="button"
+                      onClick={() => setPickedUserId(c.userId)}
+                      className={cn(
+                        "flex items-center gap-10 rounded-lg px-10 py-8 text-left transition-all",
+                        isSelected
+                          ? "bg-brand-100 ring-1 ring-brand-400"
+                          : "bg-surface-primary hover:bg-surface-card"
+                      )}
+                    >
+                      {c.avatar ? (
+                        <img
+                          src={c.avatar}
+                          alt={c.name}
+                          className="h-28 w-28 shrink-0 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-full bg-surface-muted text-11 font-semibold text-text-tertiary">
+                          {c.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <span className="text-13 font-medium text-text-primary">{c.name}</span>
+                      {isSelected && (
+                        <Check size={14} className="ml-auto text-brand-600" />
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           )}
 
@@ -140,8 +210,8 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
               <Button
                 variant="default"
                 size="sm"
-                onClick={() => onApprove(toolCall.id)}
-                disabled={!!recipientNotFound}
+                onClick={() => onApprove(toolCall.id, effectiveUserId ?? undefined)}
+                disabled={!!noMatch || (!!isAmbiguous && !pickedUserId && !toolCall.selectedUserId)}
               >
                 Send
               </Button>

@@ -213,26 +213,53 @@ async function resolveChannelId(
 }
 
 export async function POST(request: Request) {
-  let body: { token?: string; recipient?: string; message?: string }
+  let body: { token?: string; recipient?: string; message?: string; userId?: string }
   try {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
 
-  const { token, recipient, message } = body
-  if (!token || !recipient || !message) {
+  const { token, recipient, message, userId } = body
+  if (!token || !message || (!recipient && !userId)) {
     return NextResponse.json(
-      { error: "token, recipient, and message are required" },
+      { error: "token, message, and either recipient or userId are required" },
       { status: 400 }
     )
   }
 
   try {
-    const { channelId, error: resolveError } = await resolveChannelId(
-      token,
-      recipient
-    )
+    let channelId: string | null = null
+    let resolveError: string | null = null
+
+    if (userId) {
+      const dmRes = await fetch("https://slack.com/api/conversations.open", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ users: userId }),
+      })
+      const dmData = (await dmRes.json()) as {
+        ok: boolean
+        channel?: { id: string }
+        error?: string
+        needed?: string
+      }
+      if (dmData.ok && dmData.channel) {
+        channelId = dmData.channel.id
+      } else {
+        resolveError = dmData.error === "missing_scope"
+          ? `missing_scope: need "${dmData.needed}" — please re-install the Slack plugin`
+          : dmData.error || "Could not open DM with user"
+      }
+    } else {
+      const result = await resolveChannelId(token, recipient!)
+      channelId = result.channelId
+      resolveError = result.error
+    }
+
     if (!channelId) {
       return NextResponse.json(
         { error: resolveError || "Could not resolve recipient" },

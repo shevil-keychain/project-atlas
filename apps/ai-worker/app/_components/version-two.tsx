@@ -92,6 +92,8 @@ type ToolCallEntry = {
   status: "pending" | "sending" | "approved" | "rejected" | "error"
   errorMessage?: string
   resolvedRecipient?: ResolvedRecipient
+  selectedUserId?: string
+  selectedUserName?: string
 }
 
 type ChatMessage = {
@@ -1603,10 +1605,15 @@ export default function VersionTwo() {
                   body: JSON.stringify({ token: slackToken, recipient: event.args.recipient }),
                 })
                   .then((res) => res.json())
-                  .then((data: { found: boolean; user?: { name: string; avatar: string | null }; suggestions?: Array<{ name: string; avatar: string | null; score: number }> }) => {
+                  .then((data: {
+                    found: boolean
+                    user?: { userId: string; name: string; avatar: string | null; score: number }
+                    ambiguous?: boolean
+                    candidates?: Array<{ userId: string; name: string; avatar: string | null; score: number }>
+                  }) => {
                     const resolved: ResolvedRecipient = data.found && data.user
-                      ? { found: true, name: data.user.name, avatar: data.user.avatar }
-                      : { found: false, suggestions: data.suggestions }
+                      ? { found: true, name: data.user.name, avatar: data.user.avatar, userId: data.user.userId, candidates: data.candidates }
+                      : { found: false, ambiguous: data.ambiguous, candidates: data.candidates }
                     updateThreadMessage(threadId, assistantMessageId, (msg) => ({
                       ...msg,
                       toolCalls: msg.toolCalls?.map((tc) =>
@@ -2548,16 +2555,26 @@ export default function VersionTwo() {
                                       <ConnectorActionCard
                                         key={tc.id}
                                         toolCall={tc}
-                                        onApprove={async (id) => {
+                                        onApprove={async (id, selectedUserId) => {
                                           const threadId = selectedThread!.id
                                           const msgId = message.id
                                           const call = message.toolCalls?.find((t) => t.id === id)
                                           if (!call) return
 
+                                          const resolvedUserId = selectedUserId
+                                            ?? call.selectedUserId
+                                            ?? (call.resolvedRecipient?.found ? call.resolvedRecipient.userId : undefined)
+
+                                          const resolvedName = selectedUserId && call.resolvedRecipient?.candidates
+                                            ? call.resolvedRecipient.candidates.find((c) => c.userId === selectedUserId)?.name
+                                            : undefined
+
                                           updateThreadMessage(threadId, msgId, (msg) => ({
                                             ...msg,
                                             toolCalls: msg.toolCalls?.map((t) =>
-                                              t.id === id ? { ...t, status: "sending" as const } : t
+                                              t.id === id
+                                                ? { ...t, status: "sending" as const, selectedUserId: resolvedUserId, selectedUserName: resolvedName }
+                                                : t
                                             ),
                                           }))
 
@@ -2573,14 +2590,20 @@ export default function VersionTwo() {
                                               return
                                             }
                                             try {
+                                              const sendBody: Record<string, string> = {
+                                                token,
+                                                message: call.args.message,
+                                              }
+                                              if (resolvedUserId) {
+                                                sendBody.userId = resolvedUserId
+                                              } else {
+                                                sendBody.recipient = call.args.recipient
+                                              }
+
                                               const res = await fetch("/api/slack/send", {
                                                 method: "POST",
                                                 headers: { "Content-Type": "application/json" },
-                                                body: JSON.stringify({
-                                                  token,
-                                                  recipient: call.args.recipient,
-                                                  message: call.args.message,
-                                                }),
+                                                body: JSON.stringify(sendBody),
                                               })
                                               const data = await res.json()
                                               if (res.ok && data.ok) {

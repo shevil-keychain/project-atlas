@@ -48,6 +48,7 @@ function scoreUserMatch(user: SlackUser, query: string): number {
     if (firstExact && lastExact) return 95
     if (firstExact && lastName.startsWith(queryParts[1])) return 90
     if (firstExact && queryParts[1].startsWith(lastName)) return 90
+    if (lastExact && firstName.startsWith(queryParts[0])) return 88
     if (firstExact) return 78
   }
 
@@ -56,11 +57,33 @@ function scoreUserMatch(user: SlackUser, query: string): number {
     if (firstName === q) return 85
     if (lastName === q) return 80
     if (displayName === q) return 80
-    if (firstName && firstName.startsWith(q) && q.length >= 3) return 75
-    if (displayName && displayName.startsWith(q) && q.length >= 3) return 72
+    if (firstName && firstName.startsWith(q) && q.length >= 2) return 70
+    if (lastName && lastName.startsWith(q) && q.length >= 2) return 68
+    if (displayName && displayName.startsWith(q) && q.length >= 2) return 65
+  }
+
+  // Very relaxed: any query part appears as a startsWith on first or last name
+  for (const part of queryParts) {
+    if (part.length < 2) continue
+    if (firstName.startsWith(part) || lastName.startsWith(part)) return 55
+    if (displayName.startsWith(part) || username.startsWith(part)) return 50
+  }
+
+  // Even more relaxed: firstName or lastName contains query part (min 3 chars to avoid noise)
+  for (const part of queryParts) {
+    if (part.length < 3) continue
+    if (firstName.includes(part) || lastName.includes(part)) return 40
+    if (realName.includes(part) || displayName.includes(part)) return 35
   }
 
   return 0
+}
+
+export type ResolveUserCandidate = {
+  userId: string
+  name: string
+  avatar: string | null
+  score: number
 }
 
 export async function POST(request: Request) {
@@ -92,6 +115,7 @@ export async function POST(request: Request) {
     if (!usersData.ok || !usersData.members) {
       return NextResponse.json({
         found: false,
+        candidates: [],
         error: usersData.error || "Could not fetch users",
       })
     }
@@ -103,34 +127,38 @@ export async function POST(request: Request) {
 
     const scored = activeUsers
       .map((u) => ({ user: u, score: scoreUserMatch(u, cleanName) }))
-      .filter((s) => s.score >= 70)
+      .filter((s) => s.score > 0)
       .sort((a, b) => b.score - a.score)
+      .slice(0, 8)
 
     if (scored.length === 0) {
-      const closestMatches = activeUsers
-        .map((u) => ({ user: u, score: scoreUserMatch(u, cleanName) }))
-        .filter((s) => s.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 5)
-
       return NextResponse.json({
         found: false,
-        suggestions: closestMatches.map((m) => ({
-          name: m.user.profile?.real_name || m.user.real_name || m.user.name,
-          avatar: m.user.profile?.image_72 || null,
-          score: m.score,
-        })),
+        candidates: [],
       })
     }
 
-    const best = scored[0].user
+    const toCandidate = (s: { user: SlackUser; score: number }): ResolveUserCandidate => ({
+      userId: s.user.id,
+      name: s.user.profile?.real_name || s.user.real_name || s.user.name,
+      avatar: s.user.profile?.image_72 || null,
+      score: s.score,
+    })
+
+    // Clear winner: top score >= 95 and well ahead of runner-up
+    if (scored[0].score >= 95 && (scored.length === 1 || scored[0].score - scored[1].score >= 5)) {
+      return NextResponse.json({
+        found: true,
+        user: toCandidate(scored[0]),
+        candidates: scored.slice(0, 5).map(toCandidate),
+      })
+    }
+
+    // Multiple viable candidates — let the user pick
     return NextResponse.json({
-      found: true,
-      user: {
-        name: best.profile?.real_name || best.real_name || best.name,
-        avatar: best.profile?.image_72 || null,
-        score: scored[0].score,
-      },
+      found: false,
+      ambiguous: true,
+      candidates: scored.slice(0, 5).map(toCandidate),
     })
   } catch {
     return NextResponse.json(
