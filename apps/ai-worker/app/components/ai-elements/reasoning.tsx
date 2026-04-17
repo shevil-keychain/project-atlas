@@ -10,6 +10,8 @@ type ReasoningBlockProps = {
   reasoning: string
   reasoningDone?: boolean
   durationSeconds?: number
+  streamingLabel?: string
+  completedLabel?: string
 }
 
 const stripMarkdown = (text: string) =>
@@ -22,7 +24,7 @@ const stripMarkdown = (text: string) =>
     .replace(/`(.+?)`/g, "$1")
     .replace(/^#{1,6}\s+/gm, "")
 
-export function ReasoningBlock({ isStreaming, reasoning, reasoningDone, durationSeconds }: ReasoningBlockProps) {
+export function ReasoningBlock({ isStreaming, reasoning, reasoningDone, durationSeconds, streamingLabel = "Thinking", completedLabel }: ReasoningBlockProps) {
   const [collapsed, setCollapsed] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const hasFinishedRef = useRef(false)
@@ -52,11 +54,12 @@ export function ReasoningBlock({ isStreaming, reasoning, reasoningDone, duration
 
   const hasReasoning = !!reasoning
   const showContent = hasReasoning && !collapsed
+  const donePrefix = completedLabel ?? "Thought"
   const label = hasDuration
-    ? `Thought for ${durationSeconds}s`
+    ? `${donePrefix} for ${durationSeconds}s`
     : hasReasoning
-      ? "Thought process"
-      : "Thought briefly"
+      ? `${donePrefix} process`
+      : `${donePrefix} briefly`
 
   if (isStreaming) {
     if (reasoningDone && hasReasoning) {
@@ -71,7 +74,7 @@ export function ReasoningBlock({ isStreaming, reasoning, reasoningDone, duration
     return (
       <div className="flex flex-col gap-4">
         <Shimmer as="p" className="text-14 font-semibold" duration={4} spread={2}>
-          Thinking
+          {streamingLabel}
         </Shimmer>
         {hasReasoning && (
           <div

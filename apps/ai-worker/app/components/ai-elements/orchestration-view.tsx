@@ -48,12 +48,15 @@ export function OrchestrationView({
         <ReasoningBlock
           isStreaming={true}
           reasoning={orchestration.planningReasoning ?? ""}
+          streamingLabel="Planning"
+          completedLabel="Planned"
         />
       ) : orchestration.planningDone && (orchestration.planningReasoning || orchestration.planningDurationSeconds) ? (
         <ReasoningBlock
           isStreaming={false}
           reasoning={orchestration.planningReasoning ?? ""}
           durationSeconds={orchestration.planningDurationSeconds}
+          completedLabel="Planned"
         />
       ) : null}
 
