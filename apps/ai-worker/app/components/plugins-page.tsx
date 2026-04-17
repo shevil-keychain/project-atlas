@@ -110,6 +110,7 @@ export function PluginsPage({
 }: PluginsPageProps) {
   const [searchValue, setSearchValue] = useState("")
   const [installDialogPlugin, setInstallDialogPlugin] = useState<ConnectorDefinition | null>(null)
+  const [uninstallPlugin, setUninstallPlugin] = useState<ConnectorDefinition | null>(null)
 
   const filtered = connectors.filter((c) => {
     if (!searchValue.trim()) return true
@@ -175,7 +176,7 @@ export function PluginsPage({
               plugin={plugin}
               isInstalled={installedConnectors.includes(plugin.id)}
               onInstallClick={() => handleInstallClick(plugin)}
-              onUninstallClick={() => onUninstall(plugin.id)}
+              onUninstallClick={() => setUninstallPlugin(plugin)}
             />
           ))}
 
@@ -246,6 +247,43 @@ export function PluginsPage({
                 onClick={handleInstallConfirm}
               >
                 Install {installDialogPlugin.name}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        )}
+      </Dialog>
+
+      <Dialog
+        open={uninstallPlugin !== null}
+        onOpenChange={(open) => { if (!open) setUninstallPlugin(null) }}
+      >
+        {uninstallPlugin && (
+          <DialogContent size="sm">
+            <DialogHeader>
+              <p className="text-16 font-semibold text-text-primary">
+                Uninstall {uninstallPlugin.name}?
+              </p>
+            </DialogHeader>
+            <DialogBody className="py-16">
+              <p className="text-14 text-text-secondary">
+                AI workers will no longer be able to use {uninstallPlugin.name} on your behalf. You can reinstall it anytime.
+              </p>
+            </DialogBody>
+            <DialogFooter>
+              <Button
+                variant="ghost"
+                onClick={() => setUninstallPlugin(null)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  onUninstall(uninstallPlugin.id)
+                  setUninstallPlugin(null)
+                }}
+              >
+                Uninstall
               </Button>
             </DialogFooter>
           </DialogContent>
