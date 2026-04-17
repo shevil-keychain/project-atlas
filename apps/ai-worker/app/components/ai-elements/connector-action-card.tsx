@@ -1,8 +1,9 @@
 "use client"
 
-import { useRef, useMemo, useCallback } from "react"
+import { useState } from "react"
 import { cn } from "@level/ui/lib/utils"
 import { Button } from "@level/ui/components/ui/button"
+import { Textarea } from "@level/ui/components/ui/textarea"
 import { Check, Loading02 } from "@level/ui/components/icons"
 import { getConnectorById } from "../../lib/connectors"
 
@@ -32,64 +33,6 @@ const toolDisplayInfo: Record<string, { action: string; pluginId: string }> = {
   slack_search: { action: "Search Slack", pluginId: "slack" },
 }
 
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-}
-
-function formatInline(text: string): string {
-  return text
-    .replace(/\*([^*]+)\*/g, "<strong>$1</strong>")
-    .replace(/_([^_]+)_/g, "<em>$1</em>")
-    .replace(/~([^~]+)~/g, "<s>$1</s>")
-    .replace(/`([^`]+)`/g, "<code>$1</code>")
-}
-
-function renderSlackMrkdwn(text: string): string {
-  const lines = text.split("\n")
-  const htmlParts: string[] = []
-  let inList: "ul" | "ol" | null = null
-
-  for (const raw of lines) {
-    const line = escapeHtml(raw)
-
-    if (/^[-•]\s/.test(raw)) {
-      if (inList !== "ul") {
-        if (inList) htmlParts.push(`</${inList}>`)
-        htmlParts.push("<ul>")
-        inList = "ul"
-      }
-      htmlParts.push(`<li>${formatInline(line.replace(/^[-•]\s*/, ""))}</li>`)
-      continue
-    }
-    if (/^\d+\.\s/.test(raw)) {
-      if (inList !== "ol") {
-        if (inList) htmlParts.push(`</${inList}>`)
-        htmlParts.push("<ol>")
-        inList = "ol"
-      }
-      htmlParts.push(`<li>${formatInline(line.replace(/^\d+\.\s*/, ""))}</li>`)
-      continue
-    }
-
-    if (inList) {
-      htmlParts.push(`</${inList}>`)
-      inList = null
-    }
-
-    if (!line.trim()) {
-      htmlParts.push("<br/>")
-    } else {
-      htmlParts.push(`<p>${formatInline(line)}</p>`)
-    }
-  }
-
-  if (inList) htmlParts.push(`</${inList}>`)
-  return htmlParts.join("")
-}
-
 type ConnectorActionCardProps = {
   toolCall: ToolCallData
   onApprove: (id: string, selectedUserId?: string, editedMessage?: string) => void
@@ -113,26 +56,21 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
   const noMatch = resolved && !resolved.found && !hasApiError
 
   const displayRecipient = isSingleMatch ? resolved.name : toolCall.args.recipient
+  const displayAvatar = isSingleMatch ? resolved.avatar : null
   const resolvedUserId = isSingleMatch ? resolved.userId : undefined
 
   const originalMessage = isSlackSend
     ? toolCall.args.message ?? ""
     : Object.entries(toolCall.args).map(([k, v]) => `${k}: ${v}`).join("\n")
 
-  const contentRef = useRef<HTMLDivElement>(null)
-  const renderedHtml = useMemo(() => renderSlackMrkdwn(originalMessage), [originalMessage])
-
-  const getEditedMessage = useCallback(() => {
-    if (!contentRef.current) return originalMessage
-    return contentRef.current.innerText
-  }, [originalMessage])
+  const [editedMessage, setEditedMessage] = useState(originalMessage)
 
   const pluginName = connector?.name ?? "Action"
 
   return (
     <div
       className={cn(
-        "my-8 overflow-hidden rounded-xl border transition-all duration-200",
+        "my-8 overflow-hidden rounded-xl border bg-white transition-all duration-200",
         (noMatch || hasApiError) && isPending && "border-warning-300",
         !noMatch && !hasApiError && isPending && "border-border-default",
         isSending && "border-border-default",
@@ -141,60 +79,75 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
         isError && "border-error-200"
       )}
     >
-      {/* Header */}
-      <div className="flex items-center gap-8 border-b border-border-subtle px-16 py-10">
-        {connector && (
+      {/* Header: avatar + name + plugin logo */}
+      <div className="flex items-center gap-10 px-16 py-10">
+        {displayAvatar ? (
           <img
-            src={connector.logoUrl}
-            alt={connector.name}
-            className="h-18 w-18 shrink-0 object-contain"
+            src={displayAvatar}
+            alt={displayRecipient ?? "Recipient"}
+            className="h-28 w-28 shrink-0 rounded-full object-cover"
           />
+        ) : (
+          <div className="flex h-28 w-28 shrink-0 items-center justify-center rounded-full bg-surface-muted text-12 font-semibold text-text-secondary">
+            {(displayRecipient ?? "?").charAt(0).toUpperCase()}
+          </div>
         )}
-        <span className="text-13 font-semibold text-text-primary">{pluginName}</span>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-6">
+            <span className="text-13 font-semibold text-text-primary">
+              {displayRecipient ?? pluginName}
+            </span>
+            {connector && (
+              <img
+                src={connector.logoUrl}
+                alt={connector.name}
+                className="h-14 w-14 shrink-0 object-contain"
+              />
+            )}
+          </div>
+          <p className="text-11 text-text-tertiary">via {pluginName}</p>
+        </div>
 
         {isSending && (
-          <span className="ml-auto flex items-center gap-4 text-11 font-medium text-brand-600">
+          <span className="flex items-center gap-4 text-11 font-medium text-brand-600">
             <Loading02 size={12} className="animate-spin" /> Sending...
           </span>
         )}
         {isApproved && (
-          <span className="ml-auto flex items-center gap-4 text-11 font-medium text-success-700">
+          <span className="flex items-center gap-4 text-11 font-medium text-success-700">
             <Check size={12} /> Sent
           </span>
         )}
         {isRejected && (
-          <span className="ml-auto text-11 font-medium text-text-tertiary">Cancelled</span>
+          <span className="text-11 font-medium text-text-tertiary">Cancelled</span>
         )}
         {isError && (
-          <span className="ml-auto text-11 font-medium text-error-600">Failed</span>
+          <span className="text-11 font-medium text-error-600">Failed</span>
         )}
       </div>
 
-      <div className="px-16 py-12">
-        {/* Recipient */}
-        {isSlackSend && displayRecipient && (
-          <div className="flex items-center gap-6 pb-12">
-            <span className="text-12 text-text-secondary">To:</span>
-            <span className="rounded-md border border-border-subtle bg-surface-muted px-8 py-2 text-12 font-medium text-text-primary">
-              @{displayRecipient}
-            </span>
-          </div>
-        )}
+      {/* Divider */}
+      <div className="border-t border-border-subtle" />
 
+      <div className="px-16 py-12">
         {/* Message body */}
         {originalMessage && (
-          <div
-            ref={contentRef}
-            contentEditable={isPending}
-            suppressContentEditableWarning
-            className={cn(
-              "action-card-body rounded-lg border border-border-subtle px-12 py-10 text-13 leading-relaxed text-text-primary outline-none",
-              isPending && "bg-[#faf8f3] focus:border-brand-300 focus:ring-1 focus:ring-brand-200",
-              !isPending && "bg-surface-muted"
-            )}
-            style={{ maxHeight: 180, overflowY: "auto" }}
-            dangerouslySetInnerHTML={{ __html: renderedHtml }}
-          />
+          isPending ? (
+            <Textarea
+              value={editedMessage}
+              onChange={(e) => setEditedMessage(e.target.value)}
+              className="text-13 leading-relaxed"
+              style={{ minHeight: 80, maxHeight: 200 }}
+            />
+          ) : (
+            <p
+              className="whitespace-pre-wrap text-13 leading-relaxed text-text-primary"
+              style={{ maxHeight: 160, overflowY: "auto" }}
+            >
+              {editedMessage}
+            </p>
+          )
         )}
 
         {/* Errors */}
@@ -227,27 +180,22 @@ export function ConnectorActionCard({ toolCall, onApprove, onReject }: Connector
 
         {/* Footer */}
         {isPending && (
-          <div className="mt-10 flex items-center justify-between">
-            <span className="text-11 text-text-tertiary">
-              Tip: Use standard Markdown (e.g., **bold** for bold).
-            </span>
-            <div className="flex items-center gap-8">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onReject(toolCall.id)}
-              >
-                Reject
-              </Button>
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => onApprove(toolCall.id, resolvedUserId, getEditedMessage())}
-                disabled={!!noMatch || !!hasApiError}
-              >
-                Send
-              </Button>
-            </div>
+          <div className="mt-10 flex items-center justify-end gap-8">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onReject(toolCall.id)}
+            >
+              Reject
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => onApprove(toolCall.id, resolvedUserId, editedMessage)}
+              disabled={!!noMatch || !!hasApiError}
+            >
+              Send
+            </Button>
           </div>
         )}
       </div>
