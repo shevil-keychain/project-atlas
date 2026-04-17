@@ -1,6 +1,5 @@
 "use client"
 
-import { Shimmer } from "./shimmer"
 import { ReasoningBlock } from "./reasoning"
 import { WorkerCallCard } from "./worker-call-card"
 
@@ -38,29 +37,24 @@ export function OrchestrationView({
 }: OrchestrationViewProps) {
   const hasWorkers = orchestration.workers.length > 0
   const allDone = hasWorkers && orchestration.workers.every((w) => w.status === "done")
-  const isPlanningPhase = isStreaming && !orchestration.planningDone
+  const isPlanningPhase = isStreaming && !orchestration.planningDone && !hasWorkers
   const showSynthesisReasoning = allDone && (isStreaming || reasoning)
 
   return (
     <div className="mb-16 flex flex-col gap-16">
-      {/* Phase 1: Master planning reasoning */}
       {isPlanningPhase ? (
         <ReasoningBlock
           isStreaming={true}
           reasoning={orchestration.planningReasoning ?? ""}
-          streamingLabel="Planning"
-          completedLabel="Planned"
         />
-      ) : orchestration.planningDone && (orchestration.planningReasoning || orchestration.planningDurationSeconds) ? (
+      ) : hasWorkers && orchestration.planningDone && (orchestration.planningReasoning || orchestration.planningDurationSeconds) ? (
         <ReasoningBlock
           isStreaming={false}
           reasoning={orchestration.planningReasoning ?? ""}
           durationSeconds={orchestration.planningDurationSeconds}
-          completedLabel="Planned"
         />
       ) : null}
 
-      {/* Phase 2: Worker cards */}
       {hasWorkers && (
         <div className="flex flex-col gap-8">
           {orchestration.workers.map((worker) => (
