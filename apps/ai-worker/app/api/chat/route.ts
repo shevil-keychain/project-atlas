@@ -1630,6 +1630,8 @@ const createOrchestrationStreamingResponse = async ({
               }
             }
 
+            emit({ type: "reasoning_done" })
+
             if (directOutputText.trim()) {
               const turn = parseAssistantTurn(directOutputText.trim(), messages, libraryEntries)
               emit({ type: "text", content: turn.message })
