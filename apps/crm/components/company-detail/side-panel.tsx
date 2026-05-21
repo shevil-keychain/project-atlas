@@ -10,11 +10,9 @@ import {
   ArrowLeft,
   ChevronDown,
   Building01,
-  Phone01,
-  Star01,
-  Zap,
+  CalendarPlus01,
+  Email,
   DotsHorizontal,
-  Pin01,
 } from "@level/ui/components/icons";
 
 export type SidePanelContact = {
@@ -81,7 +79,7 @@ function Section({ label, defaultOpen = true, children }: SectionProps) {
         />
         <span className="text-12 font-semibold">{label}</span>
       </button>
-      {open && <div className="flex flex-col gap-8 py-8">{children}</div>}
+      {open && <div className="flex flex-col gap-16 py-8">{children}</div>}
     </div>
   );
 }
@@ -117,11 +115,19 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
         </Link>
 
         <div className="flex flex-col gap-12">
-          <Avatar name={data.name} size="md" />
+          <Avatar
+            name={data.name}
+            size="md"
+            src={
+              data.keyDetails.website
+                ? `https://www.google.com/s2/favicons?domain=${data.keyDetails.website}&sz=128`
+                : undefined
+            }
+          />
           <div className="flex flex-col gap-4">
             <h2 className="text-18 font-semibold text-text-primary">{data.name}</h2>
             <div>
-              <Badge color="primary" size="sm">
+              <Badge color="gray" size="sm">
                 {data.status}
               </Badge>
             </div>
@@ -129,17 +135,16 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
         </div>
 
         <div className="flex items-center gap-8">
-          <Button variant="secondary" size="icon-sm" aria-label="Pin">
-            <Pin01 size={16} />
+          <Button
+            variant="secondary"
+            size="sm"
+            iconLeft={<Email size={16} />}
+            className="flex-1 min-w-0"
+          >
+            Compose email
           </Button>
-          <Button variant="secondary" size="icon-sm" aria-label="Quick action">
-            <Zap size={16} />
-          </Button>
-          <Button variant="secondary" size="icon-sm" aria-label="Favorite">
-            <Star01 size={16} />
-          </Button>
-          <Button variant="secondary" size="icon-sm" aria-label="Call">
-            <Phone01 size={16} />
+          <Button variant="secondary" size="icon-sm" aria-label="Send calendar invite">
+            <CalendarPlus01 size={16} />
           </Button>
           <Button variant="secondary" size="icon-sm" aria-label="More">
             <DotsHorizontal size={16} />
@@ -151,6 +156,15 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
       <Section label="Key Details">
         <PropertyRow label="Account Name" value={data.keyDetails.accountName} />
         <PropertyRow label="Account Type" value={data.keyDetails.accountType} />
+        <PropertyRow
+          label="Connection strength"
+          value={
+            <div className="flex items-center gap-8">
+              <span className="size-8 shrink-0 rounded-full bg-surface-warning" aria-hidden />
+              <span className="text-14 font-medium text-text-primary">Weak</span>
+            </div>
+          }
+        />
         <PropertyRow label="Website" value={data.keyDetails.website} />
         <PropertyRow label="Phone" value={data.keyDetails.phone} />
         <PropertyRow label="Industry" value={data.keyDetails.industry} />

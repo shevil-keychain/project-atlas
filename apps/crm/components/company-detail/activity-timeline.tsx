@@ -108,7 +108,7 @@ export function ActivityTimeline() {
               <div
                 key={i}
                 className={`flex-1 rounded-sm ${
-                  muted ? "bg-border-subtle" : "bg-text-primary"
+                  muted ? "bg-border-subtle" : "bg-secondary-yellow-500"
                 }`}
                 style={{ height: `${heightPct}%` }}
                 title={`Day ${i + 1}: ${count} ${count === 1 ? "activity" : "activities"}`}

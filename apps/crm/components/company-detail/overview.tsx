@@ -4,6 +4,7 @@ import { Avatar } from "@level/ui/components/ui/avatar";
 import { Badge } from "@level/ui/components/ui/badge";
 import { Button } from "@level/ui/components/ui/button";
 import { Input } from "@level/ui/components/ui/input";
+import { Textarea } from "@level/ui/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -20,11 +21,9 @@ import {
 import {
   Activity,
   ArrowUpRight,
-  CalendarDate,
   ChevronRight,
   DotsHorizontal,
   Email,
-  Eye,
   Phone01,
   Plus,
   SearchSm,
@@ -120,16 +119,61 @@ const orders = [
 ];
 
 type Activity = {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+  iconNode?: React.ReactNode;
   label: React.ReactNode;
   timestamp: string;
   expandable?: boolean;
   details?: { label: string; value: React.ReactNode }[];
 };
 
+function GmailLogo({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden focusable="false">
+      <path d="M2 6.5 12 13l10-6.5V18a2 2 0 0 1-2 2h-2V10.5l-6 4-6-4V20H4a2 2 0 0 1-2-2V6.5Z" fill="#EA4335"/>
+      <path d="M22 6.5V18a2 2 0 0 1-2 2h-2V10.5l4-4Z" fill="#FBBC04"/>
+      <path d="M2 6.5 6 10.5V20H4a2 2 0 0 1-2-2V6.5Z" fill="#34A853"/>
+      <path d="M2 6.5A2 2 0 0 1 4 4.5h1L12 9l7-4.5h1a2 2 0 0 1 2 2L12 13 2 6.5Z" fill="#4285F4"/>
+      <path d="M6 10.5 12 13l-6 4v-6.5Z" fill="#C5221F"/>
+    </svg>
+  );
+}
+
+function GoogleMeetLogo({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden focusable="false">
+      <path d="M15 8v8l5 3.5V4.5L15 8Z" fill="#00AC47"/>
+      <path d="M3 7v10a2 2 0 0 0 2 2h10v-4H8V11L3 7Z" fill="#FFBA00"/>
+      <path d="M3 7l5 4V7a2 2 0 0 1 2-2h5V3H5a2 2 0 0 0-2 2v2Z" fill="#00832D"/>
+      <path d="M15 19v-4l5 4.5V19h-5Z" fill="#0066DA"/>
+      <path d="M15 3v8h5V5a2 2 0 0 0-2-2h-3Z" fill="#E94235"/>
+    </svg>
+  );
+}
+
+function CircularIcon({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="mt-2 flex size-28 shrink-0 items-center justify-center rounded-full bg-surface-sunken text-icon-secondary">
+      {children}
+    </span>
+  );
+}
+
+function BrandIconBadge({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="mt-2 flex size-28 shrink-0 items-center justify-center rounded-full bg-surface-card border border-border-default">
+      {children}
+    </span>
+  );
+}
+
 const activityApril: Activity[] = [
   {
-    icon: Email,
+    iconNode: (
+      <BrandIconBadge>
+        <GmailLogo size={16} />
+      </BrandIconBadge>
+    ),
     label: (
       <>
         Opened email: <span className="font-semibold">Follow-Up Call</span> sent by{" "}
@@ -162,7 +206,11 @@ const activityApril: Activity[] = [
     ],
   },
   {
-    icon: Eye,
+    iconNode: (
+      <span className="mt-2 shrink-0">
+        <Avatar name="Magic Spoon" size="sm" />
+      </span>
+    ),
     label: (
       <>
         Visited <span className="font-semibold">Our Services</span> +3 pages on your website.
@@ -171,12 +219,20 @@ const activityApril: Activity[] = [
     timestamp: "Apr 18, 2026 at 2:32 PM",
   },
   {
-    icon: Eye,
+    iconNode: (
+      <span className="mt-2 shrink-0">
+        <Avatar name="Magic Spoon" size="sm" />
+      </span>
+    ),
     label: <>Visited your Keychain profile.</>,
     timestamp: "Apr 18, 2026 at 1:51 PM",
   },
   {
-    icon: Eye,
+    iconNode: (
+      <span className="mt-2 shrink-0">
+        <Avatar name="Magic Spoon" size="sm" />
+      </span>
+    ),
     label: <>Saw your Keychain profile in search.</>,
     timestamp: "Apr 18, 2026 at 1:48 PM",
   },
@@ -184,7 +240,11 @@ const activityApril: Activity[] = [
 
 const activityMarch: Activity[] = [
   {
-    icon: CalendarDate,
+    iconNode: (
+      <BrandIconBadge>
+        <GoogleMeetLogo size={16} />
+      </BrandIconBadge>
+    ),
     label: (
       <>
         Attended <span className="font-semibold">Keychain Intro Call</span> with{" "}
@@ -194,7 +254,11 @@ const activityMarch: Activity[] = [
     timestamp: "Mar 27, 2026 at 4:00 PM",
   },
   {
-    icon: CalendarDate,
+    iconNode: (
+      <BrandIconBadge>
+        <GoogleMeetLogo size={16} />
+      </BrandIconBadge>
+    ),
     label: (
       <>
         Invited to <span className="font-semibold">Keychain Intro Call</span> on Mar 27 (4:00
@@ -214,7 +278,11 @@ const activityMarch: Activity[] = [
     timestamp: "Mar 22, 2026 at 9:51 AM",
   },
   {
-    icon: Email,
+    iconNode: (
+      <BrandIconBadge>
+        <GmailLogo size={16} />
+      </BrandIconBadge>
+    ),
     label: (
       <>
         Received newsletter: <span className="font-semibold">March Newsletter</span>
@@ -286,9 +354,13 @@ function ActivityCard({ activity }: { activity: Activity }) {
           size={16}
           className={`mt-6 shrink-0 text-icon-tertiary ${activity.expandable ? "rotate-90" : ""}`}
         />
-        <span className="mt-2 flex size-28 shrink-0 items-center justify-center rounded-full bg-surface-sunken text-icon-secondary">
-          <Icon size={14} />
-        </span>
+        {activity.iconNode ? (
+          activity.iconNode
+        ) : Icon ? (
+          <CircularIcon>
+            <Icon size={14} />
+          </CircularIcon>
+        ) : null}
         <div className="flex min-w-0 flex-1 flex-col gap-8">
           <div className="flex flex-wrap items-start justify-between gap-8">
             <p className="text-14 text-text-primary">{activity.label}</p>
@@ -311,7 +383,7 @@ function ActivityCard({ activity }: { activity: Activity }) {
 }
 
 const tabTriggerClass =
-  "data-[state=active]:border-secondary-yellow-500 data-[state=active]:text-text-primary";
+  "whitespace-nowrap data-[state=active]:border-secondary-yellow-500 data-[state=active]:text-text-primary";
 
 function TopStats() {
   return (
@@ -320,6 +392,29 @@ function TopStats() {
         <StatCard key={stat.label} stat={stat} />
       ))}
     </div>
+  );
+}
+
+function CompanySummaryCard() {
+  return (
+    <section className="relative overflow-hidden rounded-xl border border-border-default bg-surface-card shadow-sm">
+      {/* Decorative yellow accent strip */}
+      <div className="absolute inset-y-0 left-0 w-4 bg-secondary-yellow-500" />
+      <div className="flex items-start gap-20 bg-gradient-to-r from-secondary-yellow-50 to-surface-card p-20 pl-24">
+        <div className="flex min-w-0 flex-1 flex-col gap-8">
+          <h3 className="text-16 font-semibold text-text-primary">Summary</h3>
+          <p className="text-14 text-text-primary">
+            Magic Spoon is a Food &amp; Beverage brand currently in a prospect stage, owned
+            by Ben Cohen. They sell direct-to-consumer cereal and protein-bar products
+            (35 SKUs, $70M brand revenue, +61% YoY growth). Engagement has been{" "}
+            <span className="font-semibold">light and inconsistent</span> — a few warm
+            touch-points in mid-year followed by long quiet stretches. Champion is
+            Elliot Shifrin (CCO); next step is a tailored proposal with two pricing
+            tiers.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -611,17 +706,47 @@ export function CompanyOverview() {
             <UnderlinedTabsTrigger value="prospects" className={tabTriggerClass}>
               Prospects
             </UnderlinedTabsTrigger>
-            <UnderlinedTabsTrigger value="contacts" className={tabTriggerClass}>
+            <UnderlinedTabsTrigger
+              value="contacts"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">3</Badge>}
+            >
               Contacts
             </UnderlinedTabsTrigger>
-            <UnderlinedTabsTrigger value="emails" className={tabTriggerClass}>
+            <UnderlinedTabsTrigger
+              value="emails"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">4</Badge>}
+            >
               Emails
             </UnderlinedTabsTrigger>
-            <UnderlinedTabsTrigger value="deals" className={tabTriggerClass}>
+            <UnderlinedTabsTrigger
+              value="deals"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">1</Badge>}
+            >
               Deals
             </UnderlinedTabsTrigger>
-            <UnderlinedTabsTrigger value="orders" className={tabTriggerClass}>
+            <UnderlinedTabsTrigger
+              value="orders"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">3</Badge>}
+            >
               Orders
+            </UnderlinedTabsTrigger>
+            <UnderlinedTabsTrigger
+              value="notes"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">3</Badge>}
+            >
+              Notes
+            </UnderlinedTabsTrigger>
+            <UnderlinedTabsTrigger
+              value="calls"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">4</Badge>}
+            >
+              Calls
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger value="activity" className={tabTriggerClass}>
               Activity
@@ -631,8 +756,14 @@ export function CompanyOverview() {
 
         <TabsContent value="overview" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
-            <h2 className="text-24 font-semibold text-text-primary">Overview</h2>
-            <TopStats />
+            <div className="flex items-center gap-16">
+              <h2 className="text-24 font-semibold text-text-primary">Overview</h2>
+              <div className="flex items-center gap-8">
+                <span className="size-8 shrink-0 rounded-full bg-surface-warning" aria-hidden />
+                <span className="text-14 font-medium text-text-primary">Weak connection</span>
+              </div>
+            </div>
+            <CompanySummaryCard />
             <ActivityTimeline />
             <ActivitySection />
           </div>
@@ -750,6 +881,157 @@ export function CompanyOverview() {
                       {email.preview}
                     </span>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="notes" className="mt-0">
+          <div className="flex flex-col gap-24 p-24">
+            <SectionHeader title="Notes" count={3} />
+            <div className="flex flex-col gap-12 rounded-xl border border-border-default bg-surface-card p-16">
+              <Textarea
+                placeholder="Write a note about this account…"
+                className="min-h-128 resize-none"
+              />
+              <div className="flex items-center justify-between">
+                <span className="text-12 text-text-tertiary">
+                  Notes are visible to the whole team.
+                </span>
+                <div className="flex items-center gap-8">
+                  <Button variant="secondary" size="sm">
+                    Cancel
+                  </Button>
+                  <Button size="sm">Save note</Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-12">
+              {[
+                {
+                  author: "Ben Ratner",
+                  date: "Apr 18, 2026",
+                  body:
+                    "Elliot mentioned they're rolling out a new protein bar line in Q3. Likely a good fit for the bundled plan — flagged to revisit pricing in May.",
+                },
+                {
+                  author: "Jamal Rivera",
+                  date: "Mar 22, 2026",
+                  body:
+                    "Intro call went well. Champion is Elliot (CCO). Next step: send tailored proposal with two pricing tiers and case study from a similar brand.",
+                },
+                {
+                  author: "Ben Ratner",
+                  date: "Feb 14, 2026",
+                  body:
+                    "Account flagged as warm after newsletter engagement. They downloaded the integration guide twice in one week.",
+                },
+              ].map((note, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col gap-12 rounded-xl border border-border-default bg-surface-card p-16 shadow-sm"
+                >
+                  <div className="flex items-center justify-between gap-8">
+                    <div className="flex items-center gap-8">
+                      <Avatar name={note.author} size="sm" />
+                      <span className="text-14 font-semibold text-text-primary">
+                        {note.author}
+                      </span>
+                    </div>
+                    <span className="text-12 text-text-tertiary">{note.date}</span>
+                  </div>
+                  <p className="text-14 text-text-primary">{note.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="calls" className="mt-0">
+          <div className="flex flex-col gap-24 p-24">
+            <SectionHeader
+              title="Calls"
+              count={4}
+              action={
+                <Button size="sm" iconLeft={<Phone01 size={16} />}>
+                  Log call
+                </Button>
+              }
+            />
+            <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card">
+              <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_auto] gap-16 border-b border-border-default px-16 py-10 text-12 text-text-secondary">
+                <span>Contact</span>
+                <span>Owner</span>
+                <span>Direction</span>
+                <span>Duration</span>
+                <span>Date</span>
+              </div>
+              {[
+                {
+                  contact: "Elliot Shifrin",
+                  title: "Chief Commercial Officer",
+                  owner: "Ben Ratner",
+                  direction: "Outbound" as const,
+                  duration: "24m 12s",
+                  date: "Apr 22, 2026",
+                },
+                {
+                  contact: "Ben Ratner",
+                  title: "Director of Operations",
+                  owner: "Jamal Rivera",
+                  direction: "Inbound" as const,
+                  duration: "8m 47s",
+                  date: "Apr 15, 2026",
+                },
+                {
+                  contact: "Elliot Shifrin",
+                  title: "Chief Commercial Officer",
+                  owner: "Ben Ratner",
+                  direction: "Outbound" as const,
+                  duration: "32m 05s",
+                  date: "Mar 27, 2026",
+                },
+                {
+                  contact: "Jamal Rivera",
+                  title: "Senior Marketing Manager",
+                  owner: "Ben Ratner",
+                  direction: "Missed" as const,
+                  duration: "—",
+                  date: "Mar 14, 2026",
+                },
+              ].map((call, i) => (
+                <div
+                  key={i}
+                  className="grid grid-cols-[2fr_1.5fr_1fr_1fr_auto] items-center gap-16 border-b border-border-default px-16 py-12 last:border-b-0"
+                >
+                  <div className="flex items-center gap-12">
+                    <Avatar name={call.contact} size="sm" />
+                    <div className="flex min-w-0 flex-col">
+                      <span className="truncate text-14 font-medium text-text-primary">
+                        {call.contact}
+                      </span>
+                      <span className="truncate text-12 text-text-secondary">{call.title}</span>
+                    </div>
+                  </div>
+                  <span className="truncate text-14 text-text-primary">{call.owner}</span>
+                  <span>
+                    <Badge
+                      color={
+                        call.direction === "Missed"
+                          ? "error"
+                          : call.direction === "Inbound"
+                            ? "blue"
+                            : "primary"
+                      }
+                      size="sm"
+                    >
+                      {call.direction}
+                    </Badge>
+                  </span>
+                  <span className="text-14 text-text-primary">{call.duration}</span>
+                  <span className="text-14 text-text-primary">{call.date}</span>
                 </div>
               ))}
             </div>
