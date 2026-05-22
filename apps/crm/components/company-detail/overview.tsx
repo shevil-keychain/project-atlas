@@ -29,7 +29,6 @@ import {
   SearchSm,
   ShoppingCart01,
   ShoppingBag01,
-  Star01,
   Users01,
   Users02,
 } from "@level/ui/components/icons";
@@ -395,24 +394,82 @@ function TopStats() {
   );
 }
 
-function CompanySummaryCard() {
+function StrengthBars({ level }: { level: 1 | 2 | 3 }) {
+  const heights = ["h-6", "h-10", "h-14"];
+  const fullColor = level === 3 ? "bg-success-500" : "bg-secondary-yellow-600";
   return (
-    <section className="relative overflow-hidden rounded-xl border border-border-default bg-surface-card shadow-sm">
-      {/* Decorative yellow accent strip */}
-      <div className="absolute inset-y-0 left-0 w-4 bg-secondary-yellow-500" />
-      <div className="flex items-start gap-20 bg-gradient-to-r from-secondary-yellow-50 to-surface-card p-20 pl-24">
-        <div className="flex min-w-0 flex-1 flex-col gap-8">
-          <h3 className="text-16 font-semibold text-text-primary">Summary</h3>
-          <p className="text-14 text-text-primary">
-            Magic Spoon is a Food &amp; Beverage brand currently in a prospect stage, owned
-            by Ben Cohen. They sell direct-to-consumer cereal and protein-bar products
-            (35 SKUs, $70M brand revenue, +61% YoY growth). Engagement has been{" "}
-            <span className="font-semibold">light and inconsistent</span> — a few warm
-            touch-points in mid-year followed by long quiet stretches. Champion is
-            Elliot Shifrin (CCO); next step is a tailored proposal with two pricing
-            tiers.
-          </p>
+    <div className="flex items-end gap-2" aria-label={`Connection strength ${level} of 3`}>
+      {heights.map((h, i) => (
+        <span
+          key={i}
+          className={`w-4 rounded-sm ${h} ${
+            i < level ? fullColor : "bg-border-subtle"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
+type CompanyMeta = { name: string; industry: string; owner: string; status: string };
+
+function SummaryEyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="text-12 font-medium uppercase tracking-wide text-text-tertiary">
+      {children}
+    </span>
+  );
+}
+
+function CompanyOverviewCard({ company }: { company: CompanyMeta }) {
+  return (
+    <section className="rounded-xl border border-border-default bg-surface-card p-20 shadow-sm">
+      <div className="flex flex-col gap-12">
+        <SummaryEyebrow>About</SummaryEyebrow>
+        <p className="text-14 leading-relaxed text-text-primary">
+          <span className="font-semibold">{company.name}</span> is a{" "}
+          {company.industry.toLowerCase()} brand currently in a{" "}
+          <span className="font-semibold">{company.status.toLowerCase()}</span> stage,
+          owned by {company.owner}. They sell direct-to-consumer products with strong
+          brand recognition and a growing wholesale footprint.
+        </p>
+        <div className="grid grid-cols-3 gap-12 border-t border-border-subtle pt-12">
+          <div className="flex flex-col gap-2">
+            <span className="text-12 text-text-secondary">Industry</span>
+            <span className="text-14 font-medium text-text-primary">{company.industry}</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-12 text-text-secondary">Owner</span>
+            <span className="text-14 font-medium text-text-primary">{company.owner}</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <span className="text-12 text-text-secondary">Stage</span>
+            <span className="text-14 font-medium text-text-primary">{company.status}</span>
+          </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function RecentActivityCard({ company }: { company: CompanyMeta }) {
+  return (
+    <section className="overflow-hidden rounded-xl border border-border-default bg-surface-card shadow-sm">
+      <div className="flex flex-col gap-12 p-20">
+        <SummaryEyebrow>Recent activity</SummaryEyebrow>
+        <p className="text-14 leading-relaxed text-text-primary">
+          Engagement with {company.name} has been{" "}
+          <span className="font-semibold">light and inconsistent</span> over the past 90
+          days. A short burst of warm touch-points in mid-year was followed by long
+          quiet stretches; the champion has stopped replying to threaded emails since
+          early April.
+        </p>
+      </div>
+      <div className="flex items-center justify-between gap-16 border-t border-border-default bg-surface-subtle px-20 py-12">
+        <span className="text-12 font-medium uppercase tracking-wide text-text-tertiary">
+          Suggested next step
+        </span>
+        <Button size="sm">Draft proposal</Button>
       </div>
     </section>
   );
@@ -423,11 +480,6 @@ function BrandInsightsSection() {
     <section className="flex flex-col gap-12">
               <SectionHeader
                 title="Brand Insights"
-                leadingIcon={
-                  <span className="flex size-16 items-center justify-center text-icon-brand">
-                    <Star01 size={16} />
-                  </span>
-                }
                 action={
                   <Button variant="secondary" size="sm">
                     View Profile
@@ -691,7 +743,7 @@ function ActivitySection() {
   );
 }
 
-export function CompanyOverview() {
+export function CompanyOverview({ company }: { company: CompanyMeta }) {
   return (
     <div className="flex flex-col">
       <Tabs defaultValue="overview" className="w-full">
@@ -703,15 +755,22 @@ export function CompanyOverview() {
             <UnderlinedTabsTrigger value="brand-insights" className={tabTriggerClass}>
               Brand Insights
             </UnderlinedTabsTrigger>
-            <UnderlinedTabsTrigger value="prospects" className={tabTriggerClass}>
-              Prospects
-            </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
               value="contacts"
               className={tabTriggerClass}
               badge={<Badge color="gray" size="sm">3</Badge>}
             >
               Contacts
+            </UnderlinedTabsTrigger>
+            <UnderlinedTabsTrigger
+              value="referrals"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">5</Badge>}
+            >
+              Referrals
+            </UnderlinedTabsTrigger>
+            <UnderlinedTabsTrigger value="prospects" className={tabTriggerClass}>
+              Prospects
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
               value="emails"
@@ -763,7 +822,10 @@ export function CompanyOverview() {
                 <span className="text-14 font-medium text-text-primary">Weak connection</span>
               </div>
             </div>
-            <CompanySummaryCard />
+            <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
+              <CompanyOverviewCard company={company} />
+              <RecentActivityCard company={company} />
+            </div>
             <ActivityTimeline />
             <ActivitySection />
           </div>
@@ -1035,6 +1097,91 @@ export function CompanyOverview() {
                 </div>
               ))}
             </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="referrals" className="mt-0">
+          <div className="flex flex-col gap-24 p-24">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-24 font-semibold text-text-primary">Referrals</h2>
+              <p className="text-14 text-text-secondary">
+                People in your network who know someone at {company.name}.
+              </p>
+            </div>
+
+            {/* Recommended */}
+            <section className="overflow-hidden rounded-xl border border-border-default bg-surface-card shadow-sm">
+              <div className="border-b border-border-default bg-surface-subtle px-20 py-10">
+                <span className="text-12 font-semibold uppercase tracking-wide text-text-secondary">
+                  Recommended
+                </span>
+              </div>
+              <div className="flex items-center gap-16 p-20">
+                <Avatar name="Isa Fuller" size="lg" />
+                <div className="flex min-w-0 flex-1 flex-col gap-2">
+                  <span className="text-16 font-semibold text-text-primary">Isa Fuller</span>
+                  <span className="text-14 text-text-secondary">
+                    Director of Product · 4 mutual contacts
+                  </span>
+                </div>
+                <StrengthBars level={3} />
+                <Button variant="secondary" size="sm">
+                  Ask for intro
+                </Button>
+              </div>
+            </section>
+
+            <section className="flex flex-col gap-12">
+              <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card">
+                {[
+                  {
+                    name: "Josie Hartwell",
+                    title: "VP of Marketing · Loop",
+                    strength: 3 as const,
+                    knows: "Ben Ratner",
+                  },
+                  {
+                    name: "Cameron Reznick",
+                    title: "Head of Partnerships · Aspire",
+                    strength: 2 as const,
+                    knows: "Elliot Shifrin",
+                  },
+                  {
+                    name: "Priya Anand",
+                    title: "GM, North America · Snackcraft Labs",
+                    strength: 2 as const,
+                    knows: "Jamal Rivera",
+                  },
+                  {
+                    name: "Marcus Webb",
+                    title: "Founder · Field Day Provisions",
+                    strength: 1 as const,
+                    knows: "Ben Ratner",
+                  },
+                ].map((p, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-16 border-b border-border-default px-16 py-12 last:border-b-0"
+                  >
+                    <Avatar name={p.name} size="sm" />
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <span className="truncate text-14 font-medium text-text-primary">
+                        {p.name}
+                      </span>
+                      <span className="truncate text-12 text-text-secondary">{p.title}</span>
+                    </div>
+                    <span className="hidden text-12 text-text-tertiary md:inline">
+                      Knows{" "}
+                      <span className="font-semibold text-text-primary">{p.knows}</span>
+                    </span>
+                    <StrengthBars level={p.strength} />
+                    <Button variant="secondary" size="sm">
+                      Ask for intro
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </TabsContent>
 

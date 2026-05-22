@@ -59,7 +59,7 @@ export default async function CompanyDetailPage({ params }: PageProps) {
     <div className="flex h-full min-h-0">
       <CompanySidePanel data={data} />
       <div className="flex-1 overflow-auto bg-surface-page">
-        <CompanyOverview />
+        <CompanyOverview company={{ name: company.name, industry: company.industry, owner: company.owner, status: company.status }} />
       </div>
     </div>
   );

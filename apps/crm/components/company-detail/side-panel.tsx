@@ -138,7 +138,7 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
           <Button
             variant="secondary"
             size="sm"
-            iconLeft={<Email size={16} />}
+            iconLeft={<Email size={20} />}
             className="flex-1 min-w-0"
           >
             Compose email
