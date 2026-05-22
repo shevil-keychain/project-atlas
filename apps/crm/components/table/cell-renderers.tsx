@@ -1,9 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@level/ui/components/ui/badge";
 import { Avatar } from "@level/ui/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@level/ui/components/ui/dropdown-menu";
 import { cn } from "@level/ui/lib/utils";
 import type { BadgeVariant, CellType, ColumnDef, StrengthLevel } from "./types";
 import { RiskPopover } from "./risk-popover";
@@ -184,6 +190,93 @@ function AvatarTextCell({ value }: { value: unknown }) {
   );
 }
 
+const OWNER_OPTIONS = [
+  "Rachel Okafor",
+  "Mina Gupta",
+  "Leo Alvarez",
+  "Jake Mercer",
+  "Ben Ratner",
+  "Elliot Shifrin",
+  "Jamal Rivera",
+  "Avery Chen",
+  "Jordan Patel",
+  "Sasha Lin",
+];
+
+function OwnerCell({ value }: { value: unknown }) {
+  const initial = String(value ?? "");
+  const [owner, setOwner] = useState<string>(initial);
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const filtered = OWNER_OPTIONS.filter((o) =>
+    o.toLowerCase().includes(query.toLowerCase()),
+  );
+
+  return (
+    <DropdownMenu open={open} onOpenChange={(next) => { setOpen(next); if (!next) setQuery(""); }}>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          className="flex w-full items-center gap-8 min-w-0 rounded-md px-4 -mx-4 py-2 -my-2 hover:bg-surface-subtle cursor-pointer"
+        >
+          {owner ? (
+            <>
+              <Avatar name={owner} size="xs" />
+              <span className="flex-1 text-left text-14 font-semibold text-text-primary leading-20 truncate">
+                {owner}
+              </span>
+            </>
+          ) : (
+            <span className="flex-1 text-left text-14 text-text-tertiary leading-20">
+              No assignee
+            </span>
+          )}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-240 p-0 max-h-[360px] overflow-y-auto">
+        <div className="sticky top-0 border-b border-border-default bg-surface-card p-8">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Assign to…"
+            autoFocus
+            className="w-full h-32 px-8 text-14 text-text-primary placeholder:text-text-tertiary bg-transparent border-0 outline-0"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={() => { setOwner(""); setOpen(false); }}
+          className="flex w-full items-center gap-8 px-12 py-8 text-14 text-text-primary hover:bg-surface-subtle"
+        >
+          <span className="flex size-24 items-center justify-center rounded-full border border-dashed border-border-strong text-icon-tertiary text-12">
+            ?
+          </span>
+          <span className="flex-1 text-left">No assignee</span>
+        </button>
+        {filtered.length === 0 && (
+          <div className="px-12 py-8 text-12 text-text-tertiary">No matches</div>
+        )}
+        {filtered.map((name) => (
+          <button
+            key={name}
+            type="button"
+            onClick={() => { setOwner(name); setOpen(false); }}
+            className="flex w-full items-center gap-8 px-12 py-8 text-14 text-text-primary hover:bg-surface-subtle"
+          >
+            <Avatar name={name} size="xs" />
+            <span className="flex-1 text-left truncate">{name}</span>
+            {owner === name && (
+              <span className="text-text-secondary text-14">✓</span>
+            )}
+          </button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function TextCell({ value }: { value: unknown }) {
   return (
     <span className="text-14 font-medium text-text-primary leading-20 truncate w-full block">
@@ -219,7 +312,11 @@ export function CellRenderer({
     case "strength":
       return <StrengthCell value={value} col={col} row={row} />;
     case "avatar-text":
-      return <AvatarTextCell value={value} />;
+      return col.key === "owner" ? (
+        <OwnerCell value={value} />
+      ) : (
+        <AvatarTextCell value={value} />
+      );
     case "number":
       return <NumberCell value={value} />;
     default:

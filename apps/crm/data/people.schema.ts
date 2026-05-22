@@ -2,11 +2,11 @@ import type { TableSchema } from "@/components/table/types";
 import type { Person } from "./people.data";
 
 export const peopleSchema: TableSchema<Person> = {
-  title: "People",
-  addLabel: "Add person",
+  title: "Contacts",
+  addLabel: "Add contact",
   defaultSort: { key: "lastInteraction", dir: "asc" },
   tabs: [
-    { label: "All people", value: "all" },
+    { label: "All contacts", value: "all" },
     {
       label: "No recent contact",
       value: "no-recent-contact",

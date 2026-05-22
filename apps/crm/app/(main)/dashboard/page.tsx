@@ -251,31 +251,31 @@ function NetworkStatusCard() {
   ];
   const inNetwork = segments.reduce((sum, s) => sum + s.value, 0);
   const total = 400;
-  const pct = Math.round((inNetwork / total) * 100);
 
   return (
     <Card className="p-20 flex flex-col gap-16 shrink-0">
       <h3 className="text-14 font-semibold text-text-primary">Network status</h3>
 
-      <div className="flex items-baseline gap-8">
-        <span className="text-32 font-semibold leading-40 text-text-primary">{inNetwork}</span>
-        <span className="text-13 font-medium text-text-secondary">of {total} addressable</span>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-baseline gap-8">
+          <span className="text-32 font-semibold leading-40 text-text-primary">
+            {inNetwork} / {total}
+          </span>
+          <span className="text-13 font-medium text-text-secondary">in network</span>
+        </div>
+        <span className="text-12 font-medium text-text-secondary">
+          Connected to {Math.round((inNetwork / total) * 100)}% of companies in your category.
+        </span>
       </div>
 
-      <div className="flex flex-col gap-8">
-        <div className="flex h-6 w-full overflow-hidden rounded-full bg-surface-subtle">
-          {segments.map((s) => (
-            <span
-              key={s.label}
-              className={cn("h-full", s.className)}
-              style={{ width: `${(s.value / total) * 100}%` }}
-            />
-          ))}
-        </div>
-        <div className="flex justify-between text-12 font-medium text-text-secondary">
-          <span>{pct}% in-network</span>
-          <span>{total - inNetwork} to explore</span>
-        </div>
+      <div className="flex h-6 w-full overflow-hidden rounded-full bg-surface-subtle">
+        {segments.map((s) => (
+          <span
+            key={s.label}
+            className={cn("h-full", s.className)}
+            style={{ width: `${(s.value / total) * 100}%` }}
+          />
+        ))}
       </div>
 
       <div className="flex flex-col gap-8 pt-12 border-t border-border-subtle">

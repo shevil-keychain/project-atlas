@@ -1122,7 +1122,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
             <div className="flex flex-col gap-4">
               <h2 className="text-24 font-semibold text-text-primary">Referrals</h2>
               <p className="text-14 text-text-secondary">
-                People in your network who know someone at {company.name}.
+                Contacts in your network who know someone at {company.name}.
               </p>
             </div>
 

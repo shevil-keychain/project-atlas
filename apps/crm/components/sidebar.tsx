@@ -13,12 +13,13 @@ import {
   Calendar,
   FolderKanban,
   Compass,
+  Contact,
   Building2,
   Users,
   Target,
   Handshake,
-  Zap,
   Sparkles,
+  Search,
   Settings,
   ArrowUpRight,
 } from "lucide-react";
@@ -53,6 +54,7 @@ const SECTIONS: Section[] = [
       { label: "Dashboard", icon: Home, href: "/dashboard" },
       { label: "Keychain AI", icon: Sparkles },
       { label: "Insights", icon: TrendingUp },
+      { label: "Reports", icon: FileText },
       {
         label: "Marketing",
         icon: Megaphone,
@@ -71,8 +73,14 @@ const SECTIONS: Section[] = [
     label: "Network",
     items: [
       { label: "Companies", icon: Building2, href: "/companies" },
-      { label: "People", icon: Users, href: "/people" },
+      { label: "Contacts", icon: Users, href: "/people" },
+    ],
+  },
+  {
+    label: "Market",
+    items: [
       { label: "Discover", icon: Compass, href: "/discover" },
+      { label: "Prospecting", icon: Contact },
     ],
   },
   {
@@ -84,7 +92,7 @@ const SECTIONS: Section[] = [
   },
   {
     items: [
-      { label: "Automations", icon: Zap },
+      { label: "Sourcing", icon: Search, chevron: "right" },
       { label: "Settings", icon: Settings },
     ],
   },
@@ -173,6 +181,21 @@ function NavLink({ item }: { item: NavItem }) {
   );
 }
 
+// ─── Tier Header ──────────────────────────────────────────────────────────────
+
+function TierHeader({ label, expanded = false }: { label: string; expanded?: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-8 px-8 py-8 w-full">
+      <span className="text-14 font-bold text-[#111827] leading-20">{label}</span>
+      {expanded ? (
+        <ChevronDown size={16} className="shrink-0 text-[#6b7280]" />
+      ) : (
+        <ChevronRight size={16} className="shrink-0 text-[#6b7280]" />
+      )}
+    </div>
+  );
+}
+
 // ─── Main Sidebar ─────────────────────────────────────────────────────────────
 
 export function Sidebar() {
@@ -185,6 +208,8 @@ export function Sidebar() {
 
       {/* Nav sections */}
       <div className="flex flex-col flex-1 overflow-y-auto w-full">
+        {/* Tier: Keychain Edge (expanded) */}
+        <TierHeader label="Keychain Edge" expanded />
         {SECTIONS.map((section, si) => (
           <div key={si}>
             {/* Dotted divider between sections */}
@@ -207,6 +232,14 @@ export function Sidebar() {
             </div>
           </div>
         ))}
+
+        {/* Tier: Keychain OS (collapsed, reference only) */}
+        <div className="my-8 border-t border-[#e8e8eb]" />
+        <TierHeader label="Keychain OS" />
+
+        {/* Tier: External Vendor Portal (collapsed, reference only) */}
+        <div className="my-8 border-t border-[#e8e8eb]" />
+        <TierHeader label="External Vendor Portal" />
       </div>
 
       {/* Bottom CTA */}

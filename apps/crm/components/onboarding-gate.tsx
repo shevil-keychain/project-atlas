@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check } from "lucide-react";
 import { Button } from "@level/ui/components/ui/button";
 import { Spinner } from "@level/ui/components/ui/spinner";
 import { cn } from "@level/ui/lib/utils";
@@ -27,57 +28,186 @@ function MicrosoftLogo({ size = 18 }: { size?: number }) {
   );
 }
 
-export function OnboardingGate({ children }: { children: React.ReactNode }) {
-  const [status, setStatus] = useState<"idle" | "syncing" | "done">("idle");
+function ZoomLogo({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden focusable="false">
+      <circle cx="12" cy="12" r="12" fill="#2D8CFF" />
+      <path
+        fill="#fff"
+        d="M5.5 8.5h7.2c1 0 1.8.8 1.8 1.8v5.2H7.3c-1 0-1.8-.8-1.8-1.8V8.5Zm10.3 1.6 3.2-2.2v8.2l-3.2-2.2v-3.8Z"
+      />
+    </svg>
+  );
+}
 
-  function handleConnect() {
-    setStatus("syncing");
-    window.setTimeout(() => setStatus("done"), 1800);
+function MeetLogo({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden focusable="false">
+      <path d="M15 8v8l5 3.5V4.5L15 8Z" fill="#00AC47" />
+      <path d="M3 7v10a2 2 0 0 0 2 2h10v-4H8V11L3 7Z" fill="#FFBA00" />
+      <path d="M3 7l5 4V7a2 2 0 0 1 2-2h5V3H5a2 2 0 0 0-2 2v2Z" fill="#00832D" />
+      <path d="M15 19v-4l5 4.5V19h-5Z" fill="#0066DA" />
+      <path d="M15 3v8h5V5a2 2 0 0 0-2-2h-3Z" fill="#E94235" />
+    </svg>
+  );
+}
+
+function LinkedInLogo({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden focusable="false">
+      <rect width="24" height="24" rx="4" fill="#0A66C2" />
+      <path
+        fill="#fff"
+        d="M7.1 9.5h2.6V18H7.1V9.5Zm1.3-3.7a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM11 9.5h2.5v1.2c.4-.7 1.3-1.4 2.6-1.4 2.8 0 3.3 1.8 3.3 4.2V18h-2.6v-3.9c0-.9 0-2.1-1.3-2.1s-1.5 1-1.5 2V18H11V9.5Z"
+      />
+    </svg>
+  );
+}
+
+type State = "idle" | "syncing" | "done";
+
+type Provider = {
+  id: string;
+  label: string;
+  logo: React.ReactNode;
+};
+
+type Integration = {
+  id: "email" | "call" | "linkedin";
+  title: string;
+  subtitle: string;
+  providers: Provider[];
+};
+
+const INTEGRATIONS: Integration[] = [
+  {
+    id: "email",
+    title: "Connect your email",
+    subtitle: "Gmail · Outlook",
+    providers: [
+      { id: "gmail", label: "Gmail", logo: <GoogleLogo size={16} /> },
+      { id: "outlook", label: "Outlook", logo: <MicrosoftLogo size={16} /> },
+    ],
+  },
+  {
+    id: "call",
+    title: "Connect your call tool",
+    subtitle: "Zoom · Google Meet",
+    providers: [
+      { id: "zoom", label: "Zoom", logo: <ZoomLogo size={16} /> },
+      { id: "meet", label: "Google Meet", logo: <MeetLogo size={16} /> },
+    ],
+  },
+  {
+    id: "linkedin",
+    title: "Connect LinkedIn",
+    subtitle: "Sync profiles and recent activity",
+    providers: [
+      { id: "linkedin", label: "LinkedIn", logo: <LinkedInLogo size={16} /> },
+    ],
+  },
+];
+
+export function OnboardingGate({ children }: { children: React.ReactNode }) {
+  const [states, setStates] = useState<Record<string, State>>({});
+  const [continued, setContinued] = useState(false);
+
+  function connect(providerId: string) {
+    setStates((prev) => ({ ...prev, [providerId]: "syncing" }));
+    window.setTimeout(() => {
+      setStates((prev) => ({ ...prev, [providerId]: "done" }));
+    }, 1500);
   }
 
-  if (status === "done") return <>{children}</>;
+  function integrationDone(item: Integration) {
+    return item.providers.some((p) => states[p.id] === "done");
+  }
 
-  const syncing = status === "syncing";
+  if (continued) return <>{children}</>;
+
+  const emailConnected = integrationDone(INTEGRATIONS[0]);
 
   return (
     <div className="flex min-h-full items-center justify-center px-24 py-48">
-      <div className="w-full max-w-[480px] flex flex-col gap-24">
+      <div className="w-full max-w-[560px] flex flex-col gap-24">
         <div className="flex flex-col gap-8">
           <h1 className="text-24 font-semibold text-text-primary">
-            Bring your relationships into Keychain
+            Hi, John! Let&apos;s get you set up.
           </h1>
           <p className="text-14 text-text-secondary">
-            Connect your email and calendar to instantly see your network of
-            brands, manufacturers, and contacts, already enriched with Keychain
-            platform activity.
+            Connect your tools and your entire network — relationships, history,
+            and conversations — appears in Keychain automatically.
           </p>
         </div>
 
-        <div className="flex flex-col gap-12">
-          <Button
-            size="lg"
-            onClick={handleConnect}
-            disabled={syncing}
-            iconLeft={syncing ? <Spinner size="sm" /> : <GoogleLogo size={18} />}
-            className="w-full justify-center"
-          >
-            {syncing ? "Syncing your inbox…" : "Continue with Google"}
-          </Button>
+        <ul className="flex flex-col gap-12">
+          {INTEGRATIONS.map((item) => {
+            const done = integrationDone(item);
+            return (
+              <li
+                key={item.id}
+                className="flex items-center gap-16 rounded-lg border border-border-default bg-surface-card px-16 py-12"
+              >
+                <span
+                  className={cn(
+                    "flex size-18 shrink-0 items-center justify-center rounded-full border",
+                    done
+                      ? "border-success-500 bg-success-500 text-text-inverse"
+                      : "border-border-default bg-surface-card text-text-tertiary"
+                  )}
+                  aria-hidden
+                >
+                  {done && <Check size={11} strokeWidth={3} />}
+                </span>
 
-          <button
-            type="button"
-            aria-disabled
-            tabIndex={-1}
-            onClick={(e) => e.preventDefault()}
-            className={cn(
-              "w-full h-48 inline-flex items-center justify-center gap-8 rounded-lg",
-              "border border-border-default bg-surface-card text-14 font-semibold text-text-primary"
-            )}
-          >
-            <MicrosoftLogo size={18} />
-            Continue with Microsoft
-          </button>
-        </div>
+                <div className="flex flex-1 min-w-0 flex-col gap-2">
+                  <span className="text-14 font-semibold text-text-primary">
+                    {item.title}
+                  </span>
+                  <span className="text-12 text-text-secondary">{item.subtitle}</span>
+                </div>
+
+                <div className="flex items-center gap-8 shrink-0">
+                  {item.providers.map((p) => {
+                    const s = states[p.id] ?? "idle";
+                    if (s === "done") {
+                      return (
+                        <span
+                          key={p.id}
+                          className="inline-flex items-center gap-6 text-12 font-semibold text-success-700"
+                        >
+                          {p.logo}
+                          Connected
+                        </span>
+                      );
+                    }
+                    return (
+                      <Button
+                        key={p.id}
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => connect(p.id)}
+                        disabled={s === "syncing"}
+                        iconLeft={s === "syncing" ? <Spinner size="sm" /> : p.logo}
+                      >
+                        {s === "syncing" ? "Connecting" : p.label}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+
+        <Button
+          size="lg"
+          onClick={() => setContinued(true)}
+          disabled={!emailConnected}
+          className="w-full"
+        >
+          Continue to Keychain
+        </Button>
 
         <div className="flex items-center justify-center gap-6 text-12 text-text-tertiary">
           <span aria-hidden>🔒</span>
@@ -90,18 +220,6 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
           <span>CCPA</span>
           <span className="size-3 rounded-full bg-border-default" aria-hidden />
           <span>SOC 2</span>
-        </div>
-
-        <div className="pt-4 flex items-center justify-center">
-          <button
-            type="button"
-            aria-disabled
-            tabIndex={-1}
-            onClick={(e) => e.preventDefault()}
-            className="text-14 font-semibold text-text-secondary"
-          >
-            I'll manually create my network
-          </button>
         </div>
       </div>
     </div>

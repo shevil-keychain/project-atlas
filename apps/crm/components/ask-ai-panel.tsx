@@ -54,7 +54,7 @@ function usePageContext(): PageContext {
       };
     case "people":
       return {
-        label: "People",
+        label: "Contacts",
         Icon: Users,
         suggestions: [
           "Quiet contacts",
