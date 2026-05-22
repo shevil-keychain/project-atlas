@@ -100,16 +100,25 @@ export function ActivityTimeline() {
 
       {/* Chart */}
       <div className="flex flex-col gap-8 px-20 py-20">
-        <div className="flex h-128 items-end gap-px">
+        <div className="flex h-128 items-end">
           {dailyCounts.map((count, i) => {
             const heightPct = count === 0 ? 4 : (count / MAX) * 100;
-            const muted = count === 0;
+            const color =
+              count === 0
+                ? "bg-border-subtle"
+                : count === 1
+                  ? "bg-warning-400"
+                  : count === 2
+                    ? "bg-warning-500"
+                    : count === 3
+                      ? "bg-success-300"
+                      : count === 4
+                        ? "bg-success-400"
+                        : "bg-success-500";
             return (
               <div
                 key={i}
-                className={`flex-1 rounded-sm ${
-                  muted ? "bg-border-subtle" : "bg-secondary-yellow-600"
-                }`}
+                className={`flex-1 ${color}`}
                 style={{ height: `${heightPct}%` }}
                 title={`Day ${i + 1}: ${count} ${count === 1 ? "activity" : "activities"}`}
               />

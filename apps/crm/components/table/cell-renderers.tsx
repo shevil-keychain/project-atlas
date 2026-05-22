@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@level/ui/components/ui/badge";
@@ -11,40 +10,7 @@ import { RiskPopover } from "./risk-popover";
 import { StrengthPopover } from "./strength-popover";
 import { SourcingPopover } from "./sourcing-popover";
 import { CapabilityPopover } from "./capability-popover";
-
-function CompanyLogo({ name, website }: { name: string; website?: string }) {
-  const [stage, setStage] = useState<"clearbit" | "google" | "fallback">(
-    website ? "clearbit" : "fallback"
-  );
-  const initials = name.slice(0, 2).toUpperCase();
-  const domain = website?.replace(/^https?:\/\//, "").replace(/^www\./, "");
-
-  if (stage === "fallback" || !domain) {
-    return (
-      <div className="flex items-center justify-center size-24 rounded-full bg-surface-subtle border border-border-default shrink-0 overflow-hidden text-10 font-bold text-text-primary">
-        {initials}
-      </div>
-    );
-  }
-
-  const src =
-    stage === "clearbit"
-      ? `https://logo.clearbit.com/${domain}`
-      : `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-
-  return (
-    <div className="flex items-center justify-center size-24 rounded-full bg-surface-card border border-border-default shrink-0 overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={src}
-        alt=""
-        referrerPolicy="no-referrer"
-        className="size-24 object-contain"
-        onError={() => setStage(stage === "clearbit" ? "google" : "fallback")}
-      />
-    </div>
-  );
-}
+import { CompanyLogo } from "../company-logo";
 
 const STRENGTH_DOT: Record<StrengthLevel, string> = {
   "very-weak": "bg-error-500",
@@ -178,7 +144,7 @@ function LogoTextCell({ value, row }: { value: unknown; row?: Record<string, unk
   const website = typeof row?.website === "string" ? row.website : undefined;
   const nameContent = (
     <>
-      <CompanyLogo name={name} website={website} />
+      <CompanyLogo website={website} />
       <span className="flex-1 text-14 font-semibold text-text-primary leading-20 truncate min-w-0">
         {name}
       </span>

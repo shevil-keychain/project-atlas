@@ -33,6 +33,8 @@ import {
   Users02,
 } from "@level/ui/components/icons";
 import { ActivityTimeline } from "./activity-timeline";
+import { ComposeEmailModal } from "./compose-email-modal";
+import { useState } from "react";
 
 type Stat = {
   label: string;
@@ -70,9 +72,9 @@ const topProducts = [
 
 const contacts = [
   {
-    name: "Ben Ratner",
+    name: "John Doe",
     title: "Director of Operations",
-    email: "ben.ratner@magicspoon.com",
+    email: "john.doe@magicspoon.com",
     phone: "+1 (978) 555-4215",
     linkedin: true,
   },
@@ -97,7 +99,7 @@ const deals = [
     name: "Magic Spoon – Protein Bar Product",
     status: "Qualification",
     statusColor: "gray" as const,
-    owner: "Ben Ratner",
+    owner: "John Doe",
     value: "$195,000.00",
     lastActivity: "Apr 12, 2026",
   },
@@ -105,7 +107,7 @@ const deals = [
     name: "Magic Spoon – Protein Bar Product",
     status: "Closed-Won",
     statusColor: "primary" as const,
-    owner: "Ben Ratner",
+    owner: "John Doe",
     value: "$195,000.00",
     lastActivity: "Apr 12, 2026",
   },
@@ -176,7 +178,7 @@ const activityApril: Activity[] = [
     label: (
       <>
         Opened email: <span className="font-semibold">Follow-Up Call</span> sent by{" "}
-        <span className="font-semibold">Ben Ratner</span>
+        <span className="font-semibold">John Doe</span>
       </>
     ),
     timestamp: "Apr 22, 2026 at 4:13 PM",
@@ -186,7 +188,7 @@ const activityApril: Activity[] = [
         label: "Sent to",
         value: "Oisin Hanrahan (oisin@keychain.com), Umang Dua (umang@keychain.com)",
       },
-      { label: "Sent from", value: "Ben Ratner (ben.ratner@company.com)" },
+      { label: "Sent from", value: "John Doe (john.doe@company.com)" },
       { label: "Date sent", value: "Apr 22, 2026 at 3:16 PM" },
       { label: "Subject", value: "Follow-Up Call" },
       {
@@ -247,7 +249,7 @@ const activityMarch: Activity[] = [
     label: (
       <>
         Attended <span className="font-semibold">Keychain Intro Call</span> with{" "}
-        <span className="font-semibold">Ben Ratner</span> +4 attendees.
+        <span className="font-semibold">John Doe</span> +4 attendees.
       </>
     ),
     timestamp: "Mar 27, 2026 at 4:00 PM",
@@ -261,7 +263,7 @@ const activityMarch: Activity[] = [
     label: (
       <>
         Invited to <span className="font-semibold">Keychain Intro Call</span> on Mar 27 (4:00
-        PM - 4:30 PM) by <span className="font-semibold">Ben Ratner</span>
+        PM - 4:30 PM) by <span className="font-semibold">John Doe</span>
       </>
     ),
     timestamp: "Mar 22, 2026 at 10:13 AM",
@@ -271,7 +273,7 @@ const activityMarch: Activity[] = [
     label: (
       <>
         Added to deal: <span className="font-semibold">Keychain – Protein Bar Product</span>{" "}
-        by <span className="font-semibold">Ben Ratner</span>
+        by <span className="font-semibold">John Doe</span>
       </>
     ),
     timestamp: "Mar 22, 2026 at 9:51 AM",
@@ -294,7 +296,7 @@ const activityMarch: Activity[] = [
     label: (
       <>
         Job Title +3 other contact properties updated by{" "}
-        <span className="font-semibold">Ben Ratner</span>
+        <span className="font-semibold">John Doe</span>
       </>
     ),
     timestamp: "Mar 8, 2026 at 3:18 PM",
@@ -415,9 +417,7 @@ type CompanyMeta = { name: string; industry: string; owner: string; status: stri
 
 function SummaryEyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="text-12 font-medium uppercase tracking-wide text-text-tertiary">
-      {children}
-    </span>
+    <span className="text-14 font-semibold text-text-secondary">{children}</span>
   );
 }
 
@@ -433,18 +433,24 @@ function CompanyOverviewCard({ company }: { company: CompanyMeta }) {
           owned by {company.owner}. They sell direct-to-consumer products with strong
           brand recognition and a growing wholesale footprint.
         </p>
-        <div className="grid grid-cols-3 gap-12 border-t border-border-subtle pt-12">
-          <div className="flex flex-col gap-2">
-            <span className="text-12 text-text-secondary">Industry</span>
-            <span className="text-14 font-medium text-text-primary">{company.industry}</span>
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="text-12 text-text-secondary">Owner</span>
-            <span className="text-14 font-medium text-text-primary">{company.owner}</span>
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="text-12 text-text-secondary">Stage</span>
-            <span className="text-14 font-medium text-text-primary">{company.status}</span>
+        <div className="pt-16">
+          <div className="grid grid-cols-4 gap-12">
+            <div className="flex flex-col gap-2">
+              <span className="text-12 text-text-secondary">Revenue</span>
+              <span className="text-16 font-semibold text-text-primary">$70M</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="text-12 text-text-secondary">Growth</span>
+              <span className="text-16 font-semibold text-text-primary">+61%</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="text-12 text-text-secondary">Products</span>
+              <span className="text-16 font-semibold text-text-primary">35</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="text-12 text-text-secondary">Avg. price</span>
+              <span className="text-16 font-semibold text-text-primary">$9.58</span>
+            </div>
           </div>
         </div>
       </div>
@@ -453,24 +459,35 @@ function CompanyOverviewCard({ company }: { company: CompanyMeta }) {
 }
 
 function RecentActivityCard({ company }: { company: CompanyMeta }) {
+  const [composeOpen, setComposeOpen] = useState(false);
   return (
     <section className="overflow-hidden rounded-xl border border-border-default bg-surface-card shadow-sm">
       <div className="flex flex-col gap-12 p-20">
-        <SummaryEyebrow>Recent activity</SummaryEyebrow>
+        <SummaryEyebrow>Recommended action</SummaryEyebrow>
         <p className="text-14 leading-relaxed text-text-primary">
-          Engagement with {company.name} has been{" "}
-          <span className="font-semibold">light and inconsistent</span> over the past 90
-          days. A short burst of warm touch-points in mid-year was followed by long
-          quiet stretches; the champion has stopped replying to threaded emails since
-          early April.
+          We pitched our private-label production capability to{" "}
+          <span className="font-semibold">{company.name}</span> last time. The team said
+          they'll <span className="font-semibold">review internally</span> and circle
+          back, but the champion{" "}
+          <span className="font-semibold">Elliot Shifrin</span> has gone quiet on email
+          since.
         </p>
       </div>
-      <div className="flex items-center justify-between gap-16 border-t border-border-default bg-surface-subtle px-20 py-12">
-        <span className="text-12 font-medium uppercase tracking-wide text-text-tertiary">
-          Suggested next step
-        </span>
-        <Button size="sm">Draft proposal</Button>
+
+      <div className="flex flex-col gap-12 px-20 pb-20">
+        <p className="text-14 leading-relaxed text-text-primary">
+          Send a tailored email on your{" "}
+          <span className="font-semibold">production capability</span>, attaching the
+          latest sales collateral and a case study from a similar brand.
+        </p>
+        <div>
+          <Button size="sm" onClick={() => setComposeOpen(true)}>
+            Send email
+          </Button>
+        </div>
       </div>
+
+      <ComposeEmailModal open={composeOpen} onOpenChange={setComposeOpen} />
     </section>
   );
 }
@@ -875,7 +892,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
             <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card">
               {[
                 {
-                  from: "Ben Ratner",
+                  from: "John Doe",
                   subject: "Follow-Up Call",
                   preview:
                     "Hi Elliot, I'd like to schedule an intro call to discuss how Keychain can help Magic Spoon…",
@@ -891,7 +908,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                   unread: false,
                 },
                 {
-                  from: "Ben Ratner",
+                  from: "John Doe",
                   subject: "Pricing options",
                   preview:
                     "Attaching the three pricing tiers we discussed on the call. Let me know which fits best.",
@@ -973,7 +990,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
             <div className="flex flex-col gap-12">
               {[
                 {
-                  author: "Ben Ratner",
+                  author: "John Doe",
                   date: "Apr 18, 2026",
                   body:
                     "Elliot mentioned they're rolling out a new protein bar line in Q3. Likely a good fit for the bundled plan — flagged to revisit pricing in May.",
@@ -985,7 +1002,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                     "Intro call went well. Champion is Elliot (CCO). Next step: send tailored proposal with two pricing tiers and case study from a similar brand.",
                 },
                 {
-                  author: "Ben Ratner",
+                  author: "John Doe",
                   date: "Feb 14, 2026",
                   body:
                     "Account flagged as warm after newsletter engagement. They downloaded the integration guide twice in one week.",
@@ -1034,13 +1051,13 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 {
                   contact: "Elliot Shifrin",
                   title: "Chief Commercial Officer",
-                  owner: "Ben Ratner",
+                  owner: "John Doe",
                   direction: "Outbound" as const,
                   duration: "24m 12s",
                   date: "Apr 22, 2026",
                 },
                 {
-                  contact: "Ben Ratner",
+                  contact: "John Doe",
                   title: "Director of Operations",
                   owner: "Jamal Rivera",
                   direction: "Inbound" as const,
@@ -1050,7 +1067,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 {
                   contact: "Elliot Shifrin",
                   title: "Chief Commercial Officer",
-                  owner: "Ben Ratner",
+                  owner: "John Doe",
                   direction: "Outbound" as const,
                   duration: "32m 05s",
                   date: "Mar 27, 2026",
@@ -1058,7 +1075,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 {
                   contact: "Jamal Rivera",
                   title: "Senior Marketing Manager",
-                  owner: "Ben Ratner",
+                  owner: "John Doe",
                   direction: "Missed" as const,
                   duration: "—",
                   date: "Mar 14, 2026",
@@ -1138,7 +1155,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                     name: "Josie Hartwell",
                     title: "VP of Marketing · Loop",
                     strength: 3 as const,
-                    knows: "Ben Ratner",
+                    knows: "John Doe",
                   },
                   {
                     name: "Cameron Reznick",
@@ -1156,7 +1173,7 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                     name: "Marcus Webb",
                     title: "Founder · Field Day Provisions",
                     strength: 1 as const,
-                    knows: "Ben Ratner",
+                    knows: "John Doe",
                   },
                 ].map((p, i) => (
                   <div

@@ -6,6 +6,7 @@ import { TableControls } from "./table-controls";
 import { DataTable } from "./data-table";
 import { Pagination } from "./pagination";
 import { BulkActionBar } from "./bulk-action-bar";
+import { ComposeEmailModal } from "@/components/company-detail/compose-email-modal";
 import { FilterChips } from "./filters/filter-chips";
 import { ViewActions } from "./filters/view-actions";
 import { applyFilters } from "./filters/apply-filters";
@@ -33,6 +34,15 @@ type Props = {
 
 export function TableShell({ schema, data, selectable = false }: Props) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [composeOpen, setComposeOpen] = useState(false);
+
+  const selectedNames = useMemo(
+    () =>
+      data
+        .filter((r) => typeof r.id === "string" && selectedIds.has(r.id as string))
+        .map((r) => (typeof r.name === "string" ? r.name : String(r.id))),
+    [data, selectedIds],
+  );
 
   function toggleRow(id: string) {
     setSelectedIds((prev) => {
@@ -188,8 +198,18 @@ export function TableShell({ schema, data, selectable = false }: Props) {
         </div>
       </div>
       {selectable && (
-        <BulkActionBar count={selectedIds.size} onClear={() => setSelectedIds(new Set())} />
+        <BulkActionBar
+          count={selectedIds.size}
+          onClear={() => setSelectedIds(new Set())}
+          onSendEmail={() => setComposeOpen(true)}
+        />
       )}
+      <ComposeEmailModal
+        open={composeOpen}
+        onOpenChange={setComposeOpen}
+        recipients={selectedNames}
+        bulk
+      />
     </div>
   );
 }

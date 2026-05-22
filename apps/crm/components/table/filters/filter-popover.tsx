@@ -121,7 +121,7 @@ export function FilterPopover({ columns, onAdd, activeCount }: Props) {
           <SlidersHorizontal size={16} className="shrink-0 text-icon-secondary" />
           Filters
           {activeCount > 0 && (
-            <span className="ml-4 inline-flex items-center justify-center h-20 min-w-20 px-6 rounded-full bg-surface-brand-subtle text-12 font-semibold text-text-brand">
+            <span className="ml-4 inline-flex items-center justify-center h-20 min-w-20 px-6 rounded-full bg-text-primary text-12 font-semibold text-text-inverse">
               {activeCount}
             </span>
           )}

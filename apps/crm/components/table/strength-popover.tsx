@@ -119,14 +119,22 @@ function MiniYearActivity({ level, seed }: { level: StrengthLevel; seed: number 
       <div className="flex h-32 items-end">
         {counts.map((c, i) => {
           const heightPct = c === 0 ? 6 : (c / MINI_MAX) * 100;
-          const muted = c === 0;
+          const color =
+            c === 0
+              ? "bg-border-subtle"
+              : c === 1
+                ? "bg-warning-400"
+                : c === 2
+                  ? "bg-warning-500"
+                  : c === 3
+                    ? "bg-success-300"
+                    : c === 4
+                      ? "bg-success-400"
+                      : "bg-success-500";
           return (
             <div
               key={i}
-              className={cn(
-                "flex-1 rounded-sm",
-                muted ? "bg-border-subtle" : "bg-secondary-yellow-600"
-              )}
+              className={cn("flex-1 rounded-sm", color)}
               style={{ height: `${heightPct}%` }}
             />
           );

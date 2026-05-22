@@ -35,7 +35,7 @@ export function Topbar() {
           {/* Name + org */}
           <div className="flex flex-col items-start max-w-[160px]">
             <span className="text-14 font-semibold text-[#111827] leading-20 overflow-hidden text-ellipsis whitespace-nowrap w-full">
-              Ben Ratner
+              John Doe
             </span>
             <span className="text-12 font-medium text-[#6b7280] leading-16">
               Keychain

@@ -6,6 +6,7 @@ import { Avatar } from "@level/ui/components/ui/avatar";
 import { Badge } from "@level/ui/components/ui/badge";
 import { Button } from "@level/ui/components/ui/button";
 import { cn } from "@level/ui/lib/utils";
+import { CompanyLogo } from "../company-logo";
 import {
   ArrowLeft,
   ChevronDown,
@@ -115,15 +116,7 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
         </Link>
 
         <div className="flex flex-col gap-12">
-          <Avatar
-            name={data.name}
-            size="md"
-            src={
-              data.keyDetails.website
-                ? `https://www.google.com/s2/favicons?domain=${data.keyDetails.website}&sz=128`
-                : undefined
-            }
-          />
+          <CompanyLogo size="lg" website={data.keyDetails.website} />
           <div className="flex flex-col gap-4">
             <h2 className="text-18 font-semibold text-text-primary">{data.name}</h2>
             <div>
@@ -166,6 +159,10 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
           }
         />
         <PropertyRow label="Website" value={data.keyDetails.website} />
+        <PropertyRow
+          label="Keychain profile"
+          value={`${data.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}.keychain.com`}
+        />
         <PropertyRow label="Phone" value={data.keyDetails.phone} />
         <PropertyRow label="Industry" value={data.keyDetails.industry} />
         <PropertyRow label="Owner" value={data.keyDetails.owner} />

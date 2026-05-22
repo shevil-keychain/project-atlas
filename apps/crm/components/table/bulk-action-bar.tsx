@@ -11,12 +11,13 @@ import {
 type Props = {
   count: number;
   onClear: () => void;
+  onSendEmail?: () => void;
 };
 
 const actionButton =
   "flex items-center gap-6 h-32 px-12 rounded-md text-14 font-semibold text-white hover:bg-white/10 cursor-pointer transition-colors";
 
-export function BulkActionBar({ count, onClear }: Props) {
+export function BulkActionBar({ count, onClear, onSendEmail }: Props) {
   if (count === 0) return null;
 
   return (
@@ -28,7 +29,7 @@ export function BulkActionBar({ count, onClear }: Props) {
         selected
       </span>
 
-      <button type="button" className={actionButton}>
+      <button type="button" className={actionButton} onClick={onSendEmail}>
         <Mail size={14} className="text-white/70" />
         Send email
       </button>
