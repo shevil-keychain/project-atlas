@@ -125,7 +125,7 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
 
   if (continued) return <>{children}</>;
 
-  const emailConnected = integrationDone(INTEGRATIONS[0]);
+  const anyConnected = INTEGRATIONS.some(integrationDone);
 
   return (
     <div className="flex min-h-full items-center justify-center px-24 py-48">
@@ -203,11 +203,23 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
         <Button
           size="lg"
           onClick={() => setContinued(true)}
-          disabled={!emailConnected}
+          disabled={!anyConnected}
           className="w-full"
         >
           Continue to Keychain
         </Button>
+
+        {!anyConnected && (
+          <div className="flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => setContinued(true)}
+              className="text-14 font-semibold text-text-secondary hover:text-text-primary cursor-pointer"
+            >
+              I&apos;ll connect manually later
+            </button>
+          </div>
+        )}
 
         <div className="flex items-center justify-center gap-6 text-12 text-text-tertiary">
           <span aria-hidden>🔒</span>
