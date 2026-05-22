@@ -135,8 +135,8 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
             Hi, John! Let&apos;s get you set up.
           </h1>
           <p className="text-14 text-text-secondary">
-            Connect your tools and your entire network — relationships, history,
-            and conversations — appears in Keychain automatically.
+            Connect your tools so your entire network of relationships, history,
+            and conversations appears in Keychain automatically.
           </p>
         </div>
 
