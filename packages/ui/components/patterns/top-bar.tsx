@@ -1,7 +1,7 @@
 "use client"
 
 import { HelpCircle, Bell } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 interface TopBarProps {
   avatarInitial?: string

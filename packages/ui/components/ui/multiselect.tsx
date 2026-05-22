@@ -3,9 +3,9 @@
 import * as React from "react"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
 import { Check, ChevronDown, Search } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { Tag } from "@/components/ui/tag"
+import { cn } from "../../lib/utils"
+import { Label } from "./label"
+import { Tag } from "./tag"
 
 type MultiselectOption = {
   value: string

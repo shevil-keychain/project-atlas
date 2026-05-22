@@ -3,7 +3,7 @@
 import * as React from "react"
 import { CheckCircle, X } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 type AlertToastProps = {
   title: string

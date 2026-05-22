@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const sizeMap = { sm: 16, md: 24, lg: 40 } as const
 

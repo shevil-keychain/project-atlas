@@ -8,19 +8,19 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@/components/ui/table"
-import { Pagination } from "@/components/ui/pagination"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "./table"
+import { Pagination } from "./pagination"
+import { Input } from "./input"
+import { Button } from "./button"
+import { Checkbox } from "./checkbox"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu"
+} from "./dropdown-menu"
 import { Search, Columns3, ChevronDown } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 export type DataTableColumn = {
   id: string

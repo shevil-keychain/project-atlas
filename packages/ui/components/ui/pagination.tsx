@@ -8,14 +8,14 @@ import {
   ChevronsRight,
 } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "./select"
 
 // AntD-style truncation: always 7 visible slots max (pages + ellipsis markers)
 function getVisiblePages(

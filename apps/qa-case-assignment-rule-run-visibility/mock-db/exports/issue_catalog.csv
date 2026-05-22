@@ -1,9 +1,0 @@
-issue_code,label,hover_text,issue_group,scope,allowed_in_upcoming,counts_as_failure,allowed_on_rule_card,allowed_on_week_alert,allowed_in_sidesheet
-AGENT_NOT_IN_ANY_RULE,"Agent not in any rule","This agent is not included in any active assignment rule.",coverage,cross_rule,1,1,0,1,1
-ALL_EVALUATORS_AT_CAPACITY,"Evaluators' workload limit reached","Evaluator workload or availability constraints blocked assignment.",capacity,rule,1,1,1,1,1
-EVALUATOR_UNAVAILABLE,"Evaluators' workload limit reached","Evaluator workload or availability constraints blocked assignment.",capacity,evaluator,1,1,1,1,1
-NO_CONVERSATIONS_IN_PERIOD,"Insufficient matching conversations","No eligible conversations matched this rule during the run window.",coverage,agent,0,1,1,0,1
-NO_MATCHING_CONVERSATIONS,"Insufficient matching conversations","No eligible conversations matched this rule during the run window.",coverage,agent,1,1,1,1,1
-QUOTA_MET_BY_ANOTHER_RULE,"Quota met by another rule","Agent goal was already satisfied by another rule.",informational,agent,1,0,0,0,1
-RULE_DID_NOT_EXECUTE,"Rule execution failed","The rule did not complete successfully in this run.",system,rule,0,1,1,0,1
-RULE_EXECUTION_INTERRUPTED,"Rule execution failed","The rule did not complete successfully in this run.",system,rule,0,1,1,0,1

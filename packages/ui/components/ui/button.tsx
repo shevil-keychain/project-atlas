@@ -10,17 +10,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-interactive-primary hover:bg-interactive-primary-hover text-text-inverse disabled:bg-surface-muted disabled:text-text-disabled",
+          "bg-interactive-primary text-text-primary disabled:bg-surface-muted disabled:text-text-disabled",
         destructive:
-          "bg-interactive-destructive hover:bg-interactive-destructive-hover text-text-inverse disabled:bg-surface-muted disabled:text-text-disabled",
+          "bg-interactive-destructive text-text-inverse disabled:bg-surface-muted disabled:text-text-disabled",
         secondary:
-          "bg-surface-card border border-border-default text-text-primary hover:bg-interactive-secondary hover:border-border-strong disabled:text-text-disabled disabled:border-border-subtle",
+          "bg-surface-card border border-border-default text-text-primary disabled:text-text-disabled disabled:border-border-subtle",
         ghost:
-          "text-text-primary hover:bg-interactive-secondary disabled:text-text-disabled",
+          "text-text-primary disabled:text-text-disabled",
         linkPrimary:
-          "text-text-brand underline-offset-4 hover:underline disabled:text-text-disabled disabled:no-underline",
+          "text-text-brand underline-offset-4 disabled:text-text-disabled disabled:no-underline",
         linkSecondary:
-          "text-text-primary underline underline-offset-4 hover:underline disabled:text-text-disabled",
+          "text-text-primary underline underline-offset-4 disabled:text-text-disabled",
       },
       size: {
         sm: "h-32 px-12 rounded-lg",

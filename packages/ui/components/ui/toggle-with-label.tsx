@@ -3,8 +3,8 @@
 import * as React from "react"
 import * as SwitchPrimitive from "@radix-ui/react-switch"
 
-import { cn } from "@/lib/utils"
-import { ToggleSwitch } from "@/components/ui/toggle-switch"
+import { cn } from "../../lib/utils"
+import { ToggleSwitch } from "./toggle-switch"
 
 type ToggleWithLabelProps = React.ComponentProps<typeof SwitchPrimitive.Root> & {
   label: string

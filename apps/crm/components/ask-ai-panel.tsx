@@ -98,7 +98,7 @@ export function AskAIShell({ children }: { children: React.ReactNode }) {
             onClick={() => setOpen(true)}
             aria-label="Ask AI"
             className={cn(
-              "absolute bottom-24 right-24 z-30",
+              "fixed bottom-24 right-24 z-30",
               "inline-flex items-center gap-8 h-44 pl-14 pr-16 rounded-full",
               "bg-text-primary text-white text-14 font-semibold",
               "shadow-lg hover:shadow-xl transition-all",

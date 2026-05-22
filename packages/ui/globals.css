@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @source "./components/**/*.tsx";
 @source "./hooks/**/*.ts";
@@ -34,18 +35,18 @@
   --color-stone-800: #35312D;
   --color-stone-900: #282624;
   
-  /* Primary Brand Colors */
-  --color-primary-brand-25: #FFFAF5;
-  --color-primary-brand-50: #FFF5EB;
-  --color-primary-brand-100: #FFE5CD;
-  --color-primary-brand-200: #FFCB9B;
-  --color-primary-brand-300: #FFB168;
-  --color-primary-brand-400: #FF7B00;
-  --color-primary-brand-500: #F07400;
-  --color-primary-brand-600: #E06F06;
-  --color-primary-brand-700: #C9671D;
-  --color-primary-brand-800: #663202;
-  --color-primary-brand-900: #331901;
+  /* Primary Brand Colors — Yellow */
+  --color-primary-brand-25: #FFFEF5;
+  --color-primary-brand-50: #FFFBEB;
+  --color-primary-brand-100: #FFF3C4;
+  --color-primary-brand-200: #FFE680;
+  --color-primary-brand-300: #FFD94D;
+  --color-primary-brand-400: #FFD233;
+  --color-primary-brand-500: #FFD233;
+  --color-primary-brand-600: #E6BD2E;
+  --color-primary-brand-700: #92400E;
+  --color-primary-brand-800: #78350F;
+  --color-primary-brand-900: #451A03;
   
   /* Primary Lime Colors */
   --color-primary-lime-50: #F1FEF8;
@@ -166,7 +167,7 @@
   --radius-round: 500px;
   
   /* Font Family */
-  --font-sans: Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: var(--font-geist-mono);
 
   /* Spacing Tokens (pixel-based) */
@@ -231,11 +232,13 @@
   --text-30: 30px;
   --text-30--line-height: 36px;
 
-  /* Font Weight Tokens */
+  /* Font Weight Tokens — 1 level less than standard (Keychain convention) */
   --font-weight-*: initial;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  --font-weight-normal: 300;
+  --font-weight-medium: 400;
+  --font-weight-semibold: 500;
+  --font-weight-bold: 600;
+  --font-weight-extrabold: 700;
 
   /* Shadow Tokens */
   --shadow-*: initial;
@@ -330,6 +333,9 @@
   /* Brand text — links, brand-colored labels, active nav items */
   --color-text-brand: var(--color-primary-brand-700);
 
+  /* Tertiary accent — info, links, highlights */
+  --color-text-tertiary-accent: #5970E8;
+
   /* Error text — error messages, invalid field labels */
   --color-text-error: var(--color-error-600);
 
@@ -400,9 +406,12 @@
   --color-interactive-primary-hover: var(--color-primary-brand-600);
   --color-interactive-primary-active: var(--color-primary-brand-700);
 
-  /* Secondary action — ghost/secondary button hover background */
-  --color-interactive-secondary: var(--color-stone-100);
-  --color-interactive-secondary-hover: var(--color-stone-200);
+  /* Secondary action — black CTA (Keychain), ghost hover background */
+  --color-interactive-secondary: #000000;
+  --color-interactive-secondary-foreground: #FFFFFF;
+  --color-interactive-secondary-hover: #1a1a1a;
+  --color-interactive-ghost: var(--color-stone-100);
+  --color-interactive-ghost-hover: var(--color-stone-200);
 
   /* Destructive action — delete, remove */
   --color-interactive-destructive: var(--color-error-500);
@@ -412,7 +421,7 @@
   /* ─── FOCUS RING ─── */
 
   /* Focus ring color — always use var(--shadow-focus-ring) for the full shadow */
-  --color-focus-ring: var(--color-primary-brand-200);
+  --color-focus-ring: rgba(0, 0, 0, 0.15);
 
 
   /* ─── ICON COLORS ─── */
@@ -523,9 +532,9 @@
 
   --radius-button: var(--radius-lg);     /* 8px  */
   --radius-input: var(--radius-lg);      /* 8px  */
-  --radius-card: var(--radius-xl);       /* 12px */
+  --radius-card: var(--radius-lg);       /* 8px  */
   --radius-badge: var(--radius-round);   /* 500px — pill */
-  --radius-modal: var(--radius-xl);      /* 12px */
+  --radius-modal: var(--radius-lg);      /* 8px  */
   --radius-tooltip: var(--radius-md);    /* 6px  */
 
 
@@ -558,5 +567,36 @@
   }
   body {
     @apply bg-background text-foreground font-medium;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+}
+
+.dark {
+  --color-surface-page: #060B18;
+  --color-surface-card: #060B18;
+  --color-surface-subtle: #1E293B;
+  --color-surface-sunken: #1E293B;
+  --color-surface-muted: #334155;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #8FA3B8;
+  --color-text-tertiary: #64748B;
+  --color-text-disabled: #475569;
+  --color-border-default: #1E293B;
+  --color-border-subtle: #0F172A;
+  --color-border-strong: #334155;
+  --color-background: #060B18;
+  --color-foreground: #F8FAFC;
+  --color-card: #060B18;
+  --color-card-foreground: #F8FAFC;
+  --color-popover: #060B18;
+  --color-popover-foreground: #F8FAFC;
+  --color-muted: #1E293B;
+  --color-muted-foreground: #8FA3B8;
+  --color-accent: #1E293B;
+  --color-accent-foreground: #F8FAFC;
+  --color-border: #1E293B;
+  --color-input: #1E293B;
+  --color-ring: #8FA3B8;
+  --color-surface-overlay: rgba(6, 11, 24, 0.7);
 }

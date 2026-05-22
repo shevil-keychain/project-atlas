@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { useToast, dismissToast } from "@/hooks/use-toast"
-import { AlertToast } from "@/components/ui/alert-toast"
-import { cn } from "@/lib/utils"
+import { useToast, dismissToast } from "../../hooks/use-toast"
+import { AlertToast } from "./alert-toast"
+import { cn } from "../../lib/utils"
 
 type ToastPosition =
   | "top-center"

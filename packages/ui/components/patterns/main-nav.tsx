@@ -314,7 +314,7 @@ function NavItem({
       </div>
       <span
         className={cn(
-          "text-10 leading-tight tracking-[0.2px] font-[family-name:var(--font-manrope,sans-serif)]",
+          "text-10 leading-tight tracking-[0.2px] font-[family-name:var(--font-sans,sans-serif)]",
           isActive ? "text-text-inverse font-semibold" : "text-[#E1DEDA] font-medium"
         )}
       >

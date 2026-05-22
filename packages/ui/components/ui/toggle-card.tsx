@@ -2,8 +2,8 @@
 
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
-import { ToggleSwitch } from "@/components/ui/toggle-switch"
+import { cn } from "../../lib/utils"
+import { ToggleSwitch } from "./toggle-switch"
 
 type ToggleCardProps = {
   checked?: boolean

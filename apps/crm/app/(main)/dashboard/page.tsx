@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { Badge } from "@level/ui/components/ui/badge";
 import { Button } from "@level/ui/components/ui/button";
 import { Card } from "@level/ui/components/ui/card";
@@ -12,101 +11,97 @@ import {
   TabsContent,
 } from "@level/ui/components/ui/tabs";
 import {
-  ArrowRight,
-  Email,
-  Phone01,
-  Stars02,
+  ChevronDown,
+  Sliders02,
   Star01,
   TrendUp02,
 } from "@level/ui/components/icons";
 import { cn } from "@level/ui/lib/utils";
+import { CompanyLogo } from "@/components/company-logo";
+import { ComposeEmailModal } from "@/components/company-detail/compose-email-modal";
 
-type PriorityStatus = "Customer" | "Prospect" | "Out of network";
+type PriorityStatus = "Customer" | "Prospect" | "Out of network opportunity";
+
+type Strength = "Strong" | "Weak" | "Very weak";
+
+type RightMeta =
+  | { type: "badge"; label: string; color: "primary" | "error" | "warning" | "gray" }
+  | { type: "strength"; strength: Strength };
 
 type Priority = {
   id: string;
   company: string;
   website: string;
   status: PriorityStatus;
-  lastDiscussion: string;
-  nextStep: string;
-  lastTouch: string;
+  rightMeta: RightMeta;
   href: string;
+};
+
+type FeaturedPriority = Priority & {
+  summary: string;
+  recommendation: string;
+};
+
+const FEATURED: FeaturedPriority = {
+  id: "co-002",
+  company: "Sunroot Foods",
+  website: "sunrootfoods.com",
+  status: "Prospect",
+  rightMeta: { type: "strength", strength: "Weak" },
+  href: "/companies/co-002",
+  summary:
+    "We pitched our private-label production capability to Sunroot Foods last time. The team said they'll review internally and circle back, but the champion Elliot Shifrin has gone quiet on email since.",
+  recommendation:
+    "Send a tailored email on your production capability, attaching the latest sales collateral and a case study from a similar brand.",
 };
 
 const PRIORITIES: Priority[] = [
   {
-    id: "co-003",
-    company: "Bloom Nutrition",
-    website: "bloomnutrition.com",
-    status: "Customer",
-    lastDiscussion:
-      "Reviewed Q2 reorder cadence on the kids' line — Maya wants to consolidate POs.",
-    nextStep: "Send proposal for a quarterly QBR cadence by Friday.",
-    lastTouch: "3 days ago",
-    href: "/companies/co-003",
-  },
-  {
-    id: "co-002",
-    company: "Sunroot Foods",
-    website: "sunrootfoods.com",
-    status: "Prospect",
-    lastDiscussion:
-      "Pitched private-label production capability; team is reviewing internally.",
-    nextStep: "Follow up with Elliot Shifrin and share the case study deck.",
-    lastTouch: "2 days ago",
-    href: "/companies/co-002",
-  },
-  {
     id: "di-001",
     company: "Chomps",
     website: "chomps.com",
-    status: "Out of network",
-    lastDiscussion: "Active in market — sourcing co-mfg for a grain-free SKU.",
-    nextStep: "Warm intro via Mina Gupta; lead with SQF-3 capacity.",
-    lastTouch: "Spotted today",
+    status: "Out of network opportunity",
+    rightMeta: { type: "badge", label: "Actively searching", color: "primary" },
     href: "/discover",
+  },
+  {
+    id: "co-003",
+    company: "Olipop",
+    website: "drinkolipop.com",
+    status: "Customer",
+    rightMeta: { type: "badge", label: "At risk", color: "error" },
+    href: "/companies/co-003",
   },
   {
     id: "co-001",
     company: "Oat Haus",
     website: "oathaus.com",
-    status: "Prospect",
-    lastDiscussion:
-      "Discovery call covered fulfillment pain and EU expansion timeline.",
-    nextStep: "Schedule technical evaluation with their ops lead next week.",
-    lastTouch: "1 day ago",
+    status: "Customer",
+    rightMeta: { type: "strength", strength: "Weak" },
     href: "/companies/co-001",
+  },
+  {
+    id: "di-002",
+    company: "Catalina Crunch",
+    website: "catalinacrunch.com",
+    status: "Out of network opportunity",
+    rightMeta: { type: "strength", strength: "Very weak" },
+    href: "/discover",
   },
   {
     id: "co-009",
     company: "Supergut",
     website: "supergut.com",
     status: "Customer",
-    lastDiscussion: "Closed renewal; flagged interest in our new sampling tier.",
-    nextStep: "Loop in Finance to scope the sampling expansion contract.",
-    lastTouch: "5 weeks ago",
+    rightMeta: { type: "badge", label: "At risk", color: "error" },
     href: "/companies/co-009",
-  },
-  {
-    id: "di-002",
-    company: "Catalina Crunch",
-    website: "catalinacrunch.com",
-    status: "Out of network",
-    lastDiscussion:
-      "High-growth (+11% YoY); just posted RFI for functional beverage co-pack.",
-    nextStep: "Add to network, then send capability one-pager via prospecting.",
-    lastTouch: "Spotted 2d ago",
-    href: "/discover",
   },
   {
     id: "co-012",
     company: "ALOHA",
     website: "aloha.com",
     status: "Customer",
-    lastDiscussion: "Walked them through implementation timeline on-site.",
-    nextStep: "Confirm warehouse cutover date and share readiness checklist.",
-    lastTouch: "Yesterday",
+    rightMeta: { type: "strength", strength: "Strong" },
     href: "/companies/co-012",
   },
 ];
@@ -120,138 +115,151 @@ function useGreeting() {
   return greeting;
 }
 
-const STATUS_BADGE: Record<PriorityStatus, { variant: "primary" | "gray" | "purple"; label: string }> = {
-  Customer: { variant: "primary", label: "Customer" },
-  Prospect: { variant: "gray", label: "Prospect" },
-  "Out of network": { variant: "purple", label: "Opportunity" },
-};
-
 export default function DashboardPage() {
   const greeting = useGreeting();
+  const total = PRIORITIES.length + 1 + 38;
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-24 py-40 flex flex-col gap-32">
-      <header className="flex flex-col gap-4">
-        <p className="text-14 font-medium text-text-secondary">{greeting}, John.</p>
-        <h1 className="text-28 font-semibold leading-36 text-text-primary max-w-[820px]">
-          You have <span className="text-text-primary">7 accounts</span> waiting on a next step today.
-        </h1>
-      </header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-10 gap-24 items-start">
-        <section className="lg:col-span-7 flex flex-col gap-16">
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-16 font-semibold text-text-primary">Your priorities today</h2>
-            <span className="text-12 font-medium text-text-tertiary">
-              Sorted by urgency
-            </span>
-          </div>
-          <div className="flex flex-col gap-12">
+    <div className="mx-auto flex w-full max-w-[1280px] h-full min-h-0 gap-24 px-24 pt-32">
+      <section className="flex flex-[7] min-h-0 flex-col gap-16 overflow-y-auto pr-12">
+          <header className="flex items-end justify-between gap-16">
+            <div className="flex flex-col">
+              <p className="text-18 font-semibold leading-28 text-text-secondary">
+                {greeting}, John
+              </p>
+              <h1 className="text-18 font-semibold leading-28 text-text-primary">
+                Your priorities today ({total})
+              </h1>
+            </div>
+            <Button variant="ghost" size="sm" iconLeft={<Sliders02 size={16} />}>
+              Customize
+            </Button>
+          </header>
+          <FeaturedPriorityCard item={FEATURED} />
+          <div className="flex flex-col">
             {PRIORITIES.map((item) => (
-              <PriorityCard key={item.id} item={item} />
+              <PriorityRow key={item.id} item={item} />
             ))}
           </div>
         </section>
 
-        <aside className="lg:col-span-3 flex flex-col gap-16">
-          <NetworkStatusCard />
-          <EmailMetricsCard />
-          <SalesCoachCard />
-        </aside>
-      </div>
+      <aside className="flex flex-[3] min-h-0 flex-col gap-16 overflow-y-auto pr-4">
+        <NetworkStatusCard />
+        <EmailMetricsCard />
+        <SalesCoachCard />
+      </aside>
     </div>
   );
 }
 
-function PriorityCard({ item }: { item: Priority }) {
-  const badge = STATUS_BADGE[item.status];
-  const logoUrl = `https://www.google.com/s2/favicons?domain=${item.website}&sz=64`;
-
+function StrengthMeta({ strength }: { strength: Strength }) {
+  const dotClass =
+    strength === "Strong"
+      ? "bg-success-300"
+      : strength === "Weak"
+      ? "bg-error-300"
+      : "bg-error-500";
+  const label =
+    strength === "Very weak" ? "Very weak connection strength" : `${strength} connection strength`;
   return (
-    <Link
-      href={item.href}
-      className={cn(
-        "group rounded-xl border border-border-default bg-surface-card",
-        "px-20 py-16 flex flex-col gap-12",
-        "transition-colors hover:border-border-strong"
-      )}
-    >
-      <div className="flex items-start gap-12">
-        <div className="flex size-32 shrink-0 items-center justify-center rounded-lg border border-border-subtle bg-surface-subtle overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={logoUrl} alt="" className="size-24 object-cover" />
-        </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div className="flex items-center gap-8">
-            <span className="text-14 font-semibold leading-20 text-text-primary truncate">
-              {item.company}
-            </span>
-            <Badge color={badge.variant} size="sm">
-              {badge.label}
-            </Badge>
+    <div className="flex items-center gap-8">
+      <span className={cn("size-6 rounded-full", dotClass)} />
+      <span className="text-12 font-normal leading-16 text-text-primary whitespace-nowrap">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+function RightMetaView({ meta }: { meta: RightMeta }) {
+  if (meta.type === "badge") {
+    return (
+      <Badge color={meta.color} size="sm">
+        {meta.label}
+      </Badge>
+    );
+  }
+  return <StrengthMeta strength={meta.strength} />;
+}
+
+function FeaturedPriorityCard({ item }: { item: FeaturedPriority }) {
+  const [composeOpen, setComposeOpen] = useState(false);
+  return (
+    <div className="rounded-lg border border-border-default bg-surface-card p-24 flex flex-col gap-24 shadow-[0px_4px_6px_-1px_rgba(16,24,40,0.1),0px_2px_4px_-1px_rgba(16,24,40,0.06)]">
+      <div className="flex flex-col gap-16">
+        <div className="flex flex-wrap items-center justify-between gap-y-12">
+          <div className="flex items-center gap-12">
+            <CompanyLogo website={item.website} size="sm" />
+            <div className="flex flex-col gap-2">
+              <span className="text-14 font-semibold leading-20 text-text-primary">
+                {item.company}
+              </span>
+              <span className="text-12 font-normal leading-16 text-text-secondary">
+                {item.status}
+              </span>
+            </div>
           </div>
-          <span className="text-12 font-medium leading-16 text-text-tertiary">
-            {item.lastTouch}
-          </span>
+          <RightMetaView meta={item.rightMeta} />
         </div>
-        <ArrowRight
-          size={16}
-          className="mt-4 shrink-0 text-icon-tertiary transition-colors group-hover:text-icon-primary"
-        />
+
+        <div className="flex flex-col gap-8 text-14 leading-20 text-text-primary">
+          <p>{item.summary}</p>
+          <p>{item.recommendation}</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 gap-y-8 pl-44">
+      <div className="flex items-center gap-8">
+        <Button size="sm" onClick={() => setComposeOpen(true)}>
+          Send email
+        </Button>
+        <Button variant="secondary" size="sm" iconRight={<ChevronDown size={16} />}>
+          More actions
+        </Button>
+      </div>
+
+      <ComposeEmailModal open={composeOpen} onOpenChange={setComposeOpen} />
+    </div>
+  );
+}
+
+function PriorityRow({ item }: { item: Priority }) {
+  return (
+    <div className="flex items-center justify-between gap-12 border-b border-border-default px-8 py-24">
+      <div className="flex items-center gap-12 min-w-0">
+        <CompanyLogo website={item.website} size="sm" />
         <div className="flex flex-col gap-2 min-w-0">
-          <span className="text-12 font-medium uppercase tracking-wide text-text-tertiary">
-            {item.status === "Out of network" ? "Signal" : "Last discussion"}
+          <span className="text-14 font-semibold leading-20 text-text-primary truncate">
+            {item.company}
           </span>
-          <p className="text-13 font-medium leading-18 text-text-secondary">
-            {item.lastDiscussion}
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 min-w-0">
-          <span className="text-12 font-medium uppercase tracking-wide text-text-tertiary">
-            Next step
+          <span className="text-12 font-normal leading-16 text-text-secondary">
+            {item.status}
           </span>
-          <p className="text-13 font-medium leading-18 text-text-primary">
-            {item.nextStep}
-          </p>
         </div>
       </div>
-    </Link>
+      <RightMetaView meta={item.rightMeta} />
+    </div>
   );
 }
 
 function NetworkStatusCard() {
-  const inNetwork = 85;
+  const segments = [
+    { label: "Very strong", value: 12, className: "bg-success-500" },
+    { label: "Strong", value: 21, className: "bg-success-300" },
+    { label: "Moderate", value: 28, className: "bg-stone-400" },
+    { label: "Weak", value: 16, className: "bg-error-300" },
+    { label: "Very weak", value: 8, className: "bg-error-500" },
+  ];
+  const inNetwork = segments.reduce((sum, s) => sum + s.value, 0);
   const total = 400;
   const pct = Math.round((inNetwork / total) * 100);
 
-  const segments = [
-    { label: "Warm", value: 38, className: "bg-icon-primary" },
-    { label: "Engaging", value: 27, className: "bg-icon-secondary" },
-    { label: "Cold", value: 20, className: "bg-border-strong" },
-  ];
-
   return (
-    <Card className="p-20 flex flex-col gap-16">
-      <div className="flex items-baseline justify-between">
-        <h3 className="text-14 font-semibold text-text-primary">Network status</h3>
-        <Link
-          href="/companies"
-          className="text-12 font-semibold text-text-secondary hover:text-text-primary"
-        >
-          View all
-        </Link>
-      </div>
+    <Card className="p-20 flex flex-col gap-16 shrink-0">
+      <h3 className="text-14 font-semibold text-text-primary">Network status</h3>
 
       <div className="flex items-baseline gap-8">
-        <span className="text-32 font-semibold leading-40 text-text-primary">
-          {inNetwork}
-        </span>
-        <span className="text-13 font-medium text-text-secondary">
-          of {total} addressable
-        </span>
+        <span className="text-32 font-semibold leading-40 text-text-primary">{inNetwork}</span>
+        <span className="text-13 font-medium text-text-secondary">of {total} addressable</span>
       </div>
 
       <div className="flex flex-col gap-8">
@@ -271,17 +279,18 @@ function NetworkStatusCard() {
       </div>
 
       <div className="flex flex-col gap-8 pt-12 border-t border-border-subtle">
-        {segments.map((s) => (
-          <div key={s.label} className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <span className={cn("size-8 rounded-full", s.className)} />
-              <span className="text-13 font-medium text-text-secondary">
-                {s.label}
-              </span>
+        <span className="text-12 font-semibold text-text-primary">Connection strength</span>
+        <div className="flex flex-col gap-6">
+          {segments.map((s) => (
+            <div key={s.label} className="flex items-center justify-between">
+              <div className="flex items-center gap-8">
+                <span className={cn("size-6 rounded-full", s.className)} />
+                <span className="text-12 font-medium text-text-primary">{s.label}</span>
+              </div>
+              <span className="text-12 font-semibold text-text-primary">{s.value}</span>
             </div>
-            <span className="text-13 font-semibold text-text-primary">{s.value}</span>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </Card>
   );
@@ -291,34 +300,34 @@ function EmailMetricsCard() {
   const tabs = [
     {
       value: "response",
-      label: "Response rate",
+      label: "Email response rate",
       stat: "42%",
       delta: "+6 pts vs last week",
-      footer: "18 of 43 sent emails received a reply.",
+      footer: "90 of 215 sent emails received a reply.",
     },
     {
       value: "sent",
       label: "Emails sent",
-      stat: "43",
-      delta: "+12 vs last week",
-      footer: "Across 9 accounts and 14 contacts.",
-    },
-    {
-      value: "calls",
-      label: "Calls placed",
-      stat: "11",
-      delta: "+2 vs last week",
-      footer: "Avg duration 14 min · 6 connected.",
+      stat: "215",
+      delta: "+60 vs last week",
+      footer: "Across 45 accounts and 70 contacts.",
     },
   ];
 
+  const bars = [4, 6, 5, 8, 7, 10, 9];
+  const maxBar = Math.max(...bars);
+
   return (
-    <Card className="p-20 flex flex-col gap-16">
+    <Card className="p-20 flex flex-col gap-16 shrink-0">
       <h3 className="text-14 font-semibold text-text-primary">This week's outreach</h3>
       <Tabs defaultValue={tabs[0].value}>
-        <NeutralTabsList className="grid grid-cols-3">
+        <NeutralTabsList className="grid grid-cols-2">
           {tabs.map((tab) => (
-            <NeutralTabsTrigger key={tab.value} value={tab.value}>
+            <NeutralTabsTrigger
+              key={tab.value}
+              value={tab.value}
+              className="whitespace-nowrap text-12"
+            >
               {tab.label}
             </NeutralTabsTrigger>
           ))}
@@ -327,25 +336,36 @@ function EmailMetricsCard() {
         {tabs.map((tab) => (
           <TabsContent key={tab.value} value={tab.value} className="flex flex-col gap-8">
             <div className="flex items-baseline gap-12">
-              <span className="text-32 font-semibold leading-40 text-text-primary">
-                {tab.stat}
-              </span>
+              <span className="text-32 font-semibold leading-40 text-text-primary">{tab.stat}</span>
               <div className="flex items-center gap-4 text-12 font-semibold text-text-success">
                 <TrendUp02 size={14} />
                 <span>{tab.delta}</span>
               </div>
             </div>
             <p className="text-12 font-medium text-text-secondary">{tab.footer}</p>
-            <div className="mt-8 flex gap-3 h-32 items-end">
-              {[4, 6, 5, 8, 7, 10, 9].map((h, i) => (
-                <span
-                  key={i}
-                  className="flex-1 rounded-sm bg-icon-primary opacity-90"
-                  style={{ height: `${h * 10}%` }}
-                />
-              ))}
+            <div className="mt-8 flex gap-6 h-40 items-end">
+              {bars.map((h, i) => {
+                const ratio = h / maxBar;
+                const color =
+                  ratio >= 0.9
+                    ? "bg-success-500"
+                    : ratio >= 0.75
+                    ? "bg-success-400"
+                    : ratio >= 0.6
+                    ? "bg-success-300"
+                    : ratio >= 0.45
+                    ? "bg-warning-500"
+                    : "bg-warning-400";
+                return (
+                  <span
+                    key={i}
+                    className={cn("flex-1 rounded-sm", color)}
+                    style={{ height: `${ratio * 100}%` }}
+                  />
+                );
+              })}
             </div>
-            <div className="flex justify-between text-11 font-medium text-text-tertiary pt-4">
+            <div className="flex justify-between text-10 font-medium text-text-tertiary pt-4">
               {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
                 <span key={i}>{d}</span>
               ))}
@@ -353,62 +373,34 @@ function EmailMetricsCard() {
           </TabsContent>
         ))}
       </Tabs>
-
-      <div className="grid grid-cols-2 gap-12 pt-12 border-t border-border-subtle">
-        <Stat icon={<Email size={14} />} label="Sent" value="43" />
-        <Stat icon={<Phone01 size={14} />} label="Calls" value="11" />
-      </div>
     </Card>
-  );
-}
-
-function Stat({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center gap-8">
-      <span className="text-icon-tertiary">{icon}</span>
-      <span className="text-12 font-medium text-text-secondary">{label}</span>
-      <span className="ml-auto text-13 font-semibold text-text-primary">{value}</span>
-    </div>
   );
 }
 
 function SalesCoachCard() {
   return (
-    <Card className="p-20 flex flex-col gap-12">
-      <div className="flex items-center gap-8">
-        <span className="flex size-24 items-center justify-center rounded-full bg-surface-subtle text-icon-primary">
-          <Stars02 size={14} />
-        </span>
-        <h3 className="text-14 font-semibold text-text-primary">Sales coach</h3>
-      </div>
+    <Card className="p-20 flex flex-col gap-16 shrink-0">
+      <h3 className="text-14 font-semibold text-text-primary">Sales coach</h3>
 
-      <p className="text-13 font-medium leading-18 text-text-secondary">
-        You closed <span className="font-semibold text-text-primary">3 opportunities</span> this week and
-        recovered the Sunroot conversation. Two follow-ups slipped past their 48h SLA — both with
-        late-stage prospects.
+      <p className="text-14 leading-20 text-text-primary">
+        You closed <span className="font-semibold">3 opportunities</span> this week and recovered
+        the Sunroot conversation. Two follow-ups slipped past their 48h SLA — both with late-stage
+        prospects.
       </p>
 
-      <ul className="flex flex-col gap-6 text-13 font-medium text-text-secondary">
-        <li className="flex items-start gap-8">
-          <Star01 size={12} className="mt-4 shrink-0 text-icon-tertiary" />
-          <span>Reply cadence dropped to 32h on average — keep it under 24h.</span>
+      <ul className="flex flex-col gap-6 text-14 leading-20 text-text-primary list-disc pl-20">
+        <li>
+          <Star01 size={12} className="inline mr-4 align-text-bottom text-icon-tertiary" />
+          Reply cadence dropped to 32h on average — keep it under 24h.
         </li>
-        <li className="flex items-start gap-8">
-          <Star01 size={12} className="mt-4 shrink-0 text-icon-tertiary" />
-          <span>Discovery questions are landing; consider doubling down on capability framing.</span>
+        <li>
+          <Star01 size={12} className="inline mr-4 align-text-bottom text-icon-tertiary" />
+          Discovery questions are landing; consider doubling down on capability framing.
         </li>
       </ul>
 
-      <Button variant="secondary" size="sm" className="self-start mt-4">
-        Ask sales coach
+      <Button variant="secondary" size="sm" className="w-full">
+        Ask follow-up
       </Button>
     </Card>
   );

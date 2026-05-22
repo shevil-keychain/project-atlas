@@ -2,8 +2,8 @@
 
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
-import { RadioGroupItem } from "@/components/ui/radio-group"
+import { cn } from "../../lib/utils"
+import { RadioGroupItem } from "./radio-group"
 
 type RadioWithLabelProps = React.ComponentProps<typeof RadioGroupItem> & {
   label: string

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const AVATAR_COLORS = [
   "#9062CB", "#1A89B8", "#46A680", "#C75966", "#5A8D84",

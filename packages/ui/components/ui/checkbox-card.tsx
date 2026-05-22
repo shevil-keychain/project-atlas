@@ -2,8 +2,8 @@
 
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
-import { Checkbox } from "@/components/ui/checkbox"
+import { cn } from "../../lib/utils"
+import { Checkbox } from "./checkbox"
 
 type CheckboxCardProps = {
   checked?: boolean | "indeterminate"

@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import * as SliderPrimitive from "@radix-ui/react-slider"
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
+import { cn } from "../../lib/utils"
+import { Label } from "./label"
 
 type SliderProps = React.ComponentProps<typeof SliderPrimitive.Root> & {
   showValue?: boolean

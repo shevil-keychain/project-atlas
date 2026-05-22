@@ -3,7 +3,7 @@
 import * as React from "react"
 import { cva } from "class-variance-authority"
 import { X } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 const tagVariants = cva(
   "rounded-full pl-12 pr-8 inline-flex items-center gap-6 text-12 py-4 font-medium bg-surface-muted text-text-primary [&_[data-tag-remove]:hover]:bg-stone-300"

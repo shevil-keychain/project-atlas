@@ -4,9 +4,9 @@ import * as React from "react"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
 import { CalendarDays, ChevronDown } from "lucide-react"
 import { format as formatDate } from "date-fns"
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from "../../lib/utils"
+import { Label } from "./label"
+import { Calendar } from "./calendar"
 import type { DateRange } from "react-day-picker"
 
 type DatePickerProps = {

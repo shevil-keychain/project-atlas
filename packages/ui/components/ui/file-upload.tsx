@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import { Upload, File, X, AlertCircle } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
+import { cn } from "../../lib/utils"
+import { Label } from "./label"
 
 type FileInfo = {
   file: File

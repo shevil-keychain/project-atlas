@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/lib/utils"
-import { Textarea, type TextareaProps } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+import { cn } from "../../lib/utils"
+import { Textarea, type TextareaProps } from "./textarea"
+import { Label } from "./label"
 
 type TextareaFieldProps = TextareaProps & {
   label?: string

@@ -6,12 +6,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "lint": "turbo lint",
-    "dev:level-ds-docs": "turbo dev --filter=@level/level-ds-docs",
-    "dev:ai-worker": "turbo dev --filter=@level/ai-worker",
-    "dev:qa-case-assignment": "turbo dev --filter=@level/qa-case-assignment",
-    "dev:qa-case-assignment-rule-run-visibility": "turbo dev --filter=@level/qa-case-assignment-rule-run-visibility",
-    "dev:multiple-instascore-evaluations": "turbo dev --filter=@level/multiple-instascore-evaluations"
+    "lint": "turbo lint"
   },
   "devDependencies": {
     "puppeteer": "^24.37.5",
