@@ -193,6 +193,14 @@ export function TableShell({ schema, data, selectable = false }: Props) {
             selectedIds={selectedIds}
             onToggleRow={toggleRow}
             onToggleAll={toggleAll}
+            getRowClassName={
+              schema.highlightRow
+                ? (row) =>
+                    row[schema.highlightRow!.key] === schema.highlightRow!.equals
+                      ? schema.highlightRow!.className
+                      : undefined
+                : undefined
+            }
           />
           <Pagination page={safePage} totalPages={totalPages} onPageChange={setPage} />
         </div>

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import {
-  Sparkles,
   ArrowUp,
   X,
   History,
@@ -85,32 +84,21 @@ function usePageContext(): PageContext {
   }
 }
 
-export function AskAIShell({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-
+export function AskAIShell({
+  children,
+  open,
+  onClose,
+}: {
+  children: React.ReactNode;
+  open: boolean;
+  onClose: () => void;
+}) {
   return (
     <div className="flex flex-1 min-h-0">
       <div className="relative flex-1 min-w-0 overflow-y-auto">
         {children}
-        {!open && (
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Ask AI"
-            className={cn(
-              "fixed bottom-24 right-24 z-30",
-              "inline-flex items-center gap-8 h-44 pl-14 pr-16 rounded-full",
-              "bg-text-primary text-white text-14 font-semibold",
-              "shadow-lg hover:shadow-xl transition-all",
-              "hover:-translate-y-px active:translate-y-0"
-            )}
-          >
-            <Sparkles size={16} className="text-white" />
-            Ask AI
-          </button>
-        )}
       </div>
-      {open && <AskAISidePanel onClose={() => setOpen(false)} />}
+      {open && <AskAISidePanel onClose={onClose} />}
     </div>
   );
 }
@@ -249,6 +237,7 @@ function IconButton({
     </button>
   );
 }
+
 
 function ContextChip({ label, Icon }: { label: string; Icon: React.ElementType }) {
   return (

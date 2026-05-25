@@ -36,6 +36,7 @@ export type SidePanelAddress = {
 export type CompanySidePanelData = {
   name: string;
   status: string;
+  isDiscover?: boolean;
   keyDetails: {
     accountName: string;
     accountType: string;
@@ -45,6 +46,7 @@ export type CompanySidePanelData = {
     owner: string;
     description: string;
   };
+  extraKeyDetails?: { label: string; value: string }[];
   timestamps: {
     createdAt: string;
     lastActivity: string;
@@ -108,11 +110,11 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
       {/* Header */}
       <div className="flex flex-col gap-24 border-b border-border-default p-24">
         <Link
-          href="/companies"
+          href={data.isDiscover ? "/discover" : "/companies"}
           className="flex items-center gap-6 text-text-secondary hover:text-text-primary"
         >
           <ArrowLeft size={16} />
-          <span className="text-12">All accounts</span>
+          <span className="text-12">{data.isDiscover ? "Back to Discover" : "All accounts"}</span>
         </Link>
 
         <div className="flex flex-col gap-12">
@@ -152,10 +154,14 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
         <PropertyRow
           label="Connection strength"
           value={
-            <div className="flex items-center gap-8">
-              <span className="size-8 shrink-0 rounded-full bg-surface-warning" aria-hidden />
-              <span className="text-14 font-medium text-text-primary">Weak</span>
-            </div>
+            data.isDiscover ? (
+              <span className="text-14 font-medium text-text-tertiary">—</span>
+            ) : (
+              <div className="flex items-center gap-8">
+                <span className="size-8 shrink-0 rounded-full bg-surface-warning" aria-hidden />
+                <span className="text-14 font-medium text-text-primary">Weak</span>
+              </div>
+            )
           }
         />
         <PropertyRow label="Website" value={data.keyDetails.website} />
@@ -167,6 +173,9 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
         <PropertyRow label="Industry" value={data.keyDetails.industry} />
         <PropertyRow label="Owner" value={data.keyDetails.owner} />
         <PropertyRow label="Description" value={data.keyDetails.description} />
+        {data.extraKeyDetails?.map((row) => (
+          <PropertyRow key={row.label} label={row.label} value={row.value} />
+        ))}
       </Section>
 
       <Section label="Timestamps">
@@ -178,29 +187,33 @@ export function CompanySidePanel({ data }: { data: CompanySidePanelData }) {
         />
       </Section>
 
-      <Section label="Primary Contact">
-        <RecordCard>
-          <Avatar name={data.primaryContact.name} size="xs" />
-          <div className="flex min-w-0 flex-1 flex-col gap-4">
-            <span className="text-14 font-medium text-text-primary">
-              {data.primaryContact.name}
-            </span>
-            <span className="text-12 text-text-secondary">
-              {data.primaryContact.title}
-            </span>
-          </div>
-        </RecordCard>
-      </Section>
+      {!data.isDiscover && (
+        <>
+          <Section label="Primary Contact">
+            <RecordCard>
+              <Avatar name={data.primaryContact.name} size="xs" />
+              <div className="flex min-w-0 flex-1 flex-col gap-4">
+                <span className="text-14 font-medium text-text-primary">
+                  {data.primaryContact.name}
+                </span>
+                <span className="text-12 text-text-secondary">
+                  {data.primaryContact.title}
+                </span>
+              </div>
+            </RecordCard>
+          </Section>
 
-      <Section label="Parent Account">
-        <LinkedAccountCard account={data.parentAccount} />
-      </Section>
+          <Section label="Parent Account">
+            <LinkedAccountCard account={data.parentAccount} />
+          </Section>
 
-      <Section label="Child Accounts">
-        {data.childAccounts.map((account, i) => (
-          <LinkedAccountCard key={i} account={account} />
-        ))}
-      </Section>
+          <Section label="Child Accounts">
+            {data.childAccounts.map((account, i) => (
+              <LinkedAccountCard key={i} account={account} />
+            ))}
+          </Section>
+        </>
+      )}
 
       <Section label="Primary Addresses">
         {data.primaryAddresses.map((address, i) => (

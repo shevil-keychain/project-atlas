@@ -126,6 +126,7 @@ type Activity = {
   timestamp: string;
   expandable?: boolean;
   details?: { label: string; value: React.ReactNode }[];
+  align?: "start" | "center";
 };
 
 function GmailLogo({ size = 16 }: { size?: number }) {
@@ -348,12 +349,13 @@ function SectionHeader({
 
 function ActivityCard({ activity }: { activity: Activity }) {
   const Icon = activity.icon;
+  const align = activity.align ?? "start";
   return (
     <div className="rounded-xl border border-border-default bg-surface-card">
-      <div className="flex items-start gap-8 p-12">
+      <div className={`flex gap-8 p-12 ${align === "center" ? "items-center" : "items-start"}`}>
         <ChevronRight
           size={16}
-          className={`mt-6 shrink-0 text-icon-tertiary ${activity.expandable ? "rotate-90" : ""}`}
+          className={`shrink-0 text-icon-tertiary ${align === "start" ? "mt-6" : ""} ${activity.expandable ? "rotate-90" : ""}`}
         />
         {activity.iconNode ? (
           activity.iconNode
@@ -363,7 +365,7 @@ function ActivityCard({ activity }: { activity: Activity }) {
           </CircularIcon>
         ) : null}
         <div className="flex min-w-0 flex-1 flex-col gap-8">
-          <div className="flex flex-wrap items-start justify-between gap-8">
+          <div className={`flex flex-wrap justify-between gap-8 ${align === "center" ? "items-center" : "items-start"}`}>
             <p className="text-14 text-text-primary">{activity.label}</p>
             <span className="text-12 text-text-tertiary">{activity.timestamp}</span>
           </div>
@@ -454,6 +456,38 @@ function CompanyOverviewCard({ company }: { company: CompanyMeta }) {
           </div>
         </div>
       </div>
+    </section>
+  );
+}
+
+function DiscoverRecommendedCard({ company }: { company: CompanyMeta }) {
+  const [composeOpen, setComposeOpen] = useState(false);
+  return (
+    <section className="overflow-hidden rounded-xl border border-border-default bg-surface-card shadow-sm">
+      <div className="flex flex-col gap-12 p-20">
+        <SummaryEyebrow>Recommended action</SummaryEyebrow>
+        <p className="text-14 leading-relaxed text-text-primary">
+          <span className="font-semibold">{company.name}</span> has visited your Keychain
+          profile <span className="font-semibold">multiple times in the last 30 days</span>{" "}
+          and recently posted an RFP that overlaps with your capabilities. They're
+          actively looking — this is a warm intro opportunity.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-12 px-20 pb-20">
+        <p className="text-14 leading-relaxed text-text-primary">
+          Send a short intro with your <span className="font-semibold">pitch deck</span>{" "}
+          and a one-line tie-in to the RFP they posted. Keep it lightweight — they
+          haven't engaged with you yet.
+        </p>
+        <div>
+          <Button size="sm" onClick={() => setComposeOpen(true)}>
+            Send intro email
+          </Button>
+        </div>
+      </div>
+
+      <ComposeEmailModal open={composeOpen} onOpenChange={setComposeOpen} />
     </section>
   );
 }
@@ -703,6 +737,14 @@ function OrdersSection() {
   );
 }
 
+function EmptyState({ label }: { label: string }) {
+  return (
+    <div className="rounded-xl border border-border-default bg-surface-card p-24">
+      <p className="text-14 text-text-secondary">{label}</p>
+    </div>
+  );
+}
+
 function ActivitySection() {
   return (
     <section className="flex flex-col gap-12">
@@ -760,7 +802,44 @@ function ActivitySection() {
   );
 }
 
-export function CompanyOverview({ company }: { company: CompanyMeta }) {
+type DiscoverActivity = "posted-project" | "visited-website";
+
+export function CompanyOverview({
+  company,
+  isDiscover = false,
+  discoverActivities,
+}: {
+  company: CompanyMeta;
+  isDiscover?: boolean;
+  discoverActivities?: DiscoverActivity[];
+}) {
+  const discoverItems: Activity[] = (discoverActivities ?? ["posted-project", "visited-website"]).map((kind) =>
+    kind === "posted-project"
+      ? {
+          align: "center",
+          iconNode: (
+            <span className="shrink-0">
+              <Avatar name={company.name} size="sm" />
+            </span>
+          ),
+          label: (
+            <>
+              Posted a project: <span className="font-semibold">RFP — co-manufacturing partner</span>
+            </>
+          ),
+          timestamp: "Apr 18, 2026 at 2:32 PM",
+        }
+      : {
+          align: "center",
+          iconNode: (
+            <span className="shrink-0">
+              <Avatar name={company.name} size="sm" />
+            </span>
+          ),
+          label: <>Visited your Keychain profile.</>,
+          timestamp: "Apr 4, 2026 at 11:08 AM",
+        }
+  );
   return (
     <div className="flex flex-col">
       <Tabs defaultValue="overview" className="w-full">
@@ -775,52 +854,56 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
             <UnderlinedTabsTrigger
               value="contacts"
               className={tabTriggerClass}
-              badge={<Badge color="gray" size="sm">3</Badge>}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 3}</Badge>}
             >
               Contacts
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
               value="referrals"
               className={tabTriggerClass}
-              badge={<Badge color="gray" size="sm">5</Badge>}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 5}</Badge>}
             >
               Referrals
-            </UnderlinedTabsTrigger>
-            <UnderlinedTabsTrigger value="prospects" className={tabTriggerClass}>
-              Prospects
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
               value="emails"
               className={tabTriggerClass}
-              badge={<Badge color="gray" size="sm">4</Badge>}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 4}</Badge>}
             >
               Emails
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
+              value="leads"
+              className={tabTriggerClass}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 2}</Badge>}
+            >
+              Leads
+            </UnderlinedTabsTrigger>
+            <UnderlinedTabsTrigger
               value="deals"
               className={tabTriggerClass}
-              badge={<Badge color="gray" size="sm">1</Badge>}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 1}</Badge>}
             >
               Deals
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
               value="orders"
               className={tabTriggerClass}
-              badge={<Badge color="gray" size="sm">3</Badge>}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 3}</Badge>}
             >
               Orders
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
               value="notes"
               className={tabTriggerClass}
-              badge={<Badge color="gray" size="sm">3</Badge>}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 3}</Badge>}
             >
               Notes
             </UnderlinedTabsTrigger>
             <UnderlinedTabsTrigger
               value="calls"
               className={tabTriggerClass}
-              badge={<Badge color="gray" size="sm">4</Badge>}
+              badge={<Badge color="gray" size="sm">{isDiscover ? 0 : 4}</Badge>}
             >
               Calls
             </UnderlinedTabsTrigger>
@@ -834,17 +917,36 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
           <div className="flex flex-col gap-24 p-24">
             <div className="flex items-center gap-16">
               <h2 className="text-24 font-semibold text-text-primary">Overview</h2>
-              <div className="flex items-center gap-8">
-                <span className="size-8 shrink-0 rounded-full bg-surface-warning" aria-hidden />
-                <span className="text-14 font-medium text-text-primary">Weak connection</span>
-              </div>
+              {isDiscover ? (
+                <Badge color="gray" size="sm">Not in network</Badge>
+              ) : (
+                <div className="flex items-center gap-8">
+                  <span className="size-8 shrink-0 rounded-full bg-surface-warning" aria-hidden />
+                  <span className="text-14 font-medium text-text-primary">Weak connection</span>
+                </div>
+              )}
             </div>
             <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
               <CompanyOverviewCard company={company} />
-              <RecentActivityCard company={company} />
+              {isDiscover ? (
+                <DiscoverRecommendedCard company={company} />
+              ) : (
+                <RecentActivityCard company={company} />
+              )}
             </div>
-            <ActivityTimeline />
-            <ActivitySection />
+            {!isDiscover && <ActivityTimeline />}
+            {isDiscover ? (
+              <section className="flex flex-col gap-12">
+                <h3 className="text-14 font-semibold text-text-primary">Activity</h3>
+                <div className="flex flex-col gap-8">
+                  {discoverItems.map((a, i) => (
+                    <ActivityCard key={i} activity={a} />
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <ActivitySection />
+            )}
           </div>
         </TabsContent>
 
@@ -856,30 +958,43 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
 
         <TabsContent value="contacts" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
-            <ContactsSection />
+            {isDiscover ? <EmptyState label="No contacts yet." /> : <ContactsSection />}
           </div>
         </TabsContent>
 
         <TabsContent value="deals" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
-            <DealsSection />
+            {isDiscover ? <EmptyState label="No deals yet." /> : <DealsSection />}
           </div>
         </TabsContent>
 
         <TabsContent value="orders" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
-            <OrdersSection />
+            {isDiscover ? <EmptyState label="No orders yet." /> : <OrdersSection />}
           </div>
         </TabsContent>
 
         <TabsContent value="activity" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
-            <ActivitySection />
+            {isDiscover ? (
+              <section className="flex flex-col gap-12">
+                <h3 className="text-14 font-semibold text-text-primary">Activity</h3>
+                <div className="flex flex-col gap-8">
+                  {discoverItems.map((a, i) => (
+                    <ActivityCard key={i} activity={a} />
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <ActivitySection />
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="emails" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
+            {isDiscover ? <EmptyState label="No emails yet." /> : (
+            <>
             <SectionHeader
               title="Emails"
               count={4}
@@ -963,11 +1078,15 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 </div>
               ))}
             </div>
+            </>
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="notes" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
+            {isDiscover ? <EmptyState label="No notes yet." /> : (
+            <>
             <SectionHeader title="Notes" count={3} />
             <div className="flex flex-col gap-12 rounded-xl border border-border-default bg-surface-card p-16">
               <Textarea
@@ -1025,11 +1144,15 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 </div>
               ))}
             </div>
+            </>
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="calls" className="mt-0">
           <div className="flex flex-col gap-24 p-24">
+            {isDiscover ? <EmptyState label="No calls yet." /> : (
+            <>
             <SectionHeader
               title="Calls"
               count={4}
@@ -1114,6 +1237,8 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 </div>
               ))}
             </div>
+            </>
+            )}
           </div>
         </TabsContent>
 
@@ -1125,6 +1250,9 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 Contacts in your network who know someone at {company.name}.
               </p>
             </div>
+            {isDiscover && <EmptyState label="No referrals yet." />}
+            {!isDiscover && (<>
+
 
             {/* Recommended */}
             <section className="overflow-hidden rounded-xl border border-border-default bg-surface-card shadow-sm">
@@ -1199,12 +1327,53 @@ export function CompanyOverview({ company }: { company: CompanyMeta }) {
                 ))}
               </div>
             </section>
+            </>)}
           </div>
         </TabsContent>
 
-        <TabsContent value="prospects" className="mt-0">
-          <div className="p-24">
-            <p className="text-14 text-text-secondary">No prospects yet.</p>
+        <TabsContent value="leads" className="mt-0">
+          <div className="flex flex-col gap-24 p-24">
+            {isDiscover ? (
+              <EmptyState label="No leads yet." />
+            ) : (
+              <>
+                <SectionHeader
+                  title="Leads"
+                  count={2}
+                  action={
+                    <Button size="sm" iconLeft={<Plus size={16} />}>
+                      Create
+                    </Button>
+                  }
+                />
+                <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card">
+                  <div className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] gap-16 border-b border-border-default px-16 py-10 text-12 text-text-secondary">
+                    <span>Lead</span>
+                    <span>Source</span>
+                    <span>Owner</span>
+                    <span>Last activity</span>
+                    <span className="w-16" />
+                  </div>
+                  {[
+                    { name: "Inbound — pricing inquiry", source: "Website form", owner: "John Doe", date: "Apr 22, 2026" },
+                    { name: "Trade show — Expo West", source: "Event", owner: "Jamal Rivera", date: "Mar 14, 2026" },
+                  ].map((l, i) => (
+                    <div
+                      key={i}
+                      className="grid grid-cols-[2fr_1fr_1fr_1fr_auto] items-center gap-16 border-b border-border-default px-16 py-16 last:border-b-0"
+                    >
+                      <span className="truncate text-14 text-text-primary">{l.name}</span>
+                      <span className="truncate text-14 text-text-primary">{l.source}</span>
+                      <span className="truncate text-14 text-text-primary">{l.owner}</span>
+                      <span className="text-14 text-text-primary">{l.date}</span>
+                      <Button variant="ghost" size="icon-sm" aria-label="More">
+                        <DotsHorizontal size={16} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </TabsContent>
       </Tabs>

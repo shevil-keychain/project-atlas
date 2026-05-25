@@ -36,4 +36,9 @@ export type TableSchema<TRow = Record<string, unknown>> = {
   tabs: TabDef[];
   columns: ColumnDef<TRow>[];
   defaultSort?: DefaultSort;
+  highlightRow?: {
+    key: string;
+    equals: string | number | boolean;
+    className: string;
+  };
 };

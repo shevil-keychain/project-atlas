@@ -116,6 +116,7 @@ export function OnboardingGate({ children }: { children: React.ReactNode }) {
     setStates((prev) => ({ ...prev, [providerId]: "syncing" }));
     window.setTimeout(() => {
       setStates((prev) => ({ ...prev, [providerId]: "done" }));
+      window.setTimeout(() => setContinued(true), 400);
     }, 1500);
   }
 

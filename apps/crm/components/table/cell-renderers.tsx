@@ -148,6 +148,11 @@ function LogoTextCell({ value, row }: { value: unknown; row?: Record<string, unk
   const name = String(value ?? "");
   const companyId = typeof row?.id === "string" ? row.id : undefined;
   const website = typeof row?.website === "string" ? row.website : undefined;
+  const detailHref = companyId
+    ? companyId.startsWith("di-")
+      ? `/discover/${companyId}`
+      : `/companies/${companyId}`
+    : undefined;
   const nameContent = (
     <>
       <CompanyLogo website={website} />
@@ -159,8 +164,8 @@ function LogoTextCell({ value, row }: { value: unknown; row?: Record<string, unk
 
   return (
     <div className="flex items-center gap-12 w-full min-w-0">
-      {companyId ? (
-        <Link href={`/companies/${companyId}`} className="flex min-w-0 flex-1 items-center gap-12">
+      {detailHref ? (
+        <Link href={detailHref} className="flex min-w-0 flex-1 items-center gap-12">
           {nameContent}
         </Link>
       ) : (

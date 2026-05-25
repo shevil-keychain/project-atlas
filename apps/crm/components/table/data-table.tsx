@@ -16,6 +16,7 @@ type Props = {
   selectedIds?: Set<string>;
   onToggleRow?: (id: string) => void;
   onToggleAll?: (ids: string[], checked: boolean) => void;
+  getRowClassName?: (row: Record<string, unknown>) => string | undefined;
 };
 
 type SortDir = "asc" | "desc";
@@ -91,6 +92,7 @@ export function DataTable({
   selectedIds,
   onToggleRow,
   onToggleAll,
+  getRowClassName,
 }: Props) {
   const [sort, setSort] = useState<SortState>(defaultSort ?? null);
 
@@ -171,10 +173,11 @@ export function DataTable({
             {sortedRows.map((row, index) => {
               const id = String(row.id ?? "");
               const checked = !!id && !!selectedIds?.has(id);
+              const rowCls = getRowClassName?.(row);
               return (
                 <div
                   key={index}
-                  className={cn(dataCell, "border-r border-border-default justify-center px-0")}
+                  className={cn(dataCell, "border-r border-border-default justify-center px-0", rowCls)}
                 >
                   <Checkbox
                     checked={checked}
@@ -193,11 +196,14 @@ export function DataTable({
             <div className={cn(headerCell, "border-r border-border-strong")}>
               <HeaderLabel column={sticky} sort={sort} onToggle={toggleSort} />
             </div>
-            {sortedRows.map((row, index) => (
-              <div key={index} className={cn(dataCell, "border-r border-border-default")}>
-                <CellRenderer type={sticky.type} value={row[sticky.key]} col={sticky} row={row} />
-              </div>
-            ))}
+            {sortedRows.map((row, index) => {
+              const rowCls = getRowClassName?.(row);
+              return (
+                <div key={index} className={cn(dataCell, "border-r border-border-default", rowCls)}>
+                  <CellRenderer type={sticky.type} value={row[sticky.key]} col={sticky} row={row} />
+                </div>
+              );
+            })}
           </div>
         )}
 
@@ -211,11 +217,14 @@ export function DataTable({
               <div className={headerCell}>
                 <HeaderLabel column={column} sort={sort} onToggle={toggleSort} />
               </div>
-              {sortedRows.map((row, index) => (
-                <div key={index} className={dataCell}>
-                  <CellRenderer type={column.type} value={row[column.key]} col={column} row={row} />
-                </div>
-              ))}
+              {sortedRows.map((row, index) => {
+                const rowCls = getRowClassName?.(row);
+                return (
+                  <div key={index} className={cn(dataCell, rowCls)}>
+                    <CellRenderer type={column.type} value={row[column.key]} col={column} row={row} />
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>

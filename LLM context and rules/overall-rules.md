@@ -85,3 +85,23 @@ All product UI copy should use sentence case by default.
 - Use sentence case for button labels, tabs, inline alerts, helper text, empty states, card headings, and other interface copy.
 - Do not use Title Case for UI copy unless the text is a proper noun, brand name, feature name, acronym, or another intentional exception.
 - Preserve exact capitalization for names like "QA", "AI", organization names, and any user-provided proper nouns.
+
+---
+
+## Rule 7: Default Text Size Is 14px
+
+All body and UI text defaults to `text-14`. Only deviate downward (to `text-12` or `text-10`) when there is a deliberate, justified hierarchy reason — captions, timestamps, badge labels, fine print. Never use a smaller size just to fit more content.
+
+- Default to `text-14` for labels, descriptions, row content, helper text, and any text that isn't explicitly a caption or micro-label.
+- Use `text-12` only for metadata, timestamps, badge text, and secondary captions that are intentionally de-emphasized.
+- Use `text-10` only for the smallest micro-labels (e.g. two-letter abbreviations, tight pill text).
+
+---
+
+## Rule 8: No Tertiary Text Color
+
+Do not use `text-text-tertiary` in any UI. It is too low-contrast and creates visual hierarchy noise.
+
+- Use `text-text-secondary` wherever you would reach for tertiary — for de-emphasized content, metadata, helper text, and subtitles.
+- Reserve `text-text-primary` for headings, labels, and primary content.
+- The only permitted text color exceptions are semantic states: `text-text-brand`, `text-text-error`, `text-text-success`, `text-text-warning`, `text-text-inverse` (on dark/brand surfaces), and `text-text-disabled` (disabled controls).
